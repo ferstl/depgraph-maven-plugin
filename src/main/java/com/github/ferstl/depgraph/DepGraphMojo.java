@@ -16,6 +16,7 @@ package com.github.ferstl.depgraph;
  * limitations under the License.
  */
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -57,14 +58,12 @@ public class DepGraphMojo extends AbstractMojo {
   public void execute() throws MojoExecutionException {
     try {
       GraphBuilder graphBuilder = new GraphBuilder();
-      String artifactId = this.project.getArtifactId();
 
       @SuppressWarnings("unchecked")
       List<MavenProject> collectedProjects = this.project.getCollectedProjects();
-      for (MavenProject collectedProject : collectedProjects) {
-        Edge moduleEdge = new Edge(artifactId, collectedProject.getArtifactId());
-        graphBuilder.addEdges(moduleEdge);
+      buildModuleTree(collectedProjects, graphBuilder);
 
+      for (MavenProject collectedProject : collectedProjects) {
         DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, null);
 
         EdgeBuildingVisitor visitor = new EdgeBuildingVisitor(ArtifactIdRenderer.INSTANCE);
@@ -77,6 +76,22 @@ public class DepGraphMojo extends AbstractMojo {
 
     } catch (DependencyGraphBuilderException e) {
       throw new MojoExecutionException("boom");
+    }
+  }
+
+  public void buildModuleTree(Collection<MavenProject> collectedProjects, GraphBuilder graphBuilder) {
+    System.err.println("Project: " + this.project + ", Parent: " + this.project.getParent());
+    for (MavenProject collectedProject : collectedProjects) {
+      MavenProject child = collectedProject;
+      MavenProject parent = collectedProject.getParent();
+
+      while (parent != null) {
+        Edge edge = new Edge(parent.getArtifactId(), child.getArtifactId());
+        graphBuilder.addEdges(edge);
+
+        child = parent;
+        parent = parent.getParent();
+      }
     }
   }
 }
