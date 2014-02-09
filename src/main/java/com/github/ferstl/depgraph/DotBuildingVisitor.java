@@ -11,13 +11,13 @@ import org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor;
 
 // Invariants
 // - Stack is empty after a root node has been visited
-public class EdgeBuildingVisitor implements DependencyNodeVisitor {
+public class DotBuildingVisitor implements DependencyNodeVisitor {
 
   private final Set<Edge> edges;
   private final Deque<DependencyNode> stack;
 
 
-  public EdgeBuildingVisitor() {
+  public DotBuildingVisitor() {
     this.edges = new LinkedHashSet<>();
     this.stack = new ArrayDeque<>();
   }

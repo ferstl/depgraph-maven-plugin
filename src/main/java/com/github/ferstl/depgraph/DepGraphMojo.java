@@ -66,7 +66,7 @@ public class DepGraphMojo extends AbstractMojo {
       for (MavenProject collectedProject : collectedProjects) {
         DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, null);
 
-        EdgeBuildingVisitor visitor = new EdgeBuildingVisitor();
+        DotBuildingVisitor visitor = new DotBuildingVisitor();
         root.accept(visitor);
 
         graphBuilder.addEdges(visitor.getEdges());
