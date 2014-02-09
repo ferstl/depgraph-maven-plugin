@@ -1,4 +1,4 @@
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.dot;
 
 import java.util.Arrays;
 import java.util.Collection;

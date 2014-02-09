@@ -6,6 +6,8 @@ import java.util.Deque;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 import org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor;
 
+import com.github.ferstl.depgraph.dot.DotBuilder;
+
 
 // Invariants
 // - Stack is empty after a root node has been visited

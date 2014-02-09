@@ -31,6 +31,8 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 
+import com.github.ferstl.depgraph.dot.DotBuilder;
+
 @Mojo(
     name = "graph",
     aggregator = true,
