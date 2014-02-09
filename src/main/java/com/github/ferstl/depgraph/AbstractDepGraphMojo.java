@@ -65,6 +65,8 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
       }
 
       writeDotFile(dotBuilder);
+
+      // FIXME: For simple "debugging" purposes
       System.err.println(dotBuilder);
 
     } catch (DependencyGraphBuilderException | IOException e) {
@@ -102,6 +104,11 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
         ArtifactNode parentNode = new ArtifactNode(parent.getArtifact());
         ArtifactNode childNode = new ArtifactNode(child.getArtifact());
         dotBuilder.addEdge(parentNode, childNode);
+
+        // Stop if we reached this project!
+        if (parent.equals(this.project)) {
+          break;
+        }
 
         child = parent;
         parent = parent.getParent();
