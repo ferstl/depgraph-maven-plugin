@@ -7,17 +7,18 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
 @Mojo(
-    name = "aggregate",
+    name = "by-groupid",
     aggregator = true,
     defaultPhase = LifecyclePhase.NONE,
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.TEST,
     requiresDirectInvocation = true,
     threadSafe = true)
-public class DepGraphMojo extends AbstractDepGraphMojo {
+public class GraphByGroupIdMojo extends AbstractDepGraphMojo {
 
   @Override
   protected DotBuilder createDotBuilder() {
-    return new DotBuilder(NodeRenderers.VERSIONLESS_ID, NodeRenderers.ARTIFACT_ID_LABEL);
+    return new DotBuilder(NodeRenderers.SCOPED_GROUP_ID, NodeRenderers.GROUP_ID_LABEL);
   }
+
 }
