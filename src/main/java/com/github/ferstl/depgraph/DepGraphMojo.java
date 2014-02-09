@@ -1,8 +1,11 @@
 package com.github.ferstl.depgraph;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
+import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
@@ -11,6 +14,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.artifact.filter.ScopeArtifactFilter;
+import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilter;
+import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
@@ -18,7 +24,7 @@ import org.apache.maven.shared.dependency.graph.DependencyNode;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
 @Mojo(
-    name = "graph",
+    name = "aggregate",
     aggregator = true,
     defaultPhase = LifecyclePhase.NONE,
     inheritByDefault = false,
@@ -27,12 +33,14 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     threadSafe = true)
 public class DepGraphMojo extends AbstractMojo {
 
-  @Parameter(
-      alias = "gropIdClusters",
-      property = "groupIdClusters",
-      readonly = true,
-      required = false)
-  private List<String> groupIdClusters;
+  @Parameter(property = "scope")
+  private String scope;
+
+  @Parameter(property = "includes", defaultValue = "")
+  private List<String> includes;
+
+  @Parameter(property = "excludes", defaultValue = "")
+  private List<String> excludes;
 
   @Component
   private MavenProject project;
@@ -42,6 +50,8 @@ public class DepGraphMojo extends AbstractMojo {
 
   @Override
   public void execute() throws MojoExecutionException {
+    ArtifactFilter filter = createArtifactFilters();
+
     try {
       DotBuilder dotBuilder = new DotBuilder(ArtifactIdRenderer.VERSIONLESS_ID, ArtifactIdRenderer.ARTIFACT_ID);
 
@@ -50,7 +60,7 @@ public class DepGraphMojo extends AbstractMojo {
       buildModuleTree(collectedProjects, dotBuilder);
 
       for (MavenProject collectedProject : collectedProjects) {
-        DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, null);
+        DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, filter);
 
         DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder);
         root.accept(visitor);
@@ -63,8 +73,26 @@ public class DepGraphMojo extends AbstractMojo {
     }
   }
 
-  public void buildModuleTree(Collection<MavenProject> collectedProjects, DotBuilder dotBuilder) {
-    System.err.println("Project: " + this.project + ", Parent: " + this.project.getParent());
+  private ArtifactFilter createArtifactFilters() {
+    List<ArtifactFilter> filters = new ArrayList<>(3);
+
+    if (this.scope != null) {
+      filters.add(new ScopeArtifactFilter(this.scope));
+    }
+
+    if (!this.includes.isEmpty()) {
+      filters.add(new StrictPatternIncludesArtifactFilter(this.includes));
+    }
+
+    if (!this.excludes.isEmpty()) {
+      filters.add(new StrictPatternExcludesArtifactFilter(this.excludes));
+    }
+
+    return new AndArtifactFilter(filters);
+  }
+
+  private void buildModuleTree(Collection<MavenProject> collectedProjects, DotBuilder dotBuilder) {
+    // FIXME apply filters here
     for (MavenProject collectedProject : collectedProjects) {
       MavenProject child = collectedProject;
       MavenProject parent = collectedProject.getParent();
