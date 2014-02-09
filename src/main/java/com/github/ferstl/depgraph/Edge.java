@@ -31,6 +31,6 @@ class Edge {
 
   @Override
   public String toString() {
-    return "\"" + this.from + "\" -> \"" + this.to + "\";";
+    return "Edge[" + this.from + ", " + this.to + "]";
   }
 }
