@@ -57,7 +57,7 @@ public class DepGraphMojo extends AbstractMojo {
   @Override
   public void execute() throws MojoExecutionException {
     try {
-      GraphBuilder graphBuilder = new GraphBuilder();
+      GraphBuilder graphBuilder = new GraphBuilder(ArtifactIdRenderer.INSTANCE, ArtifactIdRenderer.INSTANCE);
 
       @SuppressWarnings("unchecked")
       List<MavenProject> collectedProjects = this.project.getCollectedProjects();
@@ -66,7 +66,7 @@ public class DepGraphMojo extends AbstractMojo {
       for (MavenProject collectedProject : collectedProjects) {
         DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, null);
 
-        EdgeBuildingVisitor visitor = new EdgeBuildingVisitor(ArtifactIdRenderer.INSTANCE);
+        EdgeBuildingVisitor visitor = new EdgeBuildingVisitor();
         root.accept(visitor);
 
         graphBuilder.addEdges(visitor.getEdges());
@@ -86,8 +86,9 @@ public class DepGraphMojo extends AbstractMojo {
       MavenProject parent = collectedProject.getParent();
 
       while (parent != null) {
-        Edge edge = new Edge(parent.getArtifactId(), child.getArtifactId());
-        graphBuilder.addEdges(edge);
+        ArtifactWrappingDependencyNode parentNode = new ArtifactWrappingDependencyNode(parent.getArtifact());
+        ArtifactWrappingDependencyNode childNode = new ArtifactWrappingDependencyNode(child.getArtifact());
+        graphBuilder.addEdge(parentNode, childNode);
 
         child = parent;
         parent = parent.getParent();

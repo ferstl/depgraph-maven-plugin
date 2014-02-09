@@ -15,14 +15,11 @@ public class EdgeBuildingVisitor implements DependencyNodeVisitor {
 
   private final Set<Edge> edges;
   private final Deque<DependencyNode> stack;
-  private final DependencyNodeRenderer renderer;
 
 
-  public EdgeBuildingVisitor(DependencyNodeRenderer renderer) {
+  public EdgeBuildingVisitor() {
     this.edges = new LinkedHashSet<>();
     this.stack = new ArrayDeque<>();
-
-    this.renderer = renderer;
   }
 
   public Set<Edge> getEdges() {
@@ -34,9 +31,7 @@ public class EdgeBuildingVisitor implements DependencyNodeVisitor {
     DependencyNode currentParent = this.stack.peek();
 
     if (currentParent != null) {
-      String from = this.renderer.render(currentParent);
-      String to = this.renderer.render(node);
-      Edge edge = new Edge(from, to);
+      Edge edge = new Edge(currentParent, node);
       this.edges.add(edge);
     }
 

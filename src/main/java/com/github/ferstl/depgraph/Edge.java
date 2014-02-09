@@ -2,18 +2,20 @@ package com.github.ferstl.depgraph;
 
 import java.util.Objects;
 
-class Edge {
-  private final String from;
-  private final String to;
+import org.apache.maven.shared.dependency.graph.DependencyNode;
 
-  public Edge(String from, String to) {
+class Edge {
+  final DependencyNode from;
+  final DependencyNode to;
+
+  public Edge(DependencyNode from, DependencyNode to) {
     this.from = from;
     this.to = to;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.from, this.to);
+    return Objects.hash(this.from.getArtifact(), this.to.getArtifact());
   }
 
   @Override
@@ -23,7 +25,8 @@ class Edge {
 
     Edge other = (Edge) obj;
 
-    return Objects.equals(this.from, other.from) && Objects.equals(this.to, other.to);
+    return Objects.equals(this.from.getArtifact(), other.from.getArtifact())
+        && Objects.equals(this.to.getArtifact(), other.to.getArtifact());
   }
 
   @Override
