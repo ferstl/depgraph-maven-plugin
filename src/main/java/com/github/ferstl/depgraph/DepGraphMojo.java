@@ -1,5 +1,8 @@
 package com.github.ferstl.depgraph;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +25,8 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 
 @Mojo(
     name = "aggregate",
@@ -41,6 +46,9 @@ public class DepGraphMojo extends AbstractMojo {
 
   @Parameter(property = "excludes", defaultValue = "")
   private List<String> excludes;
+
+  @Parameter(property = "outputFile", defaultValue = "${project.build.directory}/dependency-graph.dot")
+  private File outputFile;
 
   @Component
   private MavenProject project;
@@ -66,10 +74,19 @@ public class DepGraphMojo extends AbstractMojo {
         root.accept(visitor);
       }
 
+      writeDotFile(dotBuilder);
       System.err.println(dotBuilder);
 
-    } catch (DependencyGraphBuilderException e) {
-      throw new MojoExecutionException("boom");
+    } catch (DependencyGraphBuilderException | IOException e) {
+      throw new MojoExecutionException("Unable to create dependency graph.", e);
+    }
+  }
+
+  private void writeDotFile(DotBuilder dotBuilder) throws IOException {
+    Files.createParentDirs(this.outputFile);
+
+    try(Writer writer = Files.newWriter(this.outputFile, Charsets.UTF_8)) {
+      writer.write(dotBuilder.toString());
     }
   }
 
