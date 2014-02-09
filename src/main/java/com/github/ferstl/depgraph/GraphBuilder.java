@@ -10,12 +10,12 @@ import org.apache.maven.shared.dependency.graph.DependencyNode;
 
 public class GraphBuilder {
 
-  private final DependencyNodeRenderer nodeRenderer;
-  private final DependencyNodeRenderer nodeLabelRenderer;
+  private final NodeRenderer nodeRenderer;
+  private final NodeRenderer nodeLabelRenderer;
   private final Set<String> nodeDefinitions;
   private final Set<String> edgeDefinitions;
 
-  public GraphBuilder(DependencyNodeRenderer nodeRenderer, DependencyNodeRenderer nodeLabelRenderer) {
+  public GraphBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
     this.nodeLabelRenderer = nodeLabelRenderer;
     this.nodeRenderer = nodeRenderer;
 

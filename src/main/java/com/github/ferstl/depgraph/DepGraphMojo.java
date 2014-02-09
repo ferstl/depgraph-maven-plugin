@@ -86,8 +86,8 @@ public class DepGraphMojo extends AbstractMojo {
       MavenProject parent = collectedProject.getParent();
 
       while (parent != null) {
-        ArtifactWrappingDependencyNode parentNode = new ArtifactWrappingDependencyNode(parent.getArtifact());
-        ArtifactWrappingDependencyNode childNode = new ArtifactWrappingDependencyNode(child.getArtifact());
+        ArtifactNode parentNode = new ArtifactNode(parent.getArtifact());
+        ArtifactNode childNode = new ArtifactNode(child.getArtifact());
         graphBuilder.addEdge(parentNode, childNode);
 
         child = parent;

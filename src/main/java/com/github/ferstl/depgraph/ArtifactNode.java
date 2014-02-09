@@ -11,14 +11,14 @@ import org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor;
  * An artificial {@link DependencyNode} that wraps a regular {@link Artifact}. This class is used
  * for parent {@link MavenProject}s that are not part of a dependency graph.
  */
-class ArtifactWrappingDependencyNode implements DependencyNode {
+class ArtifactNode implements DependencyNode {
 
   private static final String UNSUPPORTED_OPERATION_MESSAGE =
-      "This operation is not supportet in instances of " + ArtifactWrappingDependencyNode.class;
+      "This operation is not supportet in instances of " + ArtifactNode.class;
 
   private final Artifact artifact;
 
-  public ArtifactWrappingDependencyNode(Artifact artifact) {
+  public ArtifactNode(Artifact artifact) {
     if (artifact == null) {
       throw new NullPointerException("Artifact must not be null");
     }
