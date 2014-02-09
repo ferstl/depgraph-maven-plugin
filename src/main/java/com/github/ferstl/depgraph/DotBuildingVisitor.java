@@ -11,7 +11,7 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 
 // Invariants
 // - Stack is empty after a root node has been visited
-public class DotBuildingVisitor implements DependencyNodeVisitor {
+class DotBuildingVisitor implements DependencyNodeVisitor {
 
   private final DotBuilder dotBuilder;
   private final Deque<DependencyNode> stack;
