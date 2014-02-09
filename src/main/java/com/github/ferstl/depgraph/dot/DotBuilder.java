@@ -1,7 +1,5 @@
 package com.github.ferstl.depgraph.dot;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -23,26 +21,16 @@ public class DotBuilder {
     this.edgeDefinitions = new LinkedHashSet<>();
   }
 
-  public void addEdges(Collection<Edge> edges) {
-    for (Edge edge : edges) {
-      String fromNode = this.nodeRenderer.render(edge.from);
-      String fromLabel = this.nodeLabelRenderer.render(edge.from);
-      String toNode = this.nodeRenderer.render(edge.to);
-      String toLabel = this.nodeLabelRenderer.render(edge.to);
-
-      this.nodeDefinitions.add(renderNode(fromNode, fromLabel));
-      this.nodeDefinitions.add(renderNode(toNode, toLabel));
-
-      this.edgeDefinitions.add(renderEdge(fromNode, toNode));
-    }
-  }
-
-  public void addEdges(Edge... edges) {
-    addEdges(Arrays.asList(edges));
-  }
-
   public void addEdge(DependencyNode from, DependencyNode to) {
-    addEdges(new Edge(from, to));
+    String fromNode = this.nodeRenderer.render(from);
+    String fromLabel = this.nodeLabelRenderer.render(from);
+    String toNode = this.nodeRenderer.render(to);
+    String toLabel = this.nodeLabelRenderer.render(to);
+
+    this.nodeDefinitions.add(renderNode(fromNode, fromLabel));
+    this.nodeDefinitions.add(renderNode(toNode, toLabel));
+
+    this.edgeDefinitions.add(renderEdge(fromNode, toNode));
   }
 
   @Override
