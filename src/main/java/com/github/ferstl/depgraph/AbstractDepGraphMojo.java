@@ -3,7 +3,10 @@ package com.github.ferstl.depgraph;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,10 +26,14 @@ import org.apache.maven.shared.dependency.graph.DependencyNode;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 
 
 abstract class AbstractDepGraphMojo extends AbstractMojo {
+
+  private static final String DOT_EXTENSION = ".dot";
+  private static final String OUTPUT_DOT_FILE_NAME = "dependency-graph" + DOT_EXTENSION;
 
   @Parameter(property = "scope")
   private String scope;
@@ -37,8 +44,14 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
   @Parameter(property = "excludes", defaultValue = "")
   private List<String> excludes;
 
-  @Parameter(property = "outputFile", defaultValue = "${project.build.directory}/dependency-graph.dot")
+  @Parameter(property = "outputFile", defaultValue = "${project.build.directory}/" + OUTPUT_DOT_FILE_NAME)
   private File outputFile;
+
+  @Parameter(property = "createImage", defaultValue = "false")
+  private boolean createImage;
+
+  @Parameter(property = "imageFormat", defaultValue = "png")
+  private String imageFormat;
 
   @Component
   private MavenProject project;
@@ -66,8 +79,9 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
 
       writeDotFile(dotBuilder);
 
-      // FIXME: For simple "debugging" purposes
-      System.err.println(dotBuilder);
+      if (this.createImage) {
+        generateGraphImage();
+      }
 
     } catch (DependencyGraphBuilderException | IOException e) {
       throw new MojoExecutionException("Unable to create dependency graph.", e);
@@ -122,5 +136,41 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
     try(Writer writer = Files.newWriter(this.outputFile, Charsets.UTF_8)) {
       writer.write(dotBuilder.toString());
     }
+  }
+
+  private void generateGraphImage() throws IOException {
+    String graphFileName = createGraphFileName();
+
+    Path graphFile = Paths.get(this.outputFile.toPath().getParent().toString(), graphFileName);
+    List<String> commandLine = Arrays.asList(
+        "dot",
+        "-T" + this.imageFormat,
+        "-o\"" + graphFile.toAbsolutePath() + "\"",
+        "\"" + this.outputFile.getAbsolutePath() + "\"");
+
+    getLog().info("Running Graphviz: " + Joiner.on(" ").join(commandLine));
+
+    ProcessBuilder processBuilder = new ProcessBuilder(commandLine);
+    Process process = processBuilder.start();
+    try {
+      process.waitFor();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      process.destroy();
+    }
+
+    getLog().info("Graph file created on " + graphFile.toAbsolutePath());
+  }
+
+  private String createGraphFileName() {
+    String dotFileName = this.outputFile.getName();
+
+    String graphFileName;
+    if (dotFileName.endsWith(DOT_EXTENSION)) {
+      graphFileName = dotFileName.substring(0, dotFileName.lastIndexOf(".")) + "." + this.imageFormat;
+    } else {
+      graphFileName = dotFileName + this.imageFormat;
+    }
+    return graphFileName;
   }
 }
