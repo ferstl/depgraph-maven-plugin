@@ -57,11 +57,11 @@ public class DepGraphMojo extends AbstractMojo {
   @Override
   public void execute() throws MojoExecutionException {
     try {
-      GraphBuilder graphBuilder = new GraphBuilder(ArtifactIdRenderer.INSTANCE, ArtifactIdRenderer.INSTANCE);
+      DotBuilder dotBuilder = new DotBuilder(ArtifactIdRenderer.INSTANCE, ArtifactIdRenderer.INSTANCE);
 
       @SuppressWarnings("unchecked")
       List<MavenProject> collectedProjects = this.project.getCollectedProjects();
-      buildModuleTree(collectedProjects, graphBuilder);
+      buildModuleTree(collectedProjects, dotBuilder);
 
       for (MavenProject collectedProject : collectedProjects) {
         DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, null);
@@ -69,17 +69,17 @@ public class DepGraphMojo extends AbstractMojo {
         DotBuildingVisitor visitor = new DotBuildingVisitor();
         root.accept(visitor);
 
-        graphBuilder.addEdges(visitor.getEdges());
+        dotBuilder.addEdges(visitor.getEdges());
       }
 
-      System.err.println(graphBuilder);
+      System.err.println(dotBuilder);
 
     } catch (DependencyGraphBuilderException e) {
       throw new MojoExecutionException("boom");
     }
   }
 
-  public void buildModuleTree(Collection<MavenProject> collectedProjects, GraphBuilder graphBuilder) {
+  public void buildModuleTree(Collection<MavenProject> collectedProjects, DotBuilder dotBuilder) {
     System.err.println("Project: " + this.project + ", Parent: " + this.project.getParent());
     for (MavenProject collectedProject : collectedProjects) {
       MavenProject child = collectedProject;
@@ -88,7 +88,7 @@ public class DepGraphMojo extends AbstractMojo {
       while (parent != null) {
         ArtifactNode parentNode = new ArtifactNode(parent.getArtifact());
         ArtifactNode childNode = new ArtifactNode(child.getArtifact());
-        graphBuilder.addEdge(parentNode, childNode);
+        dotBuilder.addEdge(parentNode, childNode);
 
         child = parent;
         parent = parent.getParent();

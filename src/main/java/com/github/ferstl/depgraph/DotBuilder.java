@@ -8,14 +8,14 @@ import java.util.Set;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 
 
-public class GraphBuilder {
+public class DotBuilder {
 
   private final NodeRenderer nodeRenderer;
   private final NodeRenderer nodeLabelRenderer;
   private final Set<String> nodeDefinitions;
   private final Set<String> edgeDefinitions;
 
-  public GraphBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
+  public DotBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
     this.nodeLabelRenderer = nodeLabelRenderer;
     this.nodeRenderer = nodeRenderer;
 
