@@ -59,7 +59,7 @@ public class DepGraphMojo extends AbstractMojo {
   @Override
   public void execute() throws MojoExecutionException {
     try {
-      DotBuilder dotBuilder = new DotBuilder(ArtifactIdRenderer.INSTANCE, ArtifactIdRenderer.INSTANCE);
+      DotBuilder dotBuilder = new DotBuilder(ArtifactIdRenderer.VERSIONLESS_ID, ArtifactIdRenderer.ARTIFACT_ID);
 
       @SuppressWarnings("unchecked")
       List<MavenProject> collectedProjects = this.project.getCollectedProjects();

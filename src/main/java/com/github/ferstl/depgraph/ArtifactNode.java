@@ -23,6 +23,8 @@ class ArtifactNode implements DependencyNode {
       throw new NullPointerException("Artifact must not be null");
     }
 
+    // FIXME: better create a copy of the artifact and set the scope there.
+    artifact.setScope("compile");
     this.artifact = artifact;
   }
 
