@@ -35,11 +35,14 @@ public class DotBuilder {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("digraph G {").append("\n  node [shape=box]");
+    StringBuilder sb = new StringBuilder("digraph G {").append("\n  node [shape=box, fontname=\"Helvetica\"]");
+
+    sb.append("\n\n  // Node Definitions:");
     for (String node : this.nodeDefinitions) {
       sb.append("\n  ").append(node);
     }
 
+    sb.append("\n\n  // Edge Definitions:");
     for (String  edge : this.edgeDefinitions) {
       sb.append("\n  ").append(edge);
     }
