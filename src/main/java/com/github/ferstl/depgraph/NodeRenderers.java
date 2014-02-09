@@ -7,7 +7,7 @@ import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.google.common.base.Joiner;
 
 
-enum ArtifactIdRenderer implements NodeRenderer {
+enum NodeRenderers implements NodeRenderer {
   ARTIFACT_ID {
     @Override
     public String render(DependencyNode node) {

@@ -61,7 +61,7 @@ public class DepGraphMojo extends AbstractMojo {
     ArtifactFilter filter = createArtifactFilters();
 
     try {
-      DotBuilder dotBuilder = new DotBuilder(ArtifactIdRenderer.VERSIONLESS_ID, ArtifactIdRenderer.ARTIFACT_ID);
+      DotBuilder dotBuilder = new DotBuilder(NodeRenderers.VERSIONLESS_ID, NodeRenderers.ARTIFACT_ID);
 
       @SuppressWarnings("unchecked")
       List<MavenProject> collectedProjects = this.project.getCollectedProjects();
