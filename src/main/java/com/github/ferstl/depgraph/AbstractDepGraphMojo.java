@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
@@ -68,13 +69,16 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
 
       @SuppressWarnings("unchecked")
       List<MavenProject> collectedProjects = this.project.getCollectedProjects();
-      buildModuleTree(collectedProjects, dotBuilder);
+      buildModuleTree(collectedProjects, filter, dotBuilder);
 
       for (MavenProject collectedProject : collectedProjects) {
-        DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, filter);
+        // Process project only if its artifact is not filtered
+        if (filter.include(collectedProject.getArtifact())) {
+          DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, filter);
 
-        DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder);
-        root.accept(visitor);
+          DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder);
+          root.accept(visitor);
+        }
       }
 
       writeDotFile(dotBuilder);
@@ -108,15 +112,15 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
     return new AndArtifactFilter(filters);
   }
 
-  private void buildModuleTree(Collection<MavenProject> collectedProjects, DotBuilder dotBuilder) {
-    // FIXME apply filters here
+  private void buildModuleTree(Collection<MavenProject> collectedProjects, ArtifactFilter filter, DotBuilder dotBuilder) {
     for (MavenProject collectedProject : collectedProjects) {
       MavenProject child = collectedProject;
       MavenProject parent = collectedProject.getParent();
 
       while (parent != null) {
-        ArtifactNode parentNode = new ArtifactNode(parent.getArtifact());
-        ArtifactNode childNode = new ArtifactNode(child.getArtifact());
+        ArtifactNode parentNode = filterProject(parent, filter);
+        ArtifactNode childNode = filterProject(child, filter);
+
         dotBuilder.addEdge(parentNode, childNode);
 
         // Stop if we reached this project!
@@ -128,6 +132,15 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
         parent = parent.getParent();
       }
     }
+  }
+
+  private ArtifactNode filterProject(MavenProject project, ArtifactFilter filter) {
+    Artifact artifact = project.getArtifact();
+    if (filter.include(artifact)) {
+      return new ArtifactNode(artifact);
+    }
+
+    return null;
   }
 
   private void writeDotFile(DotBuilder dotBuilder) throws IOException {

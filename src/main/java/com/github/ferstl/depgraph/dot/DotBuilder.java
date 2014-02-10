@@ -21,16 +21,17 @@ public class DotBuilder {
     this.edgeDefinitions = new LinkedHashSet<>();
   }
 
+  // no edge will be created in case one or both nodes are null.
   public void addEdge(DependencyNode from, DependencyNode to) {
-    String fromNode = this.nodeRenderer.render(from);
-    String fromLabel = this.nodeLabelRenderer.render(from);
-    String toNode = this.nodeRenderer.render(to);
-    String toLabel = this.nodeLabelRenderer.render(to);
+    String fromNode = safeRenderNode(from, this.nodeRenderer);
+    String fromLabel = safeRenderNode(from, this.nodeLabelRenderer);
+    String toNode = safeRenderNode(to, this.nodeRenderer);
+    String toLabel = safeRenderNode(to, this.nodeLabelRenderer);
 
-    this.nodeDefinitions.add(renderNode(fromNode, fromLabel));
-    this.nodeDefinitions.add(renderNode(toNode, toLabel));
+    safeAddNode(fromNode, fromLabel);
+    safeAddNode(toNode, toLabel);
 
-    this.edgeDefinitions.add(renderEdge(fromNode, toNode));
+    safeAddEdge(fromNode, toNode);
   }
 
   @Override
@@ -50,11 +51,25 @@ public class DotBuilder {
     return sb.append("\n}").toString();
   }
 
-  private String renderNode(String nodeName, String nodeLabel) {
-    return "\"" + nodeName + "\"" + " [label=\"" + nodeLabel + "\"]";
+  private String safeRenderNode(DependencyNode node, NodeRenderer renderer) {
+    if (node != null) {
+      return renderer.render(node);
+    }
+
+    return null;
   }
 
-  private String renderEdge(String fromNode, String toNode) {
-    return "\"" + fromNode + "\" -> \"" + toNode + "\"";
+  private void safeAddNode(String nodeName, String nodeLabel) {
+    if (nodeName != null && nodeLabel != null) {
+      String nodeDefinition = "\"" + nodeName + "\"" + " [label=\"" + nodeLabel + "\"]";
+      this.nodeDefinitions.add(nodeDefinition);
+    }
+  }
+
+  private void safeAddEdge(String fromNode, String toNode) {
+    if (fromNode != null && toNode != null) {
+      String edgeDefinition = "\"" + fromNode + "\" -> \"" + toNode + "\"";
+      this.edgeDefinitions.add(edgeDefinition);
+    }
   }
 }
