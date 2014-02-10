@@ -7,10 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
@@ -23,7 +21,6 @@ import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilt
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
-import org.apache.maven.shared.dependency.graph.DependencyNode;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.google.common.base.Charsets;
@@ -62,26 +59,14 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
 
   @Override
   public void execute() throws MojoExecutionException {
-    ArtifactFilter filter = createArtifactFilters();
+    ArtifactFilter filter = createArtifactFilter();
 
     try {
       DotBuilder dotBuilder = createDotBuilder();
 
-      @SuppressWarnings("unchecked")
-      List<MavenProject> collectedProjects = this.project.getCollectedProjects();
-      buildModuleTree(collectedProjects, filter, dotBuilder);
+      AggregatingDotGraphCreator graphCreator = new AggregatingDotGraphCreator(this.dependencyGraphBuilder, filter);
 
-      for (MavenProject collectedProject : collectedProjects) {
-        // Process project only if its artifact is not filtered
-        if (filter.include(collectedProject.getArtifact())) {
-          DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, filter);
-
-          DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder);
-          root.accept(visitor);
-        }
-      }
-
-      writeDotFile(dotBuilder);
+      writeDotFile(graphCreator.createDotGraph(this.project, dotBuilder));
 
       if (this.createImage) {
         generateGraphImage();
@@ -94,7 +79,7 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
 
   protected abstract DotBuilder createDotBuilder();
 
-  private ArtifactFilter createArtifactFilters() {
+  private ArtifactFilter createArtifactFilter() {
     List<ArtifactFilter> filters = new ArrayList<>(3);
 
     if (this.scope != null) {
@@ -112,42 +97,11 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
     return new AndArtifactFilter(filters);
   }
 
-  private void buildModuleTree(Collection<MavenProject> collectedProjects, ArtifactFilter filter, DotBuilder dotBuilder) {
-    for (MavenProject collectedProject : collectedProjects) {
-      MavenProject child = collectedProject;
-      MavenProject parent = collectedProject.getParent();
-
-      while (parent != null) {
-        ArtifactNode parentNode = filterProject(parent, filter);
-        ArtifactNode childNode = filterProject(child, filter);
-
-        dotBuilder.addEdge(parentNode, childNode);
-
-        // Stop if we reached this project!
-        if (parent.equals(this.project)) {
-          break;
-        }
-
-        child = parent;
-        parent = parent.getParent();
-      }
-    }
-  }
-
-  private ArtifactNode filterProject(MavenProject project, ArtifactFilter filter) {
-    Artifact artifact = project.getArtifact();
-    if (filter.include(artifact)) {
-      return new ArtifactNode(artifact);
-    }
-
-    return null;
-  }
-
-  private void writeDotFile(DotBuilder dotBuilder) throws IOException {
+  private void writeDotFile(String dotGraph) throws IOException {
     Files.createParentDirs(this.outputFile);
 
     try(Writer writer = Files.newWriter(this.outputFile, Charsets.UTF_8)) {
-      writer.write(dotBuilder.toString());
+      writer.write(dotGraph);
     }
   }
 
