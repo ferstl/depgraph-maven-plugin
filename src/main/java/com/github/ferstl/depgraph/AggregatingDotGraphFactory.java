@@ -13,12 +13,12 @@ import org.apache.maven.shared.dependency.graph.DependencyNode;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
 
-class AggregatingDotGraphCreator implements DotGraphCreator {
+class AggregatingDotGraphFactory implements GraphFactory {
   private final DependencyGraphBuilder dependencyGraphBuilder;
   private final ArtifactFilter artifactFilter;
   private final DotBuilder dotBuilder;
 
-  public AggregatingDotGraphCreator(
+  public AggregatingDotGraphFactory(
       DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, DotBuilder dotBuilder) {
 
     this.dependencyGraphBuilder = dependencyGraphBuilder;
@@ -27,7 +27,7 @@ class AggregatingDotGraphCreator implements DotGraphCreator {
   }
 
   @Override
-  public String createDotGraph(MavenProject project) throws DependencyGraphBuilderException {
+  public String createGraph(MavenProject project) throws DependencyGraphBuilderException {
     @SuppressWarnings("unchecked")
     List<MavenProject> collectedProjects = project.getCollectedProjects();
     buildModuleTree(project, this.artifactFilter, this.dotBuilder);

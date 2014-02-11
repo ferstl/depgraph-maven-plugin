@@ -19,10 +19,10 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 public class DepGraphMojo extends AbstractDepGraphMojo {
 
   @Override
-  protected DotGraphCreator createGraphCreator(
+  protected GraphFactory createGraphFactory(
       DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter) {
 
       DotBuilder dotBuilder = new DotBuilder(NodeRenderers.VERSIONLESS_ID, NodeRenderers.ARTIFACT_ID_LABEL);
-      return new AggregatingDotGraphCreator(dependencyGraphBuilder, artifactFilter, dotBuilder);
+      return new AggregatingDotGraphFactory(dependencyGraphBuilder, artifactFilter, dotBuilder);
   }
 }

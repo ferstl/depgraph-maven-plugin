@@ -61,9 +61,9 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
     ArtifactFilter filter = createArtifactFilter();
 
     try {
-      DotGraphCreator graphCreator = createGraphCreator(this.dependencyGraphBuilder, filter);
+      GraphFactory graphFactory = createGraphFactory(this.dependencyGraphBuilder, filter);
 
-      writeDotFile(graphCreator.createDotGraph(this.project));
+      writeDotFile(graphFactory.createGraph(this.project));
 
       if (this.createImage) {
         generateGraphImage();
@@ -74,7 +74,7 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract DotGraphCreator createGraphCreator(
+  protected abstract GraphFactory createGraphFactory(
       DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter);
 
   private ArtifactFilter createArtifactFilter() {
