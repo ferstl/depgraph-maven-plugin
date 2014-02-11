@@ -53,7 +53,7 @@ enum NodeRenderers implements NodeRenderer {
   private static final Joiner COLON_JOINER = Joiner.on(":").useForNull("");
 
   private static String toScopedString(String string, String scope) {
-    if (!"compile".equals(scope)) {
+    if (scope != null && !"compile".equals(scope)) {
       return string + "\\n(" + scope + ")";
     }
 
