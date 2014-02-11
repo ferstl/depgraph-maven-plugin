@@ -16,30 +16,33 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 class AggregatingDotGraphCreator implements DotGraphCreator {
   private final DependencyGraphBuilder dependencyGraphBuilder;
   private final ArtifactFilter artifactFilter;
+  private final DotBuilder dotBuilder;
 
-  public AggregatingDotGraphCreator(DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter) {
+  public AggregatingDotGraphCreator(
+      DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, DotBuilder dotBuilder) {
 
     this.dependencyGraphBuilder = dependencyGraphBuilder;
     this.artifactFilter = artifactFilter;
+    this.dotBuilder = dotBuilder;
   }
 
   @Override
-  public String createDotGraph(MavenProject project, DotBuilder dotBuilder) throws DependencyGraphBuilderException {
+  public String createDotGraph(MavenProject project) throws DependencyGraphBuilderException {
     @SuppressWarnings("unchecked")
     List<MavenProject> collectedProjects = project.getCollectedProjects();
-    buildModuleTree(project, this.artifactFilter, dotBuilder);
+    buildModuleTree(project, this.artifactFilter, this.dotBuilder);
 
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
       if (this.artifactFilter.include(collectedProject.getArtifact())) {
         DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, this.artifactFilter);
 
-        DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder);
+        DotBuildingVisitor visitor = new DotBuildingVisitor(this.dotBuilder);
         root.accept(visitor);
       }
     }
 
-    return dotBuilder.toString();
+    return this.dotBuilder.toString();
   }
 
   private void buildModuleTree(MavenProject rootProject, ArtifactFilter filter, DotBuilder dotBuilder) {

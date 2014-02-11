@@ -22,7 +22,6 @@ import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilt
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 
-import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
@@ -62,11 +61,9 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
     ArtifactFilter filter = createArtifactFilter();
 
     try {
-      DotBuilder dotBuilder = createDotBuilder();
+      DotGraphCreator graphCreator = createGraphCreator(this.dependencyGraphBuilder, filter);
 
-      AggregatingDotGraphCreator graphCreator = new AggregatingDotGraphCreator(this.dependencyGraphBuilder, filter);
-
-      writeDotFile(graphCreator.createDotGraph(this.project, dotBuilder));
+      writeDotFile(graphCreator.createDotGraph(this.project));
 
       if (this.createImage) {
         generateGraphImage();
@@ -77,7 +74,8 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract DotBuilder createDotBuilder();
+  protected abstract DotGraphCreator createGraphCreator(
+      DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter);
 
   private ArtifactFilter createArtifactFilter() {
     List<ArtifactFilter> filters = new ArrayList<>(3);
