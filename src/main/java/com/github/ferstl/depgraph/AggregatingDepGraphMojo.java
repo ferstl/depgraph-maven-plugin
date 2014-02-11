@@ -16,7 +16,7 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     requiresDependencyCollection = ResolutionScope.TEST,
     requiresDirectInvocation = true,
     threadSafe = true)
-public class DepGraphMojo extends AbstractDepGraphMojo {
+public class AggregatingDepGraphMojo extends AbstractDepGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(
