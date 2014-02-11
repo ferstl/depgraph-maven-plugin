@@ -22,7 +22,7 @@ public class DepGraphMojo extends AbstractDepGraphMojo {
       DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter) {
 
       DotBuilder dotBuilder = new DotBuilder(NodeRenderers.VERSIONLESS_ID, NodeRenderers.ARTIFACT_ID_LABEL);
-      return new AggregatingDotGraphFactory(dependencyGraphBuilder, artifactFilter, dotBuilder);
+      return new SimpleDotGraphFactory(dependencyGraphBuilder, artifactFilter, dotBuilder);
   }
 
 }
