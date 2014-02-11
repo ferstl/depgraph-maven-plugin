@@ -14,6 +14,7 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 
 
 class AggregatingDotGraphFactory implements GraphFactory {
+
   private final DependencyGraphBuilder dependencyGraphBuilder;
   private final ArtifactFilter artifactFilter;
   private final DotBuilder dotBuilder;
