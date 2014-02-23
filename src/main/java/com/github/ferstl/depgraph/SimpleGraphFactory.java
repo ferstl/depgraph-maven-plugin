@@ -10,7 +10,7 @@ import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
 
-class SimpleDotGraphFactory implements GraphFactory {
+class SimpleGraphFactory implements GraphFactory {
 
   private final DependencyTreeBuilder dependencyTreeBuilder;
   private final ArtifactRepository artifactRepository;
@@ -18,7 +18,7 @@ class SimpleDotGraphFactory implements GraphFactory {
   private final DotBuilder dotBuilder;
 
 
-  public SimpleDotGraphFactory(
+  public SimpleGraphFactory(
       DependencyTreeBuilder dependencyTreeBuilder,
       ArtifactRepository artifactRepository,
       ArtifactFilter artifactFilter,
