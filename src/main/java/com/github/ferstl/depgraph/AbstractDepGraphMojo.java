@@ -21,6 +21,7 @@ import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilt
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
+import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
@@ -54,14 +55,17 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
   private MavenProject project;
 
   @Component( hint = "default" )
-  private DependencyGraphBuilder dependencyGraphBuilder;
+  DependencyGraphBuilder dependencyGraphBuilder;
+
+  @Component
+  DependencyTreeBuilder dependencyTreeBuilder;
 
   @Override
   public void execute() throws MojoExecutionException {
     ArtifactFilter filter = createArtifactFilter();
 
     try {
-      GraphFactory graphFactory = createGraphFactory(this.dependencyGraphBuilder, filter);
+      GraphFactory graphFactory = createGraphFactory(filter);
 
       writeDotFile(graphFactory.createGraph(this.project));
 
@@ -74,8 +78,7 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract GraphFactory createGraphFactory(
-      DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter);
+  protected abstract GraphFactory createGraphFactory(ArtifactFilter artifactFilter);
 
   private ArtifactFilter createArtifactFilter() {
     List<ArtifactFilter> filters = new ArrayList<>(3);
