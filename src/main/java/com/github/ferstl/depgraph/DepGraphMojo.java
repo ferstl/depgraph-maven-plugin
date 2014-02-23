@@ -20,7 +20,7 @@ public class DepGraphMojo extends AbstractDepGraphMojo {
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
 
       DotBuilder dotBuilder = new DotBuilder(NodeRenderers.VERSIONLESS_ID, NodeRenderers.ARTIFACT_ID_LABEL);
-      return new SimpleDotGraphFactory(this.dependencyGraphBuilder, artifactFilter, dotBuilder);
+      return new SimpleDotGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, dotBuilder);
   }
 
 }

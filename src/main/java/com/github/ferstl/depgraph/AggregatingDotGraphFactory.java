@@ -29,7 +29,7 @@ class AggregatingDotGraphFactory implements GraphFactory {
   }
 
   @Override
-  public String createGraph(MavenProject project) throws DependencyGraphBuilderException {
+  public String createGraph(MavenProject project) throws DependencyGraphException {
     @SuppressWarnings("unchecked")
     List<MavenProject> collectedProjects = project.getCollectedProjects();
     buildModuleTree(project, this.artifactFilter, this.dotBuilder);
@@ -37,7 +37,12 @@ class AggregatingDotGraphFactory implements GraphFactory {
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
       if (this.artifactFilter.include(collectedProject.getArtifact())) {
-        DependencyNode root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, this.artifactFilter);
+        DependencyNode root;
+        try {
+          root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, this.artifactFilter);
+        } catch (DependencyGraphBuilderException e) {
+          throw new DependencyGraphException(e);
+        }
 
         DotBuildingVisitor visitor = new DotBuildingVisitor(this.dotBuilder);
         root.accept(visitor);

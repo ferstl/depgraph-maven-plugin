@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
@@ -20,7 +21,6 @@ import org.apache.maven.shared.artifact.filter.ScopeArtifactFilter;
 import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilter;
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 
 import com.google.common.base.Charsets;
@@ -51,6 +51,9 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
   @Parameter(property = "imageFormat", defaultValue = "png")
   private String imageFormat;
 
+  @Parameter( defaultValue = "${localRepository}", readonly = true )
+  ArtifactRepository localRepository;
+
   @Component
   private MavenProject project;
 
@@ -73,8 +76,10 @@ abstract class AbstractDepGraphMojo extends AbstractMojo {
         generateGraphImage();
       }
 
-    } catch (DependencyGraphBuilderException | IOException e) {
-      throw new MojoExecutionException("Unable to create dependency graph.", e);
+    } catch (DependencyGraphException e) {
+      throw new MojoExecutionException("Unable to create dependency graph.", e.getCause());
+    } catch (IOException e) {
+      throw new MojoExecutionException("Unable to write DOT file.", e);
     }
   }
 
