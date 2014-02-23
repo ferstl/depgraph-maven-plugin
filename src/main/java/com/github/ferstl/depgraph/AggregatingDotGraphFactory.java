@@ -11,6 +11,7 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.Node;
 
 
 class AggregatingDotGraphFactory implements GraphFactory {
@@ -54,8 +55,8 @@ class AggregatingDotGraphFactory implements GraphFactory {
       MavenProject parent = collectedProject.getParent();
 
       while (parent != null) {
-        ArtifactNode parentNode = filterProject(parent, filter);
-        ArtifactNode childNode = filterProject(child, filter);
+        Node parentNode = filterProject(parent, filter);
+        Node childNode = filterProject(child, filter);
 
         dotBuilder.addEdge(parentNode, childNode);
 
@@ -70,10 +71,10 @@ class AggregatingDotGraphFactory implements GraphFactory {
     }
   }
 
-  private ArtifactNode filterProject(MavenProject project, ArtifactFilter filter) {
+  private Node filterProject(MavenProject project, ArtifactFilter filter) {
     Artifact artifact = project.getArtifact();
     if (filter.include(artifact)) {
-      return new ArtifactNode(artifact);
+      return new DependencyNodeAdapter(artifact);
     }
 
     return null;

@@ -1,8 +1,8 @@
 package com.github.ferstl.depgraph;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.shared.dependency.graph.DependencyNode;
 
+import com.github.ferstl.depgraph.dot.Node;
 import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.google.common.base.Joiner;
 
@@ -10,7 +10,7 @@ import com.google.common.base.Joiner;
 enum NodeRenderers implements NodeRenderer {
   ARTIFACT_ID_LABEL {
     @Override
-    public String render(DependencyNode node) {
+    public String render(Node node) {
       Artifact artifact = node.getArtifact();
       return toScopedString(artifact.getArtifactId(), artifact.getScope());
     }
@@ -19,7 +19,7 @@ enum NodeRenderers implements NodeRenderer {
   GROUP_ID_LABEL {
 
     @Override
-    public String render(DependencyNode node) {
+    public String render(Node node) {
       Artifact artifact = node.getArtifact();
       return toScopedString(artifact.getGroupId(), artifact.getScope());
     }
@@ -28,7 +28,7 @@ enum NodeRenderers implements NodeRenderer {
 
   SCOPED_GROUP_ID {
     @Override
-    public String render(DependencyNode node) {
+    public String render(Node node) {
       Artifact artifact = node.getArtifact();
       return COLON_JOINER.join(artifact.getGroupId(), artifact.getScope());
     }
@@ -37,7 +37,7 @@ enum NodeRenderers implements NodeRenderer {
   VERSIONLESS_ID {
 
     @Override
-    public String render(DependencyNode node) {
+    public String render(Node node) {
       Artifact artifact = node.getArtifact();
 
       return COLON_JOINER.join(

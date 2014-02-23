@@ -3,8 +3,6 @@ package com.github.ferstl.depgraph.dot;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.maven.shared.dependency.graph.DependencyNode;
-
 
 public class DotBuilder {
 
@@ -22,7 +20,7 @@ public class DotBuilder {
   }
 
   // no edge will be created in case one or both nodes are null.
-  public void addEdge(DependencyNode from, DependencyNode to) {
+  public void addEdge(Node from, Node to) {
     String fromNode = safeRenderNode(from, this.nodeRenderer);
     String fromLabel = safeRenderNode(from, this.nodeLabelRenderer);
     String toNode = safeRenderNode(to, this.nodeRenderer);
@@ -51,7 +49,7 @@ public class DotBuilder {
     return sb.append("\n}").toString();
   }
 
-  private String safeRenderNode(DependencyNode node, NodeRenderer renderer) {
+  private String safeRenderNode(Node node, NodeRenderer renderer) {
     if (node != null) {
       return renderer.render(node);
     }
