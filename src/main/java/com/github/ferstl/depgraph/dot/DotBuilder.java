@@ -8,12 +8,18 @@ public class DotBuilder {
 
   private final NodeRenderer nodeRenderer;
   private final NodeRenderer nodeLabelRenderer;
+  private final EdgeStyler edgeStyler;
   private final Set<String> nodeDefinitions;
   private final Set<String> edgeDefinitions;
 
   public DotBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
+    this(nodeRenderer, nodeLabelRenderer, DefaultEdgeStyler.INSTANCE);
+  }
+
+  public DotBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer, EdgeStyler edgeStyler) {
     this.nodeLabelRenderer = nodeLabelRenderer;
     this.nodeRenderer = nodeRenderer;
+    this.edgeStyler = edgeStyler;
 
     this.nodeDefinitions = new LinkedHashSet<>();
     this.edgeDefinitions = new LinkedHashSet<>();
@@ -21,15 +27,12 @@ public class DotBuilder {
 
   // no edge will be created in case one or both nodes are null.
   public void addEdge(Node from, Node to) {
-    String fromNode = safeRenderNode(from, this.nodeRenderer);
-    String fromLabel = safeRenderNode(from, this.nodeLabelRenderer);
-    String toNode = safeRenderNode(to, this.nodeRenderer);
-    String toLabel = safeRenderNode(to, this.nodeLabelRenderer);
+    if (from != null && to != null) {
+      addNode(from);
+      addNode(to);
 
-    safelyAddNode(fromNode, fromLabel);
-    safelyAddNode(toNode, toLabel);
-
-    safelyAddEdge(fromNode, toNode);
+      safelyAddEdge(from, to);
+    }
   }
 
   @Override
@@ -49,25 +52,30 @@ public class DotBuilder {
     return sb.append("\n}").toString();
   }
 
-  private String safeRenderNode(Node node, NodeRenderer renderer) {
-    if (node != null) {
-      return renderer.render(node);
-    }
+  private void addNode(Node node) {
+    String nodeName = this.nodeRenderer.render(node);
+    String nodeLabel = this.nodeLabelRenderer.render(node);
 
-    return null;
+    String nodeDefinition = "\"" + nodeName + "\"" + " [label=\"" + nodeLabel + "\"]";
+    this.nodeDefinitions.add(nodeDefinition);
   }
 
-  private void safelyAddNode(String nodeName, String nodeLabel) {
-    if (nodeName != null && nodeLabel != null) {
-      String nodeDefinition = "\"" + nodeName + "\"" + " [label=\"" + nodeLabel + "\"]";
-      this.nodeDefinitions.add(nodeDefinition);
-    }
+  private void safelyAddEdge(Node fromNode, Node toNode) {
+    String fromName = this.nodeRenderer.render(fromNode);
+    String toName = this.nodeRenderer.render(toNode);
+
+    String edgeDefinition = "\"" + fromName + "\" -> \"" + toName + "\"" + this.edgeStyler.styleEdge(fromNode, toNode);
+    this.edgeDefinitions.add(edgeDefinition);
   }
 
-  private void safelyAddEdge(String fromNode, String toNode) {
-    if (fromNode != null && toNode != null) {
-      String edgeDefinition = "\"" + fromNode + "\" -> \"" + toNode + "\"";
-      this.edgeDefinitions.add(edgeDefinition);
+
+  static enum DefaultEdgeStyler implements EdgeStyler {
+    INSTANCE;
+
+    @Override
+    public String styleEdge(Node from, Node to) {
+      return "";
     }
+
   }
 }
