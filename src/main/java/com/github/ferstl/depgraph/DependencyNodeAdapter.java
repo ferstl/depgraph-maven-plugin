@@ -15,9 +15,22 @@ import com.github.ferstl.depgraph.dot.Node;
 public class DependencyNodeAdapter implements Node {
 
   private final Artifact artifact;
+  private final NodeResolution resolution;
 
 
-  public DependencyNodeAdapter(Artifact artifact) {
+  public  DependencyNodeAdapter(Artifact artifact) {
+    this(artifact, NodeResolution.INCLUDED);
+  }
+
+  public DependencyNodeAdapter(org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode) {
+    this(dependencyNode.getArtifact());
+  }
+
+  public DependencyNodeAdapter(org.apache.maven.shared.dependency.tree.DependencyNode dependencyNode) {
+    this(dependencyNode.getArtifact(), determineResolution(dependencyNode.getState()));
+  }
+
+  private DependencyNodeAdapter(Artifact artifact, NodeResolution resolution) {
     if (artifact == null) {
       throw new NullPointerException("Artifact must not be null");
     }
@@ -28,18 +41,29 @@ public class DependencyNodeAdapter implements Node {
     }
 
     this.artifact = artifact;
-  }
-
-  public DependencyNodeAdapter(org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode) {
-    this(dependencyNode.getArtifact());
-  }
-
-  public DependencyNodeAdapter(org.apache.maven.shared.dependency.tree.DependencyNode dependencyNode) {
-    this(dependencyNode.getArtifact());
+    this.resolution = resolution;
   }
 
   @Override
   public Artifact getArtifact() {
     return this.artifact;
+  }
+
+  @Override
+  public NodeResolution getResolution() {
+    return this.resolution;
+  }
+
+  private static NodeResolution determineResolution(int res) {
+    switch (res) {
+      case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE:
+        return NodeResolution.OMITTED_FOR_DUPLICATE;
+      case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT:
+        return NodeResolution.OMMITTED_FOR_CONFLICT;
+      case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CYCLE:
+        return NodeResolution.OMMITTED_FOR_CYCLE;
+      default:
+        return NodeResolution.INCLUDED;
+    }
   }
 }
