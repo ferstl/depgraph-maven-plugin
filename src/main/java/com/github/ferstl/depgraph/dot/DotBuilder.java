@@ -26,10 +26,10 @@ public class DotBuilder {
     String toNode = safeRenderNode(to, this.nodeRenderer);
     String toLabel = safeRenderNode(to, this.nodeLabelRenderer);
 
-    safeAddNode(fromNode, fromLabel);
-    safeAddNode(toNode, toLabel);
+    safelyAddNode(fromNode, fromLabel);
+    safelyAddNode(toNode, toLabel);
 
-    safeAddEdge(fromNode, toNode);
+    safelyAddEdge(fromNode, toNode);
   }
 
   @Override
@@ -57,14 +57,14 @@ public class DotBuilder {
     return null;
   }
 
-  private void safeAddNode(String nodeName, String nodeLabel) {
+  private void safelyAddNode(String nodeName, String nodeLabel) {
     if (nodeName != null && nodeLabel != null) {
       String nodeDefinition = "\"" + nodeName + "\"" + " [label=\"" + nodeLabel + "\"]";
       this.nodeDefinitions.add(nodeDefinition);
     }
   }
 
-  private void safeAddEdge(String fromNode, String toNode) {
+  private void safelyAddEdge(String fromNode, String toNode) {
     if (fromNode != null && toNode != null) {
       String edgeDefinition = "\"" + fromNode + "\" -> \"" + toNode + "\"";
       this.edgeDefinitions.add(edgeDefinition);
