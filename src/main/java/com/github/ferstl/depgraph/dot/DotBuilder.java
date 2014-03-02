@@ -3,6 +3,8 @@ package com.github.ferstl.depgraph.dot;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
+
 
 public class DotBuilder {
 
@@ -38,8 +40,8 @@ public class DotBuilder {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("digraph G {")
-    .append("\n  node [shape=box, fontname=\"Helvetica\"]")
-    .append("\n  edge [fontname=\"Helvetica\",fontsize=10]");
+    .append("\n  node ").append(new AttributeBuilder().shape("box").fontName("Helvetica"))
+    .append("\n  edge ").append(new AttributeBuilder().fontName("Helvetica").fontSize(10));
 
     sb.append("\n\n  // Node Definitions:");
     for (String node : this.nodeDefinitions) {
@@ -58,7 +60,8 @@ public class DotBuilder {
     String nodeName = this.nodeRenderer.render(node);
     String nodeLabel = this.nodeLabelRenderer.render(node);
 
-    String nodeDefinition = "\"" + nodeName + "\"" + " [label=\"" + nodeLabel + "\"]";
+
+    String nodeDefinition = escape(nodeName) + new AttributeBuilder().label(nodeLabel);;
     this.nodeDefinitions.add(nodeDefinition);
   }
 
@@ -66,7 +69,7 @@ public class DotBuilder {
     String fromName = this.nodeRenderer.render(fromNode);
     String toName = this.nodeRenderer.render(toNode);
 
-    String edgeDefinition = "\"" + fromName + "\" -> \"" + toName + "\"" + this.edgeStyler.styleEdge(fromNode, toNode);
+    String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeStyler.styleEdge(fromNode, toNode);
     this.edgeDefinitions.add(edgeDefinition);
   }
 
