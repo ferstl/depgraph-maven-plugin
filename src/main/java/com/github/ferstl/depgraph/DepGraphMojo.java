@@ -29,11 +29,15 @@ public class DepGraphMojo extends AbstractDepGraphMojo {
 
     @Override
     public String styleEdge(Node from, Node to) {
-      if (to.getResolution() != NodeResolution.INCLUDED) {
-        return "[style=dotted]";
-      }
+      switch(to.getResolution()) {
+        case OMITTED_FOR_DUPLICATE:
+          return "[style=dotted]";
+        case OMMITTED_FOR_CONFLICT:
+          return "[style=dashed,color=red,fontcolor=red,label=\"" + to.getArtifact().getVersion() + "\"]";
+        default:
+          return "[label=\"" + to.getArtifact().getVersion() + "\"]";
 
-      return "";
+      }
     }
   }
 }
