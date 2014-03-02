@@ -37,7 +37,9 @@ public class DotBuilder {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("digraph G {").append("\n  node [shape=box, fontname=\"Helvetica\"]");
+    StringBuilder sb = new StringBuilder("digraph G {")
+    .append("\n  node [shape=box, fontname=\"Helvetica\"]")
+    .append("\n  edge [fontname=\"Helvetica\",fontsize=10]");
 
     sb.append("\n\n  // Node Definitions:");
     for (String node : this.nodeDefinitions) {
