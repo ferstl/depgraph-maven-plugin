@@ -28,7 +28,7 @@ import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 
 
-abstract class AbstractDepGraphMojo extends AbstractMojo {
+abstract class AbstractGraphMojo extends AbstractMojo {
 
   private static final String DOT_EXTENSION = ".dot";
   private static final String OUTPUT_DOT_FILE_NAME = "dependency-graph" + DOT_EXTENSION;

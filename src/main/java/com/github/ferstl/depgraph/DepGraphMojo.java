@@ -17,7 +17,7 @@ import com.github.ferstl.depgraph.dot.Node;
     requiresDependencyCollection = ResolutionScope.TEST,
     requiresDirectInvocation = true,
     threadSafe = true)
-public class DepGraphMojo extends AbstractDepGraphMojo {
+public class DepGraphMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
