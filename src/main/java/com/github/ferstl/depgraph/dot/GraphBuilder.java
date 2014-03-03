@@ -6,7 +6,7 @@ import java.util.Set;
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 
-public class DotBuilder {
+public class GraphBuilder {
 
   private NodeRenderer nodeRenderer;
   private NodeRenderer nodeLabelRenderer;
@@ -14,7 +14,7 @@ public class DotBuilder {
   private final Set<String> nodeDefinitions;
   private final Set<String> edgeDefinitions;
 
-  public DotBuilder() {
+  public GraphBuilder() {
     this.nodeLabelRenderer = DefaultRenderer.INSTANCE;
     this.nodeRenderer = DefaultRenderer.INSTANCE;
     this.edgeRenderer = DefaultRenderer.INSTANCE;
@@ -23,23 +23,23 @@ public class DotBuilder {
     this.edgeDefinitions = new LinkedHashSet<>();
   }
 
-  public DotBuilder useNodeRenderer(NodeRenderer nodeRenderer) {
+  public GraphBuilder useNodeRenderer(NodeRenderer nodeRenderer) {
     this.nodeRenderer = nodeRenderer;
     return this;
   }
 
-  public DotBuilder useNodeLabelRenderer(NodeRenderer nodeLabelRenderer) {
+  public GraphBuilder useNodeLabelRenderer(NodeRenderer nodeLabelRenderer) {
     this.nodeLabelRenderer = nodeLabelRenderer;
     return this;
   }
 
-  public DotBuilder useEdgeRenderer(EdgeRenderer edgeRenderer) {
+  public GraphBuilder useEdgeRenderer(EdgeRenderer edgeRenderer) {
     this.edgeRenderer = edgeRenderer;
     return this;
   }
 
   // no edge will be created in case one or both nodes are null.
-  public DotBuilder addEdge(Node from, Node to) {
+  public GraphBuilder addEdge(Node from, Node to) {
     if (from != null && to != null) {
       addNode(from);
       addNode(to);

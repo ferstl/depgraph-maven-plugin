@@ -6,21 +6,21 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.GraphBuilder;
 
 
 class SimpleTreeGraphFactory implements GraphFactory {
 
   private final DependencyGraphBuilder dependencyGraphBuilder;
   private final ArtifactFilter artifactFilter;
-  private final DotBuilder dotBuilder;
+  private final GraphBuilder graphBuilder;
 
   public SimpleTreeGraphFactory(
-      DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, DotBuilder dotBuilder) {
+      DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, GraphBuilder graphBuilder) {
 
     this.dependencyGraphBuilder = dependencyGraphBuilder;
     this.artifactFilter = artifactFilter;
-    this.dotBuilder = dotBuilder;
+    this.graphBuilder = graphBuilder;
   }
 
 
@@ -34,10 +34,10 @@ class SimpleTreeGraphFactory implements GraphFactory {
       throw new DependencyGraphException(e);
     }
 
-    DotBuildingVisitor visitor = new DotBuildingVisitor(this.dotBuilder);
+    DotBuildingVisitor visitor = new DotBuildingVisitor(this.graphBuilder);
     root.accept(visitor);
 
-    return this.dotBuilder.toString();
+    return this.graphBuilder.toString();
   }
 
 }

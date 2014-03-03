@@ -5,7 +5,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.GraphBuilder;
 
 @Mojo(
     name = "aggregate",
@@ -20,10 +20,10 @@ public class AggregatingDepGraphMojo extends AbstractDepGraphMojo {
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
 
-      DotBuilder dotBuilder = new DotBuilder()
+      GraphBuilder graphBuilder = new GraphBuilder()
         .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
         .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
 
-      return new AggregatingDotGraphFactory(this.dependencyGraphBuilder, artifactFilter, dotBuilder);
+      return new AggregatingDotGraphFactory(this.dependencyGraphBuilder, artifactFilter, graphBuilder);
   }
 }

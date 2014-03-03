@@ -6,7 +6,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.GraphBuilder;
 import com.github.ferstl.depgraph.dot.EdgeRenderer;
 import com.github.ferstl.depgraph.dot.Node;
 
@@ -21,12 +21,12 @@ public class DepGraphMojo extends AbstractDepGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
-      DotBuilder dotBuilder = new DotBuilder()
+      GraphBuilder graphBuilder = new GraphBuilder()
           .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
           .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL)
           .useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions));
 
-      return new SimpleGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, dotBuilder);
+      return new SimpleGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, graphBuilder);
   }
 
   static enum EdgeStylers implements EdgeRenderer {

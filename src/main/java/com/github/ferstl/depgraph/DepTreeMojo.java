@@ -5,7 +5,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.GraphBuilder;
 
 @Mojo(
     name = "tree",
@@ -18,13 +18,13 @@ public class DepTreeMojo extends AbstractDepGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
-    DotBuilder dotBuilder = new DotBuilder()
+    GraphBuilder graphBuilder = new GraphBuilder()
         .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
         .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL)
         .useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions));
 
 
-    return new SimpleTreeGraphFactory(this.dependencyGraphBuilder, artifactFilter, dotBuilder);
+    return new SimpleTreeGraphFactory(this.dependencyGraphBuilder, artifactFilter, graphBuilder);
   }
 
 }

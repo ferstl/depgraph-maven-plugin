@@ -10,7 +10,7 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.GraphBuilder;
 import com.github.ferstl.depgraph.dot.Node;
 
 
@@ -18,21 +18,21 @@ class AggregatingDotGraphFactory implements GraphFactory {
 
   private final DependencyGraphBuilder dependencyGraphBuilder;
   private final ArtifactFilter artifactFilter;
-  private final DotBuilder dotBuilder;
+  private final GraphBuilder graphBuilder;
 
   public AggregatingDotGraphFactory(
-      DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, DotBuilder dotBuilder) {
+      DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, GraphBuilder graphBuilder) {
 
     this.dependencyGraphBuilder = dependencyGraphBuilder;
     this.artifactFilter = artifactFilter;
-    this.dotBuilder = dotBuilder;
+    this.graphBuilder = graphBuilder;
   }
 
   @Override
   public String createGraph(MavenProject project) throws DependencyGraphException {
     @SuppressWarnings("unchecked")
     List<MavenProject> collectedProjects = project.getCollectedProjects();
-    buildModuleTree(project, this.artifactFilter, this.dotBuilder);
+    buildModuleTree(project, this.artifactFilter, this.graphBuilder);
 
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
@@ -44,15 +44,15 @@ class AggregatingDotGraphFactory implements GraphFactory {
           throw new DependencyGraphException(e);
         }
 
-        DotBuildingVisitor visitor = new DotBuildingVisitor(this.dotBuilder);
+        DotBuildingVisitor visitor = new DotBuildingVisitor(this.graphBuilder);
         root.accept(visitor);
       }
     }
 
-    return this.dotBuilder.toString();
+    return this.graphBuilder.toString();
   }
 
-  private void buildModuleTree(MavenProject rootProject, ArtifactFilter filter, DotBuilder dotBuilder) {
+  private void buildModuleTree(MavenProject rootProject, ArtifactFilter filter, GraphBuilder graphBuilder) {
     @SuppressWarnings("unchecked")
     Collection<MavenProject> collectedProjects = rootProject.getCollectedProjects();
     for (MavenProject collectedProject : collectedProjects) {
@@ -63,7 +63,7 @@ class AggregatingDotGraphFactory implements GraphFactory {
         Node parentNode = filterProject(parent, filter);
         Node childNode = filterProject(child, filter);
 
-        dotBuilder.addEdge(parentNode, childNode);
+        graphBuilder.addEdge(parentNode, childNode);
 
         // Stop if we reached this project!
         if (parent.equals(rootProject)) {
