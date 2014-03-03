@@ -8,33 +8,50 @@ import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 public class DotBuilder {
 
-  private final NodeRenderer nodeRenderer;
-  private final NodeRenderer nodeLabelRenderer;
-  private final EdgeStyler edgeStyler;
+  private NodeRenderer nodeRenderer;
+  private NodeRenderer nodeLabelRenderer;
+  private EdgeStyler edgeRenderer;
   private final Set<String> nodeDefinitions;
   private final Set<String> edgeDefinitions;
 
   public DotBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
-    this(nodeRenderer, nodeLabelRenderer, DefaultEdgeStyler.INSTANCE);
+    this(nodeRenderer, nodeLabelRenderer, DefaultRenderer.INSTANCE);
   }
 
   public DotBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer, EdgeStyler edgeStyler) {
     this.nodeLabelRenderer = nodeLabelRenderer;
     this.nodeRenderer = nodeRenderer;
-    this.edgeStyler = edgeStyler;
+    this.edgeRenderer = edgeStyler;
 
     this.nodeDefinitions = new LinkedHashSet<>();
     this.edgeDefinitions = new LinkedHashSet<>();
   }
 
+  public DotBuilder useNodeRenderer(NodeRenderer nodeRenderer) {
+    this.nodeRenderer = nodeRenderer;
+    return this;
+  }
+
+  public DotBuilder useNodeLabelRenderer(NodeRenderer nodeLabelRenderer) {
+    this.nodeLabelRenderer = nodeLabelRenderer;
+    return this;
+  }
+
+  public DotBuilder useEdgeRenderer(EdgeStyler edgeRenderer) {
+    this.edgeRenderer = edgeRenderer;
+    return this;
+  }
+
   // no edge will be created in case one or both nodes are null.
-  public void addEdge(Node from, Node to) {
+  public DotBuilder addEdge(Node from, Node to) {
     if (from != null && to != null) {
       addNode(from);
       addNode(to);
 
       safelyAddEdge(from, to);
     }
+
+    return this;
   }
 
   @Override
@@ -69,17 +86,22 @@ public class DotBuilder {
     String fromName = this.nodeRenderer.render(fromNode);
     String toName = this.nodeRenderer.render(toNode);
 
-    String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeStyler.styleEdge(fromNode, toNode);
+    String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.styleEdge(fromNode, toNode);
     this.edgeDefinitions.add(edgeDefinition);
   }
 
 
-  static enum DefaultEdgeStyler implements EdgeStyler {
+  static enum DefaultRenderer implements EdgeStyler, NodeRenderer {
     INSTANCE;
 
     @Override
     public String styleEdge(Node from, Node to) {
       return "";
+    }
+
+    @Override
+    public String render(Node node) {
+      return node.getArtifact().toString();
     }
 
   }
