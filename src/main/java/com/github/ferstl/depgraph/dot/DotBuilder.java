@@ -10,7 +10,7 @@ public class DotBuilder {
 
   private NodeRenderer nodeRenderer;
   private NodeRenderer nodeLabelRenderer;
-  private EdgeStyler edgeRenderer;
+  private EdgeRenderer edgeRenderer;
   private final Set<String> nodeDefinitions;
   private final Set<String> edgeDefinitions;
 
@@ -18,10 +18,10 @@ public class DotBuilder {
     this(nodeRenderer, nodeLabelRenderer, DefaultRenderer.INSTANCE);
   }
 
-  public DotBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer, EdgeStyler edgeStyler) {
+  public DotBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer, EdgeRenderer edgeRenderer) {
     this.nodeLabelRenderer = nodeLabelRenderer;
     this.nodeRenderer = nodeRenderer;
-    this.edgeRenderer = edgeStyler;
+    this.edgeRenderer = edgeRenderer;
 
     this.nodeDefinitions = new LinkedHashSet<>();
     this.edgeDefinitions = new LinkedHashSet<>();
@@ -37,7 +37,7 @@ public class DotBuilder {
     return this;
   }
 
-  public DotBuilder useEdgeRenderer(EdgeStyler edgeRenderer) {
+  public DotBuilder useEdgeRenderer(EdgeRenderer edgeRenderer) {
     this.edgeRenderer = edgeRenderer;
     return this;
   }
@@ -86,16 +86,16 @@ public class DotBuilder {
     String fromName = this.nodeRenderer.render(fromNode);
     String toName = this.nodeRenderer.render(toNode);
 
-    String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.styleEdge(fromNode, toNode);
+    String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.createEdgeAttributes(fromNode, toNode);
     this.edgeDefinitions.add(edgeDefinition);
   }
 
 
-  static enum DefaultRenderer implements EdgeStyler, NodeRenderer {
+  static enum DefaultRenderer implements EdgeRenderer, NodeRenderer {
     INSTANCE;
 
     @Override
-    public String styleEdge(Node from, Node to) {
+    public String createEdgeAttributes(Node from, Node to) {
       return "";
     }
 

@@ -7,7 +7,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.dot.EdgeStyler;
+import com.github.ferstl.depgraph.dot.EdgeRenderer;
 import com.github.ferstl.depgraph.dot.Node;
 
 @Mojo(
@@ -25,11 +25,11 @@ public class DepGraphMojo extends AbstractDepGraphMojo {
       return new SimpleGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, dotBuilder);
   }
 
-  static enum EdgeStylers implements EdgeStyler {
+  static enum EdgeStylers implements EdgeRenderer {
     INSTANCE;
 
     @Override
-    public String styleEdge(Node from, Node to) {
+    public String createEdgeAttributes(Node from, Node to) {
       AttributeBuilder builder = new AttributeBuilder();
 
       switch(to.getResolution()) {

@@ -1,6 +1,6 @@
 package com.github.ferstl.depgraph.dot;
 
 
-public interface EdgeStyler {
-  String styleEdge(Node from, Node to);
+public interface EdgeRenderer {
+  String createEdgeAttributes(Node from, Node to);
 }
