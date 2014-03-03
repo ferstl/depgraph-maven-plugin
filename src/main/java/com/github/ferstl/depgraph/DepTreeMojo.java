@@ -18,7 +18,12 @@ public class DepTreeMojo extends AbstractDepGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
-    DotBuilder dotBuilder = new DotBuilder(NodeRenderers.VERSIONLESS_ID, NodeRenderers.ARTIFACT_ID_LABEL);
+    DotBuilder dotBuilder = new DotBuilder()
+        .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
+        .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL)
+        .useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions));
+
+
     return new SimpleTreeGraphFactory(this.dependencyGraphBuilder, artifactFilter, dotBuilder);
   }
 

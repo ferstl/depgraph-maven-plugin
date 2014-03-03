@@ -20,7 +20,10 @@ public class AggregatingDepGraphMojo extends AbstractDepGraphMojo {
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
 
-      DotBuilder dotBuilder = new DotBuilder(NodeRenderers.VERSIONLESS_ID, NodeRenderers.ARTIFACT_ID_LABEL);
+      DotBuilder dotBuilder = new DotBuilder()
+        .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
+        .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
+
       return new AggregatingDotGraphFactory(this.dependencyGraphBuilder, artifactFilter, dotBuilder);
   }
 }

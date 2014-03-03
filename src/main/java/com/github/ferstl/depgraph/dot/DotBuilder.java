@@ -14,14 +14,10 @@ public class DotBuilder {
   private final Set<String> nodeDefinitions;
   private final Set<String> edgeDefinitions;
 
-  public DotBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
-    this(nodeRenderer, nodeLabelRenderer, DefaultRenderer.INSTANCE);
-  }
-
-  public DotBuilder(NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer, EdgeRenderer edgeRenderer) {
-    this.nodeLabelRenderer = nodeLabelRenderer;
-    this.nodeRenderer = nodeRenderer;
-    this.edgeRenderer = edgeRenderer;
+  public DotBuilder() {
+    this.nodeLabelRenderer = DefaultRenderer.INSTANCE;
+    this.nodeRenderer = DefaultRenderer.INSTANCE;
+    this.edgeRenderer = DefaultRenderer.INSTANCE;
 
     this.nodeDefinitions = new LinkedHashSet<>();
     this.edgeDefinitions = new LinkedHashSet<>();
