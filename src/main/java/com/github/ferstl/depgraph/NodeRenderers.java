@@ -54,7 +54,7 @@ enum NodeRenderers implements NodeRenderer {
 
   private static String toScopedString(String string, String scope) {
     if (scope != null && !"compile".equals(scope)) {
-      return string + "\\n(" + scope + ")";
+      return string + "\n(" + scope + ")";
     }
 
     return string;
