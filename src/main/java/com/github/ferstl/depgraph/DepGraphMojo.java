@@ -5,10 +5,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
-import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.GraphBuilder;
-import com.github.ferstl.depgraph.dot.EdgeRenderer;
-import com.github.ferstl.depgraph.dot.Node;
 
 @Mojo(
     name = "graph",
@@ -17,7 +14,7 @@ import com.github.ferstl.depgraph.dot.Node;
     requiresDependencyCollection = ResolutionScope.TEST,
     requiresDirectInvocation = true,
     threadSafe = true)
-public class DepGraphMojo extends AbstractGraphMojo {
+public class DepGraphMojo extends AbstractDependencyGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
@@ -27,24 +24,5 @@ public class DepGraphMojo extends AbstractGraphMojo {
           .useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions));
 
       return new SimpleGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, graphBuilder);
-  }
-
-  static enum EdgeStylers implements EdgeRenderer {
-    INSTANCE;
-
-    @Override
-    public String createEdgeAttributes(Node from, Node to) {
-      AttributeBuilder builder = new AttributeBuilder();
-
-      switch(to.getResolution()) {
-        case OMITTED_FOR_DUPLICATE:
-          return " " + builder.style("dotted").toString();
-        case OMMITTED_FOR_CONFLICT:
-          return " " + builder.style("dashed").color("red").fontColor("red").label(to.getArtifact().getVersion()).toString();
-        default:
-          return " " + builder.label(to.getArtifact().getVersion());
-
-      }
-    }
   }
 }

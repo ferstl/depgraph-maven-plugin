@@ -54,9 +54,6 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Parameter( defaultValue = "${localRepository}", readonly = true )
   ArtifactRepository localRepository;
 
-  @Parameter(property = "showVersions", defaultValue = "false")
-  boolean showVersions;
-
   @Component
   private MavenProject project;
 
