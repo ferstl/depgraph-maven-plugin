@@ -13,4 +13,8 @@ abstract class AbstractDependencyGraphMojo extends AbstractGraphMojo {
 
   @Parameter(property = "showDuplicates", defaultValue = "false")
   boolean showDuplicates;
+
+  protected boolean requiresFullGraph() {
+    return this.showConflicts || this.showDuplicates;
+  }
 }

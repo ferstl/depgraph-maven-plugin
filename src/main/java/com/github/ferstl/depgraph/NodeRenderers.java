@@ -16,6 +16,18 @@ enum NodeRenderers implements NodeRenderer {
     }
   },
 
+  ARTIFACT_ID_VERSION_LABEL {
+
+    @Override
+    public String render(Node node) {
+      Artifact artifact = node.getArtifact();
+      String artifactIdAndVersion = artifact.getArtifactId() + "\n" + artifact.getVersion();
+
+      return toScopedString(artifactIdAndVersion, artifact.getScope());
+    }
+
+  },
+
   GROUP_ID_LABEL {
 
     @Override

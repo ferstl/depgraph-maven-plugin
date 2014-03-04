@@ -18,11 +18,29 @@ public class DependencyGraphMojo extends AbstractDependencyGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
-      GraphBuilder graphBuilder = new GraphBuilder()
-          .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
-          .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL)
-          .useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions));
+    GraphBuilder graphBuilder = createGraphBuilder();
 
-      return new SimpleGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, graphBuilder);
+    if (requiresFullGraph()) {
+      return new SimpleTreeGraphFactory(this.dependencyGraphBuilder, artifactFilter, graphBuilder);
+    }
+
+    return new SimpleGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, graphBuilder);
   }
+
+  private GraphBuilder createGraphBuilder() {
+    GraphBuilder graphBuilder = new GraphBuilder().useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
+
+    if (requiresFullGraph() && this.showVersions) {
+      graphBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions));
+
+    } else if(this.showVersions) {
+      graphBuilder.useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_VERSION_LABEL);
+
+    } else {
+      graphBuilder.useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
+    }
+
+    return graphBuilder;
+  }
+
 }
