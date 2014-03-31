@@ -50,6 +50,15 @@ public class GraphBuilder {
     return this;
   }
 
+  public GraphBuilder addEdge(Node from, Node to, EdgeRenderer edgeRenderer) {
+    EdgeRenderer originalEdgeRenderer = this.edgeRenderer;
+    this.edgeRenderer = edgeRenderer;
+    addEdge(from, to);
+    this.edgeRenderer = originalEdgeRenderer;
+
+    return this;
+  }
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("digraph G {")
