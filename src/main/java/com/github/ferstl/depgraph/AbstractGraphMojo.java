@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -79,7 +78,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     } catch (DependencyGraphException e) {
       throw new MojoExecutionException("Unable to create dependency graph.", e.getCause());
     } catch (IOException e) {
-      throw new MojoExecutionException("Unable to write DOT file.", e);
+      throw new MojoExecutionException("Unable to write graph file.", e);
     }
   }
 
@@ -114,7 +113,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private void generateGraphImage() throws IOException {
     String graphFileName = createGraphFileName();
 
-    Path graphFile = Paths.get(this.outputFile.toPath().getParent().toString(), graphFileName);
+    Path graphFile = this.outputFile.toPath().getParent().resolve(graphFileName);
     List<String> commandLine = Arrays.asList(
         "dot",
         "-T" + this.imageFormat,
