@@ -21,24 +21,28 @@ class AggregatingDotGraphFactory implements GraphFactory {
   private final DependencyGraphBuilder dependencyGraphBuilder;
   private final ArtifactFilter artifactFilter;
   private final GraphBuilder graphBuilder;
+  private final boolean includeParentProjects;
 
-  public AggregatingDotGraphFactory(
-      DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, GraphBuilder graphBuilder) {
+  public AggregatingDotGraphFactory(DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, GraphBuilder graphBuilder, boolean includeParentProjects) {
 
     this.dependencyGraphBuilder = dependencyGraphBuilder;
     this.artifactFilter = artifactFilter;
     this.graphBuilder = graphBuilder;
+    this.includeParentProjects = includeParentProjects;
   }
 
   @Override
   public String createGraph(MavenProject parent) throws DependencyGraphException {
     @SuppressWarnings("unchecked")
     List<MavenProject> collectedProjects = parent.getCollectedProjects();
-    buildModuleTree(parent, this.artifactFilter, this.graphBuilder);
+
+    if (this.includeParentProjects) {
+      buildModuleTree(parent, this.graphBuilder);
+    }
 
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
-      if (this.artifactFilter.include(collectedProject.getArtifact())) {
+      if (isPartOfGraph(collectedProject)) {
         DependencyNode root;
         try {
           root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, this.artifactFilter);
@@ -54,7 +58,7 @@ class AggregatingDotGraphFactory implements GraphFactory {
     return this.graphBuilder.toString();
   }
 
-  private void buildModuleTree(MavenProject parentProject, ArtifactFilter filter, GraphBuilder graphBuilder) {
+  private void buildModuleTree(MavenProject parentProject, GraphBuilder graphBuilder) {
     @SuppressWarnings("unchecked")
     Collection<MavenProject> collectedProjects = parentProject.getCollectedProjects();
     for (MavenProject collectedProject : collectedProjects) {
@@ -62,12 +66,12 @@ class AggregatingDotGraphFactory implements GraphFactory {
       MavenProject parent = collectedProject.getParent();
 
       while (parent != null) {
-        Node parentNode = filterProject(parent, filter);
-        Node childNode = filterProject(child, filter);
+        Node parentNode = filterProject(parent);
+        Node childNode = filterProject(child);
 
-        graphBuilder.addEdge(parentNode, childNode, DottedEdgeRenderer.DOTTED);
+        graphBuilder.addEdge(parentNode, childNode, DottedEdgeRenderer.INSTANCE);
 
-        // Stop if we reached this project!
+        // Stop if we reached the original parent project!
         if (parent.equals(parentProject)) {
           break;
         }
@@ -78,9 +82,19 @@ class AggregatingDotGraphFactory implements GraphFactory {
     }
   }
 
-  private Node filterProject(MavenProject project, ArtifactFilter filter) {
+  private boolean isPartOfGraph(MavenProject project) {
+    boolean result = this.artifactFilter.include(project.getArtifact());
+    // Project is not filtered and is a parent project
+    if (result && project.getModules().size() > 0) {
+      result = result && this.includeParentProjects;
+    }
+
+    return result;
+  }
+
+  private Node filterProject(MavenProject project) {
     Artifact artifact = project.getArtifact();
-    if (filter.include(artifact)) {
+    if (this.artifactFilter.include(artifact)) {
       return new DependencyNodeAdapter(artifact);
     }
 
@@ -88,7 +102,7 @@ class AggregatingDotGraphFactory implements GraphFactory {
   }
 
   enum DottedEdgeRenderer implements EdgeRenderer {
-    DOTTED {
+    INSTANCE {
 
       @Override
       public String createEdgeAttributes(Node from, Node to) {
