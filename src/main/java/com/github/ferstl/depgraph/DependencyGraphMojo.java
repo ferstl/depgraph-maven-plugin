@@ -31,10 +31,10 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     GraphBuilder graphBuilder = createGraphBuilder();
 
     if (requiresFullGraph()) {
-      return new SimpleTreeGraphFactory(this.dependencyGraphBuilder, artifactFilter, graphBuilder);
+      return new SimpleGraphFactory(this.dependencyGraphBuilder, artifactFilter, graphBuilder);
     }
 
-    return new SimpleGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, graphBuilder);
+    return new SimpleTreeGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, graphBuilder);
   }
 
   protected boolean requiresFullGraph() {
@@ -45,9 +45,11 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     GraphBuilder graphBuilder = new GraphBuilder().useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
 
     if (requiresFullGraph() && this.showVersions) {
+      // For the full graph we display the versions on the edges
       graphBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions));
 
-    } else if(this.showVersions) {
+    } else if (this.showVersions) {
+      // On the effective dependency graph we can display the versions within the nodes
       graphBuilder.useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_VERSION_LABEL);
 
     } else {

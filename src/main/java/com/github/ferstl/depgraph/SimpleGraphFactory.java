@@ -9,13 +9,13 @@ import org.apache.maven.shared.dependency.graph.DependencyNode;
 import com.github.ferstl.depgraph.dot.GraphBuilder;
 
 
-class SimpleTreeGraphFactory implements GraphFactory {
+class SimpleGraphFactory implements GraphFactory {
 
   private final DependencyGraphBuilder dependencyGraphBuilder;
   private final ArtifactFilter artifactFilter;
   private final GraphBuilder graphBuilder;
 
-  public SimpleTreeGraphFactory(
+  public SimpleGraphFactory(
       DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, GraphBuilder graphBuilder) {
 
     this.dependencyGraphBuilder = dependencyGraphBuilder;
