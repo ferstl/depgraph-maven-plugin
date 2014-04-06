@@ -6,9 +6,6 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
-import org.apache.maven.shared.dependency.graph.DependencyNode;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.EdgeRenderer;
@@ -18,14 +15,14 @@ import com.github.ferstl.depgraph.dot.Node;
 
 class AggregatingGraphFactory implements GraphFactory {
 
-  private final DependencyGraphBuilder dependencyGraphBuilder;
+  private final GraphBuilderAdapter graphBuilderAdapter;
   private final ArtifactFilter artifactFilter;
   private final GraphBuilder graphBuilder;
   private final boolean includeParentProjects;
 
-  public AggregatingGraphFactory(DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, GraphBuilder graphBuilder, boolean includeParentProjects) {
+  public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter artifactFilter, GraphBuilder graphBuilder, boolean includeParentProjects) {
 
-    this.dependencyGraphBuilder = dependencyGraphBuilder;
+    this.graphBuilderAdapter = graphBuilderAdapter;
     this.artifactFilter = artifactFilter;
     this.graphBuilder = graphBuilder;
     this.includeParentProjects = includeParentProjects;
@@ -43,15 +40,7 @@ class AggregatingGraphFactory implements GraphFactory {
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
       if (isPartOfGraph(collectedProject)) {
-        DependencyNode root;
-        try {
-          root = this.dependencyGraphBuilder.buildDependencyGraph(collectedProject, this.artifactFilter);
-        } catch (DependencyGraphBuilderException e) {
-          throw new DependencyGraphException(e);
-        }
-
-        DotBuildingVisitor visitor = new DotBuildingVisitor(this.graphBuilder);
-        root.accept(visitor);
+        this.graphBuilderAdapter.buildDependencyGraph(collectedProject, this.artifactFilter, this.graphBuilder);
       }
     }
 

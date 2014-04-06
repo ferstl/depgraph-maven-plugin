@@ -24,6 +24,7 @@ public class GraphByGroupIdMojo extends AbstractGraphMojo {
         .useNodeRenderer(NodeRenderers.SCOPED_GROUP_ID)
         .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL);
 
-    return new AggregatingGraphFactory(this.dependencyGraphBuilder, artifactFilter, graphBuilder, true);
+    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
+    return new AggregatingGraphFactory(adapter, artifactFilter, graphBuilder, true);
   }
 }

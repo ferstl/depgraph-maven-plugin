@@ -30,11 +30,14 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
     GraphBuilder graphBuilder = createGraphBuilder();
 
+    GraphBuilderAdapter adapter;
     if (requiresFullGraph()) {
-      return new SimpleGraphFactory(this.dependencyGraphBuilder, artifactFilter, graphBuilder);
+      adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository);
+    } else {
+      adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
     }
 
-    return new SimpleTreeGraphFactory(this.dependencyTreeBuilder, this.localRepository, artifactFilter, graphBuilder);
+    return new SimpleGraphFactory(adapter, artifactFilter, graphBuilder);
   }
 
   protected boolean requiresFullGraph() {

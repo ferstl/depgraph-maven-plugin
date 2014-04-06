@@ -28,6 +28,7 @@ public class AggregatingDepGraphMojo extends AbstractGraphMojo {
         .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
         .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
 
-      return new AggregatingGraphFactory(this.dependencyGraphBuilder, artifactFilter, graphBuilder, this.includeParentProjects);
+      GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
+      return new AggregatingGraphFactory(adapter, artifactFilter, graphBuilder, this.includeParentProjects);
   }
 }
