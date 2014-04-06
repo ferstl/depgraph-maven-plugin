@@ -33,7 +33,7 @@ class SimpleTreeGraphFactory implements GraphFactory {
 
 
   @Override
-  public String createGraph(MavenProject project) throws DependencyGraphException {
+  public String createGraph(MavenProject project) {
     DependencyNode root;
     try {
       root = this.dependencyTreeBuilder.buildDependencyTree(project, this.artifactRepository, this.artifactFilter);

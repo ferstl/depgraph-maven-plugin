@@ -32,7 +32,7 @@ class AggregatingGraphFactory implements GraphFactory {
   }
 
   @Override
-  public String createGraph(MavenProject parent) throws DependencyGraphException {
+  public String createGraph(MavenProject parent) {
     @SuppressWarnings("unchecked")
     List<MavenProject> collectedProjects = parent.getCollectedProjects();
 
