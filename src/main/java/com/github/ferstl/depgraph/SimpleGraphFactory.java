@@ -1,31 +1,24 @@
 package com.github.ferstl.depgraph;
 
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.dependency.tree.DependencyNode;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
+import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
+import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
+import org.apache.maven.shared.dependency.graph.DependencyNode;
 
 import com.github.ferstl.depgraph.dot.GraphBuilder;
 
 
-class SimpleGraphFactory implements GraphFactory {
+class SimpleTreeGraphFactory implements GraphFactory {
 
-  private final DependencyTreeBuilder dependencyTreeBuilder;
-  private final ArtifactRepository artifactRepository;
+  private final DependencyGraphBuilder dependencyGraphBuilder;
   private final ArtifactFilter artifactFilter;
   private final GraphBuilder graphBuilder;
 
+  public SimpleTreeGraphFactory(
+      DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, GraphBuilder graphBuilder) {
 
-  public SimpleGraphFactory(
-      DependencyTreeBuilder dependencyTreeBuilder,
-      ArtifactRepository artifactRepository,
-      ArtifactFilter artifactFilter,
-      GraphBuilder graphBuilder) {
-
-    this.dependencyTreeBuilder = dependencyTreeBuilder;
-    this.artifactRepository = artifactRepository;
+    this.dependencyGraphBuilder = dependencyGraphBuilder;
     this.artifactFilter = artifactFilter;
     this.graphBuilder = graphBuilder;
   }
@@ -36,8 +29,8 @@ class SimpleGraphFactory implements GraphFactory {
   public String createGraph(MavenProject project) throws DependencyGraphException {
     DependencyNode root;
     try {
-      root = this.dependencyTreeBuilder.buildDependencyTree(project, this.artifactRepository, this.artifactFilter);
-    } catch (DependencyTreeBuilderException e) {
+      root = this.dependencyGraphBuilder.buildDependencyGraph(project, this.artifactFilter);
+    } catch (DependencyGraphBuilderException e) {
       throw new DependencyGraphException(e);
     }
 
@@ -46,4 +39,5 @@ class SimpleGraphFactory implements GraphFactory {
 
     return this.graphBuilder.toString();
   }
+
 }
