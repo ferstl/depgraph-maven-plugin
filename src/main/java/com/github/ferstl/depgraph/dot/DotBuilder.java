@@ -83,7 +83,7 @@ public class DotBuilder {
     String nodeLabel = this.nodeLabelRenderer.render(node);
 
 
-    String nodeDefinition = escape(nodeName) + new AttributeBuilder().label(nodeLabel);;
+    String nodeDefinition = escape(nodeName) + new AttributeBuilder().label(nodeLabel);
     this.nodeDefinitions.add(nodeDefinition);
   }
 
