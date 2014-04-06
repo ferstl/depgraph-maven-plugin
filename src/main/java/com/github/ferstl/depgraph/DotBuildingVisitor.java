@@ -3,7 +3,7 @@ package com.github.ferstl.depgraph;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import com.github.ferstl.depgraph.dot.GraphBuilder;
+import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.dot.Node;
 
 
@@ -11,12 +11,12 @@ import com.github.ferstl.depgraph.dot.Node;
 // - Stack is empty after a root node has been visited
 class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
 
-  private final GraphBuilder graphBuilder;
+  private final DotBuilder dotBuilder;
   private final Deque<Node> stack;
 
 
-  public DotBuildingVisitor(GraphBuilder graphBuilder) {
-    this.graphBuilder = graphBuilder;
+  public DotBuildingVisitor(DotBuilder dotBuilder) {
+    this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
   }
 
@@ -44,7 +44,7 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     Node currentParent = this.stack.peek();
 
     if (currentParent != null) {
-      this.graphBuilder.addEdge(currentParent, node);
+      this.dotBuilder.addEdge(currentParent, node);
     }
 
     this.stack.push(node);

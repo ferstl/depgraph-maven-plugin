@@ -5,7 +5,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
-import com.github.ferstl.depgraph.dot.GraphBuilder;
+import com.github.ferstl.depgraph.dot.DotBuilder;
 
 @Mojo(
     name = "by-groupid",
@@ -20,11 +20,11 @@ public class GraphByGroupIdMojo extends AbstractGraphMojo {
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
 
-    GraphBuilder graphBuilder = new GraphBuilder()
+    DotBuilder dotBuilder = new DotBuilder()
         .useNodeRenderer(NodeRenderers.SCOPED_GROUP_ID)
         .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL);
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
-    return new AggregatingGraphFactory(adapter, artifactFilter, graphBuilder, true);
+    return new AggregatingGraphFactory(adapter, artifactFilter, dotBuilder, true);
   }
 }

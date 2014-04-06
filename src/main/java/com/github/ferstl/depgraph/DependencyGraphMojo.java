@@ -6,7 +6,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
-import com.github.ferstl.depgraph.dot.GraphBuilder;
+import com.github.ferstl.depgraph.dot.DotBuilder;
 
 @Mojo(
     name = "graph",
@@ -26,7 +26,7 @@ public class DependencyGraphMojo extends AbstractDependencyGraphMojo {
   @Parameter(property = "showDuplicates", defaultValue = "false")
   boolean showDuplicates;
 
-  protected GraphFactory createGraphFactory(GraphBuilderAdapter adapter, GraphBuilder graphBuilder, ArtifactFilter artifactFilter) {
-    return new SimpleGraphFactory(adapter, artifactFilter, graphBuilder);
+  protected GraphFactory createGraphFactory(GraphBuilderAdapter adapter, DotBuilder dotBuilder, ArtifactFilter artifactFilter) {
+    return new SimpleGraphFactory(adapter, artifactFilter, dotBuilder);
   }
 }
