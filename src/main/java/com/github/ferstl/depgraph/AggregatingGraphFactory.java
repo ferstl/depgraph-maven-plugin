@@ -16,14 +16,14 @@ import com.github.ferstl.depgraph.dot.GraphBuilder;
 import com.github.ferstl.depgraph.dot.Node;
 
 
-class AggregatingDotGraphFactory implements GraphFactory {
+class AggregatingGraphFactory implements GraphFactory {
 
   private final DependencyGraphBuilder dependencyGraphBuilder;
   private final ArtifactFilter artifactFilter;
   private final GraphBuilder graphBuilder;
   private final boolean includeParentProjects;
 
-  public AggregatingDotGraphFactory(DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, GraphBuilder graphBuilder, boolean includeParentProjects) {
+  public AggregatingGraphFactory(DependencyGraphBuilder dependencyGraphBuilder, ArtifactFilter artifactFilter, GraphBuilder graphBuilder, boolean includeParentProjects) {
 
     this.dependencyGraphBuilder = dependencyGraphBuilder;
     this.artifactFilter = artifactFilter;
