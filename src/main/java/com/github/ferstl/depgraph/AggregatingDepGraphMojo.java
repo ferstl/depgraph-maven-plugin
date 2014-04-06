@@ -16,19 +16,13 @@ import com.github.ferstl.depgraph.dot.GraphBuilder;
     requiresDependencyCollection = ResolutionScope.TEST,
     requiresDirectInvocation = true,
     threadSafe = true)
-public class AggregatingDepGraphMojo extends AbstractGraphMojo {
+public class AggregatingDepGraphMojo extends AbstractDependencyGraphMojo {
 
   @Parameter(property = "includeParentProjects", defaultValue = "true")
   private boolean includeParentProjects;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
-
-      GraphBuilder graphBuilder = new GraphBuilder()
-        .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
-        .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
-
-      GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
+  protected GraphFactory createGraphFactory(GraphBuilderAdapter adapter, GraphBuilder graphBuilder, ArtifactFilter artifactFilter) {
       return new AggregatingGraphFactory(adapter, artifactFilter, graphBuilder, this.includeParentProjects);
   }
 }
