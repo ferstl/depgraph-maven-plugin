@@ -11,7 +11,7 @@ abstract class AbstractDependencyGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "showVersions", defaultValue = "false")
   boolean showVersions;
 
-  @Parameter(property = "showConicts", defaultValue = "false")
+  @Parameter(property = "showConflicts", defaultValue = "false")
   boolean showConflicts;
 
   @Parameter(property = "showDuplicates", defaultValue = "false")
