@@ -16,7 +16,7 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     requiresDependencyCollection = ResolutionScope.TEST,
     requiresDirectInvocation = false,
     threadSafe = true)
-public class AggregatingDepGraphMojo extends AbstractGraphMojo {
+public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
 
   @Parameter(property = "showVersions", defaultValue = "false")
   boolean showVersions;
