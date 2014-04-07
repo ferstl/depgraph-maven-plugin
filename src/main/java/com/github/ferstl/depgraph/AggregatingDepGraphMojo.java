@@ -14,7 +14,7 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     defaultPhase = LifecyclePhase.NONE,
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.TEST,
-    requiresDirectInvocation = true,
+    requiresDirectInvocation = false,
     threadSafe = true)
 public class AggregatingDepGraphMojo extends AbstractGraphMojo {
 

@@ -13,7 +13,7 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     aggregator = false,
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.TEST,
-    requiresDirectInvocation = true,
+    requiresDirectInvocation = false,
     threadSafe = true)
 public class DependencyGraphMojo extends AbstractGraphMojo {
 

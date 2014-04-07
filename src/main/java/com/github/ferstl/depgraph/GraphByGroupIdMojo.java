@@ -8,12 +8,12 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
 @Mojo(
-    name = "by-groupid",
+    name = "bygroupid",
     aggregator = true,
     defaultPhase = LifecyclePhase.NONE,
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.TEST,
-    requiresDirectInvocation = true,
+    requiresDirectInvocation = false,
     threadSafe = true)
 public class GraphByGroupIdMojo extends AbstractGraphMojo {
 
