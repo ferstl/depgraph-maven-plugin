@@ -117,6 +117,23 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>com.mycila.maven-license-plugin</groupId>
+          <artifactId>maven-license-plugin</artifactId>
+          <version>${maven-license-plugin.version}</version>
+          <configuration>
+            <header>${basedir}/src/etc/header.txt</header>
+            <strictCheck>true</strictCheck>
+            <mapping>
+              <java>SLASHSTAR_STYLE</java>
+            </mapping>
+            <includes>
+              <include>src/main/**</include>
+              <include>src/test/java/**</include>
+            </includes>
+          </configuration>
+        </plugin>
+        
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
           <version>${maven-clean-plugin.version}</version>
