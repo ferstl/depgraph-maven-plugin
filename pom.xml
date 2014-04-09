@@ -23,6 +23,11 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  
+  <issueManagement>
+    <system>Github</system>
+    <url>https://github.com/ferstl/depgraph-maven-plugin/issues</url>
+  </issueManagement>
 
   <developers>
     <developer>
