@@ -23,7 +23,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <issueManagement>
     <system>Github</system>
     <url>https://github.com/ferstl/depgraph-maven-plugin/issues</url>
@@ -56,8 +56,9 @@
       <url>${distribution.snapshot.url}</url>
     </snapshotRepository>
     <site>
+      <!-- This local directory is used to push the plugin documentation to the gh-pages branch. -->
       <id>local</id>
-      <url>file://${project.build.directory}</url>
+      <url>file://${site.deploy.directory}</url>
     </site>
   </distributionManagement>
 
@@ -83,6 +84,7 @@
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.version>3.2.1</maven.version>
+    <site.deploy.directory>${project.build.directory}/checkout</site.deploy.directory>
   </properties>
 
   <dependencies>
@@ -313,6 +315,26 @@
         </plugins>
       </build>
     </profile>
+
+    <!--
+      This profile creates the plugin documentation and commits it onto the gh-pages branch in this local git
+      repository.
+      
+      The profile works as follows:
+      - verify phase:
+        - clone this local git repository into ${site.deploy.directory} and checkout the gh-pages branch 
+        - create the maven site at its default location
+        
+      - install phase: deploy the maven site to ${site.deploy.directory}
+      
+      - deploy phase:
+        - add all changed file to the Git index
+        - commit the changes and push them back into this local git repository
+        
+      The gh-pages branch is intentionally not pushed to the remote repository within this profile. It could however be
+      easily done with an additional execution of the maven-scm-plugin with ${basedir} as working directory in the
+      deploy phase.
+    -->
     <profile>
       <id>create-site</id>
       <build>
@@ -330,7 +352,7 @@
               </execution>
               <execution>
                 <id>deploy-site</id>
-                <phase>verify</phase>
+                <phase>install</phase>
                 <goals>
                   <goal>deploy</goal>
                 </goals>
@@ -349,18 +371,30 @@
                 </goals>
                 <configuration>
                   <connectionUrl>scm:git:file://${project.basedir}</connectionUrl>
-                  <scmVersion>gh-pages</scmVersion>
+                  <checkoutDirectory>${site.deploy.directory}</checkoutDirectory>
                   <scmVersionType>branch</scmVersionType>
+                  <scmVersion>gh-pages</scmVersion>
                 </configuration>
               </execution>
               <execution>
-                <id>commit-site</id>
-                <phase>verify</phase>
+                <id>add-site</id>
+                <phase>deploy</phase>
+                <goals>
+                  <goal>add</goal>
+                </goals>
+                <configuration>
+                  <workingDirectory>${site.deploy.directory}</workingDirectory>
+                  <includes>*</includes>
+                </configuration>
+              </execution>
+              <execution>
+                <id>push-site</id>
+                <phase>deploy</phase>
                 <goals>
                   <goal>checkin</goal>
                 </goals>
                 <configuration>
-                  <workingDirectory>${project.build.directory}/checkout</workingDirectory>
+                  <workingDirectory>${site.deploy.directory}</workingDirectory>
                   <message>Re-generated site</message>
                   <pushChanges>false</pushChanges>
                 </configuration>
