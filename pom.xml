@@ -10,7 +10,9 @@
   <name>Depgraph Maven Plugin</name>
   <description>
     A Maven plugin that generates dependency graphs on single modules or in an aggregated form
-    on a multi-module project. 
+    on a multi-module project. The graphs are represented by .dot files. In case that graphviz
+    is installed on the machine where this plugin is run, the .dot file can be directly converted
+    into all supported image files.
   </description>
   <url>https://github.com/ferstl/depgraph-maven-plugin</url>
 
@@ -48,6 +50,10 @@
       <id>${distribution.snapshot.id}</id>
       <url>${distribution.snapshot.url}</url>
     </snapshotRepository>
+    <site>
+      <id>local</id>
+      <url>file://${project.build.directory}</url>
+    </site>
   </distributionManagement>
 
   <properties>
@@ -64,7 +70,9 @@
     <maven-project-info-reports-plugin.version>2.7</maven-project-info-reports-plugin.version>
     <maven-release-plugin.version>2.4.2</maven-release-plugin.version>
     <maven-resources-plugin.version>2.6</maven-resources-plugin.version>
+    <maven-scm-plugin.version>1.9</maven-scm-plugin.version>
     <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+    <maven-site-plugin.version>3.3</maven-site-plugin.version>
     <maven-surefire-plugin.version>2.16</maven-surefire-plugin.version>
 
     <!-- Other settings. -->
@@ -132,7 +140,7 @@
             </includes>
           </configuration>
         </plugin>
-        
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
@@ -227,8 +235,20 @@
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-scm-plugin</artifactId>
+          <version>${maven-scm-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>${maven-source-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${maven-site-plugin.version}</version>
         </plugin>
 
         <plugin>
@@ -282,6 +302,63 @@
                 <goals>
                   <goal>sign</goal>
                 </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>create-site</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-site</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>deploy-site</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>deploy</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-scm-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>checkout-gh-pages</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>checkout</goal>
+                </goals>
+                <configuration>
+                  <connectionUrl>scm:git:file://${project.basedir}</connectionUrl>
+                  <scmVersion>gh-pages</scmVersion>
+                  <scmVersionType>branch</scmVersionType>
+                </configuration>
+              </execution>
+              <execution>
+                <id>commit-site</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>checkin</goal>
+                </goals>
+                <configuration>
+                  <workingDirectory>${project.build.directory}/checkout</workingDirectory>
+                  <message>Re-generated site</message>
+                  <pushChanges>false</pushChanges>
+                </configuration>
               </execution>
             </executions>
           </plugin>
