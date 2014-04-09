@@ -40,7 +40,7 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:ferstl/depgraph-maven-plugin.git</connection>
+    <connection>scm:git:https://github.com/ferstl/depgraph-maven-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:ferstl/depgraph-maven-plugin.git</developerConnection>
     <url>${project.url}</url>
     <tag>HEAD</tag>
