@@ -50,8 +50,9 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   }
 
   private DotBuilder createGraphBuilder() {
-    DotBuilder dotBuilder = new DotBuilder().useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
-    dotBuilder.useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
+    DotBuilder dotBuilder = new DotBuilder()
+      .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
+      .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
 
     if (requiresFullGraph() && this.showVersions) {
       // For the full graph we display the versions on the edges
