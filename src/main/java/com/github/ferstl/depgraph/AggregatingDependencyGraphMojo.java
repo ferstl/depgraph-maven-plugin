@@ -36,7 +36,7 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "showVersions", defaultValue = "false")
   boolean showVersions;
 
-  @Parameter(property = "includeParentProjects", defaultValue = "true")
+  @Parameter(property = "includeParentProjects", defaultValue = "false")
   private boolean includeParentProjects;
 
   @Override
