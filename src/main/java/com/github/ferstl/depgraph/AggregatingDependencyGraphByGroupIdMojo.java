@@ -33,7 +33,7 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     requiresDependencyCollection = ResolutionScope.TEST,
     requiresDirectInvocation = false,
     threadSafe = true)
-public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
+public class AggregatingDependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
