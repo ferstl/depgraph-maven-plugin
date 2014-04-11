@@ -10,7 +10,7 @@
     <meta name="Date-Revision-yyyymmdd" content="20140411" />
     <meta http-equiv="Content-Language" content="en" />
     <title>Depgraph Maven Plugin - 
-    depgraph:help</title>
+    depgraph:aggregate-by-groupid</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.1.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -112,23 +112,29 @@
             
   
     <div class="section">
-<h2>depgraph:help<a name="depgraph:help"></a></h2>
+<h2>depgraph:aggregate-by-groupid<a name="depgraph:aggregate-by-groupid"></a></h2>
       
 <p><b>Full name</b>:</p>
       
-<p>com.github.ferstl:depgraph-maven-plugin:1.0.0-SNAPSHOT:help</p>
+<p>com.github.ferstl:depgraph-maven-plugin:1.0.0-SNAPSHOT:aggregate-by-groupid</p>
       
 <p><b>Description</b>:</p>
       
-<div>Display help information on depgraph-maven-plugin.<br />
-Call <tt>mvn depgraph:help -Ddetail=true
--Dgoal=&lt;goal-name&gt;</tt> to display parameter details.</div>
+<div>Aggregates all dependencies of a multi-module by their group IDs.</div>
       
 <p><b>Attributes</b>:</p>
       
 <ul>
         
+<li>Requires a Maven project to be executed.</li>
+        
+<li>Executes as an aggregator plugin.</li>
+        
+<li>Requires dependency collection of artifacts in scope: <tt>test</tt>.</li>
+        
 <li>The goal is thread-safe and supports parallel builds.</li>
+        
+<li>Is NOT inherited by default in multi-project builds.</li>
       </ul>
       
 <div class="section">
@@ -149,48 +155,73 @@ Call <tt>mvn depgraph:help -Ddetail=true
           
 <tr class="b">
             
-<td><b><a href="#detail">detail</a></b></td>
+<td><b><a href="#createImage">createImage</a></b></td>
             
 <td><tt>boolean</tt></td>
             
-<td><tt>-</tt></td>
+<td><tt>1.0.0</tt></td>
             
-<td>If <tt>true</tt>, display all settable properties for each
-goal.<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>detail</tt>.</td>
+<td>If set to true and Graphviz is installed on the system where this
+plugin is executed, the dot file will be converted to a graph image
+using Graphviz' dot executable.<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>createImage</tt>.</td>
           </tr>
           
 <tr class="a">
             
-<td><b><a href="#goal">goal</a></b></td>
+<td><b><a href="#excludes">excludes</a></b></td>
             
-<td><tt>String</tt></td>
+<td><tt>List</tt></td>
             
-<td><tt>-</tt></td>
+<td><tt>1.0.0</tt></td>
             
-<td>The name of the goal for which to show help. If unspecified, all
-goals will be displayed.<br /><b>User property is</b>: <tt>goal</tt>.</td>
+<td>Comma-separated list of artifacts to be excluded in the form of
+<tt>groupId:artifactId:type:classifier</tt>.<br /><b>User property is</b>: <tt>excludes</tt>.</td>
           </tr>
           
 <tr class="b">
             
-<td><b><a href="#indentSize">indentSize</a></b></td>
+<td><b><a href="#imageFormat">imageFormat</a></b></td>
             
-<td><tt>int</tt></td>
+<td><tt>String</tt></td>
             
-<td><tt>-</tt></td>
+<td><tt>1.0.0</tt></td>
             
-<td>The number of spaces per indentation level, should be positive.<br /><b>Default value is</b>: <tt>2</tt>.<br /><b>User property is</b>: <tt>indentSize</tt>.</td>
+<td>The format for the graph image when <tt>createImage</tt> is set
+to <tt>true</tt>.<br /><b>Default value is</b>: <tt>png</tt>.<br /><b>User property is</b>: <tt>imageFormat</tt>.</td>
           </tr>
           
 <tr class="a">
             
-<td><b><a href="#lineLength">lineLength</a></b></td>
+<td><b><a href="#includes">includes</a></b></td>
             
-<td><tt>int</tt></td>
+<td><tt>List</tt></td>
             
-<td><tt>-</tt></td>
+<td><tt>1.0.0</tt></td>
             
-<td>The maximum length of a display line, should be positive.<br /><b>Default value is</b>: <tt>80</tt>.<br /><b>User property is</b>: <tt>lineLength</tt>.</td>
+<td>Comma-separated list of artifacts to be included in the form of
+<tt>groupId:artifactId:type:classifier</tt>.<br /><b>User property is</b>: <tt>includes</tt>.</td>
+          </tr>
+          
+<tr class="b">
+            
+<td><b><a href="#outputFile">outputFile</a></b></td>
+            
+<td><tt>File</tt></td>
+            
+<td><tt>1.0.0</tt></td>
+            
+<td>The path to the generated dot file.<br /><b>Default value is</b>: <tt>${project.build.directory}/dependency-graph.dot</tt>.<br /><b>User property is</b>: <tt>outputFile</tt>.</td>
+          </tr>
+          
+<tr class="a">
+            
+<td><b><a href="#scope">scope</a></b></td>
+            
+<td><tt>String</tt></td>
+            
+<td><tt>1.0.0</tt></td>
+            
+<td>The scope of the artifacts that should be included in the graph.<br /><b>User property is</b>: <tt>scope</tt>.</td>
           </tr>
         </table>
       </div>
@@ -198,61 +229,100 @@ goals will be displayed.<br /><b>User property is</b>: <tt>goal</tt>.</td>
 <div class="section">
 <h3>Parameter Details<a name="Parameter_Details"></a></h3>
         
-<p><b><a name="detail">detail</a>:</b></p>
+<p><b><a name="createImage">createImage</a>:</b></p>
         
-<div>If <tt>true</tt>, display all settable properties for each
-goal.</div>
+<div>If set to true and Graphviz is installed on the system where this
+plugin is executed, the dot file will be converted to a graph image
+using Graphviz' dot executable.</div>
         
 <ul>
           
 <li><b>Type</b>: <tt>boolean</tt></li>
           
+<li><b>Since</b>: <tt>1.0.0</tt></li>
+          
 <li><b>Required</b>: <tt>No</tt></li>
           
-<li><b>User Property</b>: <tt>detail</tt></li>
+<li><b>User Property</b>: <tt>createImage</tt></li>
           
 <li><b>Default</b>: <tt>false</tt></li>
         </ul><hr />
-<p><b><a name="goal">goal</a>:</b></p>
+<p><b><a name="excludes">excludes</a>:</b></p>
         
-<div>The name of the goal for which to show help. If unspecified, all
-goals will be displayed.</div>
+<div>Comma-separated list of artifacts to be excluded in the form of
+<tt>groupId:artifactId:type:classifier</tt>.</div>
+        
+<ul>
+          
+<li><b>Type</b>: <tt>java.util.List</tt></li>
+          
+<li><b>Since</b>: <tt>1.0.0</tt></li>
+          
+<li><b>Required</b>: <tt>No</tt></li>
+          
+<li><b>User Property</b>: <tt>excludes</tt></li>
+        </ul><hr />
+<p><b><a name="imageFormat">imageFormat</a>:</b></p>
+        
+<div>The format for the graph image when <tt>createImage</tt> is set
+to <tt>true</tt>.</div>
         
 <ul>
           
 <li><b>Type</b>: <tt>java.lang.String</tt></li>
           
+<li><b>Since</b>: <tt>1.0.0</tt></li>
+          
 <li><b>Required</b>: <tt>No</tt></li>
           
-<li><b>User Property</b>: <tt>goal</tt></li>
+<li><b>User Property</b>: <tt>imageFormat</tt></li>
+          
+<li><b>Default</b>: <tt>png</tt></li>
         </ul><hr />
-<p><b><a name="indentSize">indentSize</a>:</b></p>
+<p><b><a name="includes">includes</a>:</b></p>
         
-<div>The number of spaces per indentation level, should be positive.</div>
+<div>Comma-separated list of artifacts to be included in the form of
+<tt>groupId:artifactId:type:classifier</tt>.</div>
         
 <ul>
           
-<li><b>Type</b>: <tt>int</tt></li>
+<li><b>Type</b>: <tt>java.util.List</tt></li>
+          
+<li><b>Since</b>: <tt>1.0.0</tt></li>
           
 <li><b>Required</b>: <tt>No</tt></li>
           
-<li><b>User Property</b>: <tt>indentSize</tt></li>
-          
-<li><b>Default</b>: <tt>2</tt></li>
+<li><b>User Property</b>: <tt>includes</tt></li>
         </ul><hr />
-<p><b><a name="lineLength">lineLength</a>:</b></p>
+<p><b><a name="outputFile">outputFile</a>:</b></p>
         
-<div>The maximum length of a display line, should be positive.</div>
+<div>The path to the generated dot file.</div>
         
 <ul>
           
-<li><b>Type</b>: <tt>int</tt></li>
+<li><b>Type</b>: <tt>java.io.File</tt></li>
+          
+<li><b>Since</b>: <tt>1.0.0</tt></li>
           
 <li><b>Required</b>: <tt>No</tt></li>
           
-<li><b>User Property</b>: <tt>lineLength</tt></li>
+<li><b>User Property</b>: <tt>outputFile</tt></li>
           
-<li><b>Default</b>: <tt>80</tt></li>
+<li><b>Default</b>: <tt>${project.build.directory}/dependency-graph.dot</tt></li>
+        </ul><hr />
+<p><b><a name="scope">scope</a>:</b></p>
+        
+<div>The scope of the artifacts that should be included in the graph.</div>
+        
+<ul>
+          
+<li><b>Type</b>: <tt>java.lang.String</tt></li>
+          
+<li><b>Since</b>: <tt>1.0.0</tt></li>
+          
+<li><b>Required</b>: <tt>No</tt></li>
+          
+<li><b>User Property</b>: <tt>scope</tt></li>
         </ul>
       </div>
     </div>
