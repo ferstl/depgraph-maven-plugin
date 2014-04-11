@@ -26,7 +26,7 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
  * Aggregates all dependencies of a multi-module by their group IDs.
  */
 @Mojo(
-    name = "by-groupid",
+    name = "aggregate-by-groupid",
     aggregator = true,
     defaultPhase = LifecyclePhase.NONE,
     inheritByDefault = false,
