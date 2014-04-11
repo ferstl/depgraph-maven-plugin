@@ -23,6 +23,9 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
+/**
+ * Aggregates all dependencies of a multi-module project into one single graph.
+ */
 @Mojo(
     name = "aggregate",
     aggregator = true,
@@ -33,9 +36,20 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     threadSafe = true)
 public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
 
+  /**
+   * If set to {@code true} the artifact nodes will show version information.
+   *
+   * @since 1.0.0
+   */
   @Parameter(property = "showVersions", defaultValue = "false")
   boolean showVersions;
 
+  /**
+   * If set to {@code true}, all parent modules (&lt;packaging&gt;pom&lt;/packaging&gt) will be shown with a dotted
+   * arrow pointing to their child modules.
+   *
+   * @since 1.0.0
+   */
   @Parameter(property = "includeParentProjects", defaultValue = "false")
   private boolean includeParentProjects;
 

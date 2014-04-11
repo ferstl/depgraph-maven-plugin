@@ -23,6 +23,9 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
+/**
+ * Creates a dependency graph of a maven module.
+ */
 @Mojo(
     name = "graph",
     aggregator = false,
@@ -32,12 +35,31 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     threadSafe = true)
 public class DependencyGraphMojo extends AbstractGraphMojo {
 
+  /**
+   * If set to {@code true}, the created graph will show version information an all artifacts. Depending on the flags
+   * {@link #showVersions} and {@link #showConflicts}, the version will either be shown directly in the artifact nodes
+   * or on the dependency edges.
+   */
   @Parameter(property = "showVersions", defaultValue = "false")
   boolean showVersions;
 
+  /**
+   * If set to {@code true}, the graph will additionally contain conflicting dependencies. Note that the dependency
+   * graph may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater
+   * or equal 3.0!
+   *
+   * @since 1.0.0
+   */
   @Parameter(property = "showConflicts", defaultValue = "false")
   boolean showConflicts;
 
+  /**
+   * If set to {@code true}, the graph will additionally contain duplicate dependencies. Note that the dependency
+   * graph may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater
+   * or equal 3.0!
+   *
+   * @since 1.0.0
+   */
   @Parameter(property = "showDuplicates", defaultValue = "false")
   boolean showDuplicates;
 

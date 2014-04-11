@@ -41,30 +41,72 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 
-
+/**
+ * Abstract mojo to create all possible kinds of graphs in the dot format.
+ * Graphs are created with instances of the {@link GraphFactory} interface. This class defines an abstract method to
+ * create such factories. In case Graphviz is install on the system where this plugin is executed, it is also possible
+ * to run the dot program and create images out of the generated dot files.
+ * Besides that, this class allows the configuration of several basic mojo parameters, such as includes, excludes, etc.
+ */
 abstract class AbstractGraphMojo extends AbstractMojo {
 
   private static final String DOT_EXTENSION = ".dot";
   private static final String OUTPUT_DOT_FILE_NAME = "dependency-graph" + DOT_EXTENSION;
 
+  /**
+   * The scope of the artifacts that should be included in the graph.
+   *
+   * @since 1.0.0
+   */
   @Parameter(property = "scope")
   private String scope;
 
+  /**
+   * Comma-separated list of artifacts to be included in the form of {@code groupId:artifactId:type:classifier}.
+   *
+   * @since 1.0.0
+   */
   @Parameter(property = "includes", defaultValue = "")
   private List<String> includes;
 
+  /**
+   * Comma-separated list of artifacts to be excluded in the form of {@code groupId:artifactId:type:classifier}.
+   *
+   * @since 1.0.0
+   */
   @Parameter(property = "excludes", defaultValue = "")
   private List<String> excludes;
 
+  /**
+   * The path to the generated dot file.
+   *
+   * @since 1.0.0
+   */
   @Parameter(property = "outputFile", defaultValue = "${project.build.directory}/" + OUTPUT_DOT_FILE_NAME)
   private File outputFile;
 
+  /**
+   * If set to true and Graphviz is installed on the system where this plugin is executed, the dot file will be
+   * converted to a graph image using Graphviz' dot executable.
+   *
+   * @see #imageFormat
+   * @since 1.0.0
+   */
   @Parameter(property = "createImage", defaultValue = "false")
   private boolean createImage;
 
+  /**
+   * The format for the graph image when {@link #createImage} is set to {@code true}.
+   *
+   * @since 1.0.0
+   */
   @Parameter(property = "imageFormat", defaultValue = "png")
   private String imageFormat;
 
+
+  /**
+   * Local maven repository required by the {@link DependencyTreeBuilder}.
+   */
   @Parameter( defaultValue = "${localRepository}", readonly = true )
   ArtifactRepository localRepository;
 

@@ -22,8 +22,11 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
+/**
+ * Aggregates all dependencies of a multi-module by their group IDs.
+ */
 @Mojo(
-    name = "bygroupid",
+    name = "by-groupid",
     aggregator = true,
     defaultPhase = LifecyclePhase.NONE,
     inheritByDefault = false,
