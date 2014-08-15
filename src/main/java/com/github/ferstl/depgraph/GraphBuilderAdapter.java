@@ -22,13 +22,13 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
-
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
 /**
  * Adapter for {@link DependencyGraphBuilder} and {@link DependencyTreeBuilder}.
  */
 final class GraphBuilderAdapter {
+
   private DependencyGraphBuilder dependencyGraphBuilder;
   private DependencyTreeBuilder dependencyTreeBuilder;
   private ArtifactRepository artifactRepository;
@@ -71,7 +71,8 @@ final class GraphBuilderAdapter {
       throw new DependencyGraphException(e);
     }
 
-    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder);
+    // Due to MNG-3236, we need to filter the artifacts on our own.
+    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder, artifactFilter);
     root.accept(visitor);
   }
 }

@@ -17,7 +17,8 @@ package com.github.ferstl.depgraph;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.dot.Node;
 
@@ -28,11 +29,17 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
 
   private final DotBuilder dotBuilder;
   private final Deque<Node> stack;
+  private final ArtifactFilter artifactFilter;
 
 
-  public DotBuildingVisitor(DotBuilder dotBuilder) {
+  public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter artifactFilter) {
     this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
+    this.artifactFilter = artifactFilter;
+  }
+
+  public DotBuildingVisitor(DotBuilder dotBuilder) {
+    this(dotBuilder, DoNothingArtifactFilter.INSTANCE);
   }
 
   @Override
@@ -58,18 +65,34 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
   private boolean internalVisit(Node node) {
     Node currentParent = this.stack.peek();
 
-    if (currentParent != null) {
-      this.dotBuilder.addEdge(currentParent, node);
+    if (this.artifactFilter.include(node.getArtifact())) {
+      if (currentParent != null) {
+        this.dotBuilder.addEdge(currentParent, node);
+      }
+
+      this.stack.push(node);
+
+      return true;
     }
 
-    this.stack.push(node);
+    return false;
+  }
+
+  private boolean internalEndVisit(Node node) {
+    if (this.artifactFilter.include(node.getArtifact())) {
+      this.stack.pop();
+    }
 
     return true;
   }
 
-  private boolean internalEndVisit(Node node) {
-    this.stack.pop();
+  private static enum DoNothingArtifactFilter implements ArtifactFilter {
+    INSTANCE;
 
-    return true;
+    @Override
+    public boolean include(Artifact artifact) {
+      return true;
+    }
+
   }
 }
