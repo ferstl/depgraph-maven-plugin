@@ -15,10 +15,9 @@
  */
 package com.github.ferstl.depgraph.dot;
 
+import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 
 public class DotBuilder {
@@ -26,6 +25,7 @@ public class DotBuilder {
   private NodeRenderer nodeRenderer;
   private NodeRenderer nodeLabelRenderer;
   private EdgeRenderer edgeRenderer;
+  private boolean omitSelfReferences;
   private final Set<String> nodeDefinitions;
   private final Set<String> edgeDefinitions;
 
@@ -53,6 +53,11 @@ public class DotBuilder {
     return this;
   }
 
+  public DotBuilder omitSelfReferences() {
+    this.omitSelfReferences = true;
+    return this;
+  }
+
   // no edge will be created in case one or both nodes are null.
   public DotBuilder addEdge(Node from, Node to) {
     if (from != null && to != null) {
@@ -77,8 +82,8 @@ public class DotBuilder {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("digraph G {")
-    .append("\n  node ").append(new AttributeBuilder().shape("box").fontName("Helvetica"))
-    .append("\n  edge ").append(new AttributeBuilder().fontName("Helvetica").fontSize(10));
+        .append("\n  node ").append(new AttributeBuilder().shape("box").fontName("Helvetica"))
+        .append("\n  edge ").append(new AttributeBuilder().fontName("Helvetica").fontSize(10));
 
     sb.append("\n\n  // Node Definitions:");
     for (String node : this.nodeDefinitions) {
@@ -86,7 +91,7 @@ public class DotBuilder {
     }
 
     sb.append("\n\n  // Edge Definitions:");
-    for (String  edge : this.edgeDefinitions) {
+    for (String edge : this.edgeDefinitions) {
       sb.append("\n  ").append(edge);
     }
 
@@ -106,8 +111,10 @@ public class DotBuilder {
     String fromName = this.nodeRenderer.render(fromNode);
     String toName = this.nodeRenderer.render(toNode);
 
-    String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.createEdgeAttributes(fromNode, toNode);
-    this.edgeDefinitions.add(edgeDefinition);
+    if (!this.omitSelfReferences || !fromName.equals(toName)) {
+      String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.createEdgeAttributes(fromNode, toNode);
+      this.edgeDefinitions.add(edgeDefinition);
+    }
   }
 
 

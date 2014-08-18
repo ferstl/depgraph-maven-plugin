@@ -19,7 +19,6 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
 /**
@@ -40,7 +39,8 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
     DotBuilder dotBuilder = new DotBuilder()
         .useNodeRenderer(NodeRenderers.SCOPED_GROUP_ID)
-        .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL);
+        .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL)
+        .omitSelfReferences();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
     return new AggregatingGraphFactory(adapter, artifactFilter, dotBuilder, true);

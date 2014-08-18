@@ -22,7 +22,8 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
     DotBuilder dotBuilder = new DotBuilder()
         .useNodeRenderer(NodeRenderers.SCOPED_GROUP_ID)
-        .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL);
+        .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL)
+        .omitSelfReferences();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
     return new SimpleGraphFactory(adapter, artifactFilter, dotBuilder);
