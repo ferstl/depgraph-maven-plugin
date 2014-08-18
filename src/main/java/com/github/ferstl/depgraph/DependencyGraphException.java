@@ -19,7 +19,7 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 
 /**
- * Wrapper for {@link DependencyGraphException} and {@link DependencyTreeBuilderException}.
+ * Wrapper for {@link DependencyGraphBuilderException} and {@link DependencyTreeBuilderException}.
  */
 public final class DependencyGraphException extends RuntimeException {
 
