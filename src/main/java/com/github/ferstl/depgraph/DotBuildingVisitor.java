@@ -17,14 +17,19 @@ package com.github.ferstl.depgraph;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.dot.Node;
 
 
-// Invariants
-// - Stack is empty after a root node has been visited
+/**
+ * A node visitor that creates edges between the visited nodes using a {@link DotBuilder}. This
+ * class implements the {@code DependencyNodeVisitor} interfaces for dependency trees and dependency
+ * graphs and adapts the different node instances using {@link DependencyNodeAdapter}.
+ */
 class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
 
   private final DotBuilder dotBuilder;

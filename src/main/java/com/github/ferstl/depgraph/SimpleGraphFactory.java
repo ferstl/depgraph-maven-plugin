@@ -20,7 +20,9 @@ import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
-
+/**
+ * A graph factory that creates a graph from a non multi-module project.
+ */
 class SimpleGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;

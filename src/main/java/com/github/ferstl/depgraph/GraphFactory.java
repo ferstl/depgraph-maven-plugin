@@ -19,6 +19,7 @@ import org.apache.maven.project.MavenProject;
 
 
 interface GraphFactory {
+
   /**
    * Creates a graph for the given {@link MavenProject}.
    *

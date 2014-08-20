@@ -23,11 +23,15 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
-import com.github.ferstl.depgraph.dot.EdgeRenderer;
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.EdgeRenderer;
 import com.github.ferstl.depgraph.dot.Node;
 
-
+/**
+ * A graph factory that creates a dependency graph from a multi-module project. Child modules are
+ * treated as dependencies of the parent project. The created graph is the <strong>union</strong> of
+ * the child modules' dependency graphs.
+ */
 class AggregatingGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
