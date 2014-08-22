@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -36,17 +35,16 @@ import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilt
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
-
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
 
 /**
- * Abstract mojo to create all possible kinds of graphs in the dot format.
- * Graphs are created with instances of the {@link GraphFactory} interface. This class defines an abstract method to
- * create such factories. In case Graphviz is install on the system where this plugin is executed, it is also possible
- * to run the dot program and create images out of the generated dot files.
- * Besides that, this class allows the configuration of several basic mojo parameters, such as includes, excludes, etc.
+ * Abstract mojo to create all possible kinds of graphs in the dot format. Graphs are created with instances of the
+ * {@link GraphFactory} interface. This class defines an abstract method to create such factories. In case Graphviz is
+ * install on the system where this plugin is executed, it is also possible to run the dot program and create images out
+ * of the generated dot files. Besides that, this class allows the configuration of several basic mojo parameters, such
+ * as includes, excludes, etc.
  */
 abstract class AbstractGraphMojo extends AbstractMojo {
 
@@ -107,13 +105,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   /**
    * Local maven repository required by the {@link DependencyTreeBuilder}.
    */
-  @Parameter( defaultValue = "${localRepository}", readonly = true )
+  @Parameter(defaultValue = "${localRepository}", readonly = true)
   ArtifactRepository localRepository;
 
   @Component
   private MavenProject project;
 
-  @Component( hint = "default" )
+  @Component(hint = "default")
   DependencyGraphBuilder dependencyGraphBuilder;
 
   @Component
@@ -162,7 +160,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private void writeDotFile(String dotGraph) throws IOException {
     Files.createParentDirs(this.outputFile);
 
-    try(Writer writer = Files.newWriter(this.outputFile, Charsets.UTF_8)) {
+    try (Writer writer = Files.newWriter(this.outputFile, Charsets.UTF_8)) {
       writer.write(dotGraph);
     }
   }
@@ -173,9 +171,9 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     Path graphFile = this.outputFile.toPath().getParent().resolve(graphFileName);
     List<String> commandLine = Arrays.asList(
         "dot",
-        "-T" + this.imageFormat,
-        "-o\"" + graphFile.toAbsolutePath() + "\"",
-        "\"" + this.outputFile.getAbsolutePath() + "\"");
+        "-T", this.imageFormat,
+        "-o", graphFile.toAbsolutePath().toString(),
+        this.outputFile.getAbsolutePath());
 
     getLog().info("Running Graphviz: " + Joiner.on(" ").join(commandLine));
 
@@ -183,12 +181,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     Process process = processBuilder.start();
     try {
       process.waitFor();
+      getLog().info("Graph file created on " + graphFile.toAbsolutePath());
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
+
+      getLog().error("Got interrupted while creating graph file");
       process.destroy();
     }
 
-    getLog().info("Graph file created on " + graphFile.toAbsolutePath());
   }
 
   private String createGraphFileName() {
