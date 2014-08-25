@@ -10,10 +10,11 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 
-public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder> {
+final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder> {
 
-  private static final String NODE_PATTERN = ".+\"\\[label=\".+\"\\]";
-  private static final String EDGE_PATTERN = "\".+\" -> \".+\"(\\[.+\\])?";
+  private static final String[] EMPTY_ARRAY = new String[0];
+  private static final String NODE_PATTERN = ".+\\[label=.+\\]";
+  private static final String EDGE_PATTERN = ".+ -> .+";
 
   private final String[] expectedNodes;
   private final String[] expectedEdges;
@@ -29,8 +30,16 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
   }
 
 
-  public static DotBuilderMatcher contains(String[] nodes, String[] edges) {
+  public static DotBuilderMatcher hasNodesAndEdges(String[] nodes, String[] edges) {
     return new DotBuilderMatcher(nodes, edges);
+  }
+
+  public static DotBuilderMatcher hasNodes(String... nodes) {
+    return new DotBuilderMatcher(nodes, EMPTY_ARRAY);
+  }
+
+  public static DotBuilderMatcher emptyGraph() {
+    return new DotBuilderMatcher(EMPTY_ARRAY, EMPTY_ARRAY);
   }
 
 
@@ -61,30 +70,19 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
 
   @Override
   protected boolean matchesSafely(DotBuilder dotBuilder, Description mismatchDescription) {
-    mismatchDescription.appendText("was");
-    boolean result = true;
-
     init(dotBuilder);
 
-    if (!containsInAnyOrder(this.expectedNodes).matches(this.nodes)) {
-      mismatchDescription.appendText("\nNodes:");
-      for (String node : this.nodes) {
-        mismatchDescription.appendText("\n").appendText(node);
-      }
-
-      result = false;
+    mismatchDescription.appendText("was\nNodes:");
+    for (String node : this.nodes) {
+      mismatchDescription.appendText("\n").appendText(node);
+    }
+    mismatchDescription.appendText("\nEdges:");
+    for (String edge : this.edges) {
+      mismatchDescription.appendText("\n").appendText(edge);
     }
 
-    if (!containsInAnyOrder(this.expectedEdges).matches(this.edges)) {
-      mismatchDescription.appendText("\nEdges:");
-      for (String edge : this.edges) {
-        mismatchDescription.appendText("\n").appendText(edge);
-      }
-
-      result = false;
-    }
-
-    return result;
+    return containsInAnyOrder(this.expectedNodes).matches(this.nodes)
+         | containsInAnyOrder(this.expectedEdges).matches(this.edges);
   }
 
   private void init(DotBuilder dotBuilder) {
@@ -96,10 +94,10 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
     for (String line : lines) {
       String trimmed = StringUtils.trim(line);
 
-      if (trimmed.matches(NODE_PATTERN)) {
-        this.nodes.add(trimmed);
-      } else if (trimmed.matches(EDGE_PATTERN)) {
+      if (trimmed.matches(EDGE_PATTERN)) {
         this.edges.add(trimmed);
+      } else if (trimmed.matches(NODE_PATTERN)) {
+        this.nodes.add(trimmed);
       }
     }
   }
