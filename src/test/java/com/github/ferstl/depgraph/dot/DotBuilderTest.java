@@ -19,6 +19,11 @@ import static org.junit.Assert.assertThat;
  */
 public class DotBuilderTest {
 
+  private static final String DEFAULT_FROM_NODE = "\"group:from:jar:1.0.0:compile\"[label=\"group:from:jar:1.0.0:compile\"]";
+  private static final String DEFAULT_TO_NODE = "\"group:to:jar:1.0.0:compile\"[label=\"group:to:jar:1.0.0:compile\"]";
+  private static final String DEFAULT_SINGLE_NODE = "\"group:start:jar:1.0.0:compile\"[label=\"group:start:jar:1.0.0:compile\"]";
+  private static final String DEFAULT_EDGE = "\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\"";
+
   private DotBuilder dotBuilder;
 
   @Before
@@ -41,11 +46,8 @@ public class DotBuilderTest {
     this.dotBuilder.addEdge(from, to);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] {
-          "\"group:from:jar:1.0.0:compile\"[label=\"group:from:jar:1.0.0:compile\"]",
-          "\"group:to:jar:1.0.0:compile\"[label=\"group:to:jar:1.0.0:compile\"]"},
-        new String[] {
-          "\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\""}));
+        new String[] { DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
+        new String[] { DEFAULT_EDGE }));
 
   }
 
@@ -66,16 +68,12 @@ public class DotBuilderTest {
       .omitSelfReferences()
       .addEdge(createNode("start"), createNode("start"));
 
-    assertThat(this.dotBuilder, hasNodes(
-        "\"group:start:jar:1.0.0:compile\"[label=\"group:start:jar:1.0.0:compile\"]"));
+    assertThat(this.dotBuilder, hasNodes(DEFAULT_SINGLE_NODE));
 
     this.dotBuilder.addEdge(createNode("from"), createNode("to"));
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] {
-            "\"group:start:jar:1.0.0:compile\"[label=\"group:start:jar:1.0.0:compile\"]",
-            "\"group:from:jar:1.0.0:compile\"[label=\"group:from:jar:1.0.0:compile\"]",
-            "\"group:to:jar:1.0.0:compile\"[label=\"group:to:jar:1.0.0:compile\"]"},
-        new String[] {"\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\""}));
+        new String[] { DEFAULT_SINGLE_NODE, DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
+        new String[] { DEFAULT_EDGE }));
   }
 
 
@@ -99,10 +97,8 @@ public class DotBuilderTest {
       .addEdge(createNode("from"), createNode("to"));
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] {
-            "\"group:from:jar:1.0.0:compile\"[label=\"group:from:jar:1.0.0:compile\"]",
-            "\"group:to:jar:1.0.0:compile\"[label=\"group:to:jar:1.0.0:compile\"]"},
-        new String[] {"\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\"[label=\"1.0.0\"]"}));
+        new String[] { DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
+        new String[] { DEFAULT_EDGE + "[label=\"1.0.0\"]" }));
   }
 
   @Test
@@ -110,10 +106,8 @@ public class DotBuilderTest {
     this.dotBuilder.addEdge(createNode("from"), createNode("to"), TestRenderer.INSTANCE);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] {
-            "\"group:from:jar:1.0.0:compile\"[label=\"group:from:jar:1.0.0:compile\"]",
-            "\"group:to:jar:1.0.0:compile\"[label=\"group:to:jar:1.0.0:compile\"]"},
-        new String[] {"\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\"[label=\"1.0.0\"]"}));
+        new String[] { DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
+        new String[] { DEFAULT_EDGE + "[label=\"1.0.0\"]" }));
 
   }
 
@@ -123,10 +117,11 @@ public class DotBuilderTest {
       .useNodeLabelRenderer(TestRenderer.INSTANCE)
       .addEdge(createNode("from"), createNode("to"));
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(new String[] {
-        "\"group:from:jar:1.0.0:compile\"[label=from]",
-        "\"group:to:jar:1.0.0:compile\"[label=to]"},
-    new String[] {"\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\""}));
+    assertThat(this.dotBuilder, hasNodesAndEdges(
+        new String[] {
+          "\"group:from:jar:1.0.0:compile\"[label=from]",
+          "\"group:to:jar:1.0.0:compile\"[label=to]"},
+        new String[] {DEFAULT_EDGE}));
   }
 
 
