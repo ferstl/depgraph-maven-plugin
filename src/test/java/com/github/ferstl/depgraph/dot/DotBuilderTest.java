@@ -25,10 +25,14 @@ public class DotBuilderTest {
   private static final String DEFAULT_EDGE = "\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\"";
 
   private DotBuilder dotBuilder;
+  private Node fromNode;
+  private Node toNode;
 
   @Before
   public void before() {
     this.dotBuilder = new DotBuilder();
+    this.fromNode = createNode("from");
+    this.toNode = createNode("to");
   }
 
   @Test
@@ -40,10 +44,7 @@ public class DotBuilderTest {
 
   @Test
   public void defaults() {
-    Node from = createNode("from");
-    Node to = createNode("to");
-
-    this.dotBuilder.addEdge(from, to);
+    this.dotBuilder.addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[] { DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
@@ -70,7 +71,7 @@ public class DotBuilderTest {
 
     assertThat(this.dotBuilder, hasNodes(DEFAULT_SINGLE_NODE));
 
-    this.dotBuilder.addEdge(createNode("from"), createNode("to"));
+    this.dotBuilder.addEdge(this.fromNode, this.toNode);
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[] { DEFAULT_SINGLE_NODE, DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
         new String[] { DEFAULT_EDGE }));
@@ -81,7 +82,7 @@ public class DotBuilderTest {
   public void customNodeRenderer() {
     this.dotBuilder.useNodeRenderer(TestRenderer.INSTANCE);
 
-    this.dotBuilder.addEdge(createNode("from"), createNode("to"));
+    this.dotBuilder.addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[] {
@@ -94,7 +95,7 @@ public class DotBuilderTest {
   public void customEdgeRenderer() {
     this.dotBuilder
       .useEdgeRenderer(TestRenderer.INSTANCE)
-      .addEdge(createNode("from"), createNode("to"));
+      .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[] { DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
@@ -103,7 +104,7 @@ public class DotBuilderTest {
 
   @Test
   public void addEdgeWithCustomRenderer() {
-    this.dotBuilder.addEdge(createNode("from"), createNode("to"), TestRenderer.INSTANCE);
+    this.dotBuilder.addEdge(this.fromNode, this.toNode, TestRenderer.INSTANCE);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[] { DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
@@ -115,7 +116,7 @@ public class DotBuilderTest {
   public void customNodeLabelRenderer() {
     this.dotBuilder
       .useNodeLabelRenderer(TestRenderer.INSTANCE)
-      .addEdge(createNode("from"), createNode("to"));
+      .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[] {
