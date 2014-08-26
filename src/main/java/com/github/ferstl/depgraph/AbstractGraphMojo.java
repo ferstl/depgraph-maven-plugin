@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -35,6 +36,7 @@ import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilt
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.io.Files;
@@ -179,14 +181,18 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
     ProcessBuilder processBuilder = new ProcessBuilder(commandLine);
     Process process = processBuilder.start();
+
     try {
-      process.waitFor();
-      getLog().info("Graph file created on " + graphFile.toAbsolutePath());
+      if (process.waitFor() == 0) {
+        getLog().info("Graph image created on " + graphFile.toAbsolutePath());
+      } else {
+        throw new IOException("Graphviz terminated abnormally. Exit code: " + process.exitValue());
+      }
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-
-      getLog().error("Got interrupted while creating graph file");
       process.destroy();
+
+      throw new IOException("Graph image creation interrupted", e);
     }
 
   }
