@@ -17,6 +17,7 @@ package com.github.ferstl.depgraph;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
+import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 
 /**
@@ -175,19 +177,29 @@ abstract class AbstractGraphMojo extends AbstractMojo {
         "dot",
         "-T", this.imageFormat,
         "-o", graphFile.toAbsolutePath().toString(),
-        this.outputFile.getAbsolutePath());
+        this.outputFile.getAbsolutePath() + "fuck");
 
     getLog().info("Running Graphviz: " + Joiner.on(" ").join(commandLine));
 
-    ProcessBuilder processBuilder = new ProcessBuilder(commandLine);
-    Process process = processBuilder.start();
+    Process process = new ProcessBuilder(commandLine)
+      .redirectErrorStream(true)
+      .start();
+
+    List<String> output = CharStreams.readLines(new InputStreamReader(process.getInputStream()));
 
     try {
-      if (process.waitFor() == 0) {
-        getLog().info("Graph image created on " + graphFile.toAbsolutePath());
-      } else {
-        throw new IOException("Graphviz terminated abnormally. Exit code: " + process.exitValue());
+      int exitCode = process.waitFor();
+
+      for (String line : output) {
+        getLog().info("  dot> " + line);
       }
+
+      if (exitCode != 0) {
+        throw new IOException("Graphviz terminated abnormally. Exit code: " + exitCode);
+      }
+
+      getLog().info("Graph image created on " + graphFile.toAbsolutePath());
+
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       process.destroy();
