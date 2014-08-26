@@ -127,7 +127,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
       writeDotFile(graphFactory.createGraph(this.project));
 
       if (this.createImage) {
-        generateGraphImage();
+        createGraphImage();
       }
 
     } catch (DependencyGraphException e) {
@@ -165,7 +165,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
   }
 
-  private void generateGraphImage() throws IOException {
+  private void createGraphImage() throws IOException {
     String graphFileName = createGraphFileName();
 
     Path graphFile = this.outputFile.toPath().getParent().resolve(graphFileName);
