@@ -43,6 +43,25 @@ public class DependencyNodeAdapterTest {
   }
 
   @Test
+  public void resolutionFromDependencyTreeNode() {
+    Artifact artifact = createArtifact();
+    Artifact relatedArtifact = createArtifact();
+
+    org.apache.maven.shared.dependency.tree.DependencyNode node =
+        new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT, relatedArtifact);
+    DependencyNodeAdapter adapter = new DependencyNodeAdapter(node);
+    assertEquals(NodeResolution.OMMITTED_FOR_CONFLICT, adapter.getResolution());
+
+    node = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE, relatedArtifact);
+    adapter = new DependencyNodeAdapter(node);
+    assertEquals(NodeResolution.OMITTED_FOR_DUPLICATE, adapter.getResolution());
+
+    node = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CYCLE);
+    adapter = new DependencyNodeAdapter(node);
+    assertEquals(NodeResolution.OMMITTED_FOR_CYCLE, adapter.getResolution());
+  }
+
+  @Test
   public void defaultCompileScope() {
     Artifact artifact = createArtifact();
     artifact.setScope(null);
