@@ -177,7 +177,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
         "dot",
         "-T", this.imageFormat,
         "-o", graphFile.toAbsolutePath().toString(),
-        this.outputFile.getAbsolutePath() + "fuck");
+        this.outputFile.getAbsolutePath());
 
     getLog().info("Running Graphviz: " + Joiner.on(" ").join(commandLine));
 
