@@ -50,7 +50,7 @@ public class DependencyNodeAdapterTest {
     org.apache.maven.shared.dependency.tree.DependencyNode node =
         new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT, relatedArtifact);
     DependencyNodeAdapter adapter = new DependencyNodeAdapter(node);
-    assertEquals(NodeResolution.OMMITTED_FOR_CONFLICT, adapter.getResolution());
+    assertEquals(NodeResolution.OMITTED_FOR_CONFLICT, adapter.getResolution());
 
     node = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE, relatedArtifact);
     adapter = new DependencyNodeAdapter(node);
@@ -58,7 +58,7 @@ public class DependencyNodeAdapterTest {
 
     node = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CYCLE);
     adapter = new DependencyNodeAdapter(node);
-    assertEquals(NodeResolution.OMMITTED_FOR_CYCLE, adapter.getResolution());
+    assertEquals(NodeResolution.OMITTED_FOR_CYCLE, adapter.getResolution());
   }
 
   @Test

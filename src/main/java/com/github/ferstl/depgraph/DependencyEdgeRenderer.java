@@ -43,7 +43,7 @@ class DependencyEdgeRenderer implements EdgeRenderer {
       case OMITTED_FOR_DUPLICATE:
         return builder.style("dotted").toString();
 
-      case OMMITTED_FOR_CONFLICT:
+      case OMITTED_FOR_CONFLICT:
         return builder.style("dashed").color("red").fontColor("red").toString();
 
       default:

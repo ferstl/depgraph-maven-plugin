@@ -74,9 +74,9 @@ public class DependencyNodeAdapter implements Node {
       case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE:
         return NodeResolution.OMITTED_FOR_DUPLICATE;
       case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT:
-        return NodeResolution.OMMITTED_FOR_CONFLICT;
+        return NodeResolution.OMITTED_FOR_CONFLICT;
       case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CYCLE:
-        return NodeResolution.OMMITTED_FOR_CYCLE;
+        return NodeResolution.OMITTED_FOR_CYCLE;
       default:
         return NodeResolution.INCLUDED;
     }
