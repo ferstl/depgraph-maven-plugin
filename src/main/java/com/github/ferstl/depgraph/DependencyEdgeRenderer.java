@@ -25,9 +25,13 @@ class DependencyEdgeRenderer implements EdgeRenderer {
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
   private final boolean renderVersions;
+  private final boolean renderDuplicates;
+  private final boolean renderConflicts;
 
-  public DependencyEdgeRenderer(boolean renderVersions) {
+  public DependencyEdgeRenderer(boolean renderVersions, boolean renderDuplicates, boolean renderConflicts) {
     this.renderVersions = renderVersions;
+    this.renderDuplicates = renderDuplicates;
+    this.renderConflicts = renderConflicts;
   }
 
   @Override
@@ -35,20 +39,19 @@ class DependencyEdgeRenderer implements EdgeRenderer {
     AttributeBuilder builder = new AttributeBuilder();
     NodeResolution resolution = to.getResolution();
 
-    if (this.renderVersions && resolution != NodeResolution.OMITTED_FOR_DUPLICATE) {
+    if (this.renderVersions) {
       builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }
 
-    switch(resolution) {
-      case OMITTED_FOR_DUPLICATE:
-        return builder.style("dotted").toString();
-
-      case OMITTED_FOR_CONFLICT:
-        return builder.style("dashed").color("red").fontColor("red").toString();
-
-      default:
-        return builder.toString();
+    if (this.renderDuplicates && resolution == NodeResolution.OMITTED_FOR_DUPLICATE) {
+      builder.style("dotted");
     }
+
+    if (this.renderConflicts && resolution == NodeResolution.OMITTED_FOR_CONFLICT) {
+      builder.style("dashed").color("red").fontColor("red");
+    }
+
+    return builder.toString();
   }
 
   private String abbreviateVersion(String version) {

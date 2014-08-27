@@ -76,10 +76,9 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
       .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
       .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
 
-    if (requiresFullGraph() && this.showVersions) {
+    if (requiresFullGraph()) {
       // For the full graph we display the versions on the edges
-      dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions));
-
+      dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions, this.showDuplicates, this.showConflicts));
     } else if (this.showVersions) {
       // On the effective dependency graph we can display the versions within the nodes
       dotBuilder.useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_VERSION_LABEL);
