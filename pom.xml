@@ -86,7 +86,7 @@
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.version>3.2.1</maven.version>
+    <maven.version>3.2.2</maven.version>
   </properties>
 
   <dependencies>
