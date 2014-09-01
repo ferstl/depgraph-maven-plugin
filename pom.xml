@@ -340,6 +340,20 @@
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-site</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-scm-publish-plugin</artifactId>
             <configuration>
               <scmBranch>gh-pages</scmBranch>
@@ -351,19 +365,6 @@
                 <phase>deploy</phase>
                 <goals>
                   <goal>publish-scm</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-site-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>create-site</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>site</goal>
                 </goals>
               </execution>
             </executions>
