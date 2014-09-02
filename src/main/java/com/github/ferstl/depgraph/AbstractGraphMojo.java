@@ -17,12 +17,11 @@ package com.github.ferstl.depgraph;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
@@ -37,10 +36,15 @@ import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilt
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
+import org.codehaus.plexus.util.cli.CommandLineException;
+import org.codehaus.plexus.util.cli.CommandLineUtils;
+import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
+import org.codehaus.plexus.util.cli.Commandline;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
-import com.google.common.io.CharStreams;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
 
 /**
@@ -52,6 +56,7 @@ import com.google.common.io.Files;
  */
 abstract class AbstractGraphMojo extends AbstractMojo {
 
+  private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\r?\n");
   private static final String DOT_EXTENSION = ".dot";
   private static final String OUTPUT_DOT_FILE_NAME = "dependency-graph" + DOT_EXTENSION;
 
@@ -169,44 +174,45 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
   }
 
-  private void createGraphImage() throws IOException {
+  private void createGraphImage() throws MojoExecutionException {
     String graphFileName = createGraphFileName();
-
     Path graphFile = this.outputFile.toPath().getParent().resolve(graphFileName);
-    List<String> commandLine = Arrays.asList(
-        "dot",
+
+    String[] arguments = new String[] {
         "-T", this.imageFormat,
         "-o", graphFile.toAbsolutePath().toString(),
-        this.outputFile.getAbsolutePath());
+        this.outputFile.getAbsolutePath()};
 
-    getLog().info("Running Graphviz: " + Joiner.on(" ").join(commandLine));
+    Commandline cmd = new Commandline();
+    cmd.setExecutable("dot");
+    cmd.addArguments(arguments);
 
-    Process process = new ProcessBuilder(commandLine)
-      .redirectErrorStream(true)
-      .start();
+    getLog().info("Running Graphviz: " + Joiner.on(" ").join(arguments));
 
-    List<String> output = CharStreams.readLines(new InputStreamReader(process.getInputStream()));
+    StringStreamConsumer systemOut = new StringStreamConsumer();
+    StringStreamConsumer systemErr = new StringStreamConsumer();
+    int exitCode;
 
     try {
-      int exitCode = process.waitFor();
-
-      for (String line : output) {
-        getLog().info("  dot> " + line);
-      }
-
-      if (exitCode != 0) {
-        throw new IOException("Graphviz terminated abnormally. Exit code: " + exitCode);
-      }
-
-      getLog().info("Graph image created on " + graphFile.toAbsolutePath());
-
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      process.destroy();
-
-      throw new IOException("Graph image creation interrupted", e);
+      exitCode = CommandLineUtils.executeCommandLine(cmd, systemOut, systemErr);
+    } catch (CommandLineException e) {
+      throw new MojoExecutionException("Unable to execute Graphviz", e);
     }
 
+    Splitter lineSplitter = Splitter.on(LINE_SEPARATOR_PATTERN).omitEmptyStrings().trimResults();
+    Iterable<String> output = Iterables.concat(
+        lineSplitter.split(systemOut.getOutput()),
+        lineSplitter.split(systemErr.getOutput()));
+
+    for (String line : output) {
+      getLog().info("  dot> " + line);
+    }
+
+    if (exitCode != 0) {
+      throw new MojoExecutionException("Graphviz terminated abnormally. Exit code: " + exitCode);
+    }
+
+    getLog().info("Graph image created on " + graphFile.toAbsolutePath());
   }
 
   private String createGraphFileName() {
