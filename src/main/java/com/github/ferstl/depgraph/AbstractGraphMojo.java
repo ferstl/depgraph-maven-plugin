@@ -97,6 +97,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * converted to a graph image using Graphviz' dot executable.
    *
    * @see #imageFormat
+   * @see #dotExecutable
    * @since 1.0.0
    */
   @Parameter(property = "createImage", defaultValue = "false")
@@ -109,6 +110,16 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    */
   @Parameter(property = "imageFormat", defaultValue = "png")
   private String imageFormat;
+
+  /**
+   * Path to the dot executable. Use this option in case {@link #createImage} is set to {@code true} and the dot
+   * executable is not on the system {@code PATH}.
+   *
+   * @since 1.0.0
+   */
+  @Parameter(property = "dotExecutable")
+  private File dotExecutable;
+
 
 
   /**
@@ -179,16 +190,17 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     String graphFileName = createGraphFileName();
     Path graphFile = this.outputFile.toPath().getParent().resolve(graphFileName);
 
+    String dotExecutable = determineDotExecutable();
     String[] arguments = new String[] {
         "-T", this.imageFormat,
         "-o", graphFile.toAbsolutePath().toString(),
         this.outputFile.getAbsolutePath()};
 
     Commandline cmd = new Commandline();
-    cmd.setExecutable("dot");
+    cmd.setExecutable(dotExecutable);
     cmd.addArguments(arguments);
 
-    getLog().info("Running Graphviz: " + Joiner.on(" ").join(arguments));
+    getLog().info("Running Graphviz: " + dotExecutable + " " + Joiner.on(" ").join(arguments));
 
     StringStreamConsumer systemOut = new StringStreamConsumer();
     StringStreamConsumer systemErr = new StringStreamConsumer();
@@ -226,5 +238,20 @@ abstract class AbstractGraphMojo extends AbstractMojo {
       graphFileName = dotFileName + this.imageFormat;
     }
     return graphFileName;
+  }
+
+  private String determineDotExecutable() throws MojoExecutionException {
+    if (this.dotExecutable == null) {
+      return "dot";
+    }
+
+    Path dotExecutablePath = this.dotExecutable.toPath();
+    if (!Files.exists(dotExecutablePath)) {
+      throw new MojoExecutionException("The dot executable '" + this.dotExecutable + "' does not exist.");
+    } else if (Files.isDirectory(dotExecutablePath) || !Files.isExecutable(dotExecutablePath)) {
+      throw new MojoExecutionException("The dot executable '" + this.dotExecutable + "' is not a file or cannot be executed.");
+    }
+
+    return dotExecutablePath.toAbsolutePath().toString();
   }
 }
