@@ -18,6 +18,8 @@ package com.github.ferstl.depgraph;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +43,9 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
-import com.google.common.io.Files;
 
 /**
  * Abstract mojo to create all possible kinds of graphs in the dot format. Graphs are created with instances of the
@@ -167,9 +167,10 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   }
 
   private void writeDotFile(String dotGraph) throws IOException {
-    Files.createParentDirs(this.outputFile);
+    Path outputFilePath = this.outputFile.toPath();
+    Files.createDirectories(outputFilePath.getParent());
 
-    try (Writer writer = Files.newWriter(this.outputFile, Charsets.UTF_8)) {
+    try (Writer writer = Files.newBufferedWriter(outputFilePath, StandardCharsets.UTF_8)) {
       writer.write(dotGraph);
     }
   }
