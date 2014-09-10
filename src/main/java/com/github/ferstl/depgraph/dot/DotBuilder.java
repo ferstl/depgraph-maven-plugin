@@ -25,7 +25,7 @@ import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
  * defining edges between {@link Node}s. The builder allows some customizations including custom
  * {@link NodeRenderer}s and {@link EdgeRenderer}s.
  */
-public class DotBuilder {
+public final class DotBuilder {
 
   private NodeRenderer nodeRenderer;
   private NodeRenderer nodeLabelRenderer;
