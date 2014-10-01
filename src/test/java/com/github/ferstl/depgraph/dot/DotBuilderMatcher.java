@@ -10,7 +10,7 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 
-final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder> {
+public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder> {
 
   private static final String[] EMPTY_ARRAY = new String[0];
   private static final String NODE_PATTERN = ".+\\[label=.+\\]";
