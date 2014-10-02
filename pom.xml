@@ -13,8 +13,8 @@
 
   <name>Depgraph Maven Plugin</name>
   <description>
-    A Maven plugin that generates dependency graphs on single modules or in an aggregated form
-    on a multi-module project. The graphs are represented by .dot files. In case that graphviz
+    This Maven plugin generates dependency graphs on single modules or in an aggregated form
+    on multi-module projects. The graphs are represented by .dot files. In case that Graphviz
     is installed on the machine where this plugin is run, the .dot file can be directly converted
     into all supported image files.
   </description>
