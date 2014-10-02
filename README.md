@@ -1,4 +1,4 @@
-# depgraph-maven-plugin
+# depgraph-maven-plugin [![Build Status](https://travis-ci.org/ferstl/depgraph-maven-plugin.svg?branch=master)](https://travis-ci.org/ferstl/depgraph-maven-plugin)
 *- A Maven plugin that generates dependency graphs*
 
 This Maven plugin generates dependency graphs on single modules or in an aggregated form on multi-module projects. The graphs are represented by `.dot` files. In case that [Graphviz](http://www.graphviz.org/) is installed on the machine where this plugin is run, the `.dot` file can be directly converted into all supported image files.
