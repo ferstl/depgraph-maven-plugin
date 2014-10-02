@@ -23,6 +23,11 @@ These are the plugin coordinates:
       </plugins>
     </build>
     
+## Release Notes
+
+- Version 1.0.0 (first version)
+- [Version 1.0.1](https://github.com/ferstl/depgraph-maven-plugin/milestones/Version%201.0.1)
+
 ## Examples
 
 All examples are based on a multi-module project with the following structure:
