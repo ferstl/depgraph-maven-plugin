@@ -22,7 +22,7 @@ Each of the modules contains some dependencies in different scopes.
 
 ### Simple Dependency Graph
 
-A simple graph can be created by executing the `depgraph-maven-plugin:graph` goal:
+A simple graph can be created by executing the [`depgraph-maven-plugin:graph`](https://ferstl.github.io/depgraph-maven-plugin/graph-mojo.html) goal:
 
 <img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/gh-pages/images/documentation/simple-graph.png" alt="Simple dependency graph"/>
 
@@ -32,7 +32,7 @@ The goal can be configured to show the versions on the dependencies:
 
 ### Duplicates and Conflicts
 
-The `depgraph-maven-plugin:graph` can be configured to show duplicate and/or conflicting versions. Duplicate versions are shown as dotted black arrows. Conflicting versions are shown as dashed red arrows:
+The [`depgraph-maven-plugin:graph`](https://ferstl.github.io/depgraph-maven-plugin/graph-mojo.html) goal can be configured to show duplicate and/or conflicting versions. Duplicate versions are shown as dotted black arrows. Conflicting versions are shown as dashed red arrows:
 
 <img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/gh-pages/images/documentation/duplicates-and-conflicts.png" alt="Dependency graph showing duplicates and conflicts"/>
 
@@ -40,7 +40,7 @@ Duplicate dependencies do occur when more than one module defines the same depen
 
 ### Dependency Graph by `groupId`
 
-The `depgraph-maven-plugin:by-groupid` goal creates a dependency graph using the `groupId` of the dependencies:
+The [`depgraph-maven-plugin:by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/by-groupid-mojo.html) goal creates a dependency graph using the `groupId` of the dependencies:
 
 <img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/gh-pages/images/documentation/by-group-id.png" alt="Dependency graph by groupId"/>
 
@@ -49,12 +49,12 @@ Such graphs give a higher-level overview of a project, i.e. they show better whi
 
 ### Aggregated Graphs
 
-The goal `depgraph-maven-plugin:aggregate` creates an aggregated dependency graph on the root of a multi-module project. It shows the sub-modules with dotted black arrows and the **union** of all the modules' dependencies (the `sub-parent` and its `module-3` were excluded from the graph for clarity):
+The goal [`depgraph-maven-plugin:aggregate`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-mojo.html) creates an aggregated dependency graph on the root of a multi-module project. It shows the sub-modules with dotted black arrows and the **union** of all the modules' dependencies (the `sub-parent` and its `module-3` were excluded from the graph for clarity):
 
 <img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/gh-pages/images/documentation/aggregated.png" alt="Aggregated ependency graph"/>
 
 
-The goal `depgraph-maven-plugin:aggregate-by-groupid` does the same for the group IDs of all modules and their dependencies.
+The goal [`depgraph-maven-plugin:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) does the same for the group IDs of all modules and their dependencies.
 
 
 ## FAQ
