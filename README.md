@@ -7,6 +7,22 @@ This Maven plugin generates dependency graphs on single modules or in an aggrega
 For more information take a look at the generated [plugin page](https://ferstl.github.io/depgraph-maven-plugin/index.html).
 
 
+## Plugin Coordinates
+
+The *depgraph-maven-plugin* is available on [Maven Central](http://central.maven.org/maven2/com/github/ferstl/depgraph-maven-plugin/). So no further repository configuration is required.
+
+These are the plugin coordinates:
+
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>com.github.ferstl</groupId>
+          <artifactId>depgraph-maven-plugin</artifactId>
+          <version>1.0.1</version>
+        </plugin>
+      </plugins>
+    </build>
+    
 ## Examples
 
 All examples are based on a multi-module project with the following structure:
