@@ -64,6 +64,8 @@ Q: Help! The dependency graph of my 10 year old 100-module enterprise project lo
 A: Think carefully what information you want to see in your dependency graph. Do you really want to have all third-party dependencies in your graph or do you want to see only the dependencies between your own modules? Would the `groupId` graph be a better alternative?
 Generally, you should consequently exclude dependencies that don't give you useful information. The inclusion/exclusion mechanisms in this plugin are quite powerful and easy to use. A good starting point is the exclusion of dependencies to "utility" libraries, such as `commons-lang`, `guava` or `my-enterprise-project-common`. Such dependencies are typically used by every single module which is (in most cases) perfectly fine. So they don't give you much useful information when they show up in the dependency graph.
 
+-----
+
 Q: Why can't I show duplicates and conflicts in the aggregated graph.
 
 A: This does not make sense because dependencies are resolved individually for each module in the reactor. As a result, the same dependency edge in the graph could once occur as conflict, once as duplicate and once as resolved dependency.
