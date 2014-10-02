@@ -26,7 +26,7 @@ These are the plugin coordinates:
 ## Release Notes
 
 - Version 1.0.0 (first version)
-- [Version 1.0.1](https://github.com/ferstl/depgraph-maven-plugin/milestones/Version%201.0.1)
+- [Version 1.0.1](https://github.com/ferstl/depgraph-maven-plugin/issues?q=milestone%3A%22Version+1.0.1%22+is%3Aclosed)
 
 ## Examples
 
