@@ -16,7 +16,6 @@
 package com.github.ferstl.depgraph.dot;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -52,9 +51,7 @@ public class DotEscaperTest {
 
   @Test
   public void quoteIfRequired() {
-    assertEquals("NoQuotingRequired", DotEscaper.escape("NoQuotingRequired"));
-    assertEquals("\"Quoting Required\"", DotEscaper.escape("Quoting Required"));
-    assertEquals("\"Quoting-Required\"", DotEscaper.escape("Quoting-Required"));
+    assertEquals("\"QuotingRequired\"", DotEscaper.escape("QuotingRequired"));
   }
 
   @Test

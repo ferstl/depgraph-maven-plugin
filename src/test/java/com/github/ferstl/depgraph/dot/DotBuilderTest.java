@@ -19,9 +19,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Before;
 import org.junit.Test;
-
 import com.github.ferstl.depgraph.DependencyNodeAdapter;
-
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodes;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
@@ -101,8 +99,8 @@ public class DotBuilderTest {
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[] {
-            "from[label=\"group:from:jar:1.0.0:compile\"]",
-            "to[label=\"group:to:jar:1.0.0:compile\"]"},
+            "\"from\"[label=\"group:from:jar:1.0.0:compile\"]",
+            "\"to\"[label=\"group:to:jar:1.0.0:compile\"]"},
         new String[] {"from -> to"}));
   }
 
@@ -135,8 +133,8 @@ public class DotBuilderTest {
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[] {
-          "\"group:from:jar:1.0.0:compile\"[label=from]",
-          "\"group:to:jar:1.0.0:compile\"[label=to]"},
+          "\"group:from:jar:1.0.0:compile\"[label=\"from\"]",
+          "\"group:to:jar:1.0.0:compile\"[label=\"to\"]"},
         new String[] {DEFAULT_EDGE}));
   }
 

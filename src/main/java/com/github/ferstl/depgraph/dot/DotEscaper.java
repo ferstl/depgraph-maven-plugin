@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 public final class DotEscaper {
 
   private static final String QUOTE_REPLACEMENT = "\\\\\"";
-  private static final Pattern REQUIRE_QUOTING_PATTERN = Pattern.compile(".*[\\s\\p{Punct}].*", Pattern.DOTALL);
   private static final Pattern REPLACE_NEWLINE_PATTERN = Pattern.compile("(\\r\\n)|[\\r\\n]", Pattern.DOTALL);
   private static final Pattern REPLACE_QUOTE_PATTERN = Pattern.compile("\"");
 
@@ -68,7 +67,7 @@ public final class DotEscaper {
   }
 
   private boolean requiresQuoting() {
-    return !isQuoted() && REQUIRE_QUOTING_PATTERN.matcher(this.value).matches();
+    return !isQuoted();
   }
 
   private boolean isQuoted() {

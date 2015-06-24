@@ -16,7 +16,6 @@
 package com.github.ferstl.depgraph.dot;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -32,47 +31,47 @@ public class AttributeBuilderTest {
 
   @Test
   public void label() {
-    assertEquals("[label=someLabel]", new AttributeBuilder().label("someLabel").toString());
+    assertEquals("[label=\"someLabel\"]", new AttributeBuilder().label("someLabel").toString());
   }
 
   @Test
   public void fontName() {
-    assertEquals("[fontname=Helvetica]", new AttributeBuilder().fontName("Helvetica").toString());
+    assertEquals("[fontname=\"Helvetica\"]", new AttributeBuilder().fontName("Helvetica").toString());
   }
 
   @Test
   public void fontSize() {
-    assertEquals("[fontsize=12]", new AttributeBuilder().fontSize(12).toString());
+    assertEquals("[fontsize=\"12\"]", new AttributeBuilder().fontSize(12).toString());
   }
 
   @Test
   public void fontColor() {
-    assertEquals("[fontcolor=green]", new AttributeBuilder().fontColor("green").toString());
+    assertEquals("[fontcolor=\"green\"]", new AttributeBuilder().fontColor("green").toString());
   }
 
   @Test
   public void style() {
-    assertEquals("[style=dashed]", new AttributeBuilder().style("dashed").toString());
+    assertEquals("[style=\"dashed\"]", new AttributeBuilder().style("dashed").toString());
   }
 
   @Test
   public void color() {
-    assertEquals("[color=blue]", new AttributeBuilder().color("blue").toString());
+    assertEquals("[color=\"blue\"]", new AttributeBuilder().color("blue").toString());
   }
 
   @Test
   public void shape() {
-    assertEquals("[shape=box]", new AttributeBuilder().shape("box").toString());
+    assertEquals("[shape=\"box\"]", new AttributeBuilder().shape("box").toString());
   }
 
   @Test
   public void addAttribute() {
-    assertEquals("[someAttribute=someValue]", new AttributeBuilder().addAttribute("someAttribute", "someValue").toString());
+    assertEquals("[someAttribute=\"someValue\"]", new AttributeBuilder().addAttribute("someAttribute", "someValue").toString());
   }
 
   @Test
   public void multipleAttributes() {
-    assertEquals("[label=someLabel,color=green,fontsize=10]", new AttributeBuilder().label("someLabel").color("green").fontSize(10).toString());
+    assertEquals("[label=\"someLabel\",color=\"green\",fontsize=\"10\"]", new AttributeBuilder().label("someLabel").color("green").fontSize(10).toString());
   }
 
   @Test
