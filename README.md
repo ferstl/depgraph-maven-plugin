@@ -20,7 +20,7 @@ These are the plugin coordinates:
         <plugin>
           <groupId>com.github.ferstl</groupId>
           <artifactId>depgraph-maven-plugin</artifactId>
-          <version>1.0.1</version>
+          <version>1.0.2</version>
         </plugin>
       </plugins>
     </build>
