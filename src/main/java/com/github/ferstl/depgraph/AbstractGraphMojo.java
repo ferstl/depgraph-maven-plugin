@@ -70,7 +70,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private String scope;
 
   /**
-   * Comma-separated list of artifacts to be included in the form of {@code groupId:artifactId:type:classifier}.
+   * List of artifacts to be included in the form of {@code groupId:artifactId:type:classifier}.
    *
    * @since 1.0.0
    */
@@ -78,7 +78,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private List<String> includes;
 
   /**
-   * Comma-separated list of artifacts to be excluded in the form of {@code groupId:artifactId:type:classifier}.
+   * List of artifacts to be excluded in the form of {@code groupId:artifactId:type:classifier}.
    *
    * @since 1.0.0
    */
