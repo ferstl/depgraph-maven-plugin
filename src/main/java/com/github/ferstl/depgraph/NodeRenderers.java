@@ -16,7 +16,6 @@
 package com.github.ferstl.depgraph;
 
 import org.apache.maven.artifact.Artifact;
-
 import com.github.ferstl.depgraph.dot.Node;
 import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.google.common.base.Joiner;
@@ -36,9 +35,33 @@ enum NodeRenderers implements NodeRenderer {
     @Override
     public String render(Node node) {
       Artifact artifact = node.getArtifact();
-      String artifactIdAndVersion = artifact.getArtifactId() + "\n" + artifact.getVersion();
+      String artifactLabel = artifact.getArtifactId() + "\n" + artifact.getVersion();
 
-      return toScopedString(artifactIdAndVersion, artifact.getScope());
+      return toScopedString(artifactLabel, artifact.getScope());
+    }
+
+  },
+
+  GROUP_ID_ARTIFACT_ID_LABEL {
+
+    @Override
+    public String render(Node node) {
+      Artifact artifact = node.getArtifact();
+      String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId() + "\n" + artifact.getVersion();
+
+      return toScopedString(artifactLabel, artifact.getScope());
+    }
+
+  },
+
+  GROUP_ID_ARTIFACT_ID_VERSION_LABEL {
+
+    @Override
+    public String render(Node node) {
+      Artifact artifact = node.getArtifact();
+      String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId() + "\n" + artifact.getVersion();
+
+      return toScopedString(artifactLabel, artifact.getScope());
     }
 
   },
