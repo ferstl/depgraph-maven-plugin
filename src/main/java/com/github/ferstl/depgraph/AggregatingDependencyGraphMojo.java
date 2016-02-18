@@ -20,8 +20,8 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.NodeRenderer;
 
 /**
  * Aggregates all dependencies of a multi-module project into one single graph.
@@ -35,6 +35,13 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     requiresDirectInvocation = false,
     threadSafe = true)
 public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
+
+  /**
+   * If set to {@code true}, the created graph will show the {@code groupId} on all artifacts.
+   * @since 1.0.3
+   */
+  @Parameter(property = "showGroupIds", defaultValue = "false")
+  boolean showGroupIds;
 
   /**
    * If set to {@code true} the artifact nodes will show version information.
@@ -57,14 +64,24 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
     DotBuilder dotBuilder = new DotBuilder()
       .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
-      .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
-
-    if (this.showVersions) {
-      dotBuilder.useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_VERSION_LABEL);
-    }
+      .useNodeLabelRenderer(determineNodeLabelRenderer());
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
 
     return new AggregatingGraphFactory(adapter, artifactFilter, dotBuilder, this.includeParentProjects);
+  }
+
+  private NodeRenderer determineNodeLabelRenderer() {
+    NodeRenderer renderer = NodeRenderers.ARTIFACT_ID_LABEL;
+
+    if (this.showGroupIds && this.showVersions) {
+      renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_VERSION_LABEL;
+    } else if (this.showVersions) {
+      renderer = NodeRenderers.ARTIFACT_ID_VERSION_LABEL;
+    } else if (this.showGroupIds) {
+      renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_LABEL;
+    }
+
+    return renderer;
   }
 }
