@@ -109,3 +109,16 @@ Suppose, we have two modules `module-1` and `module-2` in the reactor. `module-2
     module-2 --- 3.0 (included) ---> commons-wtf  (perspective of module-2)
 
 Such a graph is not useful whatsoever. Unless it is not possible to access all resolved dependencies within the whole reactor, we cannot show duplicates and conflicts.
+
+-----
+
+Q: How do the `includes`/`excludes` parameters work?
+
+A: Both parameters are a comma-separated list in the form of `groupId:artifactId:type:classifier`. Not all parts need to be specified and there is wildcard support.
+Examples:
+
+- All spring-web\* dependencies: `org.springframework:spring-web*`
+- A test jar: `com.mycompany:mylib:jar:tests`
+- The same test jar, but without explicit `type` part `com.mycompany:mylib::tests`
+
+There is no priority in these two parameters. If a dependency will not show up in the graph if it not match the `includes` list or if it matches the `excludes` list.
