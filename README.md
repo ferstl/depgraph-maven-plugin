@@ -6,7 +6,7 @@
 This Maven plugin generates dependency graphs on single modules or in an aggregated form on multi-module projects. The graphs are represented by `.dot` files. In case that [Graphviz](http://www.graphviz.org/) is installed on the machine where this plugin is run, the `.dot` file can be directly converted into all supported image files.
 
 
-For more information take a look at the generated [plugin page](https://ferstl.github.io/depgraph-maven-plugin/index.html).
+For more information take a look at the generated [plugin page](https://ferstl.github.io/depgraph-maven-plugin/plugin-info.html).
 
 
 ## Plugin Coordinates
