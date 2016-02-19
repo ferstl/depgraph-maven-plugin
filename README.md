@@ -122,4 +122,4 @@ Examples:
 - A test jar: `com.mycompany:mylib:jar:tests`
 - The same test jar, but without explicit `type` part `com.mycompany:mylib::tests`
 
-There is no priority in these two parameters. If a dependency will not show up in the graph if it not match the `includes` list or if it matches the `excludes` list.
+A dependency will show up in the graph when it matches the `includes` list **and** doesn't match the `excludes` list.
