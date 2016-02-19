@@ -25,7 +25,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -43,7 +42,6 @@ import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -62,7 +60,15 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private static final String OUTPUT_DOT_FILE_NAME = "dependency-graph" + DOT_EXTENSION;
 
   /**
-   * The scope of the artifacts that should be included in the graph.
+   * The scope of the artifacts that should be included in the graph. An empty string indicates all scopes (default).
+   * The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+   * <ul>
+   * <li>{@code compile}: Shows compile, provided and system dependencies</li>
+   * <li>{@code provided}: Shows provided dependencies</li>
+   * <li>{@code runtime}: Shows compile and runtime dependencies</li>
+   * <li>{@code system}: Shows system dependencies</li>
+   * <li>{@code test} (default): Shows all dependencies</li>
+   * </ul>
    *
    * @since 1.0.0
    */
