@@ -52,12 +52,12 @@ A simple graph can be created by executing the [`depgraph:graph`](https://ferstl
 
 The goal can be configured to show the versions and/or groupIds on the dependencies:
 
-** With versions**:
+**With versions**
 
 <img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/with-versions.png" alt="Simple dependency graph with versions"/>
 
 
-** With groupIds **
+**With groupIds**
 
 <img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/with-group-ids.png" alt="Simple dependency graph with groupIds"/>
 
