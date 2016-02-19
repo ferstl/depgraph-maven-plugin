@@ -20,8 +20,8 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.NodeRenderer;
 
 /**
  * Creates a dependency graph of a maven module.
@@ -34,6 +34,13 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
     requiresDirectInvocation = false,
     threadSafe = true)
 public class DependencyGraphMojo extends AbstractGraphMojo {
+
+  /**
+   * If set to {@code true}, the created graph will show the {@code groupId} on all artifacts.
+   * @since 1.0.3
+   */
+  @Parameter(property = "showGroupIds", defaultValue = "false")
+  boolean showGroupIds;
 
   /**
    * If set to {@code true}, the created graph will show version information an all artifacts. Depending on the flags
@@ -75,16 +82,15 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   private DotBuilder createGraphBuilder() {
     DotBuilder dotBuilder = new DotBuilder()
-      .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
-      .useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_LABEL);
+      .useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
 
-    if (requiresFullGraph()) {
+    boolean fullGraph = requiresFullGraph();
+    if (fullGraph) {
       // For the full graph we display the versions on the edges
       dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions, this.showDuplicates, this.showConflicts));
-    } else if (this.showVersions) {
-      // On the effective dependency graph we can display the versions within the nodes
-      dotBuilder.useNodeLabelRenderer(NodeRenderers.ARTIFACT_ID_VERSION_LABEL);
     }
+
+    dotBuilder.useNodeLabelRenderer(determineNodeLabelRenderer(fullGraph));
 
     return dotBuilder;
   }
@@ -101,5 +107,19 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   private boolean requiresFullGraph() {
     return this.showConflicts || this.showDuplicates;
+  }
+
+  private NodeRenderer determineNodeLabelRenderer(boolean isFullGraph) {
+    NodeRenderer renderer = NodeRenderers.ARTIFACT_ID_LABEL;
+
+    if (this.showGroupIds && this.showVersions && !isFullGraph) {
+      renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_VERSION_LABEL;
+    } else if (this.showVersions && !isFullGraph) {
+      renderer = NodeRenderers.ARTIFACT_ID_VERSION_LABEL;
+    } else if (this.showGroupIds) {
+      renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_LABEL;
+    }
+
+    return renderer;
   }
 }
