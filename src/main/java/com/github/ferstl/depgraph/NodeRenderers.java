@@ -47,7 +47,7 @@ enum NodeRenderers implements NodeRenderer {
     @Override
     public String render(Node node) {
       Artifact artifact = node.getArtifact();
-      String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId() + "\n" + artifact.getVersion();
+      String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId();
 
       return toScopedString(artifactLabel, artifact.getScope());
     }
