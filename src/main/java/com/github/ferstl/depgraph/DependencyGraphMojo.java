@@ -44,7 +44,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   /**
    * If set to {@code true}, the created graph will show version information an all artifacts. Depending on the flags
-   * {@link #showVersions} and {@link #showConflicts}, the version will either be shown directly in the artifact nodes
+   * {@link #showDuplicates} and {@link #showConflicts}, the version will either be shown directly in the artifact nodes
    * or on the dependency edges.
    *
    * @since 1.0.0
