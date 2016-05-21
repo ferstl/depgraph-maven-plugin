@@ -15,13 +15,18 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.List;
+
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
+
+import com.github.ferstl.depgraph.DotBuildingVisitor.DoNothingArtifactFilter;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
 /**
@@ -32,14 +37,17 @@ final class GraphBuilderAdapter {
   private DependencyGraphBuilder dependencyGraphBuilder;
   private DependencyTreeBuilder dependencyTreeBuilder;
   private ArtifactRepository artifactRepository;
-
-  public GraphBuilderAdapter(DependencyGraphBuilder builder) {
+  private final List<String> targetDependencies;
+  
+  public GraphBuilderAdapter(DependencyGraphBuilder builder, List<String> targetDependencies) {
     this.dependencyGraphBuilder = builder;
+    this.targetDependencies = targetDependencies;
   }
-
-  public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository) {
+  
+  public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, List<String> targetDependencies) {
     this.dependencyTreeBuilder = builder;
     this.artifactRepository = artifactRepository;
+    this.targetDependencies = targetDependencies;
   }
 
   public void buildDependencyGraph(MavenProject project, ArtifactFilter artifactFilter, DotBuilder dotBuilder) {
@@ -59,7 +67,7 @@ final class GraphBuilderAdapter {
       throw new DependencyGraphException(e);
     }
 
-    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder);
+    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder, createTargetDependencies(this.targetDependencies));
     root.accept(visitor);
   }
 
@@ -72,7 +80,15 @@ final class GraphBuilderAdapter {
     }
 
     // Due to MNG-3236, we need to filter the artifacts on our own.
-    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder, artifactFilter);
+    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder, artifactFilter, createTargetDependencies(this.targetDependencies));
     root.accept(visitor);
+  }
+  
+  private static ArtifactFilter createTargetDependencies(List<String> targetDependencies) {
+    if (targetDependencies.isEmpty()) {
+      return DoNothingArtifactFilter.INSTANCE;
+    } else {
+      return new StrictPatternIncludesArtifactFilter(targetDependencies);
+    }
   }
 }

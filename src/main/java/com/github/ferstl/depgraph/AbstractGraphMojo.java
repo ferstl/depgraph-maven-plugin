@@ -127,6 +127,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Parameter(property = "dotExecutable")
   private File dotExecutable;
 
+  /**
+   * List of artifacts, in the form of {@code groupId:artifactId:type:classifier}, to restrict the dependency
+   * graph only to artefacts that depend on them.
+   *
+   * @since 1.0.4
+   */
+  @Parameter(property = "targetDependencies", defaultValue = "")
+  List<String> targetDependencies;
 
 
   /**

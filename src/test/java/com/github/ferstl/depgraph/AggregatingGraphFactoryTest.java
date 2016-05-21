@@ -15,7 +15,16 @@
  */
 package com.github.ferstl.depgraph;
 
+import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
+import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
@@ -28,14 +37,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
-
-import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
-import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * JUnit tests for {@link AggregatingGraphFactory}.
@@ -53,6 +54,7 @@ import static org.mockito.Mockito.when;
 public class AggregatingGraphFactoryTest {
 
   private ArtifactFilter artifactFilter;
+  private List<String> targetDependencies;
   private DependencyGraphBuilder graphBuilder;
   private GraphBuilderAdapter adapter;
   private DotBuilder dotBuilder;
@@ -62,11 +64,13 @@ public class AggregatingGraphFactoryTest {
     this.artifactFilter = mock(ArtifactFilter.class);
     when(this.artifactFilter.include(Mockito.<Artifact>any())).thenReturn(true);
 
+    this.targetDependencies = new ArrayList<>();
+    
     DependencyNode dependencyNode = mock(DependencyNode.class);
     this.graphBuilder = mock(DependencyGraphBuilder.class);
     when(this.graphBuilder.buildDependencyGraph(Mockito.<MavenProject>any(), Mockito.<ArtifactFilter>any())).thenReturn(dependencyNode);
-
-    this.adapter = new GraphBuilderAdapter(this.graphBuilder);
+    
+    this.adapter = new GraphBuilderAdapter(this.graphBuilder, this.targetDependencies);
 
     this.dotBuilder = new DotBuilder();
   }

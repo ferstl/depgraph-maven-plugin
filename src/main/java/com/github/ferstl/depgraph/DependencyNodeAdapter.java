@@ -15,9 +15,13 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.Collection;
+
 import org.apache.maven.artifact.Artifact;
 
 import com.github.ferstl.depgraph.dot.Node;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 
 /**
  * {@link Node} implementation that adapts to:
@@ -29,20 +33,24 @@ import com.github.ferstl.depgraph.dot.Node;
  */
 public class DependencyNodeAdapter implements Node {
 
+  private org.apache.maven.shared.dependency.graph.DependencyNode graphNode;
+  private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
   private final Artifact artifact;
   private final NodeResolution resolution;
 
 
-  public  DependencyNodeAdapter(Artifact artifact) {
+  public DependencyNodeAdapter(Artifact artifact) {
     this(artifact, NodeResolution.INCLUDED);
   }
 
   public DependencyNodeAdapter(org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode) {
     this(dependencyNode.getArtifact());
+    this.graphNode = dependencyNode;
   }
 
   public DependencyNodeAdapter(org.apache.maven.shared.dependency.tree.DependencyNode dependencyNode) {
     this(dependencyNode.getArtifact(), determineResolution(dependencyNode.getState()));
+    this.treeNode = dependencyNode;
   }
 
   private DependencyNodeAdapter(Artifact artifact, NodeResolution resolution) {
@@ -68,6 +76,17 @@ public class DependencyNodeAdapter implements Node {
   public NodeResolution getResolution() {
     return this.resolution;
   }
+  
+  public Collection<DependencyNodeAdapter> getChildren() {
+    if (this.treeNode != null) {
+      return Collections2.transform(this.treeNode.getChildren(), TreeNode2Adapter.INSTANCE);
+    } else if (this.graphNode != null) {
+      return Collections2.transform(this.graphNode.getChildren(), GraphNode2Adapter.INSTANCE);
+    } else {
+      // impossible case
+      return null;
+    }
+  }
 
   private static NodeResolution determineResolution(int res) {
     switch (res) {
@@ -79,6 +98,26 @@ public class DependencyNodeAdapter implements Node {
         return NodeResolution.OMITTED_FOR_CYCLE;
       default:
         return NodeResolution.INCLUDED;
+    }
+  }
+  
+  private static enum TreeNode2Adapter
+      implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, DependencyNodeAdapter> {
+    INSTANCE;
+    
+    @Override
+    public DependencyNodeAdapter apply(org.apache.maven.shared.dependency.tree.DependencyNode tn) {
+      return new DependencyNodeAdapter(tn);
+    }
+  }
+
+  private static enum GraphNode2Adapter
+      implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, DependencyNodeAdapter> {
+    INSTANCE;
+
+    @Override
+    public DependencyNodeAdapter apply(org.apache.maven.shared.dependency.graph.DependencyNode tn) {
+      return new DependencyNodeAdapter(tn);
     }
   }
 }

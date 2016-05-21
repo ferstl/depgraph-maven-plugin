@@ -37,7 +37,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
   protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
     DotBuilder dotBuilder = createGraphBuilder();
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository);
+    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, this.targetDependencies);
     return new SimpleGraphFactory(adapter, artifactFilter, dotBuilder);
   }
 

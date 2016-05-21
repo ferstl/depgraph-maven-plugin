@@ -66,7 +66,7 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
       .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
       .useNodeLabelRenderer(determineNodeLabelRenderer());
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
+    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetDependencies);
 
     return new AggregatingGraphFactory(adapter, artifactFilter, dotBuilder, this.includeParentProjects);
   }

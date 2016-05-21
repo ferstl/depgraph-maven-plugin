@@ -42,7 +42,7 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractGraphMojo {
         .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL)
         .omitSelfReferences();
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
+    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetDependencies);
     return new AggregatingGraphFactory(adapter, artifactFilter, dotBuilder, true);
   }
 }

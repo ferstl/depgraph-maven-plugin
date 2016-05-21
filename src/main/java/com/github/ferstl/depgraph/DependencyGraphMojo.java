@@ -98,9 +98,9 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   private GraphBuilderAdapter createGraphBuilderAdapter() {
     GraphBuilderAdapter adapter;
     if (requiresFullGraph()) {
-      adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository);
+      adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, this.targetDependencies);
     } else {
-      adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
+      adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetDependencies);
     }
     return adapter;
   }

@@ -15,6 +15,15 @@
  */
 package com.github.ferstl.depgraph;
 
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
@@ -30,12 +39,6 @@ import org.mockito.Mockito;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 /**
  * JUnit tests for {@link GraphBuilderAdapter}.
  */
@@ -49,10 +52,12 @@ public class GraphBuilderAdapterTest {
   private MavenProject mavenProject;
   private DotBuilder dotBuilder;
   private ArtifactFilter artifactFilter;
+  private List<String> targetDependencies;
   private ArtifactRepository artifactRepository;
 
   private GraphBuilderAdapter graphAdapter;
   private GraphBuilderAdapter treeAdapter;
+
 
   @Before
   public void before() throws Exception {
@@ -66,9 +71,11 @@ public class GraphBuilderAdapterTest {
     this.dependencyTreeBuilder = mock(DependencyTreeBuilder.class);
     when(this.dependencyTreeBuilder.buildDependencyTree(Mockito.<MavenProject>any(), Mockito.<ArtifactRepository>any(), Mockito.<ArtifactFilter>any())).thenReturn(mock(org.apache.maven.shared.dependency.tree.DependencyNode.class));
 
+    this.targetDependencies = new ArrayList<>();
+    
     this.artifactRepository = mock(ArtifactRepository.class);
-    this.graphAdapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
-    this.treeAdapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.artifactRepository);
+    this.graphAdapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetDependencies);
+    this.treeAdapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.targetDependencies);
   }
 
   @Test

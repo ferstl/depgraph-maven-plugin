@@ -35,16 +35,18 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
   private final DotBuilder dotBuilder;
   private final Deque<Node> stack;
   private final ArtifactFilter artifactFilter;
+  private final ArtifactFilter targetDependencies;
 
 
-  public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter artifactFilter) {
+  public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter artifactFilter, ArtifactFilter targetDependencies) {
     this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
     this.artifactFilter = artifactFilter;
+    this.targetDependencies = targetDependencies;
   }
 
-  public DotBuildingVisitor(DotBuilder dotBuilder) {
-    this(dotBuilder, DoNothingArtifactFilter.INSTANCE);
+  public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter targetDependencies) {
+    this(dotBuilder, DoNothingArtifactFilter.INSTANCE, targetDependencies);
   }
 
   @Override
@@ -67,10 +69,10 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     return internalEndVisit(new DependencyNodeAdapter(node));
   }
 
-  private boolean internalVisit(Node node) {
+  private boolean internalVisit(DependencyNodeAdapter node) {
     Node currentParent = this.stack.peek();
 
-    if (this.artifactFilter.include(node.getArtifact())) {
+    if (this.artifactFilter.include(node.getArtifact()) && leadsToTargetDependencies(node)) {
       if (currentParent != null) {
         this.dotBuilder.addEdge(currentParent, node);
       }
@@ -82,16 +84,30 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
 
     return false;
   }
+  
+  private boolean leadsToTargetDependencies(DependencyNodeAdapter node) {
+    if (targetDependencies.include(node.getArtifact())) {
+      return true;
+    }
+    
+    for (DependencyNodeAdapter c : node.getChildren()) {
+      if (leadsToTargetDependencies(c)) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
 
-  private boolean internalEndVisit(Node node) {
-    if (this.artifactFilter.include(node.getArtifact())) {
+  private boolean internalEndVisit(DependencyNodeAdapter node) {
+    if (this.artifactFilter.include(node.getArtifact()) && leadsToTargetDependencies(node)) {
       this.stack.pop();
     }
 
     return true;
   }
 
-  private static enum DoNothingArtifactFilter implements ArtifactFilter {
+  static enum DoNothingArtifactFilter implements ArtifactFilter {
     INSTANCE;
 
     @Override
