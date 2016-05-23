@@ -15,17 +15,7 @@
  */
 package com.github.ferstl.depgraph;
 
-import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
-import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -35,8 +25,14 @@ import org.apache.maven.shared.dependency.graph.DependencyNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
+import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * JUnit tests for {@link AggregatingGraphFactory}.
@@ -53,24 +49,24 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
  */
 public class AggregatingGraphFactoryTest {
 
-  private ArtifactFilter artifactFilter;
-  private List<String> targetDependencies;
+  private ArtifactFilter globalFilter;
+  private ArtifactFilter targetFilter;
   private DependencyGraphBuilder graphBuilder;
   private GraphBuilderAdapter adapter;
   private DotBuilder dotBuilder;
 
   @Before
   public void before() throws Exception {
-    this.artifactFilter = mock(ArtifactFilter.class);
-    when(this.artifactFilter.include(Mockito.<Artifact>any())).thenReturn(true);
+    this.globalFilter = mock(ArtifactFilter.class);
+    this.targetFilter = mock(ArtifactFilter.class);
+    when(this.globalFilter.include(Mockito.<Artifact>any())).thenReturn(true);
+    when(this.targetFilter.include(Mockito.<Artifact>any())).thenReturn(true);
 
-    this.targetDependencies = new ArrayList<>();
-    
     DependencyNode dependencyNode = mock(DependencyNode.class);
     this.graphBuilder = mock(DependencyGraphBuilder.class);
     when(this.graphBuilder.buildDependencyGraph(Mockito.<MavenProject>any(), Mockito.<ArtifactFilter>any())).thenReturn(dependencyNode);
-    
-    this.adapter = new GraphBuilderAdapter(this.graphBuilder, this.targetDependencies);
+
+    this.adapter = new GraphBuilderAdapter(this.graphBuilder, this.targetFilter);
 
     this.dotBuilder = new DotBuilder();
   }
@@ -86,7 +82,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void moduleTree() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.artifactFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     createMavenProject("child1", parent);
@@ -115,7 +111,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void excludeParentProjects() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.artifactFilter, this.dotBuilder, false);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, false);
 
     MavenProject parent = createMavenProject("parent");
     MavenProject child1 = createMavenProject("child1", parent);
@@ -123,9 +119,9 @@ public class AggregatingGraphFactoryTest {
 
     graphFactory.createGraph(parent);
 
-    verify(this.graphBuilder, never()).buildDependencyGraph(parent, this.artifactFilter);
-    verify(this.graphBuilder).buildDependencyGraph(child1, this.artifactFilter);
-    verify(this.graphBuilder).buildDependencyGraph(child2, this.artifactFilter);
+    verify(this.graphBuilder, never()).buildDependencyGraph(parent, this.globalFilter);
+    verify(this.graphBuilder).buildDependencyGraph(child1, this.globalFilter);
+    verify(this.graphBuilder).buildDependencyGraph(child2, this.globalFilter);
 
     // There are no module nodes. So because of the mocked graph builder the graph must be empty here.
     assertThat(this.dotBuilder, emptyGraph());
@@ -146,7 +142,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void nestedProjects() {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.artifactFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     createMavenProject("child1-1", parent);
@@ -182,7 +178,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void stopAtParent() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.artifactFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
 
     MavenProject parentParent = createMavenProject("parentParent");
     MavenProject parent = createMavenProject("parent", parentParent);
@@ -212,7 +208,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void filteredParent() {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.artifactFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     createMavenProject("child1-1", parent);
@@ -221,7 +217,7 @@ public class AggregatingGraphFactoryTest {
     createMavenProject("child2-1", subParent);
     createMavenProject("child2-2", subParent);
 
-    when(this.artifactFilter.include(subParent.getArtifact())).thenReturn(false);
+    when(this.globalFilter.include(subParent.getArtifact())).thenReturn(false);
 
     graphFactory.createGraph(parent);
 
@@ -246,18 +242,18 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void excludedArtifact() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.artifactFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     MavenProject child1 = createMavenProject("child1", parent);
     createMavenProject("child2", parent);
 
-    when(this.artifactFilter.include(child1.getArtifact())).thenReturn(false);
+    when(this.globalFilter.include(child1.getArtifact())).thenReturn(false);
 
     graphFactory.createGraph(parent);
 
     // graph builder must not be invoked for child1
-    verify(this.graphBuilder, never()).buildDependencyGraph(child1, this.artifactFilter);
+    verify(this.graphBuilder, never()).buildDependencyGraph(child1, this.globalFilter);
 
 
     // module tree must not contain child1

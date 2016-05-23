@@ -35,14 +35,14 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 public class AggregatingDependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
 
     DotBuilder dotBuilder = new DotBuilder()
         .useNodeRenderer(NodeRenderers.SCOPED_GROUP_ID)
         .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL)
         .omitSelfReferences();
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetDependencies);
-    return new AggregatingGraphFactory(adapter, artifactFilter, dotBuilder, true);
+    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
+    return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, true);
   }
 }

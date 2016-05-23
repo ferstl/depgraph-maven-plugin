@@ -92,6 +92,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private List<String> excludes;
 
   /**
+   * List of artifacts, in the form of {@code groupId:artifactId:type:classifier}, to restrict the dependency
+   * graph only to artifacts that depend on them.
+   *
+   * @since 1.0.4
+   */
+  @Parameter(property = "targetDependencies", defaultValue = "")
+  private List<String> targetDependencies;
+  /**
    * The path to the generated dot file.
    *
    * @since 1.0.0
@@ -128,16 +136,6 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private File dotExecutable;
 
   /**
-   * List of artifacts, in the form of {@code groupId:artifactId:type:classifier}, to restrict the dependency
-   * graph only to artifacts that depend on them.
-   *
-   * @since 1.0.4
-   */
-  @Parameter(property = "targetDependencies", defaultValue = "")
-  List<String> targetDependencies;
-
-
-  /**
    * Local maven repository required by the {@link DependencyTreeBuilder}.
    */
   @Parameter(defaultValue = "${localRepository}", readonly = true)
@@ -154,10 +152,11 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
   @Override
   public void execute() throws MojoExecutionException {
-    ArtifactFilter filter = createArtifactFilter();
+    ArtifactFilter globalFilter = createGlobalArtifactFilter();
+    ArtifactFilter targetFilter = createTargetArtifactFilter();
 
     try {
-      GraphFactory graphFactory = createGraphFactory(filter);
+      GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter);
 
       writeDotFile(graphFactory.createGraph(this.project));
 
@@ -172,9 +171,9 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract GraphFactory createGraphFactory(ArtifactFilter artifactFilter);
+  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter);
 
-  private ArtifactFilter createArtifactFilter() {
+  private ArtifactFilter createGlobalArtifactFilter() {
     List<ArtifactFilter> filters = new ArrayList<>(3);
 
     if (this.scope != null) {
@@ -190,6 +189,16 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
 
     return new AndArtifactFilter(filters);
+  }
+
+  private ArtifactFilter createTargetArtifactFilter() {
+    AndArtifactFilter filter = new AndArtifactFilter();
+
+    if (!this.targetDependencies.isEmpty()) {
+      filter.add(new StrictPatternIncludesArtifactFilter(this.targetDependencies));
+    }
+
+    return filter;
   }
 
   private void writeDotFile(String dotGraph) throws IOException {

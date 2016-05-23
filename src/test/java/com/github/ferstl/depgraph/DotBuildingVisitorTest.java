@@ -39,21 +39,21 @@ public class DotBuildingVisitorTest {
 
   private DotBuilder dotBuilder;
   private DotBuildingVisitor visitor;
-  private ArtifactFilter artifactFilter;
-  private ArtifactFilter targetDependencies;
+  private ArtifactFilter globalFilter;
+  private ArtifactFilter targetFilter;
 
   @Before
   public void before() {
     this.dotBuilder = new DotBuilder();
 
-    this.artifactFilter = mock(ArtifactFilter.class);
-    when(this.artifactFilter.include(Mockito.<Artifact>any())).thenReturn(true);
+    this.globalFilter = mock(ArtifactFilter.class);
+    when(this.globalFilter.include(Mockito.<Artifact>any())).thenReturn(true);
 
     // this is the same as an empty list of target dependencies
-    this.targetDependencies = mock(ArtifactFilter.class);
-    when(this.targetDependencies.include(Mockito.<Artifact>any())).thenReturn(true);
+    this.targetFilter = mock(ArtifactFilter.class);
+    when(this.targetFilter.include(Mockito.<Artifact>any())).thenReturn(true);
 
-    this.visitor = new DotBuildingVisitor(this.dotBuilder, this.artifactFilter, this.targetDependencies);
+    this.visitor = new DotBuildingVisitor(this.dotBuilder, this.globalFilter, this.targetFilter);
   }
 
   /**
@@ -93,7 +93,7 @@ public class DotBuildingVisitorTest {
     DependencyNode child2 = createGraphNode("child2");
     DependencyNode parent = createGraphNode("parent", child1, child2);
 
-    when(this.artifactFilter.include(child2.getArtifact())).thenReturn(false);
+    when(this.globalFilter.include(child2.getArtifact())).thenReturn(false);
 
     assertTrue(this.visitor.visit(parent));
     assertTrue(this.visitor.visit(child1));
@@ -125,8 +125,8 @@ public class DotBuildingVisitorTest {
     DependencyNode child2 = createGraphNode("child2");
     DependencyNode parent = createGraphNode("parent", child1, child2);
     
-    when(this.targetDependencies.include(Mockito.<Artifact>any())).thenReturn(false);
-    when(this.targetDependencies.include(child2.getArtifact())).thenReturn(true);
+    when(this.targetFilter.include(Mockito.<Artifact>any())).thenReturn(false);
+    when(this.targetFilter.include(child2.getArtifact())).thenReturn(true);
 
     assertTrue(this.visitor.visit(parent));
 
@@ -147,7 +147,7 @@ public class DotBuildingVisitorTest {
   
   @Test
   public void defaultArtifactFilter() {
-    this.visitor = new DotBuildingVisitor(this.dotBuilder, this.targetDependencies);
+    this.visitor = new DotBuildingVisitor(this.dotBuilder, this.targetFilter);
 
     // Use other test (I know this is ugly...)
     parentAndChild();

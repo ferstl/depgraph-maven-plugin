@@ -73,11 +73,11 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   boolean showDuplicates;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     DotBuilder dotBuilder = createGraphBuilder();
-    GraphBuilderAdapter adapter = createGraphBuilderAdapter();
+    GraphBuilderAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
-    return new SimpleGraphFactory(adapter, artifactFilter, dotBuilder);
+    return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
   private DotBuilder createGraphBuilder() {
@@ -95,12 +95,12 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     return dotBuilder;
   }
 
-  private GraphBuilderAdapter createGraphBuilderAdapter() {
+  private GraphBuilderAdapter createGraphBuilderAdapter(ArtifactFilter targetFilter) {
     GraphBuilderAdapter adapter;
     if (requiresFullGraph()) {
-      adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, this.targetDependencies);
+      adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter);
     } else {
-      adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetDependencies);
+      adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
     }
     return adapter;
   }

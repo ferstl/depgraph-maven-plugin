@@ -34,11 +34,11 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     DotBuilder dotBuilder = createGraphBuilder();
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, this.targetDependencies);
-    return new SimpleGraphFactory(adapter, artifactFilter, dotBuilder);
+    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter);
+    return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
   private DotBuilder createGraphBuilder() {

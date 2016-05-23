@@ -26,20 +26,20 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 class SimpleGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
-  private final ArtifactFilter artifactFilter;
+  private final ArtifactFilter globalFilter;
   private final DotBuilder dotBuilder;
 
   public SimpleGraphFactory(
-      GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter artifactFilter, DotBuilder dotBuilder) {
+      GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder dotBuilder) {
 
     this.graphBuilderAdapter = graphBuilderAdapter;
-    this.artifactFilter = artifactFilter;
+    this.globalFilter = globalFilter;
     this.dotBuilder = dotBuilder;
   }
 
   @Override
   public String createGraph(MavenProject project) {
-    this.graphBuilderAdapter.buildDependencyGraph(project, this.artifactFilter, this.dotBuilder);
+    this.graphBuilderAdapter.buildDependencyGraph(project, this.globalFilter, this.dotBuilder);
     return this.dotBuilder.toString();
   }
 
