@@ -70,7 +70,7 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
   private boolean internalVisit(DependencyNodeAdapter node) {
     Node currentParent = this.stack.peek();
 
-    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependencies(node)) {
+    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       if (currentParent != null) {
         this.dotBuilder.addEdge(currentParent, node);
       }
@@ -83,13 +83,13 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     return false;
   }
 
-  private boolean leadsToTargetDependencies(DependencyNodeAdapter node) {
+  private boolean leadsToTargetDependency(DependencyNodeAdapter node) {
     if (this.targetFilter.include(node.getArtifact())) {
       return true;
     }
 
     for (DependencyNodeAdapter c : node.getChildren()) {
-      if (leadsToTargetDependencies(c)) {
+      if (leadsToTargetDependency(c)) {
         return true;
       }
     }
@@ -98,7 +98,7 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
   }
 
   private boolean internalEndVisit(DependencyNodeAdapter node) {
-    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependencies(node)) {
+    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       this.stack.pop();
     }
 
