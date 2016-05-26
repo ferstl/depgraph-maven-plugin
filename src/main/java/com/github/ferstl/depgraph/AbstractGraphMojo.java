@@ -97,8 +97,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    *
    * @since 1.0.4
    */
-  @Parameter(property = "targetDependencies", defaultValue = "")
-  private List<String> targetDependencies;
+  @Parameter(property = "targetIncludes", defaultValue = "")
+  private List<String> targetIncludes;
   /**
    * The path to the generated dot file.
    *
@@ -194,8 +194,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private ArtifactFilter createTargetArtifactFilter() {
     AndArtifactFilter filter = new AndArtifactFilter();
 
-    if (!this.targetDependencies.isEmpty()) {
-      filter.add(new StrictPatternIncludesArtifactFilter(this.targetDependencies));
+    if (!this.targetIncludes.isEmpty()) {
+      filter.add(new StrictPatternIncludesArtifactFilter(this.targetIncludes));
     }
 
     return filter;
