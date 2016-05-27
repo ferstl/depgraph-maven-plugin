@@ -17,10 +17,8 @@ package com.github.ferstl.depgraph;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
-
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.dot.Node;
 
@@ -34,17 +32,19 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
 
   private final DotBuilder dotBuilder;
   private final Deque<Node> stack;
-  private final ArtifactFilter artifactFilter;
+  private final ArtifactFilter globalFilter;
+  private final ArtifactFilter targetFilter;
 
 
-  public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter artifactFilter) {
+  public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
-    this.artifactFilter = artifactFilter;
+    this.globalFilter = globalFilter;
+    this.targetFilter = targetFilter;
   }
 
-  public DotBuildingVisitor(DotBuilder dotBuilder) {
-    this(dotBuilder, DoNothingArtifactFilter.INSTANCE);
+  public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter targetFilter) {
+    this(dotBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter);
   }
 
   @Override
@@ -67,10 +67,10 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     return internalEndVisit(new DependencyNodeAdapter(node));
   }
 
-  private boolean internalVisit(Node node) {
+  private boolean internalVisit(DependencyNodeAdapter node) {
     Node currentParent = this.stack.peek();
 
-    if (this.artifactFilter.include(node.getArtifact())) {
+    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       if (currentParent != null) {
         this.dotBuilder.addEdge(currentParent, node);
       }
@@ -83,8 +83,22 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     return false;
   }
 
-  private boolean internalEndVisit(Node node) {
-    if (this.artifactFilter.include(node.getArtifact())) {
+  private boolean leadsToTargetDependency(DependencyNodeAdapter node) {
+    if (this.targetFilter.include(node.getArtifact())) {
+      return true;
+    }
+
+    for (DependencyNodeAdapter c : node.getChildren()) {
+      if (leadsToTargetDependency(c)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private boolean internalEndVisit(DependencyNodeAdapter node) {
+    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       this.stack.pop();
     }
 

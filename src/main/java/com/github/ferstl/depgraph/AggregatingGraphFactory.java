@@ -35,14 +35,14 @@ import com.github.ferstl.depgraph.dot.Node;
 class AggregatingGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
-  private final ArtifactFilter artifactFilter;
+  private final ArtifactFilter globalFilter;
   private final DotBuilder dotBuilder;
   private final boolean includeParentProjects;
 
-  public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter artifactFilter, DotBuilder dotBuilder, boolean includeParentProjects) {
+  public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder dotBuilder, boolean includeParentProjects) {
 
     this.graphBuilderAdapter = graphBuilderAdapter;
-    this.artifactFilter = artifactFilter;
+    this.globalFilter = globalFilter;
     this.dotBuilder = dotBuilder;
     this.includeParentProjects = includeParentProjects;
   }
@@ -59,7 +59,7 @@ class AggregatingGraphFactory implements GraphFactory {
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
       if (isPartOfGraph(collectedProject)) {
-        this.graphBuilderAdapter.buildDependencyGraph(collectedProject, this.artifactFilter, this.dotBuilder);
+        this.graphBuilderAdapter.buildDependencyGraph(collectedProject, this.globalFilter, this.dotBuilder);
       }
     }
 
@@ -91,7 +91,7 @@ class AggregatingGraphFactory implements GraphFactory {
   }
 
   private boolean isPartOfGraph(MavenProject project) {
-    boolean result = this.artifactFilter.include(project.getArtifact());
+    boolean result = this.globalFilter.include(project.getArtifact());
     // Project is not filtered and is a parent project
     if (result && project.getModules().size() > 0) {
       result = result && this.includeParentProjects;
@@ -102,7 +102,7 @@ class AggregatingGraphFactory implements GraphFactory {
 
   private Node filterProject(MavenProject project) {
     Artifact artifact = project.getArtifact();
-    if (this.artifactFilter.include(artifact)) {
+    if (this.globalFilter.include(artifact)) {
       return new DependencyNodeAdapter(artifact);
     }
 

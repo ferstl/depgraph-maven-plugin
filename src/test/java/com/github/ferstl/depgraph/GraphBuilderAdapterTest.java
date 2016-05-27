@@ -27,9 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
-
 import com.github.ferstl.depgraph.dot.DotBuilder;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -48,16 +46,19 @@ public class GraphBuilderAdapterTest {
   private DependencyTreeBuilder dependencyTreeBuilder;
   private MavenProject mavenProject;
   private DotBuilder dotBuilder;
-  private ArtifactFilter artifactFilter;
+  private ArtifactFilter globalFilter;
+  private ArtifactFilter targetFilter;
   private ArtifactRepository artifactRepository;
 
   private GraphBuilderAdapter graphAdapter;
   private GraphBuilderAdapter treeAdapter;
 
+
   @Before
   public void before() throws Exception {
     this.mavenProject = new MavenProject();
-    this.artifactFilter = mock(ArtifactFilter.class);
+    this.globalFilter = mock(ArtifactFilter.class);
+    this.targetFilter = mock(ArtifactFilter.class);
     this.dotBuilder = new DotBuilder();
 
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
@@ -66,16 +67,17 @@ public class GraphBuilderAdapterTest {
     this.dependencyTreeBuilder = mock(DependencyTreeBuilder.class);
     when(this.dependencyTreeBuilder.buildDependencyTree(Mockito.<MavenProject>any(), Mockito.<ArtifactRepository>any(), Mockito.<ArtifactFilter>any())).thenReturn(mock(org.apache.maven.shared.dependency.tree.DependencyNode.class));
 
+
     this.artifactRepository = mock(ArtifactRepository.class);
-    this.graphAdapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
-    this.treeAdapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.artifactRepository);
+    this.graphAdapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetFilter);
+    this.treeAdapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.targetFilter);
   }
 
   @Test
   public void dependencyGraph() throws Exception {
-    this.graphAdapter.buildDependencyGraph(this.mavenProject, this.artifactFilter, this.dotBuilder);
+    this.graphAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.dotBuilder);
 
-    verify(this.dependencyGraphBuilder).buildDependencyGraph(this.mavenProject, this.artifactFilter);
+    verify(this.dependencyGraphBuilder).buildDependencyGraph(this.mavenProject, this.globalFilter);
     verify(this.dependencyTreeBuilder, never()).buildDependencyTree(Mockito.<MavenProject>any(), Mockito.<ArtifactRepository>any(), Mockito.<ArtifactFilter>any());
   }
 
@@ -87,13 +89,13 @@ public class GraphBuilderAdapterTest {
     this.expectedException.expect(DependencyGraphException.class);
     this.expectedException.expectCause(is(cause));
 
-    this.graphAdapter.buildDependencyGraph(this.mavenProject, this.artifactFilter, this.dotBuilder);
+    this.graphAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.dotBuilder);
   }
 
   @Test
   public void dependencyTree() throws Exception {
-    this.treeAdapter.buildDependencyGraph(this.mavenProject, this.artifactFilter, this.dotBuilder);
-    verify(this.dependencyTreeBuilder).buildDependencyTree(this.mavenProject, this.artifactRepository, this.artifactFilter);
+    this.treeAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.dotBuilder);
+    verify(this.dependencyTreeBuilder).buildDependencyTree(this.mavenProject, this.artifactRepository, this.globalFilter);
     verify(this.dependencyGraphBuilder, never()).buildDependencyGraph(Mockito.<MavenProject>any(), Mockito.<ArtifactFilter>any());
   }
 
@@ -106,6 +108,6 @@ public class GraphBuilderAdapterTest {
     this.expectedException.expect(DependencyGraphException.class);
     this.expectedException.expectCause(is(cause));
 
-    this.treeAdapter.buildDependencyGraph(this.mavenProject, this.artifactFilter, this.dotBuilder);
+    this.treeAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.dotBuilder);
   }
 }

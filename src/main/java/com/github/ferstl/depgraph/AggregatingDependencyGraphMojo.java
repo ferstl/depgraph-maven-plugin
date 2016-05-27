@@ -61,14 +61,14 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
   private boolean includeParentProjects;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter artifactFilter) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     DotBuilder dotBuilder = new DotBuilder()
       .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
       .useNodeLabelRenderer(determineNodeLabelRenderer());
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder);
+    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
 
-    return new AggregatingGraphFactory(adapter, artifactFilter, dotBuilder, this.includeParentProjects);
+    return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, this.includeParentProjects);
   }
 
   private NodeRenderer determineNodeLabelRenderer() {

@@ -20,8 +20,7 @@ import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
@@ -88,7 +87,7 @@ public class DependencyNodeAdapterTest {
   @Test
   public void nullArtifact() {
     this.expectedException.expect(NullPointerException.class);
-    this.expectedException.expectMessage(not(isEmptyString()));
+    this.expectedException.expectMessage(not(emptyString()));
 
     new DependencyNodeAdapter((Artifact) null);
   }

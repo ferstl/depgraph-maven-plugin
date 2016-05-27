@@ -32,47 +32,50 @@ final class GraphBuilderAdapter {
   private DependencyGraphBuilder dependencyGraphBuilder;
   private DependencyTreeBuilder dependencyTreeBuilder;
   private ArtifactRepository artifactRepository;
+  private final ArtifactFilter targetFilter;
 
-  public GraphBuilderAdapter(DependencyGraphBuilder builder) {
+  public GraphBuilderAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
     this.dependencyGraphBuilder = builder;
+    this.targetFilter = targetFilter;
   }
 
-  public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository) {
+  public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter) {
     this.dependencyTreeBuilder = builder;
     this.artifactRepository = artifactRepository;
+    this.targetFilter = targetFilter;
   }
 
-  public void buildDependencyGraph(MavenProject project, ArtifactFilter artifactFilter, DotBuilder dotBuilder) {
+  public void buildDependencyGraph(MavenProject project, ArtifactFilter globalFilter, DotBuilder dotBuilder) {
 
     if (this.dependencyGraphBuilder != null) {
-      createGraph(project, artifactFilter, dotBuilder);
+      createGraph(project, globalFilter, dotBuilder);
     } else {
-      createTree(project, artifactFilter, dotBuilder);
+      createTree(project, globalFilter, dotBuilder);
     }
   }
 
-  private void createGraph(MavenProject project, ArtifactFilter artifactFilter, DotBuilder dotBuilder) throws DependencyGraphException {
+  private void createGraph(MavenProject project, ArtifactFilter globalFilter, DotBuilder dotBuilder) throws DependencyGraphException {
     org.apache.maven.shared.dependency.graph.DependencyNode root;
     try {
-      root = this.dependencyGraphBuilder.buildDependencyGraph(project, artifactFilter);
+      root = this.dependencyGraphBuilder.buildDependencyGraph(project, globalFilter);
     } catch (DependencyGraphBuilderException e) {
       throw new DependencyGraphException(e);
     }
 
-    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder);
+    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder, this.targetFilter);
     root.accept(visitor);
   }
 
-  private void createTree(MavenProject project, ArtifactFilter artifactFilter, DotBuilder dotBuilder) throws DependencyGraphException {
+  private void createTree(MavenProject project, ArtifactFilter globalFilter, DotBuilder dotBuilder) throws DependencyGraphException {
     org.apache.maven.shared.dependency.tree.DependencyNode root;
     try {
-      root = this.dependencyTreeBuilder.buildDependencyTree(project, this.artifactRepository, artifactFilter);
+      root = this.dependencyTreeBuilder.buildDependencyTree(project, this.artifactRepository, globalFilter);
     } catch (DependencyTreeBuilderException e) {
       throw new DependencyGraphException(e);
     }
 
     // Due to MNG-3236, we need to filter the artifacts on our own.
-    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder, artifactFilter);
+    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder, globalFilter, this.targetFilter);
     root.accept(visitor);
   }
 }
