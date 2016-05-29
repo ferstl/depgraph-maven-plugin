@@ -20,13 +20,14 @@ These are the plugin coordinates:
         <plugin>
           <groupId>com.github.ferstl</groupId>
           <artifactId>depgraph-maven-plugin</artifactId>
-          <version>1.0.3</version>
+          <version>1.0.4</version>
         </plugin>
       </plugins>
     </build>
     
 ## Release Notes
 
+- [Version 1.0.4](https://github.com/ferstl/depgraph-maven-plugin/issues?q=milestone%3A%22Version+1.0.4%22+is%3Aclosed)
 - [Version 1.0.3](https://github.com/ferstl/depgraph-maven-plugin/issues?q=milestone%3A%22Version+1.0.3%22+is%3Aclosed)
 - [Version 1.0.2](https://github.com/ferstl/depgraph-maven-plugin/issues?q=milestone%3A%22Version+1.0.2%22+is%3Aclosed)
 - [Version 1.0.1](https://github.com/ferstl/depgraph-maven-plugin/issues?q=milestone%3A%22Version+1.0.1%22+is%3Aclosed)
