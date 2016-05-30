@@ -18,7 +18,7 @@ package com.github.ferstl.depgraph.dot;
 import java.util.regex.Pattern;
 
 
-public final class DotEscaper {
+final class DotEscaper {
 
   private static final String QUOTE_REPLACEMENT = "\\\\\"";
   private static final Pattern REPLACE_NEWLINE_PATTERN = Pattern.compile("(\\r\\n)|[\\r\\n]", Pattern.DOTALL);
