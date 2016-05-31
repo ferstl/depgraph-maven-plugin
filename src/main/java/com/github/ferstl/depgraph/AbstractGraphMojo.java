@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -174,21 +173,21 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter);
 
   private ArtifactFilter createGlobalArtifactFilter() {
-    List<ArtifactFilter> filters = new ArrayList<>(3);
+    AndArtifactFilter filter = new AndArtifactFilter();
 
     if (this.scope != null) {
-      filters.add(new ScopeArtifactFilter(this.scope));
+      filter.add(new ScopeArtifactFilter(this.scope));
     }
 
     if (!this.includes.isEmpty()) {
-      filters.add(new StrictPatternIncludesArtifactFilter(this.includes));
+      filter.add(new StrictPatternIncludesArtifactFilter(this.includes));
     }
 
     if (!this.excludes.isEmpty()) {
-      filters.add(new StrictPatternExcludesArtifactFilter(this.excludes));
+      filter.add(new StrictPatternExcludesArtifactFilter(this.excludes));
     }
 
-    return new AndArtifactFilter(filters);
+    return filter;
   }
 
   private ArtifactFilter createTargetArtifactFilter() {
