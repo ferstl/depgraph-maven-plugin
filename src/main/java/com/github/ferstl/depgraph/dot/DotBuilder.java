@@ -16,6 +16,7 @@
 package com.github.ferstl.depgraph.dot;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
@@ -30,8 +31,8 @@ public final class DotBuilder {
   private NodeRenderer nodeLabelRenderer;
   private EdgeRenderer edgeRenderer;
   private boolean omitSelfReferences;
-  private final Set<String> nodeDefinitions;
-  private final Set<String> edgeDefinitions;
+  private final Set<NodeDefinition> nodeDefinitions;
+  private final Set<EdgeDefinition> edgeDefinitions;
 
   public DotBuilder() {
     this.nodeLabelRenderer = DefaultRenderer.INSTANCE;
@@ -90,34 +91,25 @@ public final class DotBuilder {
         .append("\n  edge ").append(new AttributeBuilder().fontName("Helvetica").fontSize(10));
 
     sb.append("\n\n  // Node Definitions:");
-    for (String node : this.nodeDefinitions) {
-      sb.append("\n  ").append(node);
+    for (NodeDefinition nodeDefinition : this.nodeDefinitions) {
+      sb.append("\n  ").append(nodeDefinition);
     }
 
     sb.append("\n\n  // Edge Definitions:");
-    for (String edge : this.edgeDefinitions) {
-      sb.append("\n  ").append(edge);
+    for (EdgeDefinition edgeDefinition : this.edgeDefinitions) {
+      sb.append("\n  ").append(edgeDefinition);
     }
 
     return sb.append("\n}").toString();
   }
 
   private void addNode(Node node) {
-    String nodeName = this.nodeRenderer.render(node);
-    String nodeLabel = this.nodeLabelRenderer.render(node);
-
-
-    String nodeDefinition = escape(nodeName) + new AttributeBuilder().label(nodeLabel);
-    this.nodeDefinitions.add(nodeDefinition);
+    this.nodeDefinitions.add(new NodeDefinition(node, this.nodeRenderer, this.nodeLabelRenderer));
   }
 
   private void safelyAddEdge(Node fromNode, Node toNode) {
-    String fromName = this.nodeRenderer.render(fromNode);
-    String toName = this.nodeRenderer.render(toNode);
-
-    if (!this.omitSelfReferences || !fromName.equals(toName)) {
-      String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.createEdgeAttributes(fromNode, toNode);
-      this.edgeDefinitions.add(edgeDefinition);
+    if (!this.omitSelfReferences || !fromNode.equals(toNode)) {
+      this.edgeDefinitions.add(new EdgeDefinition(this.nodeRenderer, this.edgeRenderer, fromNode, toNode));
     }
   }
 
@@ -135,5 +127,77 @@ public final class DotBuilder {
       return node.getArtifact().toString();
     }
 
+  }
+
+  static final class NodeDefinition {
+    final Node node;
+    final NodeRenderer nodeRenderer;
+    final NodeRenderer nodeLabelRenderer;
+
+    public NodeDefinition(Node node, NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
+      this.node = node;
+      this.nodeRenderer = nodeRenderer;
+      this.nodeLabelRenderer = nodeLabelRenderer;
+    }
+
+    @Override
+    public String toString() {
+      String nodeName = this.nodeRenderer.render(this.node);
+      String nodeLabel = this.nodeLabelRenderer.render(this.node);
+
+      return escape(nodeName) + new AttributeBuilder().label(nodeLabel);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) { return true; }
+      if (!(obj instanceof NodeDefinition)) { return false; }
+
+      NodeDefinition other = (NodeDefinition) obj;
+
+      return Objects.equals(this.node, other.node);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(this.node);
+    }
+  }
+
+  static final class EdgeDefinition {
+    NodeRenderer nodeRenderer;
+    EdgeRenderer edgeRenderer;
+    Node from;
+    Node to;
+
+    public EdgeDefinition(NodeRenderer nodeRenderer, EdgeRenderer edgeRenderer, Node from, Node to) {
+      this.nodeRenderer = nodeRenderer;
+      this.edgeRenderer = edgeRenderer;
+      this.from = from;
+      this.to = to;
+    }
+
+    @Override
+    public String toString() {
+      String fromName = this.nodeRenderer.render(this.from);
+      String toName = this.nodeRenderer.render(this.to);
+      return escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.createEdgeAttributes(this.from, this.to);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) { return true; }
+      if (!(obj instanceof EdgeDefinition)) { return false; }
+
+      EdgeDefinition other = (EdgeDefinition) obj;
+
+      return Objects.equals(this.from, other.from)
+          && Objects.equals(this.to, other.to);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(this.from, this.to);
+    }
   }
 }

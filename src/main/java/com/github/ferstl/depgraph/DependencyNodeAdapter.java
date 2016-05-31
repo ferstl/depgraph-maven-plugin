@@ -16,9 +16,8 @@
 package com.github.ferstl.depgraph;
 
 import java.util.Collection;
-
+import java.util.Objects;
 import org.apache.maven.artifact.Artifact;
-
 import com.github.ferstl.depgraph.dot.Node;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -76,7 +75,7 @@ public class DependencyNodeAdapter implements Node {
   public NodeResolution getResolution() {
     return this.resolution;
   }
-  
+
   public Collection<DependencyNodeAdapter> getChildren() {
     if (this.treeNode != null) {
       return Collections2.transform(this.treeNode.getChildren(), TreeNode2Adapter.INSTANCE);
@@ -86,6 +85,21 @@ public class DependencyNodeAdapter implements Node {
       // impossible case
       return null;
     }
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) { return true; }
+    if (!(obj instanceof DependencyNodeAdapter)) { return false; }
+
+    DependencyNodeAdapter other = (DependencyNodeAdapter) obj;
+
+    return Objects.equals(this.artifact, other.artifact);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.artifact);
   }
 
   private static NodeResolution determineResolution(int res) {
@@ -100,11 +114,11 @@ public class DependencyNodeAdapter implements Node {
         return NodeResolution.INCLUDED;
     }
   }
-  
+
   private static enum TreeNode2Adapter
       implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, DependencyNodeAdapter> {
     INSTANCE;
-    
+
     @Override
     public DependencyNodeAdapter apply(org.apache.maven.shared.dependency.tree.DependencyNode tn) {
       return new DependencyNodeAdapter(tn);
