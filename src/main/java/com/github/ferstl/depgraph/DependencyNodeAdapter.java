@@ -32,6 +32,7 @@ import com.google.common.collect.ImmutableSet;
  * <li>{@link org.apache.maven.shared.dependency.graph.DependencyNode}</li>
  * <li>{@link org.apache.maven.shared.dependency.tree.DependencyNode}</li>
  * </ul>
+ * .
  */
 public class DependencyNodeAdapter implements Node {
 
@@ -105,8 +106,12 @@ public class DependencyNodeAdapter implements Node {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) { return true; }
-    if (!(obj instanceof DependencyNodeAdapter)) { return false; }
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof DependencyNodeAdapter)) {
+      return false;
+    }
 
     DependencyNodeAdapter other = (DependencyNodeAdapter) obj;
 
@@ -131,9 +136,9 @@ public class DependencyNodeAdapter implements Node {
     }
   }
 
-  private static enum TreeNode2Adapter
-      implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, DependencyNodeAdapter> {
-    INSTANCE;
+  private enum TreeNode2Adapter
+    implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, DependencyNodeAdapter> {
+      INSTANCE;
 
     @Override
     public DependencyNodeAdapter apply(org.apache.maven.shared.dependency.tree.DependencyNode tn) {
@@ -141,9 +146,9 @@ public class DependencyNodeAdapter implements Node {
     }
   }
 
-  private static enum GraphNode2Adapter
-      implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, DependencyNodeAdapter> {
-    INSTANCE;
+  private enum GraphNode2Adapter
+    implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, DependencyNodeAdapter> {
+      INSTANCE;
 
     @Override
     public DependencyNodeAdapter apply(org.apache.maven.shared.dependency.graph.DependencyNode tn) {

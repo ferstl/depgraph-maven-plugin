@@ -37,6 +37,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   /**
    * If set to {@code true}, the created graph will show the {@code groupId} on all artifacts.
+   * 
    * @since 1.0.3
    */
   @Parameter(property = "showGroupIds", defaultValue = "false")
@@ -44,8 +45,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   /**
    * If set to {@code true}, the created graph will show version information an all artifacts. Depending on the flags
-   * {@link #showDuplicates} and {@link #showConflicts}, the version will either be shown directly in the artifact nodes
-   * or on the dependency edges.
+   * {@link #showDuplicates} and {@link #showConflicts}, the version will either be shown directly in the artifact
+   * nodes or on the dependency edges.
    *
    * @since 1.0.0
    */
@@ -63,9 +64,9 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   boolean showConflicts;
 
   /**
-   * If set to {@code true}, the graph will additionally contain duplicate dependencies. Note that the dependency
-   * graph may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater
-   * or equal 3.0!
+   * If set to {@code true}, the graph will additionally contain duplicate dependencies. Note that the dependency graph
+   * may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater or
+   * equal 3.0!
    *
    * @since 1.0.0
    */
@@ -82,7 +83,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   private DotBuilder createGraphBuilder() {
     DotBuilder dotBuilder = new DotBuilder()
-      .useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
+        .useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
 
     boolean fullGraph = requiresFullGraph();
     if (fullGraph) {

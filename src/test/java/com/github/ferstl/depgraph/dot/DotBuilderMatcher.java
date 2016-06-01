@@ -17,11 +17,9 @@ package com.github.ferstl.depgraph.dot;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.codehaus.plexus.util.StringUtils;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 
@@ -36,7 +34,6 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
 
   private List<String> nodes;
   private List<String> edges;
-
 
 
   private DotBuilderMatcher(String[] expectedNodes, String[] expectedEdges) {
@@ -97,7 +94,7 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
     }
 
     return containsInAnyOrder(this.expectedNodes).matches(this.nodes)
-         | containsInAnyOrder(this.expectedEdges).matches(this.edges);
+        | containsInAnyOrder(this.expectedEdges).matches(this.edges);
   }
 
   private void init(DotBuilder dotBuilder) {

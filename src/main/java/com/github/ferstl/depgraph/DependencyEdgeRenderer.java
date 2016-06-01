@@ -28,7 +28,7 @@ class DependencyEdgeRenderer implements EdgeRenderer {
   private final boolean renderDuplicates;
   private final boolean renderConflicts;
 
-  public DependencyEdgeRenderer(boolean renderVersions, boolean renderDuplicates, boolean renderConflicts) {
+  DependencyEdgeRenderer(boolean renderVersions, boolean renderDuplicates, boolean renderConflicts) {
     this.renderVersions = renderVersions;
     this.renderDuplicates = renderDuplicates;
     this.renderConflicts = renderConflicts;

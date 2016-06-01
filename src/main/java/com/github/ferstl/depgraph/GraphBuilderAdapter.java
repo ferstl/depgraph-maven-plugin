@@ -34,12 +34,12 @@ final class GraphBuilderAdapter {
   private ArtifactRepository artifactRepository;
   private final ArtifactFilter targetFilter;
 
-  public GraphBuilderAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
+  GraphBuilderAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
     this.dependencyGraphBuilder = builder;
     this.targetFilter = targetFilter;
   }
 
-  public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter) {
+  GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter) {
     this.dependencyTreeBuilder = builder;
     this.artifactRepository = artifactRepository;
     this.targetFilter = targetFilter;

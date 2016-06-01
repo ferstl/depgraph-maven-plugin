@@ -48,9 +48,9 @@ import com.google.common.collect.Iterables;
 /**
  * Abstract mojo to create all possible kinds of graphs in the dot format. Graphs are created with instances of the
  * {@link GraphFactory} interface. This class defines an abstract method to create such factories. In case Graphviz is
- * install on the system where this plugin is executed, it is also possible to run the dot program and create images out
- * of the generated dot files. Besides that, this class allows the configuration of several basic mojo parameters, such
- * as includes, excludes, etc.
+ * install on the system where this plugin is executed, it is also possible to run the dot program and create images
+ * out of the generated dot files. Besides that, this class allows the configuration of several basic mojo parameters,
+ * such as includes, excludes, etc.
  */
 abstract class AbstractGraphMojo extends AbstractMojo {
 
@@ -91,8 +91,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private List<String> excludes;
 
   /**
-   * List of artifacts, in the form of {@code groupId:artifactId:type:classifier}, to restrict the dependency
-   * graph only to artifacts that depend on them.
+   * List of artifacts, in the form of {@code groupId:artifactId:type:classifier}, to restrict the dependency graph
+   * only to artifacts that depend on them.
    *
    * @since 1.0.4
    */
@@ -214,7 +214,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     Path graphFile = this.outputFile.toPath().getParent().resolve(graphFileName);
 
     String dotExecutable = determineDotExecutable();
-    String[] arguments = new String[] {
+    String[] arguments = new String[]{
         "-T", this.imageFormat,
         "-o", graphFile.toAbsolutePath().toString(),
         this.outputFile.getAbsolutePath()};

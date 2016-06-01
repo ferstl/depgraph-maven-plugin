@@ -18,7 +18,6 @@ package com.github.ferstl.depgraph.dot;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 
@@ -75,7 +74,7 @@ public class AttributeBuilder {
     }
 
     return sb.delete(sb.length() - 1, sb.length())
-    .append("]")
-    .toString();
+        .append("]")
+        .toString();
   }
 }

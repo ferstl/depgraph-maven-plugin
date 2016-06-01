@@ -24,6 +24,7 @@ import com.google.common.base.Joiner;
 
 enum NodeRenderers implements NodeRenderer {
   ARTIFACT_ID_LABEL {
+
     @Override
     public String render(Node node) {
       Artifact artifact = node.getArtifact();
@@ -78,6 +79,7 @@ enum NodeRenderers implements NodeRenderer {
   },
 
   SCOPED_GROUP_ID {
+
     @Override
     public String render(Node node) {
       Artifact artifact = node.getArtifact();

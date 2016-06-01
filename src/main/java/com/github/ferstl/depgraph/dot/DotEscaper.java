@@ -36,10 +36,10 @@ final class DotEscaper {
 
   public static String escape(String value) {
     return new DotEscaper(value)
-      .escapeNewLines()
-      .escapeQuotes()
-      .quoteIfRequired()
-      .getValue();
+        .escapeNewLines()
+        .escapeQuotes()
+        .quoteIfRequired()
+        .getValue();
   }
 
   private DotEscaper escapeNewLines() {

@@ -24,9 +24,9 @@ import com.github.ferstl.depgraph.dot.Node;
 
 
 /**
- * A node visitor that creates edges between the visited nodes using a {@link DotBuilder}. This
- * class implements the {@code DependencyNodeVisitor} interfaces for dependency trees and dependency
- * graphs and adapts the different node instances using {@link DependencyNodeAdapter}.
+ * A node visitor that creates edges between the visited nodes using a {@link DotBuilder}. This class implements the
+ * {@code DependencyNodeVisitor} interfaces for dependency trees and dependency graphs and adapts the different node
+ * instances using {@link DependencyNodeAdapter}.
  */
 class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
 
@@ -35,14 +35,14 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter targetFilter;
 
-  public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
+  DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
     this.targetFilter = targetFilter;
   }
 
-  public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter targetFilter) {
+  DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter targetFilter) {
     this(dotBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter);
   }
 
@@ -107,7 +107,7 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     return true;
   }
 
-  private static enum DoNothingArtifactFilter implements ArtifactFilter {
+  private enum DoNothingArtifactFilter implements ArtifactFilter {
     INSTANCE;
 
     @Override

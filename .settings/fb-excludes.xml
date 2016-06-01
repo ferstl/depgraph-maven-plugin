@@ -1,0 +1,174 @@
+<?xml version="1.0" ?>
+<FindBugsFilter>
+  <!-- findbugs exclusion file -->
+  <!-- with Java 1.5 comparable is generic -->
+  <Match>
+    <Bug pattern="CO_ABSTRACT_SELF"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="CO_SELF_NO_OBJECT"></Bug>
+  </Match>
+  <!-- we don't write Java SE applications -->
+  <Match>
+    <Bug pattern="DM_EXIT"></Bug>
+  </Match>
+  <!-- should be caught by Java 1.5 generic collections -->
+  <Match>
+    <Bug pattern="GC_UNCHECKED_TYPE_IN_GENERIC_CALL"></Bug>
+  </Match>
+  <!-- we use serialization rarely with collections with custom comparators -->
+  <Match>
+    <Bug pattern="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE"></Bug>
+  </Match>
+  <!-- default disable at NCA -->
+  <Match>
+    <Bug pattern="SE_NO_SERIALVERSIONID"></Bug>
+  </Match>
+  <!-- set up of TestCase is empty -->
+  <Match>
+    <Bug pattern="IJU_SETUP_NO_SUPER"></Bug>
+  </Match>
+  <!-- tear down of TestCase is empty -->
+  <Match>
+    <Bug pattern="IJU_TEARDOWN_NO_SUPER"></Bug>
+  </Match>
+  <!-- seems buggy in 1.3.9 -->
+  <Match>
+    <Bug pattern="IL_INFINITE_LOOP"></Bug>
+  </Match>
+  <!-- seems buggy in 1.3.9 -->
+  <Match>
+    <Bug pattern="NP_UNWRITTEN_FIELD"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="NP_ALWAYS_NULL"></Bug>
+  </Match>
+  <!-- seems buggy in 1.3.9 -->
+  <Match>
+    <Bug pattern="UWF_UNWRITTEN_FIELD"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="URF_UNREAD_FIELD"></Bug>
+  </Match>
+  <!-- we don't use JUL -->
+  <Match>
+    <Bug pattern="LG_LOST_LOGGER_DUE_TO_WEAK_REFERENCE"></Bug>
+  </Match>
+  <!-- doesn't seem to be stable in 1.3.9 -->
+  <Match>
+    <Bug pattern="OBL_UNSATISFIED_OBLIGATION"></Bug>
+  </Match>
+  <!-- too much pain for the gain -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP2"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="EI_EXPOSE_STATIC_REP2"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="MS_CANNOT_BE_FINAL"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="MS_EXPOSE_REP"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="MS_MUTABLE_ARRAY"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="MS_MUTABLE_HASHTABLE"></Bug>
+  </Match>
+  <!-- unsure about these two -->
+  <Match>
+    <Bug pattern="WA_AWAIT_NOT_IN_LOOP"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="WA_NOT_IN_LOOP"></Bug>
+  </Match>
+  <!-- convenience seems to outweight the cost -->
+  <Match>
+    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"></Bug>
+  </Match>
+  <!-- potentially too much noise -->
+  <Match>
+    <Bug pattern="BC_UNCONFIRMED_CAST"></Bug>
+  </Match>
+  <!-- may still be preferrable to fall-through -->
+  <Match>
+    <Bug pattern="DB_DUPLICATE_SWITCH_CLAUSES"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_NEEDS_THIS"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="IM_AVERAGE_COMPUTATION_COULD_OVERFLOW"></Bug>
+  </Match>
+  <!-- allowed by checkstyle -->
+  <Match>
+    <Bug pattern="SF_SWITCH_FALLTHROUGH"></Bug>
+  </Match>
+  <!-- for enums having a default makes little sense -->
+  <Match>
+    <Bug pattern="SF_SWITCH_NO_DEFAULT"></Bug>
+  </Match>
+  <!-- only a problem if there really is a subclass -->
+  <Match>
+    <Bug pattern="SE_PRIVATE_READ_RESOLVE_NOT_INHERITED"></Bug>
+  </Match>
+  <!-- too many false positives -->
+  <Match>
+    <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"></Bug>
+  </Match>
+  <!-- buggy with java 7 -->
+  <Match>
+    <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE"></Bug>
+  </Match>
+  <!-- Many tests pass null on purpose -->
+  <Match>
+    <Class name="~.*Test$" />
+    <Bug pattern="NP_NULL_PARAM_DEREF_ALL_TARGETS_DANGEROUS"></Bug>
+  </Match>
+  <!-- Many tests pass null on purpose -->
+  <Match>
+    <Class name="~.*Test$" />
+    <Bug pattern="NP_NULL_PARAM_DEREF_NONVIRTUAL"></Bug>
+  </Match>
+  <!-- new with fb 2 -->
+  <!-- can easily be tricked with -->
+  <!-- BigDecimal testBigDecimal(double d) {return new BigDecimal(d);} -->
+  <Match>
+    <Bug pattern="DMI_BIGDECIMAL_CONSTRUCTED_FROM_DOUBLE"></Bug>
+  </Match>
+  <!-- we don't allow public or protected fields -->
+  <Match>
+    <Bug pattern="NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD"></Bug>
+  </Match>
+  <!-- superseeded by OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE -->
+  <Match>
+    <Bug pattern="OS_OPEN_STREAM"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="OS_OPEN_STREAM_EXCEPTION_PATH"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="ODR_OPEN_DATABASE_RESOURCE"></Bug>
+  </Match>
+  <Match>
+    <Bug pattern="ODR_OPEN_DATABASE_RESOURCE_EXCEPTION_PATH"></Bug>
+  </Match>
+  <!-- already checked by Eclipse "assignment has no effect" -->
+  <Match>
+    <Bug pattern="SA_LOCAL_SELF_ASSIGNMENT_INSTEAD_OF_FIELD"></Bug>
+  </Match>
+</FindBugsFilter>

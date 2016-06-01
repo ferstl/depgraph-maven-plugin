@@ -15,24 +15,21 @@
  */
 package com.github.ferstl.depgraph;
 
-import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-
+import org.mockito.Matchers;
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class DotBuildingVisitorTest {
@@ -47,19 +44,21 @@ public class DotBuildingVisitorTest {
     this.dotBuilder = new DotBuilder();
 
     this.globalFilter = mock(ArtifactFilter.class);
-    when(this.globalFilter.include(Mockito.<Artifact>any())).thenReturn(true);
+    when(this.globalFilter.include(Matchers.<Artifact>any())).thenReturn(true);
 
     // this is the same as an empty list of target dependencies
     this.targetFilter = mock(ArtifactFilter.class);
-    when(this.targetFilter.include(Mockito.<Artifact>any())).thenReturn(true);
+    when(this.targetFilter.include(Matchers.<Artifact>any())).thenReturn(true);
 
     this.visitor = new DotBuildingVisitor(this.dotBuilder, this.globalFilter, this.targetFilter);
   }
 
   /**
+   * .
+   *
    * <pre>
    * parent
-   * - child
+   *     - child
    * </pre>
    */
   @Test
@@ -73,18 +72,20 @@ public class DotBuildingVisitorTest {
     assertTrue(this.visitor.endVisit(parent));
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-      new String[] {
-        "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-        "\"groupId:child:jar:version:compile\"[label=\"groupId:child:jar:version:compile\"]"},
-      new String[] {
-        "\"groupId:parent:jar:version:compile\" -> \"groupId:child:jar:version:compile\""}));
+        new String[]{
+            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
+            "\"groupId:child:jar:version:compile\"[label=\"groupId:child:jar:version:compile\"]"},
+        new String[]{
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child:jar:version:compile\""}));
   }
 
   /**
+   * .
+   * 
    * <pre>
    * parent
-   * - child1
-   * - child2 (ignored)
+   *     - child1
+   *     - child2(ignored)
    * </pre>
    */
   @Test
@@ -105,14 +106,16 @@ public class DotBuildingVisitorTest {
     assertTrue(this.visitor.endVisit(child2));
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] {
-          "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-          "\"groupId:child:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]"},
-        new String[] {
-          "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\""}));
+        new String[]{
+            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
+            "\"groupId:child:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]"},
+        new String[]{
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\""}));
   }
 
   /**
+   * .
+   * 
    * <pre>
    * parent
    * - child1
@@ -124,8 +127,8 @@ public class DotBuildingVisitorTest {
     DependencyNode child1 = createGraphNode("child1");
     DependencyNode child2 = createGraphNode("child2");
     DependencyNode parent = createGraphNode("parent", child1, child2);
-    
-    when(this.targetFilter.include(Mockito.<Artifact>any())).thenReturn(false);
+
+    when(this.targetFilter.include(Matchers.<Artifact>any())).thenReturn(false);
     when(this.targetFilter.include(child2.getArtifact())).thenReturn(true);
 
     assertTrue(this.visitor.visit(parent));
@@ -138,13 +141,13 @@ public class DotBuildingVisitorTest {
     assertTrue(this.visitor.endVisit(child2));
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] {
-          "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-          "\"groupId:child:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
-        new String[] {
-          "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\""}));
+        new String[]{
+            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
+            "\"groupId:child:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
+        new String[]{
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\""}));
   }
-  
+
   @Test
   public void defaultArtifactFilter() {
     this.visitor = new DotBuildingVisitor(this.dotBuilder, this.targetFilter);

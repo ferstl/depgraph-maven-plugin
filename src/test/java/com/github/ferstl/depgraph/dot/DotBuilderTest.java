@@ -60,8 +60,8 @@ public class DotBuilderTest {
     this.dotBuilder.addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] { DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
-        new String[] { DEFAULT_EDGE }));
+        new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
+        new String[]{DEFAULT_EDGE}));
 
   }
 
@@ -79,15 +79,15 @@ public class DotBuilderTest {
   @Test
   public void omitSelfReferences() {
     this.dotBuilder
-      .omitSelfReferences()
-      .addEdge(createNode("start"), createNode("start"));
+        .omitSelfReferences()
+        .addEdge(createNode("start"), createNode("start"));
 
     assertThat(this.dotBuilder, hasNodes(DEFAULT_SINGLE_NODE));
 
     this.dotBuilder.addEdge(this.fromNode, this.toNode);
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] { DEFAULT_SINGLE_NODE, DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
-        new String[] { DEFAULT_EDGE }));
+        new String[]{DEFAULT_SINGLE_NODE, DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
+        new String[]{DEFAULT_EDGE}));
   }
 
 
@@ -98,21 +98,21 @@ public class DotBuilderTest {
     this.dotBuilder.addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] {
+        new String[]{
             "\"from\"[label=\"group:from:jar:1.0.0:compile\"]",
             "\"to\"[label=\"group:to:jar:1.0.0:compile\"]"},
-        new String[] {"from -> to"}));
+        new String[]{"from -> to"}));
   }
 
   @Test
   public void customEdgeRenderer() {
     this.dotBuilder
-      .useEdgeRenderer(TestRenderer.INSTANCE)
-      .addEdge(this.fromNode, this.toNode);
+        .useEdgeRenderer(TestRenderer.INSTANCE)
+        .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] { DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
-        new String[] { DEFAULT_EDGE + "[label=\"1.0.0\"]" }));
+        new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
+        new String[]{DEFAULT_EDGE + "[label=\"1.0.0\"]"}));
   }
 
   @Test
@@ -120,22 +120,22 @@ public class DotBuilderTest {
     this.dotBuilder.addEdge(this.fromNode, this.toNode, TestRenderer.INSTANCE);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] { DEFAULT_FROM_NODE, DEFAULT_TO_NODE },
-        new String[] { DEFAULT_EDGE + "[label=\"1.0.0\"]" }));
+        new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
+        new String[]{DEFAULT_EDGE + "[label=\"1.0.0\"]"}));
 
   }
 
   @Test
   public void customNodeLabelRenderer() {
     this.dotBuilder
-      .useNodeLabelRenderer(TestRenderer.INSTANCE)
-      .addEdge(this.fromNode, this.toNode);
+        .useNodeLabelRenderer(TestRenderer.INSTANCE)
+        .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[] {
-          "\"group:from:jar:1.0.0:compile\"[label=\"from\"]",
-          "\"group:to:jar:1.0.0:compile\"[label=\"to\"]"},
-        new String[] {DEFAULT_EDGE}));
+        new String[]{
+            "\"group:from:jar:1.0.0:compile\"[label=\"from\"]",
+            "\"group:to:jar:1.0.0:compile\"[label=\"to\"]"},
+        new String[]{DEFAULT_EDGE}));
   }
 
 
@@ -145,7 +145,7 @@ public class DotBuilderTest {
     return new DependencyNodeAdapter(artifact);
   }
 
-  static enum TestRenderer implements EdgeRenderer, NodeRenderer {
+  enum TestRenderer implements EdgeRenderer, NodeRenderer {
     INSTANCE;
 
     @Override
@@ -156,8 +156,8 @@ public class DotBuilderTest {
     @Override
     public String createEdgeAttributes(Node from, Node to) {
       return new AttributeBuilder()
-        .label(to.getArtifact().getVersion())
-        .toString();
+          .label(to.getArtifact().getVersion())
+          .toString();
     }
 
   }

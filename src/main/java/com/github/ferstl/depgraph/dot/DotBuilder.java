@@ -27,9 +27,9 @@ import com.google.common.collect.ImmutableSet;
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 /**
- * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by
- * defining edges between {@link Node}s. The builder allows some customizations including custom
- * {@link NodeRenderer}s and {@link EdgeRenderer}s.
+ * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by defining edges between
+ * {@link Node}s. The builder allows some customizations including custom {@link NodeRenderer}s and
+ * {@link EdgeRenderer}s.
  */
 public final class DotBuilder {
 
@@ -131,16 +131,15 @@ public final class DotBuilder {
 
   /**
    * Transforms the elements of the given collection into its {@code toString()} representation and returns a unique
-   * collection of them.
-   * This is needed to get unique node and edge strings since rendering may produce duplicates. This happens for example
-   * when aggregating maven modules which don't have a classifier.
+   * collection of them. This is needed to get unique node and edge strings since rendering may produce duplicates.
+   * This happens for example when aggregating maven modules which don't have a classifier.
    */
   private Collection<String> uniqueToString(Collection<?> collection) {
     return ImmutableSet.copyOf(Collections2.transform(collection, Functions.toStringFunction()));
   }
 
 
-  static enum DefaultRenderer implements EdgeRenderer, NodeRenderer {
+  enum DefaultRenderer implements EdgeRenderer, NodeRenderer {
     INSTANCE;
 
     @Override
@@ -156,11 +155,12 @@ public final class DotBuilder {
   }
 
   static final class NodeDefinition {
+
     final Node node;
     final NodeRenderer nodeRenderer;
     final NodeRenderer nodeLabelRenderer;
 
-    public NodeDefinition(Node node, NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
+    NodeDefinition(Node node, NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
       this.node = node;
       this.nodeRenderer = nodeRenderer;
       this.nodeLabelRenderer = nodeLabelRenderer;
@@ -176,8 +176,12 @@ public final class DotBuilder {
 
     @Override
     public boolean equals(Object obj) {
-      if (this == obj) { return true; }
-      if (!(obj instanceof NodeDefinition)) { return false; }
+      if (this == obj) {
+        return true;
+      }
+      if (!(obj instanceof NodeDefinition)) {
+        return false;
+      }
 
       NodeDefinition other = (NodeDefinition) obj;
 
@@ -191,12 +195,13 @@ public final class DotBuilder {
   }
 
   static final class EdgeDefinition {
+
     NodeRenderer nodeRenderer;
     EdgeRenderer edgeRenderer;
     Node from;
     Node to;
 
-    public EdgeDefinition(NodeRenderer nodeRenderer, EdgeRenderer edgeRenderer, Node from, Node to) {
+    EdgeDefinition(NodeRenderer nodeRenderer, EdgeRenderer edgeRenderer, Node from, Node to) {
       this.nodeRenderer = nodeRenderer;
       this.edgeRenderer = edgeRenderer;
       this.from = from;
@@ -212,8 +217,12 @@ public final class DotBuilder {
 
     @Override
     public boolean equals(Object obj) {
-      if (this == obj) { return true; }
-      if (!(obj instanceof EdgeDefinition)) { return false; }
+      if (this == obj) {
+        return true;
+      }
+      if (!(obj instanceof EdgeDefinition)) {
+        return false;
+      }
 
       EdgeDefinition other = (EdgeDefinition) obj;
 

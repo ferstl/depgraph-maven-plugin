@@ -17,7 +17,6 @@ package com.github.ferstl.depgraph;
 
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
-
 import com.github.ferstl.depgraph.dot.DotBuilder;
 
 /**
@@ -29,8 +28,7 @@ class SimpleGraphFactory implements GraphFactory {
   private final ArtifactFilter globalFilter;
   private final DotBuilder dotBuilder;
 
-  public SimpleGraphFactory(
-      GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder dotBuilder) {
+  SimpleGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder dotBuilder) {
 
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;
