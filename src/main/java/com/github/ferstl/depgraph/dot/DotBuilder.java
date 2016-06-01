@@ -15,9 +15,13 @@
  */
 package com.github.ferstl.depgraph.dot;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import com.google.common.base.Functions;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableSet;
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 /**
@@ -91,12 +95,12 @@ public final class DotBuilder {
         .append("\n  edge ").append(new AttributeBuilder().fontName("Helvetica").fontSize(10));
 
     sb.append("\n\n  // Node Definitions:");
-    for (NodeDefinition nodeDefinition : this.nodeDefinitions) {
+    for (String nodeDefinition : uniqueToString(this.nodeDefinitions)) {
       sb.append("\n  ").append(nodeDefinition);
     }
 
     sb.append("\n\n  // Edge Definitions:");
-    for (EdgeDefinition edgeDefinition : this.edgeDefinitions) {
+    for (String edgeDefinition : uniqueToString(this.edgeDefinitions)) {
       sb.append("\n  ").append(edgeDefinition);
     }
 
@@ -111,6 +115,16 @@ public final class DotBuilder {
     if (!this.omitSelfReferences || !fromNode.equals(toNode)) {
       this.edgeDefinitions.add(new EdgeDefinition(this.nodeRenderer, this.edgeRenderer, fromNode, toNode));
     }
+  }
+
+  /**
+   * Transforms the elements of the given collection into its {@code toString()} representation and returns a unique
+   * collection of them.
+   * This is needed to get unique node and edge strings since rendering may produce duplicates. This happens for example
+   * when aggregating maven modules which don't have a classifier.
+   */
+  private Collection<String> uniqueToString(Collection<?> collection) {
+    return ImmutableSet.copyOf(Collections2.transform(collection, Functions.toStringFunction()));
   }
 
 
