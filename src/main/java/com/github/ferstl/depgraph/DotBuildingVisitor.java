@@ -35,7 +35,6 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter targetFilter;
 
-
   public DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
@@ -73,6 +72,9 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       if (currentParent != null) {
         this.dotBuilder.addEdge(currentParent, node);
+
+        Node existingTarget = this.dotBuilder.getNode(node);
+        existingTarget.addScope(node.getArtifact().getScope());
       }
 
       this.stack.push(node);

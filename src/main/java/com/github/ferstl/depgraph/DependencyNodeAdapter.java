@@ -17,10 +17,13 @@ package com.github.ferstl.depgraph;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dot.Node;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * {@link Node} implementation that adapts to:
@@ -36,6 +39,7 @@ public class DependencyNodeAdapter implements Node {
   private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
   private final Artifact artifact;
   private final NodeResolution resolution;
+  private final TreeSet<String> scopes;
 
 
   public DependencyNodeAdapter(Artifact artifact) {
@@ -57,13 +61,15 @@ public class DependencyNodeAdapter implements Node {
       throw new NullPointerException("Artifact must not be null");
     }
 
-    // FIXME: better create a copy of the artifact and set the scope there.
+    // FIXME: better create a copy of the artifact and set the missing attributes there.
     if (artifact.getScope() == null) {
       artifact.setScope("compile");
     }
 
+    this.scopes = new TreeSet<>();
     this.artifact = artifact;
     this.resolution = resolution;
+    addScope(artifact.getScope());
   }
 
   @Override
@@ -74,6 +80,16 @@ public class DependencyNodeAdapter implements Node {
   @Override
   public NodeResolution getResolution() {
     return this.resolution;
+  }
+
+  @Override
+  public void addScope(String scope) {
+    this.scopes.add(scope);
+  }
+
+  @Override
+  public Set<String> getScopes() {
+    return ImmutableSet.copyOf(this.scopes);
   }
 
   public Collection<DependencyNodeAdapter> getChildren() {

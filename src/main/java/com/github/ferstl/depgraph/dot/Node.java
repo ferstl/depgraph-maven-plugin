@@ -15,8 +15,8 @@
  */
 package com.github.ferstl.depgraph.dot;
 
+import java.util.Set;
 import org.apache.maven.artifact.Artifact;
-
 import com.github.ferstl.depgraph.NodeResolution;
 
 
@@ -25,4 +25,8 @@ public interface Node {
   Artifact getArtifact();
 
   NodeResolution getResolution();
+
+  void addScope(String scope);
+
+  Set<String> getScopes();
 }

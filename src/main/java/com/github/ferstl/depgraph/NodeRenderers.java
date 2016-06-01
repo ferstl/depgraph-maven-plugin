@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dot.Node;
 import com.github.ferstl.depgraph.dot.NodeRenderer;
@@ -26,7 +27,7 @@ enum NodeRenderers implements NodeRenderer {
     @Override
     public String render(Node node) {
       Artifact artifact = node.getArtifact();
-      return toScopedString(artifact.getArtifactId(), artifact.getScope());
+      return toScopedString(artifact.getArtifactId(), node.getScopes());
     }
   },
 
@@ -37,7 +38,7 @@ enum NodeRenderers implements NodeRenderer {
       Artifact artifact = node.getArtifact();
       String artifactLabel = artifact.getArtifactId() + "\n" + artifact.getVersion();
 
-      return toScopedString(artifactLabel, artifact.getScope());
+      return toScopedString(artifactLabel, node.getScopes());
     }
 
   },
@@ -49,7 +50,7 @@ enum NodeRenderers implements NodeRenderer {
       Artifact artifact = node.getArtifact();
       String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId();
 
-      return toScopedString(artifactLabel, artifact.getScope());
+      return toScopedString(artifactLabel, node.getScopes());
     }
 
   },
@@ -61,7 +62,7 @@ enum NodeRenderers implements NodeRenderer {
       Artifact artifact = node.getArtifact();
       String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId() + "\n" + artifact.getVersion();
 
-      return toScopedString(artifactLabel, artifact.getScope());
+      return toScopedString(artifactLabel, node.getScopes());
     }
 
   },
@@ -71,7 +72,7 @@ enum NodeRenderers implements NodeRenderer {
     @Override
     public String render(Node node) {
       Artifact artifact = node.getArtifact();
-      return toScopedString(artifact.getGroupId(), artifact.getScope());
+      return toScopedString(artifact.getGroupId(), node.getScopes());
     }
 
   },
@@ -94,17 +95,17 @@ enum NodeRenderers implements NodeRenderer {
           artifact.getGroupId(),
           artifact.getArtifactId(),
           artifact.getType(),
-          artifact.getClassifier(),
-          artifact.getScope());
+          artifact.getClassifier());
     }
 
   };
 
   private static final Joiner COLON_JOINER = Joiner.on(":").useForNull("");
+  private static final Joiner SLASH_JOINER = Joiner.on("/").useForNull("");
 
-  private static String toScopedString(String string, String scope) {
-    if (scope != null && !"compile".equals(scope)) {
-      return string + "\n(" + scope + ")";
+  private static String toScopedString(String string, Set<String> scopes) {
+    if (scopes.size() > 1 || !scopes.contains("compile")) {
+      return string + "\n(" + SLASH_JOINER.join(scopes) + ")";
     }
 
     return string;

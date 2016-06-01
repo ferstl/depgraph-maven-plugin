@@ -16,7 +16,9 @@
 package com.github.ferstl.depgraph.dot;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import com.google.common.base.Functions;
@@ -35,7 +37,7 @@ public final class DotBuilder {
   private NodeRenderer nodeLabelRenderer;
   private EdgeRenderer edgeRenderer;
   private boolean omitSelfReferences;
-  private final Set<NodeDefinition> nodeDefinitions;
+  private final Map<Node, NodeDefinition> nodeDefinitions;
   private final Set<EdgeDefinition> edgeDefinitions;
 
   public DotBuilder() {
@@ -43,7 +45,7 @@ public final class DotBuilder {
     this.nodeRenderer = DefaultRenderer.INSTANCE;
     this.edgeRenderer = DefaultRenderer.INSTANCE;
 
-    this.nodeDefinitions = new LinkedHashSet<>();
+    this.nodeDefinitions = new LinkedHashMap<>();
     this.edgeDefinitions = new LinkedHashSet<>();
   }
 
@@ -79,6 +81,11 @@ public final class DotBuilder {
     return this;
   }
 
+  public Node getNode(Node key) {
+    NodeDefinition nodeDefinition = this.nodeDefinitions.get(key);
+    return nodeDefinition != null ? nodeDefinition.node : null;
+  }
+
   public DotBuilder addEdge(Node from, Node to, EdgeRenderer edgeRenderer) {
     EdgeRenderer originalEdgeRenderer = this.edgeRenderer;
     this.edgeRenderer = edgeRenderer;
@@ -95,7 +102,7 @@ public final class DotBuilder {
         .append("\n  edge ").append(new AttributeBuilder().fontName("Helvetica").fontSize(10));
 
     sb.append("\n\n  // Node Definitions:");
-    for (String nodeDefinition : uniqueToString(this.nodeDefinitions)) {
+    for (String nodeDefinition : uniqueToString(this.nodeDefinitions.values())) {
       sb.append("\n  ").append(nodeDefinition);
     }
 
@@ -108,7 +115,12 @@ public final class DotBuilder {
   }
 
   private void addNode(Node node) {
-    this.nodeDefinitions.add(new NodeDefinition(node, this.nodeRenderer, this.nodeLabelRenderer));
+    // If a node definition does already exist, use the node of the existing definition
+    NodeDefinition nodeDefinition = this.nodeDefinitions.get(node);
+    Node effectiveNode = nodeDefinition != null ? nodeDefinition.node : node;
+
+    NodeDefinition newNodeDefinition = new NodeDefinition(effectiveNode, this.nodeRenderer, this.nodeLabelRenderer);
+    this.nodeDefinitions.put(effectiveNode, newNodeDefinition);
   }
 
   private void safelyAddEdge(Node fromNode, Node toNode) {
