@@ -28,8 +28,7 @@ import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 /**
  * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by defining edges between
- * {@link Node}s. The builder allows some customizations including custom {@link NodeRenderer}s and
- * {@link EdgeRenderer}s.
+ * Nodes. The builder allows some customizations including custom {@link NodeRenderer}s and {@link EdgeRenderer}s.
  */
 public final class DotBuilder<T> {
 

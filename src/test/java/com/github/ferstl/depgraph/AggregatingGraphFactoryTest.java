@@ -52,7 +52,7 @@ public class AggregatingGraphFactoryTest {
   private ArtifactFilter targetFilter;
   private DependencyGraphBuilder graphBuilder;
   private GraphBuilderAdapter adapter;
-  private DotBuilder<DependencyNodeAdapter> dotBuilder;
+  private DotBuilder<GraphNode> dotBuilder;
 
   @Before
   public void before() throws Exception {

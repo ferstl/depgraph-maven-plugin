@@ -25,54 +25,54 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 /**
  * A node visitor that creates edges between the visited nodes using a {@link DotBuilder}. This class implements the
  * {@code DependencyNodeVisitor} interfaces for dependency trees and dependency graphs and adapts the different node
- * instances using {@link DependencyNodeAdapter}.
+ * instances using {@link GraphNode}.
  */
 class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
 
-  private final DotBuilder<DependencyNodeAdapter> dotBuilder;
-  private final Deque<DependencyNodeAdapter> stack;
+  private final DotBuilder<GraphNode> dotBuilder;
+  private final Deque<GraphNode> stack;
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter targetFilter;
 
-  DotBuildingVisitor(DotBuilder<DependencyNodeAdapter> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
+  DotBuildingVisitor(DotBuilder<GraphNode> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
     this.targetFilter = targetFilter;
   }
 
-  DotBuildingVisitor(DotBuilder<DependencyNodeAdapter> dotBuilder, ArtifactFilter targetFilter) {
+  DotBuildingVisitor(DotBuilder<GraphNode> dotBuilder, ArtifactFilter targetFilter) {
     this(dotBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter);
   }
 
   @Override
   public boolean visit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalVisit(new DependencyNodeAdapter(node));
+    return internalVisit(new GraphNode(node));
   }
 
   @Override
   public boolean endVisit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalEndVisit(new DependencyNodeAdapter(node));
+    return internalEndVisit(new GraphNode(node));
   }
 
   @Override
   public boolean visit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalVisit(new DependencyNodeAdapter(node));
+    return internalVisit(new GraphNode(node));
   }
 
   @Override
   public boolean endVisit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalEndVisit(new DependencyNodeAdapter(node));
+    return internalEndVisit(new GraphNode(node));
   }
 
-  private boolean internalVisit(DependencyNodeAdapter node) {
-    DependencyNodeAdapter currentParent = this.stack.peek();
+  private boolean internalVisit(GraphNode node) {
+    GraphNode currentParent = this.stack.peek();
 
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       if (currentParent != null) {
         this.dotBuilder.addEdge(currentParent, node);
 
-        DependencyNodeAdapter existingTarget = this.dotBuilder.getNode(node);
+        GraphNode existingTarget = this.dotBuilder.getNode(node);
         existingTarget.addScope(node.getArtifact().getScope());
       }
 
@@ -84,12 +84,12 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     return false;
   }
 
-  private boolean leadsToTargetDependency(DependencyNodeAdapter node) {
+  private boolean leadsToTargetDependency(GraphNode node) {
     if (this.targetFilter.include(node.getArtifact())) {
       return true;
     }
 
-    for (DependencyNodeAdapter c : node.getChildren()) {
+    for (GraphNode c : node.getChildren()) {
       if (leadsToTargetDependency(c)) {
         return true;
       }
@@ -98,7 +98,7 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     return false;
   }
 
-  private boolean internalEndVisit(DependencyNodeAdapter node) {
+  private boolean internalEndVisit(GraphNode node) {
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       this.stack.pop();
     }

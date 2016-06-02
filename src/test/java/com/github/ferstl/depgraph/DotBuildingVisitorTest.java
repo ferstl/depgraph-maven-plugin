@@ -34,14 +34,14 @@ import static org.mockito.Mockito.when;
 
 public class DotBuildingVisitorTest {
 
-  private DotBuilder<DependencyNodeAdapter> dotBuilder;
+  private DotBuilder<GraphNode> dotBuilder;
   private DotBuildingVisitor visitor;
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
 
   @Before
   public void before() {
-    this.dotBuilder = new DotBuilder<DependencyNodeAdapter>();
+    this.dotBuilder = new DotBuilder<GraphNode>();
 
     this.globalFilter = mock(ArtifactFilter.class);
     when(this.globalFilter.include(Matchers.<Artifact>any())).thenReturn(true);

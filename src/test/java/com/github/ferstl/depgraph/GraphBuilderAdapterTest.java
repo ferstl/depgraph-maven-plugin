@@ -45,7 +45,7 @@ public class GraphBuilderAdapterTest {
   private DependencyGraphBuilder dependencyGraphBuilder;
   private DependencyTreeBuilder dependencyTreeBuilder;
   private MavenProject mavenProject;
-  private DotBuilder<DependencyNodeAdapter> dotBuilder;
+  private DotBuilder<GraphNode> dotBuilder;
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
   private ArtifactRepository artifactRepository;
@@ -59,7 +59,7 @@ public class GraphBuilderAdapterTest {
     this.mavenProject = new MavenProject();
     this.globalFilter = mock(ArtifactFilter.class);
     this.targetFilter = mock(ArtifactFilter.class);
-    this.dotBuilder = new DotBuilder<DependencyNodeAdapter>();
+    this.dotBuilder = new DotBuilder<GraphNode>();
 
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
     when(this.dependencyGraphBuilder.buildDependencyGraph(Matchers.<MavenProject>any(), Matchers.<ArtifactFilter>any())).thenReturn(mock(org.apache.maven.shared.dependency.graph.DependencyNode.class));

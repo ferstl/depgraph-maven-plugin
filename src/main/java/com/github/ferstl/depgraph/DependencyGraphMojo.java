@@ -75,14 +75,14 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-    DotBuilder<DependencyNodeAdapter> dotBuilder = createGraphBuilder();
+    DotBuilder<GraphNode> dotBuilder = createGraphBuilder();
     GraphBuilderAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
-  private DotBuilder<DependencyNodeAdapter> createGraphBuilder() {
-    DotBuilder<DependencyNodeAdapter> dotBuilder = new DotBuilder<DependencyNodeAdapter>()
+  private DotBuilder<GraphNode> createGraphBuilder() {
+    DotBuilder<GraphNode> dotBuilder = new DotBuilder<GraphNode>()
         .useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
 
     boolean fullGraph = requiresFullGraph();
@@ -110,8 +110,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     return this.showConflicts || this.showDuplicates;
   }
 
-  private NodeRenderer<DependencyNodeAdapter> determineNodeLabelRenderer(boolean isFullGraph) {
-    NodeRenderer<DependencyNodeAdapter> renderer = NodeRenderers.ARTIFACT_ID_LABEL;
+  private NodeRenderer<GraphNode> determineNodeLabelRenderer(boolean isFullGraph) {
+    NodeRenderer<GraphNode> renderer = NodeRenderers.ARTIFACT_ID_LABEL;
 
     if (this.showGroupIds && this.showVersions && !isFullGraph) {
       renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_VERSION_LABEL;

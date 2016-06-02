@@ -21,11 +21,11 @@ import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.google.common.base.Joiner;
 
 
-enum NodeRenderers implements NodeRenderer<DependencyNodeAdapter> {
+enum NodeRenderers implements NodeRenderer<GraphNode> {
   ARTIFACT_ID_LABEL {
 
     @Override
-    public String render(DependencyNodeAdapter node) {
+    public String render(GraphNode node) {
       Artifact artifact = node.getArtifact();
       return toScopedString(artifact.getArtifactId(), node.getScopes());
     }
@@ -34,7 +34,7 @@ enum NodeRenderers implements NodeRenderer<DependencyNodeAdapter> {
   ARTIFACT_ID_VERSION_LABEL {
 
     @Override
-    public String render(DependencyNodeAdapter node) {
+    public String render(GraphNode node) {
       Artifact artifact = node.getArtifact();
       String artifactLabel = artifact.getArtifactId() + "\n" + artifact.getVersion();
 
@@ -46,7 +46,7 @@ enum NodeRenderers implements NodeRenderer<DependencyNodeAdapter> {
   GROUP_ID_ARTIFACT_ID_LABEL {
 
     @Override
-    public String render(DependencyNodeAdapter node) {
+    public String render(GraphNode node) {
       Artifact artifact = node.getArtifact();
       String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId();
 
@@ -58,7 +58,7 @@ enum NodeRenderers implements NodeRenderer<DependencyNodeAdapter> {
   GROUP_ID_ARTIFACT_ID_VERSION_LABEL {
 
     @Override
-    public String render(DependencyNodeAdapter node) {
+    public String render(GraphNode node) {
       Artifact artifact = node.getArtifact();
       String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId() + "\n" + artifact.getVersion();
 
@@ -70,7 +70,7 @@ enum NodeRenderers implements NodeRenderer<DependencyNodeAdapter> {
   GROUP_ID_LABEL {
 
     @Override
-    public String render(DependencyNodeAdapter node) {
+    public String render(GraphNode node) {
       Artifact artifact = node.getArtifact();
       return toScopedString(artifact.getGroupId(), node.getScopes());
     }
@@ -80,7 +80,7 @@ enum NodeRenderers implements NodeRenderer<DependencyNodeAdapter> {
   SCOPED_GROUP_ID {
 
     @Override
-    public String render(DependencyNodeAdapter node) {
+    public String render(GraphNode node) {
       Artifact artifact = node.getArtifact();
       return COLON_JOINER.join(artifact.getGroupId(), artifact.getScope());
     }
@@ -89,7 +89,7 @@ enum NodeRenderers implements NodeRenderer<DependencyNodeAdapter> {
   VERSIONLESS_ID {
 
     @Override
-    public String render(DependencyNodeAdapter node) {
+    public String render(GraphNode node) {
       Artifact artifact = node.getArtifact();
 
       return COLON_JOINER.join(

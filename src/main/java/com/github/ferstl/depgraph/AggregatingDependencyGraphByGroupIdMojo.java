@@ -37,7 +37,7 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractGraphMojo {
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
 
-    DotBuilder<DependencyNodeAdapter> dotBuilder = new DotBuilder<>();
+    DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
         .useNodeRenderer(NodeRenderers.SCOPED_GROUP_ID)
         .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL)

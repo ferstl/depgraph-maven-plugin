@@ -33,10 +33,10 @@ class AggregatingGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
   private final ArtifactFilter globalFilter;
-  private final DotBuilder<DependencyNodeAdapter> dotBuilder;
+  private final DotBuilder<GraphNode> dotBuilder;
   private final boolean includeParentProjects;
 
-  AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<DependencyNodeAdapter> dotBuilder, boolean includeParentProjects) {
+  AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder, boolean includeParentProjects) {
 
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;
@@ -62,15 +62,15 @@ class AggregatingGraphFactory implements GraphFactory {
     return this.dotBuilder.toString();
   }
 
-  private void buildModuleTree(MavenProject parentProject, DotBuilder<DependencyNodeAdapter> dotBuilder) {
+  private void buildModuleTree(MavenProject parentProject, DotBuilder<GraphNode> dotBuilder) {
     @SuppressWarnings("unchecked") Collection<MavenProject> collectedProjects = parentProject.getCollectedProjects();
     for (MavenProject collectedProject : collectedProjects) {
       MavenProject child = collectedProject;
       MavenProject parent = collectedProject.getParent();
 
       while (parent != null) {
-        DependencyNodeAdapter parentNode = filterProject(parent);
-        DependencyNodeAdapter childNode = filterProject(child);
+        GraphNode parentNode = filterProject(parent);
+        GraphNode childNode = filterProject(child);
 
         dotBuilder.addEdge(parentNode, childNode, DottedEdgeRenderer.INSTANCE);
 
@@ -95,20 +95,20 @@ class AggregatingGraphFactory implements GraphFactory {
     return result;
   }
 
-  private DependencyNodeAdapter filterProject(MavenProject project) {
+  private GraphNode filterProject(MavenProject project) {
     Artifact artifact = project.getArtifact();
     if (this.globalFilter.include(artifact)) {
-      return new DependencyNodeAdapter(artifact);
+      return new GraphNode(artifact);
     }
 
     return null;
   }
 
-  enum DottedEdgeRenderer implements EdgeRenderer<DependencyNodeAdapter> {
+  enum DottedEdgeRenderer implements EdgeRenderer<GraphNode> {
     INSTANCE {
 
       @Override
-      public String createEdgeAttributes(DependencyNodeAdapter from, DependencyNodeAdapter to) {
+      public String createEdgeAttributes(GraphNode from, GraphNode to) {
         return new AttributeBuilder().style("dotted").toString();
       }
 

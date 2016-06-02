@@ -19,7 +19,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Before;
 import org.junit.Test;
-import com.github.ferstl.depgraph.DependencyNodeAdapter;
+import com.github.ferstl.depgraph.GraphNode;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodes;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
@@ -37,9 +37,9 @@ public class DotBuilderTest {
   private static final String DEFAULT_SINGLE_NODE = "\"group:start:jar:1.0.0:compile\"[label=\"group:start:jar:1.0.0:compile\"]";
   private static final String DEFAULT_EDGE = "\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\"";
 
-  private DotBuilder<DependencyNodeAdapter> dotBuilder;
-  private DependencyNodeAdapter fromNode;
-  private DependencyNodeAdapter toNode;
+  private DotBuilder<GraphNode> dotBuilder;
+  private GraphNode fromNode;
+  private GraphNode toNode;
 
   @Before
   public void before() {
@@ -67,7 +67,7 @@ public class DotBuilderTest {
 
   @Test
   public void nullNodes() {
-    DependencyNodeAdapter node = createNode("node");
+    GraphNode node = createNode("node");
 
     this.dotBuilder.addEdge(node, null);
     assertThat(this.dotBuilder, emptyGraph());
@@ -139,22 +139,22 @@ public class DotBuilderTest {
   }
 
 
-  private DependencyNodeAdapter createNode(String name) {
+  private GraphNode createNode(String name) {
     Artifact artifact = new DefaultArtifact("group", name, "1.0.0", "compile", "jar", "", null);
 
-    return new DependencyNodeAdapter(artifact);
+    return new GraphNode(artifact);
   }
 
-  enum TestRenderer implements EdgeRenderer<DependencyNodeAdapter>, NodeRenderer<DependencyNodeAdapter> {
+  enum TestRenderer implements EdgeRenderer<GraphNode>, NodeRenderer<GraphNode> {
     INSTANCE;
 
     @Override
-    public String render(DependencyNodeAdapter node) {
+    public String render(GraphNode node) {
       return node.getArtifact().getArtifactId();
     }
 
     @Override
-    public String createEdgeAttributes(DependencyNodeAdapter from, DependencyNodeAdapter to) {
+    public String createEdgeAttributes(GraphNode from, GraphNode to) {
       return new AttributeBuilder()
           .label(to.getArtifact().getVersion())
           .toString();

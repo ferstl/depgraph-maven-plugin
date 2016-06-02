@@ -35,14 +35,14 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-    DotBuilder<DependencyNodeAdapter> dotBuilder = createDotBuilder();
+    DotBuilder<GraphNode> dotBuilder = createDotBuilder();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter);
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
-  private DotBuilder<DependencyNodeAdapter> createDotBuilder() {
-    DotBuilder<DependencyNodeAdapter> dotBuilder = new DotBuilder<>();
+  private DotBuilder<GraphNode> createDotBuilder() {
+    DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
         .useNodeRenderer(NodeRenderers.SCOPED_GROUP_ID)
         .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL)
