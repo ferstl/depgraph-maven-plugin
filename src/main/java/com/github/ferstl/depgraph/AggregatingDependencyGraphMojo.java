@@ -38,7 +38,7 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
 
   /**
    * If set to {@code true}, the created graph will show the {@code groupId} on all artifacts.
-   * 
+   *
    * @since 1.0.3
    */
   @Parameter(property = "showGroupIds", defaultValue = "false")
@@ -63,7 +63,8 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-    DotBuilder dotBuilder = new DotBuilder()
+    DotBuilder<DependencyNodeAdapter> dotBuilder = new DotBuilder<>();
+    dotBuilder
         .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
         .useNodeLabelRenderer(determineNodeLabelRenderer());
 
@@ -72,8 +73,8 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
     return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, this.includeParentProjects);
   }
 
-  private NodeRenderer determineNodeLabelRenderer() {
-    NodeRenderer renderer = NodeRenderers.ARTIFACT_ID_LABEL;
+  private NodeRenderer<DependencyNodeAdapter> determineNodeLabelRenderer() {
+    NodeRenderer<DependencyNodeAdapter> renderer = NodeRenderers.ARTIFACT_ID_LABEL;
 
     if (this.showGroupIds && this.showVersions) {
       renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_VERSION_LABEL;

@@ -17,10 +17,9 @@ package com.github.ferstl.depgraph;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.EdgeRenderer;
-import com.github.ferstl.depgraph.dot.Node;
 
 
-class DependencyEdgeRenderer implements EdgeRenderer {
+class DependencyEdgeRenderer implements EdgeRenderer<DependencyNodeAdapter> {
 
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
@@ -35,7 +34,7 @@ class DependencyEdgeRenderer implements EdgeRenderer {
   }
 
   @Override
-  public String createEdgeAttributes(Node from, Node to) {
+  public String createEdgeAttributes(DependencyNodeAdapter from, DependencyNodeAdapter to) {
     AttributeBuilder builder = new AttributeBuilder();
     NodeResolution resolution = to.getResolution();
 

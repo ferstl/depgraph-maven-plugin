@@ -31,46 +31,46 @@ import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
  * {@link Node}s. The builder allows some customizations including custom {@link NodeRenderer}s and
  * {@link EdgeRenderer}s.
  */
-public final class DotBuilder {
+public final class DotBuilder<T> {
 
-  private NodeRenderer nodeRenderer;
-  private NodeRenderer nodeLabelRenderer;
-  private EdgeRenderer edgeRenderer;
+  private NodeRenderer<? super T> nodeRenderer;
+  private NodeRenderer<? super T> nodeLabelRenderer;
+  private EdgeRenderer<? super T> edgeRenderer;
   private boolean omitSelfReferences;
-  private final Map<Node, NodeDefinition> nodeDefinitions;
-  private final Set<EdgeDefinition> edgeDefinitions;
+  private final Map<T, NodeDefinition<T>> nodeDefinitions;
+  private final Set<EdgeDefinition<T>> edgeDefinitions;
 
   public DotBuilder() {
-    this.nodeLabelRenderer = DefaultRenderer.INSTANCE;
-    this.nodeRenderer = DefaultRenderer.INSTANCE;
-    this.edgeRenderer = DefaultRenderer.INSTANCE;
+    this.nodeLabelRenderer = createDefaultNodeRenderer();
+    this.nodeRenderer = createDefaultNodeRenderer();
+    this.edgeRenderer = createDefaultEdgeRenderer();
 
     this.nodeDefinitions = new LinkedHashMap<>();
     this.edgeDefinitions = new LinkedHashSet<>();
   }
 
-  public DotBuilder useNodeRenderer(NodeRenderer nodeRenderer) {
+  public DotBuilder<T> useNodeRenderer(NodeRenderer<? super T> nodeRenderer) {
     this.nodeRenderer = nodeRenderer;
     return this;
   }
 
-  public DotBuilder useNodeLabelRenderer(NodeRenderer nodeLabelRenderer) {
+  public DotBuilder<T> useNodeLabelRenderer(NodeRenderer<? super T> nodeLabelRenderer) {
     this.nodeLabelRenderer = nodeLabelRenderer;
     return this;
   }
 
-  public DotBuilder useEdgeRenderer(EdgeRenderer edgeRenderer) {
+  public DotBuilder<T> useEdgeRenderer(EdgeRenderer<? super T> edgeRenderer) {
     this.edgeRenderer = edgeRenderer;
     return this;
   }
 
-  public DotBuilder omitSelfReferences() {
+  public DotBuilder<T> omitSelfReferences() {
     this.omitSelfReferences = true;
     return this;
   }
 
   // no edge will be created in case one or both nodes are null.
-  public DotBuilder addEdge(Node from, Node to) {
+  public DotBuilder<T> addEdge(T from, T to) {
     if (from != null && to != null) {
       addNode(from);
       addNode(to);
@@ -81,13 +81,13 @@ public final class DotBuilder {
     return this;
   }
 
-  public Node getNode(Node key) {
-    NodeDefinition nodeDefinition = this.nodeDefinitions.get(key);
+  public T getNode(T key) {
+    NodeDefinition<T> nodeDefinition = this.nodeDefinitions.get(key);
     return nodeDefinition != null ? nodeDefinition.node : null;
   }
 
-  public DotBuilder addEdge(Node from, Node to, EdgeRenderer edgeRenderer) {
-    EdgeRenderer originalEdgeRenderer = this.edgeRenderer;
+  public DotBuilder<T> addEdge(T from, T to, EdgeRenderer<? super T> edgeRenderer) {
+    EdgeRenderer<? super T> originalEdgeRenderer = this.edgeRenderer;
     this.edgeRenderer = edgeRenderer;
     addEdge(from, to);
     this.edgeRenderer = originalEdgeRenderer;
@@ -114,18 +114,18 @@ public final class DotBuilder {
     return sb.append("\n}").toString();
   }
 
-  private void addNode(Node node) {
+  private void addNode(T node) {
     // If a node definition does already exist, use the node of the existing definition
-    NodeDefinition nodeDefinition = this.nodeDefinitions.get(node);
-    Node effectiveNode = nodeDefinition != null ? nodeDefinition.node : node;
+    NodeDefinition<T> nodeDefinition = this.nodeDefinitions.get(node);
+    T effectiveNode = nodeDefinition != null ? nodeDefinition.node : node;
 
-    NodeDefinition newNodeDefinition = new NodeDefinition(effectiveNode, this.nodeRenderer, this.nodeLabelRenderer);
+    NodeDefinition<T> newNodeDefinition = new NodeDefinition<>(effectiveNode, this.nodeRenderer, this.nodeLabelRenderer);
     this.nodeDefinitions.put(effectiveNode, newNodeDefinition);
   }
 
-  private void safelyAddEdge(Node fromNode, Node toNode) {
+  private void safelyAddEdge(T fromNode, T toNode) {
     if (!this.omitSelfReferences || !fromNode.equals(toNode)) {
-      this.edgeDefinitions.add(new EdgeDefinition(this.nodeRenderer, this.edgeRenderer, fromNode, toNode));
+      this.edgeDefinitions.add(new EdgeDefinition<>(this.nodeRenderer, this.edgeRenderer, fromNode, toNode));
     }
   }
 
@@ -139,28 +139,34 @@ public final class DotBuilder {
   }
 
 
-  enum DefaultRenderer implements EdgeRenderer, NodeRenderer {
-    INSTANCE;
+  static <T> EdgeRenderer<T> createDefaultEdgeRenderer() {
+    return new EdgeRenderer<T>() {
 
-    @Override
-    public String createEdgeAttributes(Node from, Node to) {
-      return "";
-    }
+      @Override
+      public String createEdgeAttributes(T from, T to) {
+        return "";
+      }
 
-    @Override
-    public String render(Node node) {
-      return node.getArtifact().toString();
-    }
-
+    };
   }
 
-  static final class NodeDefinition {
+  static <T> NodeRenderer<T> createDefaultNodeRenderer() {
+    return new NodeRenderer<T>() {
 
-    final Node node;
-    final NodeRenderer nodeRenderer;
-    final NodeRenderer nodeLabelRenderer;
+      @Override
+      public String render(T node) {
+        return node.toString();
+      }
+    };
+  }
 
-    NodeDefinition(Node node, NodeRenderer nodeRenderer, NodeRenderer nodeLabelRenderer) {
+  static final class NodeDefinition<T> {
+
+    final T node;
+    final NodeRenderer<? super T> nodeRenderer;
+    final NodeRenderer<? super T> nodeLabelRenderer;
+
+    NodeDefinition(T node, NodeRenderer<? super T> nodeRenderer, NodeRenderer<? super T> nodeLabelRenderer) {
       this.node = node;
       this.nodeRenderer = nodeRenderer;
       this.nodeLabelRenderer = nodeLabelRenderer;
@@ -183,7 +189,7 @@ public final class DotBuilder {
         return false;
       }
 
-      NodeDefinition other = (NodeDefinition) obj;
+      NodeDefinition<?> other = (NodeDefinition<?>) obj;
 
       return Objects.equals(this.node, other.node);
     }
@@ -194,14 +200,14 @@ public final class DotBuilder {
     }
   }
 
-  static final class EdgeDefinition {
+  static final class EdgeDefinition<T> {
 
-    NodeRenderer nodeRenderer;
-    EdgeRenderer edgeRenderer;
-    Node from;
-    Node to;
+    NodeRenderer<? super T> nodeRenderer;
+    EdgeRenderer<? super T> edgeRenderer;
+    T from;
+    T to;
 
-    EdgeDefinition(NodeRenderer nodeRenderer, EdgeRenderer edgeRenderer, Node from, Node to) {
+    EdgeDefinition(NodeRenderer<? super T> nodeRenderer, EdgeRenderer<? super T> edgeRenderer, T from, T to) {
       this.nodeRenderer = nodeRenderer;
       this.edgeRenderer = edgeRenderer;
       this.from = from;
@@ -224,7 +230,7 @@ public final class DotBuilder {
         return false;
       }
 
-      EdgeDefinition other = (EdgeDefinition) obj;
+      EdgeDefinition<?> other = (EdgeDefinition<?>) obj;
 
       return Objects.equals(this.from, other.from)
           && Objects.equals(this.to, other.to);

@@ -52,7 +52,7 @@ public class AggregatingGraphFactoryTest {
   private ArtifactFilter targetFilter;
   private DependencyGraphBuilder graphBuilder;
   private GraphBuilderAdapter adapter;
-  private DotBuilder dotBuilder;
+  private DotBuilder<DependencyNodeAdapter> dotBuilder;
 
   @Before
   public void before() throws Exception {
@@ -67,7 +67,7 @@ public class AggregatingGraphFactoryTest {
 
     this.adapter = new GraphBuilderAdapter(this.graphBuilder, this.targetFilter);
 
-    this.dotBuilder = new DotBuilder();
+    this.dotBuilder = new DotBuilder<>();
   }
 
   /**
@@ -103,7 +103,7 @@ public class AggregatingGraphFactoryTest {
 
   /**
    * .
-   * 
+   *
    * <pre>
    * parent
    * - child1
@@ -133,7 +133,7 @@ public class AggregatingGraphFactoryTest {
 
   /**
    * .
-   * 
+   *
    * <pre>
    * parent
    * - child1-1
@@ -176,7 +176,7 @@ public class AggregatingGraphFactoryTest {
 
   /**
    * .
-   * 
+   *
    * <pre>
    * parentParent (not part of graph)
    * - parent
@@ -203,7 +203,7 @@ public class AggregatingGraphFactoryTest {
 
   /**
    * .
-   * 
+   *
    * <pre>
    * parent
    * - child1-1
@@ -242,7 +242,7 @@ public class AggregatingGraphFactoryTest {
 
   /**
    * .
-   * 
+   *
    * <pre>
    * parent
    * - child1

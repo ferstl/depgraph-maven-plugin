@@ -20,7 +20,6 @@ import java.util.Deque;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.dot.Node;
 
 
 /**
@@ -30,19 +29,19 @@ import com.github.ferstl.depgraph.dot.Node;
  */
 class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
 
-  private final DotBuilder dotBuilder;
-  private final Deque<Node> stack;
+  private final DotBuilder<DependencyNodeAdapter> dotBuilder;
+  private final Deque<DependencyNodeAdapter> stack;
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter targetFilter;
 
-  DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
+  DotBuildingVisitor(DotBuilder<DependencyNodeAdapter> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
     this.targetFilter = targetFilter;
   }
 
-  DotBuildingVisitor(DotBuilder dotBuilder, ArtifactFilter targetFilter) {
+  DotBuildingVisitor(DotBuilder<DependencyNodeAdapter> dotBuilder, ArtifactFilter targetFilter) {
     this(dotBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter);
   }
 
@@ -67,13 +66,13 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
   }
 
   private boolean internalVisit(DependencyNodeAdapter node) {
-    Node currentParent = this.stack.peek();
+    DependencyNodeAdapter currentParent = this.stack.peek();
 
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       if (currentParent != null) {
         this.dotBuilder.addEdge(currentParent, node);
 
-        Node existingTarget = this.dotBuilder.getNode(node);
+        DependencyNodeAdapter existingTarget = this.dotBuilder.getNode(node);
         existingTarget.addScope(node.getArtifact().getScope());
       }
 

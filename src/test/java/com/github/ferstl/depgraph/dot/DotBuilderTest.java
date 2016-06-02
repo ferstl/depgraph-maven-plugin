@@ -37,13 +37,13 @@ public class DotBuilderTest {
   private static final String DEFAULT_SINGLE_NODE = "\"group:start:jar:1.0.0:compile\"[label=\"group:start:jar:1.0.0:compile\"]";
   private static final String DEFAULT_EDGE = "\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\"";
 
-  private DotBuilder dotBuilder;
-  private Node fromNode;
-  private Node toNode;
+  private DotBuilder<DependencyNodeAdapter> dotBuilder;
+  private DependencyNodeAdapter fromNode;
+  private DependencyNodeAdapter toNode;
 
   @Before
   public void before() {
-    this.dotBuilder = new DotBuilder();
+    this.dotBuilder = new DotBuilder<>();
     this.fromNode = createNode("from");
     this.toNode = createNode("to");
   }
@@ -67,7 +67,7 @@ public class DotBuilderTest {
 
   @Test
   public void nullNodes() {
-    Node node = createNode("node");
+    DependencyNodeAdapter node = createNode("node");
 
     this.dotBuilder.addEdge(node, null);
     assertThat(this.dotBuilder, emptyGraph());
@@ -139,22 +139,22 @@ public class DotBuilderTest {
   }
 
 
-  private Node createNode(String name) {
+  private DependencyNodeAdapter createNode(String name) {
     Artifact artifact = new DefaultArtifact("group", name, "1.0.0", "compile", "jar", "", null);
 
     return new DependencyNodeAdapter(artifact);
   }
 
-  enum TestRenderer implements EdgeRenderer, NodeRenderer {
+  enum TestRenderer implements EdgeRenderer<DependencyNodeAdapter>, NodeRenderer<DependencyNodeAdapter> {
     INSTANCE;
 
     @Override
-    public String render(Node node) {
+    public String render(DependencyNodeAdapter node) {
       return node.getArtifact().getArtifactId();
     }
 
     @Override
-    public String createEdgeAttributes(Node from, Node to) {
+    public String createEdgeAttributes(DependencyNodeAdapter from, DependencyNodeAdapter to) {
       return new AttributeBuilder()
           .label(to.getArtifact().getVersion())
           .toString();

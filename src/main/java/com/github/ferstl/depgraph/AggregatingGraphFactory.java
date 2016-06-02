@@ -23,7 +23,6 @@ import org.apache.maven.project.MavenProject;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.dot.EdgeRenderer;
-import com.github.ferstl.depgraph.dot.Node;
 
 /**
  * A graph factory that creates a dependency graph from a multi-module project. Child modules are treated as
@@ -34,10 +33,10 @@ class AggregatingGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
   private final ArtifactFilter globalFilter;
-  private final DotBuilder dotBuilder;
+  private final DotBuilder<DependencyNodeAdapter> dotBuilder;
   private final boolean includeParentProjects;
 
-  AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder dotBuilder, boolean includeParentProjects) {
+  AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<DependencyNodeAdapter> dotBuilder, boolean includeParentProjects) {
 
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;
@@ -63,15 +62,15 @@ class AggregatingGraphFactory implements GraphFactory {
     return this.dotBuilder.toString();
   }
 
-  private void buildModuleTree(MavenProject parentProject, DotBuilder dotBuilder) {
+  private void buildModuleTree(MavenProject parentProject, DotBuilder<DependencyNodeAdapter> dotBuilder) {
     @SuppressWarnings("unchecked") Collection<MavenProject> collectedProjects = parentProject.getCollectedProjects();
     for (MavenProject collectedProject : collectedProjects) {
       MavenProject child = collectedProject;
       MavenProject parent = collectedProject.getParent();
 
       while (parent != null) {
-        Node parentNode = filterProject(parent);
-        Node childNode = filterProject(child);
+        DependencyNodeAdapter parentNode = filterProject(parent);
+        DependencyNodeAdapter childNode = filterProject(child);
 
         dotBuilder.addEdge(parentNode, childNode, DottedEdgeRenderer.INSTANCE);
 
@@ -96,7 +95,7 @@ class AggregatingGraphFactory implements GraphFactory {
     return result;
   }
 
-  private Node filterProject(MavenProject project) {
+  private DependencyNodeAdapter filterProject(MavenProject project) {
     Artifact artifact = project.getArtifact();
     if (this.globalFilter.include(artifact)) {
       return new DependencyNodeAdapter(artifact);
@@ -105,11 +104,11 @@ class AggregatingGraphFactory implements GraphFactory {
     return null;
   }
 
-  enum DottedEdgeRenderer implements EdgeRenderer {
+  enum DottedEdgeRenderer implements EdgeRenderer<DependencyNodeAdapter> {
     INSTANCE {
 
       @Override
-      public String createEdgeAttributes(Node from, Node to) {
+      public String createEdgeAttributes(DependencyNodeAdapter from, DependencyNodeAdapter to) {
         return new AttributeBuilder().style("dotted").toString();
       }
 

@@ -37,7 +37,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   /**
    * If set to {@code true}, the created graph will show the {@code groupId} on all artifacts.
-   * 
+   *
    * @since 1.0.3
    */
   @Parameter(property = "showGroupIds", defaultValue = "false")
@@ -75,14 +75,14 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-    DotBuilder dotBuilder = createGraphBuilder();
+    DotBuilder<DependencyNodeAdapter> dotBuilder = createGraphBuilder();
     GraphBuilderAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
-  private DotBuilder createGraphBuilder() {
-    DotBuilder dotBuilder = new DotBuilder()
+  private DotBuilder<DependencyNodeAdapter> createGraphBuilder() {
+    DotBuilder<DependencyNodeAdapter> dotBuilder = new DotBuilder<DependencyNodeAdapter>()
         .useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
 
     boolean fullGraph = requiresFullGraph();
@@ -110,8 +110,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     return this.showConflicts || this.showDuplicates;
   }
 
-  private NodeRenderer determineNodeLabelRenderer(boolean isFullGraph) {
-    NodeRenderer renderer = NodeRenderers.ARTIFACT_ID_LABEL;
+  private NodeRenderer<DependencyNodeAdapter> determineNodeLabelRenderer(boolean isFullGraph) {
+    NodeRenderer<DependencyNodeAdapter> renderer = NodeRenderers.ARTIFACT_ID_LABEL;
 
     if (this.showGroupIds && this.showVersions && !isFullGraph) {
       renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_VERSION_LABEL;

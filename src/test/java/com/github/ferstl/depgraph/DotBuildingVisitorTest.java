@@ -34,14 +34,14 @@ import static org.mockito.Mockito.when;
 
 public class DotBuildingVisitorTest {
 
-  private DotBuilder dotBuilder;
+  private DotBuilder<DependencyNodeAdapter> dotBuilder;
   private DotBuildingVisitor visitor;
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
 
   @Before
   public void before() {
-    this.dotBuilder = new DotBuilder();
+    this.dotBuilder = new DotBuilder<DependencyNodeAdapter>();
 
     this.globalFilter = mock(ArtifactFilter.class);
     when(this.globalFilter.include(Matchers.<Artifact>any())).thenReturn(true);
@@ -81,7 +81,7 @@ public class DotBuildingVisitorTest {
 
   /**
    * .
-   * 
+   *
    * <pre>
    * parent
    *     - child1
@@ -115,7 +115,7 @@ public class DotBuildingVisitorTest {
 
   /**
    * .
-   * 
+   *
    * <pre>
    * parent
    * - child1

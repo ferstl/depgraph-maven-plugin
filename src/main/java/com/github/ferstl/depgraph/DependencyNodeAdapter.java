@@ -20,7 +20,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.maven.artifact.Artifact;
-import com.github.ferstl.depgraph.dot.Node;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
@@ -34,7 +33,7 @@ import com.google.common.collect.ImmutableSet;
  * </ul>
  * .
  */
-public class DependencyNodeAdapter implements Node {
+public class DependencyNodeAdapter {
 
   private org.apache.maven.shared.dependency.graph.DependencyNode graphNode;
   private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
@@ -73,22 +72,18 @@ public class DependencyNodeAdapter implements Node {
     addScope(artifact.getScope());
   }
 
-  @Override
   public Artifact getArtifact() {
     return this.artifact;
   }
 
-  @Override
   public NodeResolution getResolution() {
     return this.resolution;
   }
 
-  @Override
   public void addScope(String scope) {
     this.scopes.add(scope);
   }
 
-  @Override
   public Set<String> getScopes() {
     return ImmutableSet.copyOf(this.scopes);
   }
@@ -102,6 +97,11 @@ public class DependencyNodeAdapter implements Node {
       // impossible case
       return null;
     }
+  }
+
+  @Override
+  public String toString() {
+    return this.artifact.toString();
   }
 
   @Override
@@ -137,8 +137,8 @@ public class DependencyNodeAdapter implements Node {
   }
 
   private enum TreeNode2Adapter
-    implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, DependencyNodeAdapter> {
-      INSTANCE;
+      implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, DependencyNodeAdapter> {
+    INSTANCE;
 
     @Override
     public DependencyNodeAdapter apply(org.apache.maven.shared.dependency.tree.DependencyNode tn) {
@@ -147,8 +147,8 @@ public class DependencyNodeAdapter implements Node {
   }
 
   private enum GraphNode2Adapter
-    implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, DependencyNodeAdapter> {
-      INSTANCE;
+      implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, DependencyNodeAdapter> {
+    INSTANCE;
 
     @Override
     public DependencyNodeAdapter apply(org.apache.maven.shared.dependency.graph.DependencyNode tn) {

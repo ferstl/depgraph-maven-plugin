@@ -20,10 +20,11 @@ import java.util.List;
 import org.codehaus.plexus.util.StringUtils;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import com.github.ferstl.depgraph.DependencyNodeAdapter;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 
-public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder> {
+public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder<DependencyNodeAdapter>> {
 
   private static final String[] EMPTY_ARRAY = new String[0];
   private static final String NODE_PATTERN = ".+\\[label=.+\\]";
@@ -81,7 +82,7 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
 
 
   @Override
-  protected boolean matchesSafely(DotBuilder dotBuilder, Description mismatchDescription) {
+  protected boolean matchesSafely(DotBuilder<DependencyNodeAdapter> dotBuilder, Description mismatchDescription) {
     init(dotBuilder);
 
     mismatchDescription.appendText("was\nNodes:");
