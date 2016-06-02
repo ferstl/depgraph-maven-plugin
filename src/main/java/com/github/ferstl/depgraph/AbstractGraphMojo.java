@@ -142,7 +142,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Parameter(defaultValue = "${localRepository}", readonly = true)
   ArtifactRepository localRepository;
 
-  @Component
+  @Parameter(defaultValue = "${project}", readonly = true)
   private MavenProject project;
 
   @Component(hint = "default")
