@@ -32,7 +32,7 @@ import com.google.common.collect.ImmutableSet;
  * <li>{@link org.apache.maven.shared.dependency.tree.DependencyNode}</li>
  * </ul>
  */
-public class GraphNode {
+public final class GraphNode {
 
   private org.apache.maven.shared.dependency.graph.DependencyNode graphNode;
   private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
