@@ -19,7 +19,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Before;
 import org.junit.Test;
-import com.github.ferstl.depgraph.GraphNode;
+import com.github.ferstl.depgraph.graph.GraphNode;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodes;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;

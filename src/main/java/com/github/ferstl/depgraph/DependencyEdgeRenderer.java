@@ -17,6 +17,8 @@ package com.github.ferstl.depgraph;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.EdgeRenderer;
+import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.NodeResolution;
 
 
 class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {

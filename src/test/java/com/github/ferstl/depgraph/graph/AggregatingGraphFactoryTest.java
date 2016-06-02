@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.graph;
 
 import java.util.ArrayList;
 import org.apache.maven.artifact.Artifact;
@@ -26,6 +26,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
+import com.github.ferstl.depgraph.graph.GraphNode;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
 import static org.junit.Assert.assertThat;

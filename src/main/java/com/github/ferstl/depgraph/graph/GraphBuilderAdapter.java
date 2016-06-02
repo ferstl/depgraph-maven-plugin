@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.graph;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -27,19 +27,19 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 /**
  * Adapter for {@link DependencyGraphBuilder} and {@link DependencyTreeBuilder}.
  */
-final class GraphBuilderAdapter {
+public final class GraphBuilderAdapter {
 
   private DependencyGraphBuilder dependencyGraphBuilder;
   private DependencyTreeBuilder dependencyTreeBuilder;
   private ArtifactRepository artifactRepository;
   private final ArtifactFilter targetFilter;
 
-  GraphBuilderAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
+  public GraphBuilderAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
     this.dependencyGraphBuilder = builder;
     this.targetFilter = targetFilter;
   }
 
-  GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter) {
+  public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter) {
     this.dependencyTreeBuilder = builder;
     this.artifactRepository = artifactRepository;
     this.targetFilter = targetFilter;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.graph;
 
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
@@ -21,7 +21,7 @@ import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.google.common.base.Joiner;
 
 
-enum NodeRenderers implements NodeRenderer<GraphNode> {
+public enum NodeRenderers implements NodeRenderer<GraphNode> {
   ARTIFACT_ID_LABEL {
 
     @Override

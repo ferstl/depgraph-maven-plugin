@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.graph;
 
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
@@ -22,14 +22,13 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 /**
  * A graph factory that creates a graph from a non multi-module project.
  */
-class SimpleGraphFactory implements GraphFactory {
+public class SimpleGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
   private final ArtifactFilter globalFilter;
   private final DotBuilder<GraphNode> dotBuilder;
 
-  SimpleGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder) {
-
+  public SimpleGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder) {
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;
     this.dotBuilder = dotBuilder;

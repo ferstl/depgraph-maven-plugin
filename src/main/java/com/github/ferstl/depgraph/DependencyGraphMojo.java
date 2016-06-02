@@ -22,6 +22,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.dot.NodeRenderer;
+import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
+import com.github.ferstl.depgraph.graph.GraphFactory;
+import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.NodeRenderers;
+import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
 
 /**
  * Creates a dependency graph of a maven module.

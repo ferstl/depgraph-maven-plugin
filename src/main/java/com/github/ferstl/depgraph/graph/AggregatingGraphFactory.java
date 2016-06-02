@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.graph;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,14 +29,14 @@ import com.github.ferstl.depgraph.dot.EdgeRenderer;
  * dependencies of the parent project. The created graph is the <strong>union</strong> of the child modules' dependency
  * graphs.
  */
-class AggregatingGraphFactory implements GraphFactory {
+public class AggregatingGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
   private final ArtifactFilter globalFilter;
   private final DotBuilder<GraphNode> dotBuilder;
   private final boolean includeParentProjects;
 
-  AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder, boolean includeParentProjects) {
+  public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder, boolean includeParentProjects) {
 
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;

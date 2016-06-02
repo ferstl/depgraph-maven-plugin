@@ -20,6 +20,11 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
+import com.github.ferstl.depgraph.graph.GraphFactory;
+import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.NodeRenderers;
 
 /**
  * Aggregates all dependencies of a multi-module by their group IDs.
