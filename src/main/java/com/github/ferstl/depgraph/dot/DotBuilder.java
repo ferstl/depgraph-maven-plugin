@@ -29,7 +29,7 @@ import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 /**
  * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by defining edges between
  * Nodes. The builder allows some customizations including custom {@link NodeRenderer}s and {@link EdgeRenderer}s.
- * 
+ *
  * @param <T> Type of the graph nodes. The graph nodes are expected to provide proper {@code equals()} and
  * {@code hashCode()} implementations.
  */
@@ -74,8 +74,8 @@ public final class DotBuilder<T> {
   // no edge will be created in case one or both nodes are null.
   public DotBuilder<T> addEdge(T from, T to) {
     if (from != null && to != null) {
-      addNode(from);
-      addNode(to);
+      from = addNode(from);
+      to = addNode(to);
 
       safelyAddEdge(from, to);
     }
@@ -116,13 +116,15 @@ public final class DotBuilder<T> {
     return sb.append("\n}").toString();
   }
 
-  private void addNode(T node) {
+  private T addNode(T node) {
     // If a node definition does already exist, use the node of the existing definition
     NodeDefinition<T> nodeDefinition = this.nodeDefinitions.get(node);
     T effectiveNode = nodeDefinition != null ? nodeDefinition.node : node;
 
     NodeDefinition<T> newNodeDefinition = new NodeDefinition<>(effectiveNode, this.nodeRenderer, this.nodeLabelRenderer);
     this.nodeDefinitions.put(effectiveNode, newNodeDefinition);
+
+    return effectiveNode;
   }
 
   private void safelyAddEdge(T fromNode, T toNode) {
