@@ -71,7 +71,7 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
    *
    * @since 1.0.5
    */
-  @Parameter(property = "mergeScopes", defaultValue = "true")
+  @Parameter(property = "mergeScopes", defaultValue = "false")
   private boolean mergeScopes;
 
   @Override
