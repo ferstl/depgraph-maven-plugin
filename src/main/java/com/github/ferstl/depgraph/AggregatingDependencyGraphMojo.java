@@ -66,15 +66,25 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "includeParentProjects", defaultValue = "false")
   private boolean includeParentProjects;
 
+  /**
+   * Merge dependencies that occur in multiple scopes into one graph node instead of having a node per scope.
+   *
+   * @since 1.0.5
+   */
+  @Parameter(property = "mergeScopes", defaultValue = "true")
+  private boolean mergeScopes;
+
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
-    dotBuilder
-        .useNodeRenderer(NodeRenderers.VERSIONLESS_ID)
-        .useNodeLabelRenderer(determineNodeLabelRenderer());
+    dotBuilder.useNodeLabelRenderer(determineNodeLabelRenderer());
+    if (this.mergeScopes) {
+      dotBuilder.useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
+    } else {
+      dotBuilder.useNodeRenderer(NodeRenderers.VERSIONLESS_ID_WITH_SCOPE);
+    }
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
-
     return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, this.includeParentProjects);
   }
 

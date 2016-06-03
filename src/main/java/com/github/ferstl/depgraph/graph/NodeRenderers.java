@@ -98,6 +98,21 @@ public enum NodeRenderers implements NodeRenderer<GraphNode> {
           artifact.getType(),
           artifact.getClassifier());
     }
+  },
+
+  VERSIONLESS_ID_WITH_SCOPE {
+
+    @Override
+    public String render(GraphNode node) {
+      Artifact artifact = node.getArtifact();
+
+      return COLON_JOINER.join(
+          artifact.getGroupId(),
+          artifact.getArtifactId(),
+          artifact.getType(),
+          artifact.getClassifier(),
+          artifact.getScope());
+    }
 
   };
 
