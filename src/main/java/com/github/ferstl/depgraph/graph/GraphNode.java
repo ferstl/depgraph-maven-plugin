@@ -16,7 +16,6 @@
 package com.github.ferstl.depgraph.graph;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.maven.artifact.Artifact;
@@ -101,25 +100,6 @@ public final class GraphNode {
   @Override
   public String toString() {
     return this.artifact.toString();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (!(obj instanceof GraphNode)) {
-      return false;
-    }
-
-    GraphNode other = (GraphNode) obj;
-
-    return Objects.equals(this.artifact, other.artifact);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(this.artifact);
   }
 
   private static NodeResolution determineResolution(int res) {

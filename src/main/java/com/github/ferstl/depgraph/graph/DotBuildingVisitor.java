@@ -70,10 +70,11 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
 
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       if (currentParent != null) {
-        this.dotBuilder.addEdge(currentParent, node);
+        GraphNode effectiveSource = this.dotBuilder.getEffectiveNode(currentParent);
+        GraphNode effectiveTarget = this.dotBuilder.getEffectiveNode(node);
+        effectiveTarget.addScope(node.getArtifact().getScope());
 
-        GraphNode existingTarget = this.dotBuilder.getNode(node);
-        existingTarget.addScope(node.getArtifact().getScope());
+        this.dotBuilder.addEdge(effectiveSource, effectiveTarget);
       }
 
       this.stack.push(node);
