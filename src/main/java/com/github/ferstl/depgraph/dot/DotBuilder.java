@@ -88,6 +88,12 @@ public final class DotBuilder<T> {
     return this;
   }
 
+  /**
+   * Returns the node that was added <strong>first</strong> to this builder or the given node if new.
+   *
+   * @param node Node.
+   * @return The firstly added node or the given node if not present.
+   */
   public T getEffectiveNode(T node) {
     String key = this.nodeRenderer.render(node);
     if (this.nodeMap.containsKey(key)) {
