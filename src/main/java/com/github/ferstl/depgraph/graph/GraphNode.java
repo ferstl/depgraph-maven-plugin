@@ -115,8 +115,7 @@ public final class GraphNode {
     }
   }
 
-  private enum TreeNode2Adapter
-      implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, GraphNode> {
+  private enum TreeNode2Adapter implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, GraphNode> {
     INSTANCE;
 
     @Override
@@ -125,8 +124,7 @@ public final class GraphNode {
     }
   }
 
-  private enum GraphNode2Adapter
-      implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, GraphNode> {
+  private enum GraphNode2Adapter implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, GraphNode> {
     INSTANCE;
 
     @Override
