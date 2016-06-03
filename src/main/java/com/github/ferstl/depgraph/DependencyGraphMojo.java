@@ -96,7 +96,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
       dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions, this.showDuplicates, this.showConflicts));
     }
 
-    dotBuilder.useNodeLabelRenderer(determineNodeLabelRenderer(fullGraph));
+    dotBuilder.useNodeLabelRenderer(determineNodeLabelRenderer());
 
     return dotBuilder;
   }
@@ -115,12 +115,12 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     return this.showConflicts || this.showDuplicates;
   }
 
-  private NodeRenderer<GraphNode> determineNodeLabelRenderer(boolean isFullGraph) {
+  private NodeRenderer<GraphNode> determineNodeLabelRenderer() {
     NodeRenderer<GraphNode> renderer = NodeRenderers.ARTIFACT_ID_LABEL;
 
-    if (this.showGroupIds && this.showVersions && !isFullGraph) {
+    if (this.showGroupIds && this.showVersions) {
       renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_VERSION_LABEL;
-    } else if (this.showVersions && !isFullGraph) {
+    } else if (this.showVersions) {
       renderer = NodeRenderers.ARTIFACT_ID_VERSION_LABEL;
     } else if (this.showGroupIds) {
       renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_LABEL;

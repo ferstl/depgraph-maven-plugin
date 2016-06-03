@@ -40,16 +40,19 @@ class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
     AttributeBuilder builder = new AttributeBuilder();
     NodeResolution resolution = to.getResolution();
 
-    if (this.renderVersions) {
-      builder.label(abbreviateVersion(to.getArtifact().getVersion()));
-    }
-
     if (this.renderDuplicates && resolution == NodeResolution.OMITTED_FOR_DUPLICATE) {
       builder.style("dotted");
     }
 
     if (this.renderConflicts && resolution == NodeResolution.OMITTED_FOR_CONFLICT) {
-      builder.style("dashed").color("red").fontColor("red");
+      builder
+          .style("dashed")
+          .color("red")
+          .fontColor("red");
+
+      if (this.renderVersions) {
+        builder.label(abbreviateVersion(to.getArtifact().getVersion()));
+      }
     }
 
     return builder.toString();
