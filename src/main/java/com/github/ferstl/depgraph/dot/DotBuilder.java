@@ -15,9 +15,10 @@
  */
 package com.github.ferstl.depgraph.dot;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
@@ -33,18 +34,16 @@ public final class DotBuilder<T> {
   private NodeRenderer<? super T> nodeLabelRenderer;
   private EdgeRenderer<? super T> edgeRenderer;
   private boolean omitSelfReferences;
-  private final Set<String> nodeDefinitions;
+  private final Map<String, T> nodeDefinitions;
   private final Set<String> edgeDefinitions;
-  private final Map<String, T> nodeMap;
 
   public DotBuilder() {
     this.nodeLabelRenderer = createDefaultNodeRenderer();
     this.nodeRenderer = createDefaultNodeRenderer();
     this.edgeRenderer = createDefaultEdgeRenderer();
 
-    this.nodeDefinitions = new LinkedHashSet<>();
+    this.nodeDefinitions = new LinkedHashMap<>();
     this.edgeDefinitions = new LinkedHashSet<>();
-    this.nodeMap = new HashMap<>();
   }
 
   public DotBuilder<T> useNodeRenderer(NodeRenderer<? super T> nodeRenderer) {
@@ -95,9 +94,9 @@ public final class DotBuilder<T> {
    * @return The firstly added node or the given node if not present.
    */
   public T getEffectiveNode(T node) {
-    String key = this.nodeRenderer.render(node);
-    if (this.nodeMap.containsKey(key)) {
-      return this.nodeMap.get(key);
+    String key = escape(this.nodeRenderer.render(node));
+    if (this.nodeDefinitions.containsKey(key)) {
+      return this.nodeDefinitions.get(key);
     }
 
     return node;
@@ -110,8 +109,11 @@ public final class DotBuilder<T> {
         .append("\n  edge ").append(new AttributeBuilder().fontName("Helvetica").fontSize(10));
 
     sb.append("\n\n  // Node Definitions:");
-    for (String node : this.nodeDefinitions) {
-      sb.append("\n  ").append(node);
+    for (Entry<String, T> entry : this.nodeDefinitions.entrySet()) {
+      String nodeLabel = this.nodeLabelRenderer.render(entry.getValue());
+      sb.append("\n  ")
+          .append(entry.getKey())
+          .append(new AttributeBuilder().label(nodeLabel));
     }
 
     sb.append("\n\n  // Edge Definitions:");
@@ -124,14 +126,7 @@ public final class DotBuilder<T> {
 
   private void addNode(T node) {
     String nodeName = this.nodeRenderer.render(node);
-    String nodeLabel = this.nodeLabelRenderer.render(node);
-
-    String nodeDefinition = escape(nodeName) + new AttributeBuilder().label(nodeLabel);
-    this.nodeDefinitions.add(nodeDefinition);
-
-    if (!this.nodeMap.containsKey(nodeName)) {
-      this.nodeMap.put(nodeName, node);
-    }
+    this.nodeDefinitions.put(escape(nodeName), node);
   }
 
   private void safelyAddEdge(T fromNode, T toNode) {
