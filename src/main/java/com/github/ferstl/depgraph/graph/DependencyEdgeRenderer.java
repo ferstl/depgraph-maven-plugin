@@ -39,7 +39,7 @@ public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
     NodeResolution resolution = to.getResolution();
 
     if (this.renderDuplicates && resolution == NodeResolution.OMITTED_FOR_DUPLICATE) {
-      builder.style("dotted");
+      builder.style("dashed");
     }
 
     if (this.renderConflicts && resolution == NodeResolution.OMITTED_FOR_CONFLICT) {
