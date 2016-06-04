@@ -48,7 +48,7 @@ public final class DotBuilder<T> {
     this.edgeDefinitions = new LinkedHashSet<>();
   }
 
-  public DotBuilder graphName(String name) {
+  public DotBuilder<T> graphName(String name) {
     this.graphName = name;
     return this;
   }
