@@ -36,6 +36,7 @@ public class SimpleGraphFactory implements GraphFactory {
 
   @Override
   public String createGraph(MavenProject project) {
+    this.dotBuilder.graphName(project.getArtifactId());
     this.graphBuilderAdapter.buildDependencyGraph(project, this.globalFilter, this.dotBuilder);
     return this.dotBuilder.toString();
   }

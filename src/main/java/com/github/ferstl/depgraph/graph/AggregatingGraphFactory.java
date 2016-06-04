@@ -37,7 +37,6 @@ public class AggregatingGraphFactory implements GraphFactory {
   private final boolean includeParentProjects;
 
   public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder, boolean includeParentProjects) {
-
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;
     this.dotBuilder = dotBuilder;
@@ -46,12 +45,13 @@ public class AggregatingGraphFactory implements GraphFactory {
 
   @Override
   public String createGraph(MavenProject parent) {
-    @SuppressWarnings("unchecked") List<MavenProject> collectedProjects = parent.getCollectedProjects();
+    this.dotBuilder.graphName(parent.getArtifactId());
 
     if (this.includeParentProjects) {
       buildModuleTree(parent, this.dotBuilder);
     }
 
+    @SuppressWarnings("unchecked") List<MavenProject> collectedProjects = parent.getCollectedProjects();
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
       if (isPartOfGraph(collectedProject)) {

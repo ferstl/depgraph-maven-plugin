@@ -51,8 +51,15 @@ public class DotBuilderTest {
   @Test
   public void graphStructure() {
     String graph = this.dotBuilder.toString();
-    assertThat(graph, startsWith("digraph G {"));
+    assertThat(graph, startsWith("digraph \"G\" {"));
     assertThat(graph, endsWith("}"));
+  }
+
+  @Test
+  public void graphName() {
+    String graph = this.dotBuilder.graphName("test-graph").toString();
+    assertThat(graph, startsWith("digraph \"test-graph\""));
+
   }
 
   @Test
