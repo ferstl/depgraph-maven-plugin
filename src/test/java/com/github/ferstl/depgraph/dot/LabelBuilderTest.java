@@ -46,6 +46,42 @@ public class LabelBuilderTest {
   }
 
   @Test
+  public void text() {
+    String label = new LabelBuilder()
+        .text("text")
+        .build();
+
+    assertEquals("<text>", label);
+  }
+
+  @Test
+  public void bold() {
+    String label = new LabelBuilder()
+        .bold("text")
+        .build();
+
+    assertEquals("<<b>text</b>>", label);
+  }
+
+  @Test
+  public void italic() {
+    String label = new LabelBuilder()
+        .italic("text")
+        .build();
+
+    assertEquals("<<i>text</i>>", label);
+  }
+
+  @Test
+  public void underline() {
+    String label = new LabelBuilder()
+        .underline("text")
+        .build();
+
+    assertEquals("<<u>text</u>>", label);
+  }
+
+  @Test
   public void fontName() {
     String label = new LabelBuilder()
         .font()
