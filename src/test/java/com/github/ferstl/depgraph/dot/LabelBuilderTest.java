@@ -35,4 +35,13 @@ public class LabelBuilderTest {
         label);
   }
 
+  @Test
+  public void htmlEscape() {
+    String label = new LabelBuilder()
+        .text("<foo>")
+        .underline("&bar&")
+        .build();
+
+    assertEquals("<&lt;foo&gt;<u>&amp;bar&amp;</u>>", label);
+  }
 }

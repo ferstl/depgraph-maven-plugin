@@ -2,6 +2,7 @@ package com.github.ferstl.depgraph.dot;
 
 import java.util.Map;
 import java.util.TreeMap;
+import com.google.common.html.HtmlEscapers;
 
 /**
  * <a href=http://www.graphviz.org/doc/info/shapes.html#html>HTML-like labels</a>.
@@ -11,7 +12,7 @@ public class LabelBuilder {
   private final StringBuilder labelBuilder = new StringBuilder();
 
   public LabelBuilder text(String text) {
-    this.labelBuilder.append(text);
+    this.labelBuilder.append(HtmlEscapers.htmlEscaper().escape(text));
     return this;
   }
 
@@ -53,7 +54,7 @@ public class LabelBuilder {
 
     // text and end tag
     this.labelBuilder
-        .append(text)
+        .append(HtmlEscapers.htmlEscaper().escape(text))
         .append("</").append(tagName).append(">");
   }
 
