@@ -44,4 +44,57 @@ public class LabelBuilderTest {
 
     assertEquals("<&lt;foo&gt;<u>&amp;bar&amp;</u>>", label);
   }
+
+  @Test
+  public void fontName() {
+    String label = new LabelBuilder()
+        .font()
+        .name("Helvetica")
+        .text("text")
+        .build();
+
+    assertEquals("<<font face=\"Helvetica\">text</font>>", label);
+  }
+
+  @Test
+  public void fontSize() {
+    String label = new LabelBuilder()
+        .font()
+        .size(10)
+        .text("text")
+        .build();
+
+    assertEquals("<<font point-size=\"10\">text</font>>", label);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void fontSizeNegative() {
+    new LabelBuilder()
+        .font()
+        .size(-1);
+  }
+
+  @Test
+  public void fontColor() {
+    String label = new LabelBuilder()
+        .font()
+        .color("red")
+        .text("text")
+        .build();
+
+    assertEquals("<<font color=\"red\">text</font>>", label);
+  }
+
+  @Test
+  public void fontAll() {
+    String label = new LabelBuilder()
+        .font()
+        .name("Helvetica")
+        .color("green")
+        .size(12)
+        .text("text")
+        .build();
+
+    assertEquals("<<font color=\"green\" face=\"Helvetica\" point-size=\"12\">text</font>>", label);
+  }
 }
