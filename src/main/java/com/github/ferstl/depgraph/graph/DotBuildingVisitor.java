@@ -20,6 +20,7 @@ import java.util.Deque;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import static com.github.ferstl.depgraph.graph.NodeResolution.OMITTED_FOR_CONFLICT;
 
 
 /**
@@ -70,8 +71,8 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
 
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       if (currentParent != null) {
-        GraphNode effectiveSource = this.dotBuilder.getEffectiveNode(currentParent);
-        GraphNode effectiveTarget = this.dotBuilder.getEffectiveNode(node);
+        GraphNode effectiveSource = getEffectiveNode(currentParent);
+        GraphNode effectiveTarget = getEffectiveNode(node);
         effectiveTarget.addScope(node.getArtifact().getScope());
 
         this.dotBuilder.addEdge(effectiveSource, effectiveTarget);
@@ -83,6 +84,26 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     }
 
     return false;
+  }
+
+  private GraphNode getEffectiveNode(GraphNode node) {
+    GraphNode effectiveNode = this.dotBuilder.getEffectiveNode(node);
+    effectiveNode = handleConflict(effectiveNode, node);
+    return effectiveNode;
+  }
+
+  // In case a conflicting dependency was added to the DotBuilder, we need to exchange it with a non-conflicting
+  // dependency by preserving all collected scopes.
+  private GraphNode handleConflict(GraphNode effectiveNode, GraphNode node) {
+    if (effectiveNode.getResolution() == OMITTED_FOR_CONFLICT && node.getResolution() != OMITTED_FOR_CONFLICT) {
+      for (String scope : effectiveNode.getScopes()) {
+        node.addScope(scope);
+      }
+
+      return node;
+    }
+
+    return effectiveNode;
   }
 
   private boolean leadsToTargetDependency(GraphNode node) {
