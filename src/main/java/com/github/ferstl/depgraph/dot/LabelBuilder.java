@@ -68,6 +68,9 @@ public class LabelBuilder {
     }
 
     public FontBuilder size(int size) {
+      if (size < 0) {
+        throw new IllegalArgumentException("Font size must not be negative");
+      }
       addAttribute("point-size", size);
       return this;
     }
