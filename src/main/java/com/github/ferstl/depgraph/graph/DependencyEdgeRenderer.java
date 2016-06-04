@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.graph;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.EdgeRenderer;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeResolution;
 
 
-class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
+public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
 
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
@@ -29,7 +27,7 @@ class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
   private final boolean renderDuplicates;
   private final boolean renderConflicts;
 
-  DependencyEdgeRenderer(boolean renderVersions, boolean renderDuplicates, boolean renderConflicts) {
+  public DependencyEdgeRenderer(boolean renderVersions, boolean renderDuplicates, boolean renderConflicts) {
     this.renderVersions = renderVersions;
     this.renderDuplicates = renderDuplicates;
     this.renderConflicts = renderConflicts;
