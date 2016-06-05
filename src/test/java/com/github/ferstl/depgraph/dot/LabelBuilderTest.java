@@ -84,6 +84,16 @@ public class LabelBuilderTest {
   }
 
   @Test
+  public void newLine() {
+    String label = new LabelBuilder()
+        .text("text")
+        .newLine()
+        .build();
+
+    assertEquals("<text<br/>>", label);
+  }
+
+  @Test
   public void fontName() {
     String label = new LabelBuilder()
         .font()
