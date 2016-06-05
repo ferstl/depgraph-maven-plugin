@@ -58,7 +58,7 @@ public class LabelBuilder {
         .append("</").append(tagName).append(">");
   }
 
-  class FontBuilder {
+  public class FontBuilder {
 
     private final Map<String, String> attributes = new TreeMap<>();
 
