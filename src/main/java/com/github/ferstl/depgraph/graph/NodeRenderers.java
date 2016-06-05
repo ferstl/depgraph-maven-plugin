@@ -30,7 +30,7 @@ public enum NodeRenderers implements NodeRenderer<GraphNode> {
     }
   },
 
-  SCOPED_GROUP_ID {
+  GROUP_ID_WITH_SCOPE {
 
     @Override
     public String render(GraphNode node) {
