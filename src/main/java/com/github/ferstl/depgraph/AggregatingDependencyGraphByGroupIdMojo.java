@@ -18,7 +18,6 @@ package com.github.ferstl.depgraph;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
@@ -39,22 +38,14 @@ import com.github.ferstl.depgraph.graph.NodeRenderers;
     requiresDependencyCollection = ResolutionScope.TEST,
     requiresDirectInvocation = false,
     threadSafe = true)
-public class AggregatingDependencyGraphByGroupIdMojo extends AbstractGraphMojo {
-
-  /**
-   * Merge dependencies that occur in multiple scopes into one graph node instead of having a node per scope.
-   *
-   * @since 1.0.5
-   */
-  @Parameter(property = "mergeScopes", defaultValue = "false")
-  private boolean mergeScopes;
+public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregatingGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
 
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
-        .useNodeRenderer(NodeRenderers.SCOPED_GROUP_ID)
+        .useNodeRenderer(this.mergeScopes ? NodeRenderers.GROUP_ID : NodeRenderers.SCOPED_GROUP_ID)
         .useNodeLabelRenderer(new DependencyNodeLabelRenderer(true, false, false))
         .omitSelfReferences();
 

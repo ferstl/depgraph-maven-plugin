@@ -22,6 +22,14 @@ import com.google.common.base.Joiner;
 
 public enum NodeRenderers implements NodeRenderer<GraphNode> {
 
+  GROUP_ID {
+
+    @Override
+    public String render(GraphNode node) {
+      return node.getArtifact().getGroupId();
+    }
+  },
+
   SCOPED_GROUP_ID {
 
     @Override
