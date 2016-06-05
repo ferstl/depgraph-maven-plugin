@@ -2,15 +2,14 @@ package com.github.ferstl.depgraph.graph;
 
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
+import com.github.ferstl.depgraph.dot.LabelBuilder;
 import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.google.common.base.Joiner;
-import static java.util.Arrays.asList;
 
 
 public class DependencyNodeLabelRenderer implements NodeRenderer<GraphNode> {
 
   private static final Joiner SLASH_JOINER = Joiner.on("/").skipNulls();
-  private static final Joiner NEWLINE_JOINER = Joiner.on("\n").skipNulls();
 
   private final boolean showGroupId;
   private final boolean showArtifactId;
@@ -25,20 +24,26 @@ public class DependencyNodeLabelRenderer implements NodeRenderer<GraphNode> {
   @Override
   public String render(GraphNode node) {
     Artifact artifact = node.getArtifact();
-    String label = NEWLINE_JOINER.join(asList(
-        this.showGroupId ? artifact.getGroupId() : null,
-        this.showArtifactId ? artifact.getArtifactId() : null,
-        this.showVersion ? artifact.getVersion() : null));
+    String scopes = createScopeString(node.getScopes());
 
-    return toScopedString(label, node.getScopes());
-  }
+    LabelBuilder labelBuilder = new LabelBuilder()
+        .font().size(11).text(this.showGroupId ? artifact.getGroupId() : null)
+        .smartNewLine().text(this.showArtifactId ? artifact.getArtifactId() : null)
+        .smartNewLine().font().size(11).text(this.showVersion ? artifact.getVersion() : null);
 
-  private static String toScopedString(String string, Set<String> scopes) {
-    if (scopes.size() > 1 || !scopes.contains("compile")) {
-      return string + "\n(" + SLASH_JOINER.join(scopes) + ")";
+    if (!scopes.isEmpty()) {
+      labelBuilder.smartNewLine().font().size(11).text(scopes);
     }
 
-    return string;
+    return labelBuilder.build();
+  }
+
+  private static String createScopeString(Set<String> scopes) {
+    if (scopes.size() > 1 || !scopes.contains("compile")) {
+      return "(" + SLASH_JOINER.join(scopes) + ")";
+    }
+
+    return "";
   }
 
 }
