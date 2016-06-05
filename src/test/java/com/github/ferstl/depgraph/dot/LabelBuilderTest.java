@@ -1,7 +1,9 @@
 package com.github.ferstl.depgraph.dot;
 
 import org.junit.Test;
+import static org.hamcrest.Matchers.emptyString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 
 public class LabelBuilderTest {
@@ -132,5 +134,27 @@ public class LabelBuilderTest {
         .build();
 
     assertEquals("<<font color=\"green\" face=\"Helvetica\" point-size=\"12\">text</font>>", label);
+  }
+
+  @Test
+  public void empty() {
+    String label = new LabelBuilder().build();
+
+    assertThat(label, emptyString());
+  }
+
+  @Test
+  public void emptyText() {
+    String label = new LabelBuilder()
+        .text(null)
+        .font()
+        .color("red")
+        .text("")
+        .italic(null)
+        .bold("")
+        .underline(null)
+        .build();
+
+    assertThat(label, emptyString());
   }
 }

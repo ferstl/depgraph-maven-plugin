@@ -2,6 +2,7 @@ package com.github.ferstl.depgraph.dot;
 
 import java.util.Map;
 import java.util.TreeMap;
+import org.apache.commons.lang3.StringUtils;
 import com.google.common.html.HtmlEscapers;
 
 /**
@@ -41,10 +42,18 @@ public class LabelBuilder {
   }
 
   public String build() {
+    if (this.labelBuilder.length() == 0) {
+      return "";
+    }
+
     return "<" + this.labelBuilder + ">";
   }
 
   private void addText(String text, String tagName, String... tagAttributes) {
+    if (StringUtils.isEmpty(text)) {
+      return;
+    }
+
     // tag with attributes
     this.labelBuilder.append("<").append(tagName);
     for (String attribute : tagAttributes) {
@@ -60,6 +69,10 @@ public class LabelBuilder {
   }
 
   private void addText(String text) {
+    if (StringUtils.isEmpty(text)) {
+      return;
+    }
+
     this.labelBuilder.append(HtmlEscapers.htmlEscaper().escape(text));
   }
 
