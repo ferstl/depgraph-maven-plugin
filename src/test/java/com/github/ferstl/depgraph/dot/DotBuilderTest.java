@@ -81,9 +81,8 @@ public class DotBuilderTest {
             .fontName("Courier italic")
             .fontSize(10))
         .toString();
-    System.out.println(graph);
 
-    assertThat(graph, containsString("node [shape=\"polygon\",sides=\"6\"]"));
+    assertThat(graph, containsString("edge [style=\"dotted\",fontname=\"Courier italic\",fontsize=\"10\"]"));
   }
 
   @Test
