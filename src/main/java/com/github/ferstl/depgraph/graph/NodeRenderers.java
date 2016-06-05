@@ -15,23 +15,12 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.google.common.base.Joiner;
 
 
 public enum NodeRenderers implements NodeRenderer<GraphNode> {
-
-  GROUP_ID_LABEL {
-
-    @Override
-    public String render(GraphNode node) {
-      Artifact artifact = node.getArtifact();
-      return toScopedString(artifact.getGroupId(), node.getScopes());
-    }
-
-  },
 
   SCOPED_GROUP_ID {
 
@@ -73,14 +62,4 @@ public enum NodeRenderers implements NodeRenderer<GraphNode> {
   };
 
   private static final Joiner COLON_JOINER = Joiner.on(":").useForNull("");
-  private static final Joiner SLASH_JOINER = Joiner.on("/").useForNull("");
-
-  private static String toScopedString(String string, Set<String> scopes) {
-    if (scopes.size() > 1 || !scopes.contains("compile")) {
-      return string + "\n(" + SLASH_JOINER.join(scopes) + ")";
-    }
-
-    return string;
-  }
-
 }

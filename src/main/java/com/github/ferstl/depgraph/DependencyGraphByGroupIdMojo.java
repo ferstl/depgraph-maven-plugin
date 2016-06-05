@@ -20,6 +20,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.DependencyNodeLabelRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
@@ -50,7 +51,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
         .useNodeRenderer(NodeRenderers.SCOPED_GROUP_ID)
-        .useNodeLabelRenderer(NodeRenderers.GROUP_ID_LABEL)
+        .useNodeLabelRenderer(new DependencyNodeLabelRenderer(true, false, false))
         .omitSelfReferences();
 
     return dotBuilder;
