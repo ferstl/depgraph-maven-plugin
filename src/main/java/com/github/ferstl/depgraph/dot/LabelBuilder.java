@@ -13,31 +13,70 @@ public class LabelBuilder {
   private static final String NEWLINE = "<br/>";
   private final StringBuilder labelBuilder = new StringBuilder();
 
+  /**
+   * Add the given text.
+   *
+   * @param text Text.
+   * @return This builder.
+   */
   public LabelBuilder text(String text) {
     addText(text);
     return this;
   }
 
+  /**
+   * Add italic text.
+   *
+   * @param text Text.
+   * @return This builder.
+   */
   public LabelBuilder italic(String text) {
     addText(text, "i");
     return this;
   }
 
+  /**
+   * Add bold text.
+   *
+   * @param text Text.
+   * @return This builder.
+   */
   public LabelBuilder bold(String text) {
     addText(text, "b");
     return this;
   }
 
+  /**
+   * Add underlined text.
+   *
+   * @param text Text.
+   * @return This builder.
+   */
   public LabelBuilder underline(String text) {
     addText(text, "u");
     return this;
   }
 
+  /**
+   * Add a line break.
+   * 
+   * @return This builder.
+   */
   public LabelBuilder newLine() {
     this.labelBuilder.append(NEWLINE);
     return this;
   }
 
+  /**
+   * Add a line only if:
+   * <ul>
+   * <li>The label is not empty</li>
+   * <li>The label does not already end with a line break</li>
+   * </ul>
+   * .
+   * 
+   * @return This builder.
+   */
   public LabelBuilder smartNewLine() {
     int length = this.labelBuilder.length();
     int nLength = NEWLINE.length();
@@ -49,10 +88,20 @@ public class LabelBuilder {
     return this;
   }
 
+  /**
+   * Configure font options.
+   *
+   * @return A builder to configure font options.
+   */
   public FontBuilder font() {
     return new FontBuilder();
   }
 
+  /**
+   * Builds the label.
+   *
+   * @return The label.
+   */
   public String build() {
     if (this.labelBuilder.length() == 0) {
       return "";
@@ -92,11 +141,23 @@ public class LabelBuilder {
 
     private final Map<String, String> attributes = new TreeMap<>();
 
+    /**
+     * Set the font color.
+     *
+     * @param color Color.
+     * @return This builder.
+     */
     public FontBuilder color(String color) {
       addAttribute("color", color);
       return this;
     }
 
+    /**
+     * Set the font size.
+     *
+     * @param size Size.
+     * @return This builder.
+     */
     public FontBuilder size(int size) {
       if (size < 0) {
         throw new IllegalArgumentException("Font size must not be negative");
@@ -105,11 +166,23 @@ public class LabelBuilder {
       return this;
     }
 
+    /**
+     * Set the font name.
+     *
+     * @param font Font name.
+     * @return This builder.
+     */
     public FontBuilder name(String font) {
       addAttribute("face", font);
       return this;
     }
 
+    /**
+     * Add the given text.
+     *
+     * @param text Text.
+     * @return The encapsulating label builder.
+     */
     public LabelBuilder text(String text) {
       LabelBuilder.this.addText(text, "font", this.attributes.values().toArray(new String[0]));
       return LabelBuilder.this;
