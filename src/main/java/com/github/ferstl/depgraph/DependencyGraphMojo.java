@@ -81,13 +81,13 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-    DotBuilder<GraphNode> dotBuilder = createGraphBuilder();
+    DotBuilder<GraphNode> dotBuilder = createDotBuilder();
     GraphBuilderAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
-  private DotBuilder<GraphNode> createGraphBuilder() {
+  private DotBuilder<GraphNode> createDotBuilder() {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<GraphNode>()
         .useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
 
