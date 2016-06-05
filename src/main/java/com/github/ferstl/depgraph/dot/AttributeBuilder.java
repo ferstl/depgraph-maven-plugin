@@ -18,6 +18,7 @@ package com.github.ferstl.depgraph.dot;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.apache.commons.lang3.StringUtils;
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 
@@ -30,6 +31,11 @@ public class AttributeBuilder {
   }
 
   public AttributeBuilder label(String label) {
+    if (StringUtils.startsWith(label, "<") && StringUtils.endsWith(label, ">")) {
+      this.attributes.put("label", label);
+      return this;
+    }
+
     return addAttribute("label", label);
   }
 

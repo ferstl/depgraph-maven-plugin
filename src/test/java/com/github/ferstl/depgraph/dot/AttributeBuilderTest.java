@@ -35,6 +35,12 @@ public class AttributeBuilderTest {
   }
 
   @Test
+  public void htmlLabel() {
+    String label = new AttributeBuilder().label("<<b>text1\ntext2</b><font point-size=\"10\">text3</font>>").toString();
+    assertEquals("[label=<<b>text1\ntext2</b><font point-size=\"10\">text3</font>>]", label);
+  }
+
+  @Test
   public void fontName() {
     assertEquals("[fontname=\"Helvetica\"]", new AttributeBuilder().fontName("Helvetica").toString());
   }
