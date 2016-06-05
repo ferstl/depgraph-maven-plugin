@@ -94,6 +94,30 @@ public class LabelBuilderTest {
   }
 
   @Test
+  public void smartNewLineAtBeginning() {
+    String label = new LabelBuilder()
+        .smartNewLine()
+        .text("text")
+        .smartNewLine()
+        .build();
+
+    assertEquals("<text<br/>>", label);
+  }
+
+  @Test
+  public void smartNewLineWithinText() {
+    String label = new LabelBuilder()
+        .text("text1")
+        .smartNewLine()
+        .smartNewLine()
+        .text("text2")
+        .smartNewLine()
+        .build();
+
+    assertEquals("<text1<br/>text2<br/>>", label);
+  }
+
+  @Test
   public void fontName() {
     String label = new LabelBuilder()
         .font()

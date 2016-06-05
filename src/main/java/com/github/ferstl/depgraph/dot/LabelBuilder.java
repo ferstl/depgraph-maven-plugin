@@ -10,6 +10,7 @@ import com.google.common.html.HtmlEscapers;
  */
 public class LabelBuilder {
 
+  private static final String NEWLINE = "<br/>";
   private final StringBuilder labelBuilder = new StringBuilder();
 
   public LabelBuilder text(String text) {
@@ -33,7 +34,18 @@ public class LabelBuilder {
   }
 
   public LabelBuilder newLine() {
-    this.labelBuilder.append("<br/>");
+    this.labelBuilder.append(NEWLINE);
+    return this;
+  }
+
+  public LabelBuilder smartNewLine() {
+    int length = this.labelBuilder.length();
+    int nLength = NEWLINE.length();
+
+    if ((length > 0 && length < nLength) || (length >= nLength && !NEWLINE.equals(this.labelBuilder.substring(length - nLength, length)))) {
+      return newLine();
+    }
+
     return this;
   }
 
