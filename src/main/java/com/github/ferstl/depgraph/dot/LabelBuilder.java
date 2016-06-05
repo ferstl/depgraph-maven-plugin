@@ -12,7 +12,7 @@ public class LabelBuilder {
   private final StringBuilder labelBuilder = new StringBuilder();
 
   public LabelBuilder text(String text) {
-    this.labelBuilder.append(HtmlEscapers.htmlEscaper().escape(text));
+    addText(text);
     return this;
   }
 
@@ -52,10 +52,15 @@ public class LabelBuilder {
     }
     this.labelBuilder.append(">");
 
-    // text and end tag
-    this.labelBuilder
-        .append(HtmlEscapers.htmlEscaper().escape(text))
-        .append("</").append(tagName).append(">");
+    // text
+    addText(text);
+
+    // end tag
+    this.labelBuilder.append("</").append(tagName).append(">");
+  }
+
+  private void addText(String text) {
+    this.labelBuilder.append(HtmlEscapers.htmlEscaper().escape(text));
   }
 
   public class FontBuilder {
