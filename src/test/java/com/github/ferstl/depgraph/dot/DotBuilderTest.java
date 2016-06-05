@@ -23,6 +23,7 @@ import com.github.ferstl.depgraph.graph.GraphNode;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodes;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
@@ -59,7 +60,30 @@ public class DotBuilderTest {
   public void graphName() {
     String graph = this.dotBuilder.graphName("test-graph").toString();
     assertThat(graph, startsWith("digraph \"test-graph\""));
+  }
 
+  @Test
+  public void nodeStyle() {
+    String graph = this.dotBuilder
+        .nodeStyle(new AttributeBuilder()
+            .shape("polygon")
+            .addAttribute("sides", "6"))
+        .toString();
+
+    assertThat(graph, containsString("node [shape=\"polygon\",sides=\"6\"]"));
+  }
+
+  @Test
+  public void edgeStyle() {
+    String graph = this.dotBuilder
+        .edgeStyle(new AttributeBuilder()
+            .style("dotted")
+            .fontName("Courier italic")
+            .fontSize(10))
+        .toString();
+    System.out.println(graph);
+
+    assertThat(graph, containsString("node [shape=\"polygon\",sides=\"6\"]"));
   }
 
   @Test

@@ -31,6 +31,8 @@ import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 public final class DotBuilder<T> {
 
   private String graphName;
+  private AttributeBuilder nodeAttributeBuilder;
+  private AttributeBuilder edgeAttributeBuilder;
   private NodeRenderer<? super T> nodeRenderer;
   private NodeRenderer<? super T> nodeLabelRenderer;
   private EdgeRenderer<? super T> edgeRenderer;
@@ -40,6 +42,8 @@ public final class DotBuilder<T> {
 
   public DotBuilder() {
     this.graphName = "G";
+    this.nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
+    this.edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
     this.nodeLabelRenderer = createDefaultNodeRenderer();
     this.nodeRenderer = createDefaultNodeRenderer();
     this.edgeRenderer = createDefaultEdgeRenderer();
@@ -50,6 +54,16 @@ public final class DotBuilder<T> {
 
   public DotBuilder<T> graphName(String name) {
     this.graphName = name;
+    return this;
+  }
+
+  public DotBuilder<T> nodeStyle(AttributeBuilder attributeBuilder) {
+    this.nodeAttributeBuilder = attributeBuilder;
+    return this;
+  }
+
+  public DotBuilder<T> edgeStyle(AttributeBuilder attributeBuilder) {
+    this.edgeAttributeBuilder = attributeBuilder;
     return this;
   }
 
@@ -112,8 +126,8 @@ public final class DotBuilder<T> {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder("digraph ").append(escape(this.graphName)).append(" {")
-        .append("\n  node ").append(new AttributeBuilder().shape("box").fontName("Helvetica"))
-        .append("\n  edge ").append(new AttributeBuilder().fontName("Helvetica").fontSize(10));
+        .append("\n  node ").append(this.nodeAttributeBuilder)
+        .append("\n  edge ").append(this.edgeAttributeBuilder);
 
     sb.append("\n\n  // Node Definitions:");
     for (Entry<String, T> entry : this.nodeDefinitions.entrySet()) {
