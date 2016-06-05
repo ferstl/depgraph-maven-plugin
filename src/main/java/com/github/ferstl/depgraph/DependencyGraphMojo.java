@@ -21,8 +21,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.github.ferstl.depgraph.graph.DependencyEdgeRenderer;
+import com.github.ferstl.depgraph.graph.DependencyNodeLabelRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
@@ -97,7 +97,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
       dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions, this.showDuplicates, this.showConflicts));
     }
 
-    dotBuilder.useNodeLabelRenderer(determineNodeLabelRenderer());
+    dotBuilder.useNodeLabelRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions));
 
     return dotBuilder;
   }
@@ -114,19 +114,5 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   private boolean requiresFullGraph() {
     return this.showConflicts || this.showDuplicates;
-  }
-
-  private NodeRenderer<GraphNode> determineNodeLabelRenderer() {
-    NodeRenderer<GraphNode> renderer = NodeRenderers.ARTIFACT_ID_LABEL;
-
-    if (this.showGroupIds && this.showVersions) {
-      renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_VERSION_LABEL;
-    } else if (this.showVersions) {
-      renderer = NodeRenderers.ARTIFACT_ID_VERSION_LABEL;
-    } else if (this.showGroupIds) {
-      renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_LABEL;
-    }
-
-    return renderer;
   }
 }

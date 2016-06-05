@@ -23,6 +23,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.graph.DependencyNodeLabelRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
@@ -77,7 +78,7 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
-    dotBuilder.useNodeLabelRenderer(determineNodeLabelRenderer());
+    dotBuilder.useNodeLabelRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions));
     if (this.mergeScopes) {
       dotBuilder.useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
     } else {
@@ -86,19 +87,5 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, this.includeParentProjects);
-  }
-
-  private NodeRenderer<GraphNode> determineNodeLabelRenderer() {
-    NodeRenderer<GraphNode> renderer = NodeRenderers.ARTIFACT_ID_LABEL;
-
-    if (this.showGroupIds && this.showVersions) {
-      renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_VERSION_LABEL;
-    } else if (this.showVersions) {
-      renderer = NodeRenderers.ARTIFACT_ID_VERSION_LABEL;
-    } else if (this.showGroupIds) {
-      renderer = NodeRenderers.GROUP_ID_ARTIFACT_ID_LABEL;
-    }
-
-    return renderer;
   }
 }

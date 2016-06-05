@@ -22,50 +22,6 @@ import com.google.common.base.Joiner;
 
 
 public enum NodeRenderers implements NodeRenderer<GraphNode> {
-  ARTIFACT_ID_LABEL {
-
-    @Override
-    public String render(GraphNode node) {
-      Artifact artifact = node.getArtifact();
-      return toScopedString(artifact.getArtifactId(), node.getScopes());
-    }
-  },
-
-  ARTIFACT_ID_VERSION_LABEL {
-
-    @Override
-    public String render(GraphNode node) {
-      Artifact artifact = node.getArtifact();
-      String artifactLabel = artifact.getArtifactId() + "\n" + artifact.getVersion();
-
-      return toScopedString(artifactLabel, node.getScopes());
-    }
-
-  },
-
-  GROUP_ID_ARTIFACT_ID_LABEL {
-
-    @Override
-    public String render(GraphNode node) {
-      Artifact artifact = node.getArtifact();
-      String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId();
-
-      return toScopedString(artifactLabel, node.getScopes());
-    }
-
-  },
-
-  GROUP_ID_ARTIFACT_ID_VERSION_LABEL {
-
-    @Override
-    public String render(GraphNode node) {
-      Artifact artifact = node.getArtifact();
-      String artifactLabel = artifact.getGroupId() + "\n" + artifact.getArtifactId() + "\n" + artifact.getVersion();
-
-      return toScopedString(artifactLabel, node.getScopes());
-    }
-
-  },
 
   GROUP_ID_LABEL {
 
