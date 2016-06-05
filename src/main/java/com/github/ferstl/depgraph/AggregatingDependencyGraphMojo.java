@@ -39,7 +39,7 @@ import com.github.ferstl.depgraph.graph.NodeRenderers;
     requiresDependencyCollection = ResolutionScope.TEST,
     requiresDirectInvocation = false,
     threadSafe = true)
-public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
+public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo {
 
   /**
    * If set to {@code true}, the created graph will show the {@code groupId} on all artifacts.
@@ -65,14 +65,6 @@ public class AggregatingDependencyGraphMojo extends AbstractGraphMojo {
    */
   @Parameter(property = "includeParentProjects", defaultValue = "false")
   private boolean includeParentProjects;
-
-  /**
-   * Merge dependencies that occur in multiple scopes into one graph node instead of having a node per scope.
-   *
-   * @since 1.0.5
-   */
-  @Parameter(property = "mergeScopes", defaultValue = "false")
-  private boolean mergeScopes;
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
