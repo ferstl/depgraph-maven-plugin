@@ -45,7 +45,6 @@ public class StyleConfiguration {
   static class NodeConfiguration {
 
     AbstractNode shape = new Polygon();
-    int sides = 4;
     String color = "red";
     Font font = new Font();
   }
