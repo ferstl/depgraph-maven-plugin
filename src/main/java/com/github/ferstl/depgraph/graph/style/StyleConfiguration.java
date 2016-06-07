@@ -2,6 +2,7 @@ package com.github.ferstl.depgraph.graph.style;
 
 import java.io.IOException;
 import java.util.Map;
+import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.FieldNamingPolicy;
@@ -42,28 +43,64 @@ public class StyleConfiguration {
     System.out.println(gson.toJson(new StyleConfiguration()));
   }
 
-  static class NodeConfiguration {
+  static class NodeConfiguration implements GlobalConfigurer, SingleConfigurer {
 
     AbstractNode shape = new Polygon();
     String color = "red";
     Font font = new Font();
+
+    @Override
+    public void configure(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void configureGlobally(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+
+    }
   }
 
-  static class EdgeConfiguration {
+  static class EdgeConfiguration implements GlobalConfigurer, SingleConfigurer {
 
     String style = "dotted";
     String color = "black";
     Font font = new Font();
+
+    @Override
+    public void configure(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void configureGlobally(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+
+    }
   }
 
-  static class Font {
+  static class Font implements GlobalConfigurer, SingleConfigurer {
 
     String color = "black";
     int size = 14;
     String name = "Helvetica";
+
+    @Override
+    public void configure(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void configureGlobally(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+
+    }
   }
 
-  abstract static class AbstractNode {
+  abstract static class AbstractNode implements GlobalConfigurer, SingleConfigurer {
 
     final String type;
     String color = "black";
@@ -72,6 +109,18 @@ public class StyleConfiguration {
 
     AbstractNode(String type) {
       this.type = type;
+    }
+
+    @Override
+    public void configureGlobally(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void configure(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+
     }
 
   }
@@ -84,12 +133,36 @@ public class StyleConfiguration {
     Polygon() {
       super("polygon");
     }
+
+    @Override
+    public void configureGlobally(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+      super.configureGlobally(builder);
+    }
+
+    @Override
+    public void configure(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+      super.configure(builder);
+    }
   }
 
   static class Ellipse extends AbstractNode {
 
     Ellipse() {
       super("ellipse");
+    }
+
+    @Override
+    public void configureGlobally(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+      super.configureGlobally(builder);
+    }
+
+    @Override
+    public void configure(AttributeBuilder builder) {
+      // TODO Auto-generated method stub
+      super.configure(builder);
     }
   }
 }
