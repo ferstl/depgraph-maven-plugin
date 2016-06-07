@@ -1,10 +1,14 @@
 package com.github.ferstl.depgraph.graph;
 
+import java.io.IOException;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 public class StyleConfiguration {
 
@@ -17,9 +21,23 @@ public class StyleConfiguration {
   public static void main(String[] args) {
     Gson gson = new GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
+        .enableComplexMapKeySerialization()
+        .registerTypeAdapter(NodeResolution.class, new TypeAdapter<NodeResolution>() {
+
+          @Override
+          public void write(JsonWriter out, NodeResolution value) throws IOException {
+            out.value(value.name().replace('_', '-').toLowerCase());
+          }
+
+          @Override
+          public NodeResolution read(JsonReader in) throws IOException {
+            String value = in.nextString();
+            return NodeResolution.valueOf(value.replace('-', '_').toUpperCase());
+          }
+        })
         .setPrettyPrinting()
         .create();
-    
+
     System.out.println(gson.toJson(new StyleConfiguration()));
   }
 
