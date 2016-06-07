@@ -2,6 +2,9 @@ package com.github.ferstl.depgraph.graph;
 
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class StyleConfiguration {
 
@@ -10,6 +13,15 @@ public class StyleConfiguration {
   Map<String, NodeConfiguration> scopedNodes = ImmutableMap.of("compile", new NodeConfiguration(), "test", new NodeConfiguration());
   Map<NodeResolution, EdgeConfiguration> edgeTypes = ImmutableMap.of(NodeResolution.INCLUDED, new EdgeConfiguration(), NodeResolution.OMITTED_FOR_DUPLICATE, new EdgeConfiguration());
 
+
+  public static void main(String[] args) {
+    Gson gson = new GsonBuilder()
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
+        .setPrettyPrinting()
+        .create();
+    
+    System.out.println(gson.toJson(new StyleConfiguration()));
+  }
 
   static class NodeConfiguration {
 
