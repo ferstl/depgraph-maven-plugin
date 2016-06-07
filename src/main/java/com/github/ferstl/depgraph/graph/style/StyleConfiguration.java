@@ -3,6 +3,7 @@ package com.github.ferstl.depgraph.graph.style;
 import java.io.IOException;
 import java.util.Map;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
+import com.github.ferstl.depgraph.dot.LabelBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.FieldNamingPolicy;
@@ -51,14 +52,14 @@ public class StyleConfiguration {
 
     @Override
     public void configure(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
-
+      builder.color(this.color);
+      this.font.configure(builder);
     }
 
     @Override
     public void configureGlobally(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
-
+      builder.color(this.color);
+      this.font.configureGlobally(builder);
     }
   }
 
@@ -70,14 +71,20 @@ public class StyleConfiguration {
 
     @Override
     public void configure(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
+      builder
+          .style(this.style)
+          .color(this.color);
 
+      this.font.configure(builder);
     }
 
     @Override
     public void configureGlobally(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
+      builder
+          .style(this.style)
+          .color(this.color);
 
+      this.font.configureGlobally(builder);
     }
   }
 
@@ -89,14 +96,16 @@ public class StyleConfiguration {
 
     @Override
     public void configure(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
-
+      new LabelBuilder().font().color(this.color).size(this.size).name(this.name);
+      // FUCK!!!!
     }
 
     @Override
     public void configureGlobally(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
-
+      builder
+          .color(this.color)
+          .fontSize(this.size)
+          .fontName(this.name);
     }
   }
 
@@ -113,13 +122,11 @@ public class StyleConfiguration {
 
     @Override
     public void configureGlobally(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
 
     }
 
     @Override
     public void configure(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
 
     }
 
@@ -136,13 +143,11 @@ public class StyleConfiguration {
 
     @Override
     public void configureGlobally(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
       super.configureGlobally(builder);
     }
 
     @Override
     public void configure(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
       super.configure(builder);
     }
   }
@@ -155,13 +160,11 @@ public class StyleConfiguration {
 
     @Override
     public void configureGlobally(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
       super.configureGlobally(builder);
     }
 
     @Override
     public void configure(AttributeBuilder builder) {
-      // TODO Auto-generated method stub
       super.configure(builder);
     }
   }
