@@ -1,7 +1,8 @@
-package com.github.ferstl.depgraph.graph;
+package com.github.ferstl.depgraph.graph.style;
 
 import java.io.IOException;
 import java.util.Map;
+import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
