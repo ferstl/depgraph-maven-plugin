@@ -43,7 +43,7 @@ public class StyleConfiguration {
 
   static class NodeConfiguration {
 
-    String shape = "polygon";
+    AbstractNode shape = new Polygon();
     int sides = 4;
     String color = "red";
     Font font = new Font();
@@ -61,5 +61,35 @@ public class StyleConfiguration {
     String color = "black";
     int size = 14;
     String name = "Helvetica";
+  }
+
+  abstract static class AbstractNode {
+
+    final String type;
+    String color = "black";
+    String style = "rounded";
+    Font font = new Font();
+
+    AbstractNode(String type) {
+      this.type = type;
+    }
+
+  }
+
+  static class Polygon extends AbstractNode {
+
+    int sides = 4;
+
+
+    Polygon() {
+      super("polygon");
+    }
+  }
+
+  static class Ellipse extends AbstractNode {
+
+    Ellipse() {
+      super("ellipse");
+    }
   }
 }
