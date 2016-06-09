@@ -44,32 +44,29 @@ public class StyleConfiguration {
     System.out.println(gson.toJson(new StyleConfiguration()));
   }
 
-  static class NodeConfiguration implements GlobalConfigurer, SingleConfigurer {
+  static class NodeConfiguration {
 
     AbstractNode shape = new Polygon();
     String color = "red";
     Font font = new Font();
 
-    @Override
     public void configure(AttributeBuilder builder) {
       builder.color(this.color);
       this.font.configure(builder);
     }
 
-    @Override
     public void configureGlobally(AttributeBuilder builder) {
       builder.color(this.color);
       this.font.configureGlobally(builder);
     }
   }
 
-  static class EdgeConfiguration implements GlobalConfigurer, SingleConfigurer {
+  static class EdgeConfiguration {
 
     String style = "dotted";
     String color = "black";
     Font font = new Font();
 
-    @Override
     public void configure(AttributeBuilder builder) {
       builder
           .style(this.style)
@@ -78,7 +75,6 @@ public class StyleConfiguration {
       this.font.configure(builder);
     }
 
-    @Override
     public void configureGlobally(AttributeBuilder builder) {
       builder
           .style(this.style)
@@ -88,19 +84,17 @@ public class StyleConfiguration {
     }
   }
 
-  static class Font implements GlobalConfigurer, SingleConfigurer {
+  static class Font {
 
     String color = "black";
     int size = 14;
     String name = "Helvetica";
 
-    @Override
     public void configure(AttributeBuilder builder) {
       new LabelBuilder().font().color(this.color).size(this.size).name(this.name);
       // FUCK!!!!
     }
 
-    @Override
     public void configureGlobally(AttributeBuilder builder) {
       builder
           .color(this.color)
@@ -109,7 +103,7 @@ public class StyleConfiguration {
     }
   }
 
-  abstract static class AbstractNode implements GlobalConfigurer, SingleConfigurer {
+  abstract static class AbstractNode {
 
     final String type;
     String color = "black";
@@ -120,12 +114,10 @@ public class StyleConfiguration {
       this.type = type;
     }
 
-    @Override
     public void configureGlobally(AttributeBuilder builder) {
 
     }
 
-    @Override
     public void configure(AttributeBuilder builder) {
 
     }
