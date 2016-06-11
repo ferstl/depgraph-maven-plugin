@@ -109,6 +109,10 @@ public class StyleConfiguration {
     String color = "black";
     String style = "rounded";
     Font defaultFont = new Font();
+    Font groupIdFont = this.defaultFont;
+    Font artifactIdFont = this.defaultFont;
+    Font versionFont = this.defaultFont;
+    Font scopeFont = this.defaultFont;
 
     AbstractNode(String type) {
       this.type = type;
