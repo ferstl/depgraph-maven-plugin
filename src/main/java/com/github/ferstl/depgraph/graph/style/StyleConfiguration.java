@@ -110,9 +110,9 @@ public class StyleConfiguration {
     String style = "rounded";
     Font defaultFont = new Font();
     Font groupIdFont = this.defaultFont;
-    Font artifactIdFont = this.defaultFont;
-    Font versionFont = this.defaultFont;
-    Font scopeFont = this.defaultFont;
+    Font artifactIdFont;
+    Font versionFont;
+    Font scopeFont;
 
     AbstractNode(String type) {
       this.type = type;
