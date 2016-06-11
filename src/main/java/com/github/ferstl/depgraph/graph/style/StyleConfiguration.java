@@ -118,7 +118,7 @@ public class StyleConfiguration {
       this.type = type;
     }
 
-    public void configureGlobally(AttributeBuilder builder) {
+    public final void configureGlobally(AttributeBuilder builder) {
       builder.shape(this.type)
           .style(this.style)
           .color(this.color)
@@ -143,11 +143,6 @@ public class StyleConfiguration {
     }
 
     @Override
-    public void configureGlobally(AttributeBuilder builder) {
-      super.configureGlobally(builder);
-    }
-
-    @Override
     public void configure(AttributeBuilder builder) {
       super.configure(builder);
     }
@@ -157,11 +152,6 @@ public class StyleConfiguration {
 
     Ellipse() {
       super("ellipse");
-    }
-
-    @Override
-    public void configureGlobally(AttributeBuilder builder) {
-      super.configureGlobally(builder);
     }
 
     @Override
