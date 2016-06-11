@@ -119,7 +119,12 @@ public class StyleConfiguration {
     }
 
     public void configureGlobally(AttributeBuilder builder) {
-
+      builder.shape(this.type)
+          .style(this.style)
+          .color(this.color)
+          .fontName(this.defaultFont.name)
+          .fontSize(this.defaultFont.size)
+          .fontColor(this.defaultFont.color);
     }
 
     public void configure(AttributeBuilder builder) {
