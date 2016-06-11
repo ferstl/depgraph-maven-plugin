@@ -108,7 +108,7 @@ public class StyleConfiguration {
     final String type;
     String color = "black";
     String style = "rounded";
-    Font font = new Font();
+    Font defaultFont = new Font();
 
     AbstractNode(String type) {
       this.type = type;
