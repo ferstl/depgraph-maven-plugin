@@ -3,7 +3,6 @@ package com.github.ferstl.depgraph.graph.style;
 import java.io.IOException;
 import java.util.Map;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
-import com.github.ferstl.depgraph.dot.LabelBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.FieldNamingPolicy;
@@ -50,11 +49,6 @@ public class StyleConfiguration {
     String color = "red";
     Font font = new Font();
 
-    public void configure(AttributeBuilder builder) {
-      builder.color(this.color);
-      this.font.configure(builder);
-    }
-
     public void configureGlobally(AttributeBuilder builder) {
       builder.color(this.color);
       this.font.configureGlobally(builder);
@@ -66,14 +60,6 @@ public class StyleConfiguration {
     String style = "dotted";
     String color = "black";
     Font font = new Font();
-
-    public void configure(AttributeBuilder builder) {
-      builder
-          .style(this.style)
-          .color(this.color);
-
-      this.font.configure(builder);
-    }
 
     public void configureGlobally(AttributeBuilder builder) {
       builder
@@ -89,11 +75,6 @@ public class StyleConfiguration {
     String color = "black";
     int size = 14;
     String name = "Helvetica";
-
-    public void configure(AttributeBuilder builder) {
-      new LabelBuilder().font().color(this.color).size(this.size).name(this.name);
-      // FUCK!!!!
-    }
 
     public void configureGlobally(AttributeBuilder builder) {
       builder
@@ -127,10 +108,6 @@ public class StyleConfiguration {
           .fontColor(this.defaultFont.color);
     }
 
-    public void configure(AttributeBuilder builder) {
-
-    }
-
   }
 
   static class Polygon extends AbstractNode {
@@ -142,21 +119,12 @@ public class StyleConfiguration {
       super("polygon");
     }
 
-    @Override
-    public void configure(AttributeBuilder builder) {
-      super.configure(builder);
-    }
   }
 
   static class Ellipse extends AbstractNode {
 
     Ellipse() {
       super("ellipse");
-    }
-
-    @Override
-    public void configure(AttributeBuilder builder) {
-      super.configure(builder);
     }
   }
 }
