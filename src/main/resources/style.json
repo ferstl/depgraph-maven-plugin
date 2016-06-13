@@ -1,0 +1,16 @@
+{
+  "default-node": {
+    "type": "box",
+    "style": "rounded",
+    "default-font": {
+      "size": 14,
+      "name": "Helvetica"
+    },
+    "group-id-font": {
+      "size": 12
+    },
+    "scope-font": {
+      "size": 12
+    }
+  }
+}
