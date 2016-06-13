@@ -24,9 +24,9 @@ import com.google.gson.stream.JsonWriter;
 public class StyleConfiguration {
 
   AbstractNode defaultNode;
-  EdgeConfiguration defaultEdge = new EdgeConfiguration();
+  Edge defaultEdge = new Edge();
   Map<String, ? extends AbstractNode> scopedNodes = ImmutableMap.of("compile", new Box(), "test", new Box());
-  Map<NodeResolution, EdgeConfiguration> edgeTypes = ImmutableMap.of(NodeResolution.INCLUDED, new EdgeConfiguration(), NodeResolution.OMITTED_FOR_DUPLICATE, new EdgeConfiguration());
+  Map<NodeResolution, Edge> edgeTypes = ImmutableMap.of(NodeResolution.INCLUDED, new Edge(), NodeResolution.OMITTED_FOR_DUPLICATE, new Edge());
 
   public StyleConfiguration() {
     this.defaultNode = new Box();
@@ -107,7 +107,7 @@ public class StyleConfiguration {
     }
   }
 
-  static class EdgeConfiguration {
+  static class Edge {
 
     String style = "dotted";
     String color = "black";
