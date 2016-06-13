@@ -123,9 +123,9 @@ public class StyleConfiguration {
 
   static class Font {
 
-    String color = "black";
-    int size = 14;
-    String name = "Helvetica";
+    String color;
+    int size;
+    String name;
 
     public void configureGlobally(AttributeBuilder builder) {
       builder
