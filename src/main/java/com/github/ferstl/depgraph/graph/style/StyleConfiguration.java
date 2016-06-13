@@ -34,11 +34,15 @@ public class StyleConfiguration {
     this.defaultNode.defaultFont = new Font();
     this.defaultNode.defaultFont.name = "Helvetica";
     this.defaultNode.defaultFont.size = 14;
-
     this.defaultNode.groupIdFont = new Font();
     this.defaultNode.groupIdFont.size = 12;
     this.defaultNode.scopeFont = new Font();
     this.defaultNode.scopeFont.size = 12;
+
+    this.defaultEdge = new Edge();
+    this.defaultEdge.font = new Font();
+    this.defaultEdge.font.name = "Helvetica";
+    this.defaultEdge.font.size = 10;
   }
 
   public static void main(String[] args) {
@@ -109,9 +113,9 @@ public class StyleConfiguration {
 
   static class Edge {
 
-    String style = "dotted";
-    String color = "black";
-    Font font = new Font();
+    String style;
+    String color;
+    Font font;
 
     public void configureGlobally(AttributeBuilder builder) {
       builder
