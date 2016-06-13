@@ -56,6 +56,8 @@ public class StyleConfiguration {
             }
 
             switch (type.getAsString()) {
+              case "box":
+                return context.deserialize(json, Box.class);
               case "polygon":
                 return context.deserialize(json, Polygon.class);
               case "ellipse":
@@ -69,7 +71,9 @@ public class StyleConfiguration {
 
           @Override
           public JsonElement serialize(AbstractNode src, Type typeOfSrc, JsonSerializationContext context) {
-            if (src instanceof Polygon) {
+            if (src instanceof Box) {
+              return context.serialize(src, Box.class);
+            } else if (src instanceof Polygon) {
               return context.serialize(src, Polygon.class);
             } else if (src instanceof Ellipse) {
               return context.serialize(src, Ellipse.class);
@@ -158,10 +162,16 @@ public class StyleConfiguration {
 
   }
 
+  static class Box extends AbstractNode {
+
+    Box() {
+      super("box");
+    }
+  }
+
   static class Polygon extends AbstractNode {
 
     int sides = 4;
-
 
     Polygon() {
       super("polygon");
