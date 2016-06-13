@@ -28,6 +28,18 @@ public class StyleConfiguration {
   Map<String, NodeConfiguration> scopedNodes = ImmutableMap.of("compile", new NodeConfiguration(), "test", new NodeConfiguration());
   Map<NodeResolution, EdgeConfiguration> edgeTypes = ImmutableMap.of(NodeResolution.INCLUDED, new EdgeConfiguration(), NodeResolution.OMITTED_FOR_DUPLICATE, new EdgeConfiguration());
 
+  public StyleConfiguration() {
+    this.defaultNode = new NodeConfiguration();
+    this.defaultNode.shape = new Box();
+    this.defaultNode.font = new Font();
+    this.defaultNode.font.name = "Helvetica";
+    this.defaultNode.font.size = 14;
+
+    this.defaultNode.shape.groupIdFont = new Font();
+    this.defaultNode.shape.groupIdFont.size = 12;
+    this.defaultNode.shape.scopeFont = new Font();
+    this.defaultNode.shape.scopeFont.size = 12;
+  }
 
   public static void main(String[] args) {
     Gson gson = new GsonBuilder()
@@ -95,6 +107,7 @@ public class StyleConfiguration {
     }
   }
 
+
   static class NodeConfiguration {
 
     AbstractNode shape = new Polygon();
@@ -102,8 +115,8 @@ public class StyleConfiguration {
     Font font = new Font();
 
     public void configureGlobally(AttributeBuilder builder) {
-      builder.color(this.color);
-      this.font.configureGlobally(builder);
+      builder.color(this.shape.color);
+      this.shape.defaultFont.configureGlobally(builder);
     }
   }
 
