@@ -1,6 +1,9 @@
 package com.github.ferstl.depgraph.graph.style;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.Map;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
@@ -8,6 +11,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -37,10 +44,36 @@ public class StyleConfiguration {
             return NodeResolution.valueOf(value.replace('-', '_').toUpperCase());
           }
         })
+        .registerTypeAdapter(AbstractNode.class, new JsonDeserializer<AbstractNode>() {
+
+          @Override
+          public AbstractNode deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            JsonElement type = json.getAsJsonObject().get("type");
+            if (type == null) {
+              throw new NullPointerException("Undefined shape type");
+            }
+
+            switch (type.getAsString()) {
+              case "polygon":
+                return context.deserialize(json, Polygon.class);
+              case "ellipse":
+                return context.deserialize(json, Ellipse.class);
+              default:
+                throw new IllegalArgumentException("Unknown shape type: " + type.getAsString());
+            }
+          }
+        })
         .setPrettyPrinting()
         .create();
 
     System.out.println(gson.toJson(new StyleConfiguration()));
+
+    try (InputStream is = ClassLoader.getSystemResourceAsStream("style.json")) {
+      StyleConfiguration config = gson.fromJson(new InputStreamReader(is), StyleConfiguration.class);
+      System.err.println(gson.toJson(config));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   static class NodeConfiguration {
