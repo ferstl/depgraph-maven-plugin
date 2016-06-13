@@ -30,6 +30,7 @@ public class StyleConfiguration {
 
   public StyleConfiguration() {
     this.defaultNode = new Box();
+    this.defaultNode.style = "rounded";
     this.defaultNode.defaultFont = new Font();
     this.defaultNode.defaultFont.name = "Helvetica";
     this.defaultNode.defaultFont.size = 14;
@@ -124,7 +125,7 @@ public class StyleConfiguration {
   static class Font {
 
     String color;
-    int size;
+    Integer size;
     String name;
 
     public void configureGlobally(AttributeBuilder builder) {
@@ -138,10 +139,10 @@ public class StyleConfiguration {
   abstract static class AbstractNode {
 
     final String type;
-    String color = "black";
-    String style = "rounded";
-    Font defaultFont = new Font();
-    Font groupIdFont = this.defaultFont;
+    String color;
+    String style;
+    Font defaultFont;
+    Font groupIdFont;
     Font artifactIdFont;
     Font versionFont;
     Font scopeFont;
