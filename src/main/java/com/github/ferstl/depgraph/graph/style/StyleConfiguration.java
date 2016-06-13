@@ -15,6 +15,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -60,6 +62,19 @@ public class StyleConfiguration {
                 return context.deserialize(json, Ellipse.class);
               default:
                 throw new IllegalArgumentException("Unknown shape type: " + type.getAsString());
+            }
+          }
+        })
+        .registerTypeAdapter(AbstractNode.class, new JsonSerializer<AbstractNode>() {
+
+          @Override
+          public JsonElement serialize(AbstractNode src, Type typeOfSrc, JsonSerializationContext context) {
+            if (src instanceof Polygon) {
+              return context.serialize(src, Polygon.class);
+            } else if (src instanceof Ellipse) {
+              return context.serialize(src, Ellipse.class);
+            } else {
+              throw new IllegalArgumentException("Unsupported shape type: " + typeOfSrc);
             }
           }
         })
