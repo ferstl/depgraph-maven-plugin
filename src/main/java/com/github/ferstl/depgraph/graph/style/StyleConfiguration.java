@@ -23,22 +23,21 @@ import com.google.gson.stream.JsonWriter;
 
 public class StyleConfiguration {
 
-  NodeConfiguration defaultNode = new NodeConfiguration();
+  AbstractNode defaultNode;
   EdgeConfiguration defaultEdge = new EdgeConfiguration();
-  Map<String, NodeConfiguration> scopedNodes = ImmutableMap.of("compile", new NodeConfiguration(), "test", new NodeConfiguration());
+  Map<String, ? extends AbstractNode> scopedNodes = ImmutableMap.of("compile", new Box(), "test", new Box());
   Map<NodeResolution, EdgeConfiguration> edgeTypes = ImmutableMap.of(NodeResolution.INCLUDED, new EdgeConfiguration(), NodeResolution.OMITTED_FOR_DUPLICATE, new EdgeConfiguration());
 
   public StyleConfiguration() {
-    this.defaultNode = new NodeConfiguration();
-    this.defaultNode.shape = new Box();
-    this.defaultNode.font = new Font();
-    this.defaultNode.font.name = "Helvetica";
-    this.defaultNode.font.size = 14;
+    this.defaultNode = new Box();
+    this.defaultNode.defaultFont = new Font();
+    this.defaultNode.defaultFont.name = "Helvetica";
+    this.defaultNode.defaultFont.size = 14;
 
-    this.defaultNode.shape.groupIdFont = new Font();
-    this.defaultNode.shape.groupIdFont.size = 12;
-    this.defaultNode.shape.scopeFont = new Font();
-    this.defaultNode.shape.scopeFont.size = 12;
+    this.defaultNode.groupIdFont = new Font();
+    this.defaultNode.groupIdFont.size = 12;
+    this.defaultNode.scopeFont = new Font();
+    this.defaultNode.scopeFont.size = 12;
   }
 
   public static void main(String[] args) {
@@ -104,19 +103,6 @@ public class StyleConfiguration {
       System.err.println(gson.toJson(config));
     } catch (IOException e) {
       throw new RuntimeException(e);
-    }
-  }
-
-
-  static class NodeConfiguration {
-
-    AbstractNode shape = new Polygon();
-    String color = "red";
-    Font font = new Font();
-
-    public void configureGlobally(AttributeBuilder builder) {
-      builder.color(this.shape.color);
-      this.shape.defaultFont.configureGlobally(builder);
     }
   }
 
