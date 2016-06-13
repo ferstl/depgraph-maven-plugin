@@ -12,5 +12,11 @@
     "scope-font": {
       "size": 12
     }
+  },
+  "default-edge": {
+    "font": {
+      "size": 10,
+      "name": "Helvetica"
+    }
   }
 }
