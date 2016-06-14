@@ -111,6 +111,12 @@ public class StyleConfiguration {
     }
   }
 
+  public AttributeBuilder configureDefaultNode() {
+    AttributeBuilder builder = new AttributeBuilder();
+    this.defaultNode.setAttributes(builder);
+    return builder;
+  }
+
   static class Edge {
 
     String style;
