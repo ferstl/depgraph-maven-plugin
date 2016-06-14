@@ -43,6 +43,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
 import com.github.ferstl.depgraph.graph.DependencyGraphException;
 import com.github.ferstl.depgraph.graph.GraphFactory;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -150,6 +151,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
   @Component
   DependencyTreeBuilder dependencyTreeBuilder;
+
+  StyleConfiguration styleConfiguration = new StyleConfiguration();
 
   @Override
   public void execute() throws MojoExecutionException {
