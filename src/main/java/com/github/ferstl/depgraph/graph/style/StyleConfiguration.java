@@ -117,12 +117,12 @@ public class StyleConfiguration {
     String color;
     Font font;
 
-    public void configureGlobally(AttributeBuilder builder) {
+    public void setAttributes(AttributeBuilder builder) {
       builder
           .style(this.style)
           .color(this.color);
 
-      this.font.configureGlobally(builder);
+      this.font.setAttributes(builder);
     }
   }
 
@@ -132,7 +132,7 @@ public class StyleConfiguration {
     Integer size;
     String name;
 
-    public void configureGlobally(AttributeBuilder builder) {
+    public void setAttributes(AttributeBuilder builder) {
       builder
           .color(this.color)
           .fontSize(this.size)
@@ -155,7 +155,7 @@ public class StyleConfiguration {
       this.type = type;
     }
 
-    public final void configureGlobally(AttributeBuilder builder) {
+    public final void setAttributes(AttributeBuilder builder) {
       builder.shape(this.type)
           .style(this.style)
           .color(this.color)
