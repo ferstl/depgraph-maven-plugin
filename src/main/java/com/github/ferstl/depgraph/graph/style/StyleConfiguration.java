@@ -155,7 +155,7 @@ public class StyleConfiguration {
       this.type = type;
     }
 
-    public final void setAttributes(AttributeBuilder builder) {
+    public void setAttributes(AttributeBuilder builder) {
       builder.shape(this.type)
           .style(this.style)
           .color(this.color)
@@ -179,6 +179,12 @@ public class StyleConfiguration {
 
     Polygon() {
       super("polygon");
+    }
+
+    @Override
+    public void setAttributes(AttributeBuilder builder) {
+      super.setAttributes(builder);
+      builder.addAttribute("sides", Integer.toString(this.sides));
     }
 
   }
