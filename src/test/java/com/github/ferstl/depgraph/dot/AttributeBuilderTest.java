@@ -76,6 +76,11 @@ public class AttributeBuilderTest {
   }
 
   @Test
+  public void addAttributeWithNullValue() {
+    assertEquals("", new AttributeBuilder().addAttribute("someAttribute", null).toString());
+  }
+
+  @Test
   public void multipleAttributes() {
     assertEquals("[label=\"someLabel\",color=\"green\",fontsize=\"10\"]", new AttributeBuilder().label("someLabel").color("green").fontSize(10).toString());
   }

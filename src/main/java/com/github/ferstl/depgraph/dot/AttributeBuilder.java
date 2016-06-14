@@ -64,7 +64,9 @@ public class AttributeBuilder {
   }
 
   public AttributeBuilder addAttribute(String key, String value) {
-    this.attributes.put(key, escape(value));
+    if (value != null) {
+      this.attributes.put(key, escape(value));
+    }
     return this;
   }
 
