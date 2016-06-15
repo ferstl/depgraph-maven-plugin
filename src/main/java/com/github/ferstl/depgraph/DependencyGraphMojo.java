@@ -90,6 +90,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   private DotBuilder<GraphNode> createDotBuilder() {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<GraphNode>()
         .nodeStyle(this.styleConfiguration.configureDefaultNode())
+        .edgeStyle(this.styleConfiguration.configureDefaultEdge())
         .useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
 
     boolean fullGraph = requiresFullGraph();
