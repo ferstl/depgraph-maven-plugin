@@ -17,6 +17,7 @@ package com.github.ferstl.depgraph.graph;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.EdgeRenderer;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 
 
 public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
@@ -24,33 +25,22 @@ public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
   private final boolean renderVersions;
-  private final boolean renderDuplicates;
   private final boolean renderConflicts;
+  private final StyleConfiguration styleConfiguration;
 
-  public DependencyEdgeRenderer(boolean renderVersions, boolean renderDuplicates, boolean renderConflicts) {
+  public DependencyEdgeRenderer(boolean renderVersions, boolean renderConflicts, StyleConfiguration styleConfiguration) {
     this.renderVersions = renderVersions;
-    this.renderDuplicates = renderDuplicates;
     this.renderConflicts = renderConflicts;
+    this.styleConfiguration = styleConfiguration;
   }
 
   @Override
   public String createEdgeAttributes(GraphNode from, GraphNode to) {
-    AttributeBuilder builder = new AttributeBuilder();
     NodeResolution resolution = to.getResolution();
 
-    if (this.renderDuplicates && resolution == NodeResolution.OMITTED_FOR_DUPLICATE) {
-      builder.style("dashed");
-    }
-
-    if (this.renderConflicts && resolution == NodeResolution.OMITTED_FOR_CONFLICT) {
-      builder
-          .style("dashed")
-          .color("red")
-          .fontColor("red");
-
-      if (this.renderVersions) {
-        builder.label(abbreviateVersion(to.getArtifact().getVersion()));
-      }
+    AttributeBuilder builder = this.styleConfiguration.configureEdge(resolution);
+    if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderConflicts && this.renderVersions) {
+      builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }
 
     return builder.toString();

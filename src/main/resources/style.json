@@ -18,5 +18,18 @@
       "size": 10,
       "name": "Helvetica"
     }
+  },
+  "edge-types": {
+    "omitted-for-duplicate": {
+      "style": "dashed"
+    },
+    "omitted-for-conflict": {
+      "style": "dashed",
+      "color": "red",
+      "font": {
+        "color": "red",
+        "size": 0
+      }
+    }
   }
 }

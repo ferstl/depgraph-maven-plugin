@@ -26,7 +26,7 @@ public class StyleConfiguration {
   AbstractNode defaultNode;
   Edge defaultEdge = new Edge();
   Map<String, ? extends AbstractNode> scopedNodes = ImmutableMap.of("compile", new Box(), "test", new Box());
-  Map<NodeResolution, Edge> edgeTypes = ImmutableMap.of(NodeResolution.INCLUDED, new Edge(), NodeResolution.OMITTED_FOR_DUPLICATE, new Edge());
+  Map<NodeResolution, Edge> edgeTypes;
 
   public StyleConfiguration() {
     this.defaultNode = new Box();
@@ -43,6 +43,19 @@ public class StyleConfiguration {
     this.defaultEdge.font = new Font();
     this.defaultEdge.font.name = "Helvetica";
     this.defaultEdge.font.size = 10;
+
+    Edge conflictEdge = new Edge();
+    conflictEdge.style = "dashed";
+    conflictEdge.color = "red";
+    conflictEdge.font = new Font();
+    conflictEdge.font.color = "red";
+
+    Edge duplicateEdge = new Edge();
+    duplicateEdge.style = "dashed";
+
+    this.edgeTypes = ImmutableMap.of(
+        NodeResolution.OMITTED_FOR_DUPLICATE, duplicateEdge,
+        NodeResolution.OMITTED_FOR_CONFLICT, conflictEdge);
   }
 
   public static void main(String[] args) {
@@ -123,6 +136,16 @@ public class StyleConfiguration {
     return builder;
   }
 
+  public AttributeBuilder configureEdge(NodeResolution resolution) {
+    Edge edge = this.edgeTypes.get(resolution);
+    AttributeBuilder builder = new AttributeBuilder();
+    if (edge != null) {
+      edge.setAttributes(builder);
+    }
+
+    return builder;
+  }
+
   static class Edge {
 
     String style;
@@ -134,19 +157,21 @@ public class StyleConfiguration {
           .style(this.style)
           .color(this.color);
 
-      this.font.setAttributes(builder);
+      if (this.font != null) {
+        this.font.setAttributes(builder);
+      }
     }
   }
 
   static class Font {
 
     String color;
-    Integer size;
+    int size;
     String name;
 
     public void setAttributes(AttributeBuilder builder) {
       builder
-          .color(this.color)
+          .fontColor(this.color)
           .fontSize(this.size)
           .fontName(this.name);
     }
