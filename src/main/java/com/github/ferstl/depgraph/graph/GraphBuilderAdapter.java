@@ -29,17 +29,20 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
  */
 public final class GraphBuilderAdapter {
 
-  private DependencyGraphBuilder dependencyGraphBuilder;
-  private DependencyTreeBuilder dependencyTreeBuilder;
-  private ArtifactRepository artifactRepository;
+  private final DependencyGraphBuilder dependencyGraphBuilder;
+  private final DependencyTreeBuilder dependencyTreeBuilder;
+  private final ArtifactRepository artifactRepository;
   private final ArtifactFilter targetFilter;
 
   public GraphBuilderAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
     this.dependencyGraphBuilder = builder;
     this.targetFilter = targetFilter;
+    this.dependencyTreeBuilder = null;
+    this.artifactRepository = null;
   }
 
   public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter) {
+    this.dependencyGraphBuilder = null;
     this.dependencyTreeBuilder = builder;
     this.artifactRepository = artifactRepository;
     this.targetFilter = targetFilter;
