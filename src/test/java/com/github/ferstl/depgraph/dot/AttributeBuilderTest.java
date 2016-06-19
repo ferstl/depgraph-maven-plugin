@@ -51,6 +51,16 @@ public class AttributeBuilderTest {
   }
 
   @Test
+  public void fontSizeZero() {
+    assertEquals("", new AttributeBuilder().fontSize(0).toString());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void fontSizeNegative() {
+    new AttributeBuilder().fontSize(-1).toString();
+  }
+
+  @Test
   public void fontColor() {
     assertEquals("[fontcolor=\"green\"]", new AttributeBuilder().fontColor("green").toString());
   }

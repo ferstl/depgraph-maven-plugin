@@ -44,7 +44,13 @@ public class AttributeBuilder {
   }
 
   public AttributeBuilder fontSize(int fontSize) {
-    return addAttribute("fontsize", Integer.toString(fontSize));
+    if (fontSize > 0) {
+      return addAttribute("fontsize", Integer.toString(fontSize));
+    } else if (fontSize < 0) {
+      throw new IllegalArgumentException("Negative font size");
+    }
+
+    return this;
   }
 
   public AttributeBuilder fontColor(String color) {
