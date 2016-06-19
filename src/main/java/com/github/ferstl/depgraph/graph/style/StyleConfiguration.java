@@ -166,13 +166,13 @@ public class StyleConfiguration {
   static class Font {
 
     String color;
-    int size;
+    Integer size;
     String name;
 
     public void setAttributes(AttributeBuilder builder) {
       builder
           .fontColor(this.color)
-          .fontSize(this.size)
+          .fontSize(this.size != null ? this.size : 0)
           .fontName(this.name);
     }
   }
