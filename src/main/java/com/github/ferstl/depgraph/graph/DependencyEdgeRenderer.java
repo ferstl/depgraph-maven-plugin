@@ -25,12 +25,10 @@ public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
   private final boolean renderVersions;
-  private final boolean renderConflicts;
   private final StyleConfiguration styleConfiguration;
 
-  public DependencyEdgeRenderer(boolean renderVersions, boolean renderConflicts, StyleConfiguration styleConfiguration) {
+  public DependencyEdgeRenderer(boolean renderVersions, StyleConfiguration styleConfiguration) {
     this.renderVersions = renderVersions;
-    this.renderConflicts = renderConflicts;
     this.styleConfiguration = styleConfiguration;
   }
 
@@ -39,7 +37,7 @@ public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
     NodeResolution resolution = to.getResolution();
 
     AttributeBuilder builder = this.styleConfiguration.configureEdge(resolution);
-    if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderConflicts && this.renderVersions) {
+    if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions) {
       builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }
 
