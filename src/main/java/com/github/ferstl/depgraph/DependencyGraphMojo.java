@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.EnumSet;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -27,7 +28,11 @@ import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
 import com.github.ferstl.depgraph.graph.NodeRenderers;
+import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
+import static java.util.EnumSet.allOf;
+import static java.util.EnumSet.complementOf;
+import static java.util.EnumSet.of;
 
 /**
  * Creates a dependency graph of a maven module.
@@ -107,7 +112,11 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   private GraphBuilderAdapter createGraphBuilderAdapter(ArtifactFilter targetFilter) {
     GraphBuilderAdapter adapter;
     if (requiresFullGraph()) {
-      adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter);
+      EnumSet<NodeResolution> resolutions = allOf(NodeResolution.class);
+      resolutions = !this.showConflicts ? complementOf(of(NodeResolution.OMITTED_FOR_CONFLICT)) : resolutions;
+      resolutions = !this.showDuplicates ? complementOf(of(NodeResolution.OMITTED_FOR_DUPLICATE)) : resolutions;
+
+      adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, resolutions);
     } else {
       adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
     }

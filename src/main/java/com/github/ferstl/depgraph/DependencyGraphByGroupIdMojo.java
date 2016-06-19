@@ -25,7 +25,9 @@ import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
 import com.github.ferstl.depgraph.graph.NodeRenderers;
+import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
+import static java.util.EnumSet.allOf;
 
 /**
  * Creates a graph containing the group IDs of all dependencies.
@@ -43,7 +45,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     DotBuilder<GraphNode> dotBuilder = createDotBuilder();
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter);
+    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, allOf(NodeResolution.class));
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
