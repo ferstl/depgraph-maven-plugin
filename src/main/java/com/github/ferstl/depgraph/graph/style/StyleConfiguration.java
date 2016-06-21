@@ -26,7 +26,7 @@ public class StyleConfiguration {
 
   AbstractNode defaultNode;
   Edge defaultEdge = new Edge();
-  Map<String, ? extends AbstractNode> scopedNodes = ImmutableMap.of("compile", new Box(), "test", new Box());
+  Map<String, ? extends AbstractNode> scopedNodes;
   Map<NodeResolution, Edge> edgeTypes;
 
   public StyleConfiguration() {
@@ -36,9 +36,11 @@ public class StyleConfiguration {
     this.defaultNode.defaultFont.name = "Helvetica";
     this.defaultNode.defaultFont.size = 14;
     this.defaultNode.groupIdFont = new Font();
-    this.defaultNode.groupIdFont.size = 12;
+    this.defaultNode.groupIdFont.size = 10;
+    this.defaultNode.versionFont = new Font();
+    this.defaultNode.versionFont.size = 10;
     this.defaultNode.scopeFont = new Font();
-    this.defaultNode.scopeFont.size = 12;
+    this.defaultNode.scopeFont.size = 10;
 
     this.defaultEdge = new Edge();
     this.defaultEdge.font = new Font();
@@ -57,6 +59,8 @@ public class StyleConfiguration {
     this.edgeTypes = ImmutableMap.of(
         NodeResolution.OMITTED_FOR_DUPLICATE, duplicateEdge,
         NodeResolution.OMITTED_FOR_CONFLICT, conflictEdge);
+
+    this.scopedNodes = ImmutableMap.of();
   }
 
   public static void main(String[] args) {
