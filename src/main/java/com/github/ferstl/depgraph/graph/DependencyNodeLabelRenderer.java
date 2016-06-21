@@ -2,10 +2,10 @@ package com.github.ferstl.depgraph.graph;
 
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
-import com.github.ferstl.depgraph.dot.LabelBuilder;
 import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
 
 
 public class DependencyNodeLabelRenderer implements NodeRenderer<GraphNode> {
@@ -29,13 +29,12 @@ public class DependencyNodeLabelRenderer implements NodeRenderer<GraphNode> {
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
 
-    LabelBuilder labelBuilder = new LabelBuilder()
-        .font().size(11).text(this.showGroupId ? artifact.getGroupId() : null)
-        .smartNewLine().text(this.showArtifactId ? artifact.getArtifactId() : null)
-        .smartNewLine().font().size(11).text(this.showVersion ? artifact.getVersion() : null)
-        .smartNewLine().font().size(11).text(scopes);
-
-    return labelBuilder.build();
+    return this.styleConfiguration.renderNode(
+        this.showGroupId ? artifact.getGroupId() : null,
+        this.showArtifactId ? artifact.getArtifactId() : null,
+        this.showVersion ? artifact.getVersion() : null,
+        scopes,
+        Iterables.getFirst(node.getScopes(), null));
   }
 
   private static String createScopeString(Set<String> scopes) {
