@@ -31,7 +31,6 @@ public class StyleConfiguration {
 
   public StyleConfiguration() {
     this.defaultNode = new Box();
-    this.defaultNode.style = "rounded";
     this.defaultNode.defaultFont = new Font();
     this.defaultNode.defaultFont.name = "Helvetica";
     this.defaultNode.defaultFont.size = 14;
