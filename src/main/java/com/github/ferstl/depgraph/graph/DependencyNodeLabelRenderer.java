@@ -29,11 +29,8 @@ public class DependencyNodeLabelRenderer implements NodeRenderer<GraphNode> {
     LabelBuilder labelBuilder = new LabelBuilder()
         .font().size(11).text(this.showGroupId ? artifact.getGroupId() : null)
         .smartNewLine().text(this.showArtifactId ? artifact.getArtifactId() : null)
-        .smartNewLine().font().size(11).text(this.showVersion ? artifact.getVersion() : null);
-
-    if (!scopes.isEmpty()) {
-      labelBuilder.smartNewLine().font().size(11).text(scopes);
-    }
+        .smartNewLine().font().size(11).text(this.showVersion ? artifact.getVersion() : null)
+        .smartNewLine().font().size(11).text(scopes);
 
     return labelBuilder.build();
   }
