@@ -104,7 +104,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
       dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions, this.styleConfiguration));
     }
 
-    dotBuilder.useNodeLabelRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions));
+    dotBuilder.useNodeLabelRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions, this.styleConfiguration));
 
     return dotBuilder;
   }

@@ -69,7 +69,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
-    dotBuilder.useNodeLabelRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions));
+    dotBuilder.useNodeLabelRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions, this.styleConfiguration));
     if (this.mergeScopes) {
       dotBuilder.useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
     } else {
