@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.Map;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
+import com.github.ferstl.depgraph.dot.LabelBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.FieldNamingPolicy;
@@ -146,6 +147,11 @@ public class StyleConfiguration {
     return builder;
   }
 
+  public String renderNode(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
+    AbstractNode node = this.scopedNodes.containsKey(effectiveScope) ? this.scopedNodes.get(effectiveScope) : this.defaultNode;
+    return node.renderLabel(groupId, artifactId, version, scopes);
+  }
+
   static class Edge {
 
     String style;
@@ -172,7 +178,7 @@ public class StyleConfiguration {
     public void setAttributes(AttributeBuilder builder) {
       builder
           .fontColor(this.color)
-          .fontSize(this.size != null ? this.size : 0)
+          .fontSize(this.size)
           .fontName(this.name);
     }
   }
@@ -201,6 +207,38 @@ public class StyleConfiguration {
           .fontColor(this.defaultFont.color);
     }
 
+    public String renderLabel(String groupId, String artifactId, String version, String scopes) {
+      Font groupIdFont = this.groupIdFont != null ? this.groupIdFont : new Font();
+      Font artifactIdFont = this.artifactIdFont != null ? this.artifactIdFont : new Font();
+      Font versionFont = this.versionFont != null ? this.versionFont : new Font();
+      Font scopeFont = this.scopeFont != null ? this.scopeFont : new Font();
+
+      return new LabelBuilder()
+          .font()
+          .name(groupIdFont.name)
+          .color(groupIdFont.color)
+          .size(groupIdFont.size)
+          .text(groupId)
+          .smartNewLine()
+          .font()
+          .name(artifactIdFont.name)
+          .color(artifactIdFont.color)
+          .size(artifactIdFont.size)
+          .text(artifactId)
+          .smartNewLine()
+          .font()
+          .name(versionFont.name)
+          .color(versionFont.color)
+          .size(versionFont.size)
+          .text(version)
+          .smartNewLine()
+          .font()
+          .name(scopeFont.name)
+          .color(scopeFont.color)
+          .size(scopeFont.size)
+          .text(scopes)
+          .build();
+    }
   }
 
   static class Box extends AbstractNode {
