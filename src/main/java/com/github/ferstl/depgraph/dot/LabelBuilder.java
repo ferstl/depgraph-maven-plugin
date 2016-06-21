@@ -59,7 +59,7 @@ public class LabelBuilder {
 
   /**
    * Add a line break.
-   * 
+   *
    * @return This builder.
    */
   public LabelBuilder newLine() {
@@ -74,7 +74,7 @@ public class LabelBuilder {
    * <li>The label does not already end with a line break</li>
    * </ul>
    * .
-   * 
+   *
    * @return This builder.
    */
   public LabelBuilder smartNewLine() {
@@ -159,11 +159,23 @@ public class LabelBuilder {
      * @return This builder.
      */
     public FontBuilder size(int size) {
-      if (size < 0) {
+      if (size > 0) {
+        addAttribute("point-size", size);
+      } else if (size < 0) {
         throw new IllegalArgumentException("Font size must not be negative");
       }
-      addAttribute("point-size", size);
+
       return this;
+    }
+
+    /**
+     * Set the font size.
+     *
+     * @param size Size.
+     * @return This builder.
+     */
+    public FontBuilder size(Integer size) {
+      return size(size != null ? size : 0);
     }
 
     /**

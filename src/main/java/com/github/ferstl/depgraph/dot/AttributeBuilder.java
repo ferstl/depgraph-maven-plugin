@@ -53,6 +53,10 @@ public class AttributeBuilder {
     return this;
   }
 
+  public AttributeBuilder fontSize(Integer fontSize) {
+    return fontSize(fontSize != null ? fontSize : 0);
+  }
+
   public AttributeBuilder fontColor(String color) {
     return addAttribute("fontcolor", color);
   }

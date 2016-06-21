@@ -139,6 +139,28 @@ public class LabelBuilderTest {
     assertEquals("<<font point-size=\"10\">text</font>>", label);
   }
 
+  @Test
+  public void fontSizeZero() {
+    String label = new LabelBuilder()
+        .font()
+        .size(0)
+        .text("text")
+        .build();
+
+    assertEquals("<<font>text</font>>", label);
+  }
+
+  @Test
+  public void fontSizeNull() {
+    String label = new LabelBuilder()
+        .font()
+        .size(null)
+        .text("text")
+        .build();
+
+    assertEquals("<<font>text</font>>", label);
+  }
+
   @Test(expected = IllegalArgumentException.class)
   public void fontSizeNegative() {
     new LabelBuilder()
