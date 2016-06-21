@@ -193,6 +193,19 @@ public class LabelBuilderTest {
   }
 
   @Test
+  public void fontNullValues() {
+    String label = new LabelBuilder()
+        .font()
+        .name(null)
+        .color(null)
+        .size(12)
+        .text("text")
+        .build();
+
+    assertEquals("<<font point-size=\"12\">text</font>>", label);
+  }
+
+  @Test
   public void fontEmpty() {
     String label = new LabelBuilder()
         .font()

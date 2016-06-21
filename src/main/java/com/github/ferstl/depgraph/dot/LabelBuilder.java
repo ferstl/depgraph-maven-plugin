@@ -206,7 +206,9 @@ public class LabelBuilder {
     }
 
     private void addAttribute(String name, Object value) {
-      this.attributes.put(name, name + "=\"" + value + "\"");
+      if (value != null) {
+        this.attributes.put(name, name + "=\"" + value + "\"");
+      }
     }
   }
 }
