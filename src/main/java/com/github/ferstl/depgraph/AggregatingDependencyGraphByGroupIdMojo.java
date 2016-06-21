@@ -45,6 +45,8 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
 
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
+        .nodeStyle(this.styleConfiguration.configureDefaultNode())
+        .edgeStyle(this.styleConfiguration.configureDefaultEdge())
         .useNodeRenderer(this.mergeScopes ? NodeRenderers.GROUP_ID : NodeRenderers.GROUP_ID_WITH_SCOPE)
         .useNodeLabelRenderer(new DependencyNodeLabelRenderer(true, false, false, this.styleConfiguration))
         .omitSelfReferences();
