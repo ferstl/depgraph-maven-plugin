@@ -12,6 +12,7 @@ public class LabelBuilder {
 
   private static final String NEWLINE = "<br/>";
   private final StringBuilder labelBuilder = new StringBuilder();
+  private boolean smartNewLine;
 
   /**
    * Add the given text.
@@ -78,12 +79,14 @@ public class LabelBuilder {
    * @return This builder.
    */
   public LabelBuilder smartNewLine() {
-    int length = this.labelBuilder.length();
-    int nLength = NEWLINE.length();
-
-    if ((length > 0 && length < nLength) || (length >= nLength && !NEWLINE.equals(this.labelBuilder.substring(length - nLength, length)))) {
-      return newLine();
-    }
+    this.smartNewLine = true;
+    // int length = this.labelBuilder.length();
+    // int nLength = NEWLINE.length();
+    //
+    // if ((length > 0 && length < nLength) || (length >= nLength && !NEWLINE.equals(this.labelBuilder.substring(length
+    // - nLength, length)))) {
+    // return newLine();
+    // }
 
     return this;
   }
@@ -134,6 +137,10 @@ public class LabelBuilder {
       return;
     }
 
+    if (this.smartNewLine && this.labelBuilder.length() > 0) {
+      newLine();
+      this.smartNewLine = false;
+    }
     this.labelBuilder.append(HtmlEscapers.htmlEscaper().escape(text));
   }
 

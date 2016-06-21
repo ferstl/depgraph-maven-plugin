@@ -101,7 +101,7 @@ public class LabelBuilderTest {
         .smartNewLine()
         .build();
 
-    assertEquals("<text<br/>>", label);
+    assertEquals("<text>", label);
   }
 
   @Test
@@ -114,7 +114,7 @@ public class LabelBuilderTest {
         .smartNewLine()
         .build();
 
-    assertEquals("<text1<br/>text2<br/>>", label);
+    assertEquals("<text1<br/>text2>", label);
   }
 
   @Test
