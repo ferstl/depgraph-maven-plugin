@@ -196,7 +196,12 @@ public class LabelBuilder {
      * @return The encapsulating label builder.
      */
     public LabelBuilder text(String text) {
-      LabelBuilder.this.addText(text, "font", this.attributes.values().toArray(new String[0]));
+      if (this.attributes.size() > 0) {
+        LabelBuilder.this.addText(text, "font", this.attributes.values().toArray(new String[0]));
+      } else {
+        LabelBuilder.this.text(text);
+      }
+
       return LabelBuilder.this;
     }
 

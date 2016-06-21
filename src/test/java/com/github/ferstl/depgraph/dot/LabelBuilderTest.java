@@ -147,7 +147,7 @@ public class LabelBuilderTest {
         .text("text")
         .build();
 
-    assertEquals("<<font>text</font>>", label);
+    assertEquals("<text>", label);
   }
 
   @Test
@@ -158,7 +158,7 @@ public class LabelBuilderTest {
         .text("text")
         .build();
 
-    assertEquals("<<font>text</font>>", label);
+    assertEquals("<text>", label);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -190,6 +190,16 @@ public class LabelBuilderTest {
         .build();
 
     assertEquals("<<font color=\"green\" face=\"Helvetica\" point-size=\"12\">text</font>>", label);
+  }
+
+  @Test
+  public void fontEmpty() {
+    String label = new LabelBuilder()
+        .font()
+        .text("text")
+        .build();
+
+    assertEquals("<text>", label);
   }
 
   @Test
