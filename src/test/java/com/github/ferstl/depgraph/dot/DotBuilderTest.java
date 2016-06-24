@@ -122,8 +122,8 @@ public class DotBuilderTest {
 
 
   @Test
-  public void customNodeRenderer() {
-    this.dotBuilder.useNodeRenderer(TestRenderer.INSTANCE);
+  public void customNodeNameRenderer() {
+    this.dotBuilder.useNodeNameRenderer(TestRenderer.INSTANCE);
 
     this.dotBuilder.addEdge(this.fromNode, this.toNode);
 
@@ -189,7 +189,7 @@ public class DotBuilderTest {
     return new GraphNode(artifact);
   }
 
-  enum TestRenderer implements EdgeRenderer<GraphNode>, NodeRenderer<GraphNode>, NodeAttributeRenderer<GraphNode> {
+  enum TestRenderer implements EdgeRenderer<GraphNode>, NodeNameRenderer<GraphNode>, NodeAttributeRenderer<GraphNode> {
     INSTANCE;
 
     @Override

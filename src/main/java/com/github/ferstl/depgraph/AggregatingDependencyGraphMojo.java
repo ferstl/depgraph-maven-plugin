@@ -26,7 +26,7 @@ import com.github.ferstl.depgraph.graph.DependencyNodeLabelRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeRenderers;
+import com.github.ferstl.depgraph.graph.NodeNameRenderers;
 
 /**
  * Aggregates all dependencies of a multi-module project into one single graph.
@@ -73,9 +73,9 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .nodeStyle(this.styleConfiguration.configureDefaultNode())
         .edgeStyle(this.styleConfiguration.configureDefaultEdge());
     if (this.mergeScopes) {
-      dotBuilder.useNodeRenderer(NodeRenderers.VERSIONLESS_ID);
+      dotBuilder.useNodeNameRenderer(NodeNameRenderers.VERSIONLESS_ID);
     } else {
-      dotBuilder.useNodeRenderer(NodeRenderers.VERSIONLESS_ID_WITH_SCOPE);
+      dotBuilder.useNodeNameRenderer(NodeNameRenderers.VERSIONLESS_ID_WITH_SCOPE);
     }
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);

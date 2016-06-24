@@ -24,7 +24,7 @@ import com.github.ferstl.depgraph.graph.DependencyNodeLabelRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeRenderers;
+import com.github.ferstl.depgraph.graph.NodeNameRenderers;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
 import static java.util.EnumSet.allOf;
@@ -54,7 +54,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
     dotBuilder
         .nodeStyle(this.styleConfiguration.configureDefaultNode())
         .edgeStyle(this.styleConfiguration.configureDefaultEdge())
-        .useNodeRenderer(NodeRenderers.GROUP_ID_WITH_SCOPE)
+        .useNodeNameRenderer(NodeNameRenderers.GROUP_ID_WITH_SCOPE)
         .useNodeAttributeRenderer(new DependencyNodeLabelRenderer(true, false, false, this.styleConfiguration))
         .omitSelfReferences();
 
