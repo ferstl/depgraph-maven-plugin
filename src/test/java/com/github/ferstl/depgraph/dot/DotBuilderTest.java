@@ -193,7 +193,7 @@ public class DotBuilderTest {
     INSTANCE;
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       return node.getArtifact().getArtifactId();
     }
 

@@ -25,7 +25,7 @@ public enum NodeNameRenderers implements NodeNameRenderer<GraphNode> {
   GROUP_ID {
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       return node.getArtifact().getGroupId();
     }
   },
@@ -33,7 +33,7 @@ public enum NodeNameRenderers implements NodeNameRenderer<GraphNode> {
   GROUP_ID_WITH_SCOPE {
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       Artifact artifact = node.getArtifact();
       return COLON_JOINER.join(artifact.getGroupId(), artifact.getScope());
     }
@@ -42,7 +42,7 @@ public enum NodeNameRenderers implements NodeNameRenderer<GraphNode> {
   VERSIONLESS_ID {
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       Artifact artifact = node.getArtifact();
 
       return COLON_JOINER.join(
@@ -56,7 +56,7 @@ public enum NodeNameRenderers implements NodeNameRenderer<GraphNode> {
   VERSIONLESS_ID_WITH_SCOPE {
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       Artifact artifact = node.getArtifact();
 
       return COLON_JOINER.join(
