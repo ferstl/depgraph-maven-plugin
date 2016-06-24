@@ -152,7 +152,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Component
   DependencyTreeBuilder dependencyTreeBuilder;
 
-  StyleConfiguration styleConfiguration = new StyleConfiguration();
+  StyleConfiguration styleConfiguration = StyleConfiguration.load();
 
   @Override
   public void execute() throws MojoExecutionException {

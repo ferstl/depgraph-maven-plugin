@@ -28,38 +28,17 @@ public class StyleConfiguration {
   Map<String, ? extends AbstractNode> scopedNodes;
   Map<NodeResolution, Edge> edgeTypes;
 
-  public StyleConfiguration() {
-    this.defaultNode = new Box();
-    this.defaultNode.defaultFont = new Font();
-    this.defaultNode.defaultFont.name = "Helvetica";
-    this.defaultNode.defaultFont.size = 14;
-    this.defaultNode.groupIdFont = new Font();
-    this.defaultNode.groupIdFont.size = 10;
-    this.defaultNode.versionFont = new Font();
-    this.defaultNode.versionFont.size = 10;
-    this.defaultNode.scopeFont = new Font();
-    this.defaultNode.scopeFont.size = 10;
 
-    this.defaultEdge = new Edge();
-    this.defaultEdge.font = new Font();
-    this.defaultEdge.font.name = "Helvetica";
-    this.defaultEdge.font.size = 10;
-
-    Edge conflictEdge = new Edge();
-    conflictEdge.style = "dashed";
-    conflictEdge.color = "red";
-    conflictEdge.font = new Font();
-    conflictEdge.font.color = "red";
-
-    Edge duplicateEdge = new Edge();
-    duplicateEdge.style = "dashed";
-
-    this.edgeTypes = ImmutableMap.of(
-        NodeResolution.OMITTED_FOR_DUPLICATE, duplicateEdge,
-        NodeResolution.OMITTED_FOR_CONFLICT, conflictEdge);
+  public static StyleConfiguration load() {
+    Gson gson = createGson();
+    try (InputStream is = StyleConfiguration.class.getClassLoader().getResourceAsStream("style.json")) {
+      return gson.fromJson(new InputStreamReader(is), StyleConfiguration.class);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
-  public static void main(String[] args) {
+  private static Gson createGson() {
     Gson gson = new GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
         .enableComplexMapKeySerialization()
@@ -114,15 +93,7 @@ public class StyleConfiguration {
         })
         .setPrettyPrinting()
         .create();
-
-    System.out.println(gson.toJson(new StyleConfiguration()));
-
-    try (InputStream is = ClassLoader.getSystemResourceAsStream("style.json")) {
-      StyleConfiguration config = gson.fromJson(new InputStreamReader(is), StyleConfiguration.class);
-      System.err.println(gson.toJson(config));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    return gson;
   }
 
   public AttributeBuilder configureDefaultNode() {
@@ -148,7 +119,8 @@ public class StyleConfiguration {
   }
 
   public String renderNode(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
-    AbstractNode node = this.scopedNodes.containsKey(effectiveScope) ? this.scopedNodes.get(effectiveScope) : this.defaultNode;
+    Map<String, ? extends AbstractNode> scopedNodes = this.scopedNodes != null ? this.scopedNodes : ImmutableMap.<String, AbstractNode>of();
+    AbstractNode node = scopedNodes.containsKey(effectiveScope) ? scopedNodes.get(effectiveScope) : this.defaultNode;
     return node.createAttributes(groupId, artifactId, version, scopes).toString();
   }
 }
