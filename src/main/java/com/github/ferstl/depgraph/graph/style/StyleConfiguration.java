@@ -151,6 +151,8 @@ public class StyleConfiguration {
 
   public String renderNode(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
     AbstractNode node = this.scopedNodes.containsKey(effectiveScope) ? this.scopedNodes.get(effectiveScope) : this.defaultNode;
-    return node.renderLabel(groupId, artifactId, version, scopes);
+    return new AttributeBuilder()
+        .label(node.renderLabel(groupId, artifactId, version, scopes))
+        .toString();
   }
 }

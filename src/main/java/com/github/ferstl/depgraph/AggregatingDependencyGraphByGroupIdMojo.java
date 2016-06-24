@@ -48,7 +48,7 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
         .nodeStyle(this.styleConfiguration.configureDefaultNode())
         .edgeStyle(this.styleConfiguration.configureDefaultEdge())
         .useNodeRenderer(this.mergeScopes ? NodeRenderers.GROUP_ID : NodeRenderers.GROUP_ID_WITH_SCOPE)
-        .useNodeLabelRenderer(new DependencyNodeLabelRenderer(true, false, false, this.styleConfiguration))
+        .useNodeAttributeRenderer(new DependencyNodeLabelRenderer(true, false, false, this.styleConfiguration))
         .omitSelfReferences();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);

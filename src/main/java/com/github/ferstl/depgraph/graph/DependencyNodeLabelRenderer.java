@@ -2,13 +2,13 @@ package com.github.ferstl.depgraph.graph;
 
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
-import com.github.ferstl.depgraph.dot.NodeRenderer;
+import com.github.ferstl.depgraph.dot.NodeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 
 
-public class DependencyNodeLabelRenderer implements NodeRenderer<GraphNode> {
+public class DependencyNodeLabelRenderer implements NodeAttributeRenderer<GraphNode> {
 
   private static final Joiner SLASH_JOINER = Joiner.on("/").skipNulls();
 
@@ -24,8 +24,9 @@ public class DependencyNodeLabelRenderer implements NodeRenderer<GraphNode> {
     this.styleConfiguration = styleConfiguration;
   }
 
+
   @Override
-  public String render(GraphNode node) {
+  public String createNodeAttributes(GraphNode node) {
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
 

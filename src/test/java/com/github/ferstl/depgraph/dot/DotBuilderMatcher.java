@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder<GraphNode>> {
 
   private static final String[] EMPTY_ARRAY = new String[0];
-  private static final String NODE_PATTERN = ".+\\[label=.+\\]";
+  private static final String NODE_PATTERN = "\\s*\"[\\w\\p{Punct}]+\"(\\[.+\\])?\\s*";
   private static final String EDGE_PATTERN = ".+ -> .+";
 
   private final String[] expectedNodes;

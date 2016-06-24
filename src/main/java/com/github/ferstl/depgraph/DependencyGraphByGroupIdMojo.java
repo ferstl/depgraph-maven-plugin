@@ -55,7 +55,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
         .nodeStyle(this.styleConfiguration.configureDefaultNode())
         .edgeStyle(this.styleConfiguration.configureDefaultEdge())
         .useNodeRenderer(NodeRenderers.GROUP_ID_WITH_SCOPE)
-        .useNodeLabelRenderer(new DependencyNodeLabelRenderer(true, false, false, this.styleConfiguration))
+        .useNodeAttributeRenderer(new DependencyNodeLabelRenderer(true, false, false, this.styleConfiguration))
         .omitSelfReferences();
 
     return dotBuilder;

@@ -129,10 +129,24 @@ public class DotBuilderTest {
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[]{
-            "\"from\"[label=\"group:from:jar:1.0.0:compile\"]",
-            "\"to\"[label=\"group:to:jar:1.0.0:compile\"]"},
+            "\"from\"",
+            "\"to\""},
         new String[]{"from -> to"}));
   }
+
+  @Test
+  public void customNodeAttributeRenderer() {
+    this.dotBuilder.useNodeAttributeRenderer(TestRenderer.INSTANCE);
+
+    this.dotBuilder.addEdge(this.fromNode, this.toNode);
+
+    assertThat(this.dotBuilder, hasNodesAndEdges(
+        new String[]{
+            "\"group:from:jar:1.0.0:compile\"[label=\"from\"]",
+            "\"group:to:jar:1.0.0:compile\"[label=\"to\"]"},
+        new String[]{"from -> to"}));
+  }
+
 
   @Test
   public void customEdgeRenderer() {
@@ -158,7 +172,7 @@ public class DotBuilderTest {
   @Test
   public void customNodeLabelRenderer() {
     this.dotBuilder
-        .useNodeLabelRenderer(TestRenderer.INSTANCE)
+        .useNodeAttributeRenderer(TestRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
@@ -175,7 +189,7 @@ public class DotBuilderTest {
     return new GraphNode(artifact);
   }
 
-  enum TestRenderer implements EdgeRenderer<GraphNode>, NodeRenderer<GraphNode> {
+  enum TestRenderer implements EdgeRenderer<GraphNode>, NodeRenderer<GraphNode>, NodeAttributeRenderer<GraphNode> {
     INSTANCE;
 
     @Override
@@ -187,6 +201,13 @@ public class DotBuilderTest {
     public String createEdgeAttributes(GraphNode from, GraphNode to) {
       return new AttributeBuilder()
           .label(to.getArtifact().getVersion())
+          .toString();
+    }
+
+    @Override
+    public String createNodeAttributes(GraphNode node) {
+      return new AttributeBuilder()
+          .label(node.getArtifact().getArtifactId())
           .toString();
     }
 

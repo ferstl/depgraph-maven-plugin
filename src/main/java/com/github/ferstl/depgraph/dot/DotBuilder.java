@@ -34,7 +34,7 @@ public final class DotBuilder<T> {
   private AttributeBuilder nodeAttributeBuilder;
   private AttributeBuilder edgeAttributeBuilder;
   private NodeRenderer<? super T> nodeRenderer;
-  private NodeRenderer<? super T> nodeLabelRenderer;
+  private NodeAttributeRenderer<? super T> nodeAttributeRenderer;
   private EdgeRenderer<? super T> edgeRenderer;
   private boolean omitSelfReferences;
   private final Map<String, T> nodeDefinitions;
@@ -44,7 +44,7 @@ public final class DotBuilder<T> {
     this.graphName = "G";
     this.nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
     this.edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
-    this.nodeLabelRenderer = createDefaultNodeRenderer();
+    this.nodeAttributeRenderer = createDefaultNodeAttributeRenderer();
     this.nodeRenderer = createDefaultNodeRenderer();
     this.edgeRenderer = createDefaultEdgeRenderer();
 
@@ -72,8 +72,8 @@ public final class DotBuilder<T> {
     return this;
   }
 
-  public DotBuilder<T> useNodeLabelRenderer(NodeRenderer<? super T> nodeLabelRenderer) {
-    this.nodeLabelRenderer = nodeLabelRenderer;
+  public DotBuilder<T> useNodeAttributeRenderer(NodeAttributeRenderer<? super T> nodeAttributeRenderer) {
+    this.nodeAttributeRenderer = nodeAttributeRenderer;
     return this;
   }
 
@@ -131,10 +131,10 @@ public final class DotBuilder<T> {
 
     sb.append("\n\n  // Node Definitions:");
     for (Entry<String, T> entry : this.nodeDefinitions.entrySet()) {
-      String nodeLabel = this.nodeLabelRenderer.render(entry.getValue());
+      String nodeAttributes = this.nodeAttributeRenderer.createNodeAttributes(entry.getValue());
       sb.append("\n  ")
           .append(entry.getKey())
-          .append(new AttributeBuilder().label(nodeLabel));
+          .append(nodeAttributes);
     }
 
     sb.append("\n\n  // Edge Definitions:");
@@ -177,6 +177,16 @@ public final class DotBuilder<T> {
       @Override
       public String render(T node) {
         return node.toString();
+      }
+    };
+  }
+
+  static <T> NodeAttributeRenderer<T> createDefaultNodeAttributeRenderer() {
+    return new NodeAttributeRenderer<T>() {
+
+      @Override
+      public String createNodeAttributes(T node) {
+        return "";
       }
     };
   }
