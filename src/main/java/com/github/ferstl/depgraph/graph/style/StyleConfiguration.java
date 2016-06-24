@@ -57,8 +57,6 @@ public class StyleConfiguration {
     this.edgeTypes = ImmutableMap.of(
         NodeResolution.OMITTED_FOR_DUPLICATE, duplicateEdge,
         NodeResolution.OMITTED_FOR_CONFLICT, conflictEdge);
-
-    this.scopedNodes = ImmutableMap.of();
   }
 
   public static void main(String[] args) {
@@ -151,8 +149,6 @@ public class StyleConfiguration {
 
   public String renderNode(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
     AbstractNode node = this.scopedNodes.containsKey(effectiveScope) ? this.scopedNodes.get(effectiveScope) : this.defaultNode;
-    return new AttributeBuilder()
-        .label(node.renderLabel(groupId, artifactId, version, scopes))
-        .toString();
+    return node.createAttributes(groupId, artifactId, version, scopes).toString();
   }
 }
