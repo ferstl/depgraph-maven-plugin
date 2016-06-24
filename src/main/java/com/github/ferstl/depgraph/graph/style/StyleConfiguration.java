@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.Map;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -98,18 +98,18 @@ public class StyleConfiguration {
 
   public AttributeBuilder configureDefaultNode() {
     AttributeBuilder builder = new AttributeBuilder();
-    this.defaultNode.setAttributes(builder);
+    getDefaultNode().setAttributes(builder);
     return builder;
   }
 
   public AttributeBuilder configureDefaultEdge() {
     AttributeBuilder builder = new AttributeBuilder();
-    this.defaultEdge.setAttributes(builder);
+    getDefaultEdge().setAttributes(builder);
     return builder;
   }
 
   public AttributeBuilder configureEdge(NodeResolution resolution) {
-    Edge edge = this.edgeTypes.get(resolution);
+    Edge edge = getEdgeTypes().get(resolution);
     AttributeBuilder builder = new AttributeBuilder();
     if (edge != null) {
       edge.setAttributes(builder);
@@ -119,8 +119,25 @@ public class StyleConfiguration {
   }
 
   public String renderNode(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
-    Map<String, ? extends AbstractNode> scopedNodes = this.scopedNodes != null ? this.scopedNodes : ImmutableMap.<String, AbstractNode>of();
+    Map<String, ? extends AbstractNode> scopedNodes = getScopedNodes();
     AbstractNode node = scopedNodes.containsKey(effectiveScope) ? scopedNodes.get(effectiveScope) : this.defaultNode;
     return node.createAttributes(groupId, artifactId, version, scopes).toString();
   }
+
+  private AbstractNode getDefaultNode() {
+    return this.defaultNode != null ? this.defaultNode : new Box();
+  }
+
+  private Edge getDefaultEdge() {
+    return this.defaultEdge != null ? this.defaultEdge : new Edge();
+  }
+
+  private Map<String, ? extends AbstractNode> getScopedNodes() {
+    return this.scopedNodes != null ? this.scopedNodes : Collections.<String, AbstractNode>emptyMap();
+  }
+
+  private Map<NodeResolution, Edge> getEdgeTypes() {
+    return this.edgeTypes != null ? this.edgeTypes : Collections.<NodeResolution, Edge>emptyMap();
+  }
+
 }

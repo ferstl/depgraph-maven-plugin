@@ -13,8 +13,10 @@ class Edge {
         .style(this.style)
         .color(this.color);
 
-    if (this.font != null) {
-      this.font.setAttributes(builder);
-    }
+    getFont().setAttributes(builder);
+  }
+
+  private Font getFont() {
+    return this.font != null ? this.font : new Font();
   }
 }

@@ -28,11 +28,11 @@ abstract class AbstractNode {
   }
 
   public AttributeBuilder createAttributes(String groupId, String artifactId, String version, String scopes) {
-    Font defaultFont = this.defaultFont != null ? this.defaultFont : new Font();
-    Font groupIdFont = this.groupIdFont != null ? this.groupIdFont : new Font();
-    Font artifactIdFont = this.artifactIdFont != null ? this.artifactIdFont : new Font();
-    Font versionFont = this.versionFont != null ? this.versionFont : new Font();
-    Font scopeFont = this.scopeFont != null ? this.scopeFont : new Font();
+    Font defaultFont = getDefaultFont();
+    Font groupIdFont = getGroupIdFont();
+    Font artifactIdFont = getArtifactIdFont();
+    Font versionFont = getVersionFont();
+    Font scopeFont = getScopeFont();
 
     return new AttributeBuilder()
         .style(this.style)
@@ -67,4 +67,23 @@ abstract class AbstractNode {
             .build());
   }
 
+  private Font getDefaultFont() {
+    return this.defaultFont != null ? this.defaultFont : new Font();
+  }
+
+  private Font getGroupIdFont() {
+    return this.groupIdFont != null ? this.groupIdFont : new Font();
+  }
+
+  private Font getArtifactIdFont() {
+    return this.artifactIdFont != null ? this.artifactIdFont : new Font();
+  }
+
+  private Font getVersionFont() {
+    return this.versionFont != null ? this.versionFont : new Font();
+  }
+
+  private Font getScopeFont() {
+    return this.scopeFont != null ? this.scopeFont : new Font();
+  }
 }
