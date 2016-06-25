@@ -11,9 +11,8 @@ class Polygon extends AbstractNode {
   }
 
   @Override
-  public void setAttributes(AttributeBuilder builder) {
-    super.setAttributes(builder);
-    builder.addAttribute("sides", this.sides > 0 ? Integer.toString(this.sides) : null);
+  public AttributeBuilder createAttributes() {
+    return super.createAttributes().addAttribute("sides", this.sides > 0 ? Integer.toString(this.sides) : null);
   }
 
 }

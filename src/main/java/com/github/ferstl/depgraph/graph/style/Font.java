@@ -8,8 +8,8 @@ class Font {
   Integer size;
   String name;
 
-  public void setAttributes(AttributeBuilder builder) {
-    builder
+  public AttributeBuilder setAttributes(AttributeBuilder builder) {
+    return builder
         .fontColor(this.color)
         .fontSize(this.size)
         .fontName(this.name);

@@ -8,12 +8,12 @@ class Edge {
   String color;
   Font font;
 
-  public void setAttributes(AttributeBuilder builder) {
-    builder
+  public AttributeBuilder createAttributes() {
+    AttributeBuilder builder = new AttributeBuilder()
         .style(this.style)
         .color(this.color);
 
-    getFont().setAttributes(builder);
+    return getFont().setAttributes(builder);
   }
 
   private Font getFont() {

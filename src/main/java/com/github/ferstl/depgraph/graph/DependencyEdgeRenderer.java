@@ -36,7 +36,7 @@ public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
   public String createEdgeAttributes(GraphNode from, GraphNode to) {
     NodeResolution resolution = to.getResolution();
 
-    AttributeBuilder builder = this.styleConfiguration.configureEdge(resolution);
+    AttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution);
     if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions) {
       builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }

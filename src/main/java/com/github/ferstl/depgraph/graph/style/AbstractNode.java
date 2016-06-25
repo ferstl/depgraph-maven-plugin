@@ -18,8 +18,9 @@ abstract class AbstractNode {
     this.type = type;
   }
 
-  public void setAttributes(AttributeBuilder builder) {
-    builder.shape(this.type)
+  public AttributeBuilder createAttributes() {
+    return new AttributeBuilder()
+        .shape(this.type)
         .style(this.style)
         .color(this.color)
         .fontName(this.defaultFont.name)
@@ -34,11 +35,7 @@ abstract class AbstractNode {
     Font versionFont = getVersionFont();
     Font scopeFont = getScopeFont();
 
-    return new AttributeBuilder()
-        .style(this.style)
-        .color(this.color)
-        .fontName(defaultFont.name)
-        .fontSize(defaultFont.size)
+    return createAttributes()
         .fontColor(defaultFont.color)
         .label(new LabelBuilder()
             .font()

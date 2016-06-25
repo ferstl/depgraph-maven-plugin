@@ -96,32 +96,23 @@ public class StyleConfiguration {
     return gson;
   }
 
-  public AttributeBuilder configureDefaultNode() {
-    AttributeBuilder builder = new AttributeBuilder();
-    getDefaultNode().setAttributes(builder);
-    return builder;
+  public AttributeBuilder defaultNodeAttributes() {
+    return getDefaultNode().createAttributes();
   }
 
-  public AttributeBuilder configureDefaultEdge() {
-    AttributeBuilder builder = new AttributeBuilder();
-    getDefaultEdge().setAttributes(builder);
-    return builder;
+  public AttributeBuilder defaultEdgeAttributes() {
+    return getDefaultEdge().createAttributes();
   }
 
-  public AttributeBuilder configureEdge(NodeResolution resolution) {
+  public AttributeBuilder edgeAttributes(NodeResolution resolution) {
     Edge edge = getEdgeTypes().get(resolution);
-    AttributeBuilder builder = new AttributeBuilder();
-    if (edge != null) {
-      edge.setAttributes(builder);
-    }
-
-    return builder;
+    return edge != null ? edge.createAttributes() : new AttributeBuilder();
   }
 
-  public String renderNode(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
+  public AttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
     Map<String, ? extends AbstractNode> scopedNodes = getScopedNodes();
     AbstractNode node = scopedNodes.containsKey(effectiveScope) ? scopedNodes.get(effectiveScope) : this.defaultNode;
-    return node.createAttributes(groupId, artifactId, version, scopes).toString();
+    return node.createAttributes(groupId, artifactId, version, scopes);
   }
 
   private AbstractNode getDefaultNode() {
