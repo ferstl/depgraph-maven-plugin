@@ -22,7 +22,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.DependencyEdgeRenderer;
+import com.github.ferstl.depgraph.graph.DependencyEdgeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.DependencyNodeLabelRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
@@ -101,7 +101,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     boolean fullGraph = requiresFullGraph();
     if (fullGraph) {
       // For the full graph we display the versions on the edges
-      dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions, this.styleConfiguration));
+      dotBuilder.useEdgeAttributeRenderer(new DependencyEdgeAttributeRenderer(this.showVersions, this.styleConfiguration));
     }
 
     dotBuilder.useNodeAttributeRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions, this.styleConfiguration));

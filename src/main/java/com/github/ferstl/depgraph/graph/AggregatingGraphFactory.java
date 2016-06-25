@@ -22,7 +22,7 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.dot.EdgeRenderer;
+import com.github.ferstl.depgraph.dot.EdgeAttributeRenderer;
 
 /**
  * A graph factory that creates a dependency graph from a multi-module project. Child modules are treated as
@@ -72,7 +72,7 @@ public class AggregatingGraphFactory implements GraphFactory {
         GraphNode parentNode = filterProject(parent);
         GraphNode childNode = filterProject(child);
 
-        dotBuilder.addEdge(parentNode, childNode, DottedEdgeRenderer.INSTANCE);
+        dotBuilder.addEdge(parentNode, childNode, DottedEdgeAttributeRenderer.INSTANCE);
 
         // Stop if we reached the original parent project!
         if (parent.equals(parentProject)) {
@@ -104,7 +104,7 @@ public class AggregatingGraphFactory implements GraphFactory {
     return null;
   }
 
-  enum DottedEdgeRenderer implements EdgeRenderer<GraphNode> {
+  enum DottedEdgeAttributeRenderer implements EdgeAttributeRenderer<GraphNode> {
     INSTANCE {
 
       @Override
