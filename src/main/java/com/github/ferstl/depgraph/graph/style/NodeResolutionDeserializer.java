@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 
 
-public class NodeResolutionDeserializer extends JsonDeserializer<NodeResolution> {
+class NodeResolutionDeserializer extends JsonDeserializer<NodeResolution> {
 
   @Override
   public NodeResolution deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 
-public class NodeResolutionSerializer extends JsonSerializer<NodeResolution> {
+class NodeResolutionSerializer extends JsonSerializer<NodeResolution> {
 
   @Override
   public void serialize(NodeResolution value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
