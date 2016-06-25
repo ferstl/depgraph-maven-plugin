@@ -2,12 +2,17 @@ package com.github.ferstl.depgraph.graph.style;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
-import com.google.gson.Gson;
 
 public class StyleConfiguration {
 
@@ -17,11 +22,29 @@ public class StyleConfiguration {
   Map<NodeResolution, Edge> edgeTypes;
 
 
-  public static StyleConfiguration load() {
-    Gson gson = GsonFactory.newGson();
+  public static StyleConfiguration load(String mainConfig, String... overrides) {
+    SimpleModule module = new SimpleModule()
+        .addKeySerializer(NodeResolution.class, new NodeResolutionSerializer())
+        .addDeserializer(NodeResolution.class, new NodeResolutionDeserializer());
 
-    try (InputStream is = StyleConfiguration.class.getClassLoader().getResourceAsStream("style.json")) {
-      return gson.fromJson(new InputStreamReader(is), StyleConfiguration.class);
+    ObjectMapper mapper = new ObjectMapper()
+        .registerModule(module)
+        .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
+        .setSerializationInclusion(Include.NON_EMPTY)
+        .setVisibility(PropertyAccessor.FIELD, Visibility.NON_PRIVATE);
+
+
+    StyleConfiguration styleConfiguration = readConfig(mapper.readerFor(StyleConfiguration.class), mainConfig);
+    for (String override : overrides) {
+      styleConfiguration = readConfig(mapper.readerForUpdating(styleConfiguration), override);
+    }
+
+    return styleConfiguration;
+  }
+
+  private static StyleConfiguration readConfig(ObjectReader reader, String config) {
+    try (InputStream is = StyleConfiguration.class.getClassLoader().getResourceAsStream(config)) {
+      return reader.readValue(is);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

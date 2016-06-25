@@ -1,8 +1,12 @@
 package com.github.ferstl.depgraph.graph.style;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.LabelBuilder;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
+@JsonTypeIdResolver(NodeIdResolver.class)
 abstract class AbstractNode {
 
   final String type;
