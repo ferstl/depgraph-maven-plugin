@@ -33,7 +33,7 @@ public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
   }
 
   @Override
-  public String createEdgeAttributes(GraphNode from, GraphNode to) {
+  public AttributeBuilder createEdgeAttributes(GraphNode from, GraphNode to) {
     NodeResolution resolution = to.getResolution();
 
     AttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution);
@@ -41,7 +41,7 @@ public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
       builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }
 
-    return builder.toString();
+    return builder;
   }
 
   private String abbreviateVersion(String version) {

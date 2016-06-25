@@ -108,8 +108,8 @@ public class AggregatingGraphFactory implements GraphFactory {
     INSTANCE {
 
       @Override
-      public String createEdgeAttributes(GraphNode from, GraphNode to) {
-        return new AttributeBuilder().style("dotted").toString();
+      public AttributeBuilder createEdgeAttributes(GraphNode from, GraphNode to) {
+        return new AttributeBuilder().style("dotted");
       }
 
     }

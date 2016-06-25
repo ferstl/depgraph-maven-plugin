@@ -2,6 +2,7 @@ package com.github.ferstl.depgraph.graph;
 
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
+import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.NodeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.google.common.base.Joiner;
@@ -26,7 +27,7 @@ public class DependencyNodeLabelRenderer implements NodeAttributeRenderer<GraphN
 
 
   @Override
-  public String createNodeAttributes(GraphNode node) {
+  public AttributeBuilder createNodeAttributes(GraphNode node) {
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
 
@@ -35,8 +36,7 @@ public class DependencyNodeLabelRenderer implements NodeAttributeRenderer<GraphN
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? artifact.getVersion() : null,
         scopes,
-        Iterables.getFirst(node.getScopes(), null))
-        .toString();
+        Iterables.getFirst(node.getScopes(), null));
   }
 
   private static String createScopeString(Set<String> scopes) {
