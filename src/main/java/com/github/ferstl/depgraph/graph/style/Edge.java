@@ -8,7 +8,7 @@ class Edge {
   String color;
   Font font;
 
-  public AttributeBuilder createAttributes() {
+  AttributeBuilder createAttributes() {
     AttributeBuilder builder = new AttributeBuilder()
         .style(this.style)
         .color(this.color);

@@ -18,7 +18,7 @@ abstract class AbstractNode {
     this.type = type;
   }
 
-  public AttributeBuilder createAttributes() {
+  AttributeBuilder createAttributes() {
     return new AttributeBuilder()
         .shape(this.type)
         .style(this.style)
@@ -28,7 +28,7 @@ abstract class AbstractNode {
         .fontColor(this.defaultFont.color);
   }
 
-  public AttributeBuilder createAttributes(String groupId, String artifactId, String version, String scopes) {
+  AttributeBuilder createAttributes(String groupId, String artifactId, String version, String scopes) {
     Font defaultFont = getDefaultFont();
     Font groupIdFont = getGroupIdFont();
     Font artifactIdFont = getArtifactIdFont();

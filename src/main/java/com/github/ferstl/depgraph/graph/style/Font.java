@@ -8,7 +8,7 @@ class Font {
   Integer size;
   String name;
 
-  public AttributeBuilder setAttributes(AttributeBuilder builder) {
+  AttributeBuilder setAttributes(AttributeBuilder builder) {
     return builder
         .fontColor(this.color)
         .fontSize(this.size)
