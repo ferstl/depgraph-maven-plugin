@@ -155,7 +155,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   StyleConfiguration styleConfiguration = StyleConfiguration.load("default-style.json");
 
   @Override
-  public void execute() throws MojoExecutionException {
+  public final void execute() throws MojoExecutionException {
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
     ArtifactFilter targetFilter = createTargetArtifactFilter();
 
