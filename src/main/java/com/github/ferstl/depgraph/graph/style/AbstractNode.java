@@ -23,24 +23,23 @@ abstract class AbstractNode {
   }
 
   AttributeBuilder createAttributes() {
+    Font defaultFont = getDefaultFont();
     return new AttributeBuilder()
         .shape(this.type)
         .style(this.style)
         .color(this.color)
-        .fontName(this.defaultFont.name)
-        .fontSize(this.defaultFont.size)
-        .fontColor(this.defaultFont.color);
+        .fontName(defaultFont.name)
+        .fontSize(defaultFont.size)
+        .fontColor(defaultFont.color);
   }
 
   AttributeBuilder createAttributes(String groupId, String artifactId, String version, String scopes) {
-    Font defaultFont = getDefaultFont();
     Font groupIdFont = getGroupIdFont();
     Font artifactIdFont = getArtifactIdFont();
     Font versionFont = getVersionFont();
     Font scopeFont = getScopeFont();
 
-    return createAttributes()
-        .fontColor(defaultFont.color)
+    return new AttributeBuilder()
         .label(new LabelBuilder()
             .font()
             .name(groupIdFont.name)
