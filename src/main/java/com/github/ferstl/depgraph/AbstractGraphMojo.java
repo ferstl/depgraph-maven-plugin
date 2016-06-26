@@ -22,15 +22,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -48,6 +51,7 @@ import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.style.resource.ClasspathStyleResource;
+import com.github.ferstl.depgraph.graph.style.resource.FileSystemStyleResource;
 import com.github.ferstl.depgraph.graph.style.resource.StyleResource;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -143,6 +147,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private File dotExecutable;
 
   /**
+   * Path to a custom style configuration in JSON format.
+   *
+   * @since 1.0.5
+   */
+  @Parameter(property = "customStyleConfiguration", defaultValue = "")
+  private String customStyleConfiguration;
+
+  /**
    * Local maven repository required by the {@link DependencyTreeBuilder}.
    */
   @Parameter(defaultValue = "${localRepository}", readonly = true)
@@ -158,7 +170,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   DependencyTreeBuilder dependencyTreeBuilder;
 
   @Override
-  public final void execute() throws MojoExecutionException {
+  public final void execute() throws MojoExecutionException, MojoFailureException {
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
     ArtifactFilter targetFilter = createTargetArtifactFilter();
     StyleConfiguration styleConfiguration = loadStyleConfiguration();
@@ -220,12 +232,24 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     return filter;
   }
 
-  private StyleConfiguration loadStyleConfiguration() {
+  private StyleConfiguration loadStyleConfiguration() throws MojoFailureException {
+    // default style resources
     ClasspathStyleResource defaultStyleResource = BuiltInStyleResource.DEFAULT_STYLE.createStyleResource(getClass().getClassLoader());
 
+    // additional style resources from the mojo
     Set<StyleResource> styleResources = new LinkedHashSet<>();
     for (BuiltInStyleResource additionalResource : getAdditionalStyleResources()) {
       styleResources.add(additionalResource.createStyleResource(getClass().getClassLoader()));
+    }
+
+    // custom style resource
+    if (StringUtils.isNotBlank(this.customStyleConfiguration)) {
+      FileSystemStyleResource customStyleResource = new FileSystemStyleResource(Paths.get(this.customStyleConfiguration));
+      if (!customStyleResource.exists()) {
+        throw new MojoFailureException("Custom configuration '" + this.customStyleConfiguration + "' does not exist.");
+      }
+      getLog().info("Using custom style configuration " + this.customStyleConfiguration);
+      styleResources.add(customStyleResource);
     }
 
     return StyleConfiguration.load(defaultStyleResource, styleResources.toArray(new StyleResource[0]));
