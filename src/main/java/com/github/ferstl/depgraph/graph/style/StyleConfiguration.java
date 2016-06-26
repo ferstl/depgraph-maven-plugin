@@ -22,8 +22,8 @@ public class StyleConfiguration {
 
   private AbstractNode defaultNode;
   private Edge defaultEdge;
-  private Map<String, ? extends AbstractNode> scopedNodes;
-  private Map<NodeResolution, Edge> edgeTypes;
+  private Map<String, ? extends AbstractNode> scopeStyles;
+  private Map<NodeResolution, Edge> edgeResolutionStyles;
 
 
   public static StyleConfiguration load(StyleResource mainConfig, StyleResource... overrides) {
@@ -82,11 +82,11 @@ public class StyleConfiguration {
   }
 
   private Map<String, ? extends AbstractNode> getScopedNodes() {
-    return this.scopedNodes != null ? this.scopedNodes : Collections.<String, AbstractNode>emptyMap();
+    return this.scopeStyles != null ? this.scopeStyles : Collections.<String, AbstractNode>emptyMap();
   }
 
   private Map<NodeResolution, Edge> getEdgeTypes() {
-    return this.edgeTypes != null ? this.edgeTypes : Collections.<NodeResolution, Edge>emptyMap();
+    return this.edgeResolutionStyles != null ? this.edgeResolutionStyles : Collections.<NodeResolution, Edge>emptyMap();
   }
 
 }

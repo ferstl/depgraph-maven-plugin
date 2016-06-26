@@ -13,12 +13,12 @@
     "style": "dotted",
     "color": "blue"
   },
-  "edge-types": {
+  "edge-resolution-styles": {
     "omitted-for-duplicate": {
       "style": "dashed"
     }
   },
-  "scoped-nodes": {
+  "scope-styles": {
     "test": {
       "type": "box",
       "style": "filled",

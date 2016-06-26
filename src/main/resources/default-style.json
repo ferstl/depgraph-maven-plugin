@@ -21,7 +21,7 @@
       "name": "Helvetica"
     }
   },
-  "edge-types": {
+  "edge-resolution-styles": {
     "omitted-for-duplicate": {
       "style": "dashed"
     },

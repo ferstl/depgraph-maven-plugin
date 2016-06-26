@@ -1,5 +1,5 @@
 {
-  "scoped-nodes": {
+  "scope-styles": {
     "provided": {
       "type": "box",
       "color": "blue"
