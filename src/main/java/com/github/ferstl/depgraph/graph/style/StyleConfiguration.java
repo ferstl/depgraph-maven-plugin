@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
+import com.github.ferstl.depgraph.graph.style.resource.StyleResource;
 
 public class StyleConfiguration {
 
@@ -22,7 +23,7 @@ public class StyleConfiguration {
   Map<NodeResolution, Edge> edgeTypes;
 
 
-  public static StyleConfiguration load(String mainConfig, String... overrides) {
+  public static StyleConfiguration load(StyleResource mainConfig, StyleResource... overrides) {
     SimpleModule module = new SimpleModule()
         .addKeySerializer(NodeResolution.class, new NodeResolutionSerializer())
         .addDeserializer(NodeResolution.class, new NodeResolutionDeserializer());
@@ -35,15 +36,15 @@ public class StyleConfiguration {
 
 
     StyleConfiguration styleConfiguration = readConfig(mapper.readerFor(StyleConfiguration.class), mainConfig);
-    for (String override : overrides) {
+    for (StyleResource override : overrides) {
       styleConfiguration = readConfig(mapper.readerForUpdating(styleConfiguration), override);
     }
 
     return styleConfiguration;
   }
 
-  private static StyleConfiguration readConfig(ObjectReader reader, String config) {
-    try (InputStream is = StyleConfiguration.class.getClassLoader().getResourceAsStream(config)) {
+  private static StyleConfiguration readConfig(ObjectReader reader, StyleResource config) {
+    try (InputStream is = config.openStream()) {
       return reader.readValue(is);
     } catch (IOException e) {
       throw new RuntimeException(e);

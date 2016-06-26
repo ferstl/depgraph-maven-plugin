@@ -22,7 +22,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
@@ -44,6 +46,9 @@ import org.codehaus.plexus.util.cli.Commandline;
 import com.github.ferstl.depgraph.graph.DependencyGraphException;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
+import com.github.ferstl.depgraph.graph.style.resource.ClasspathStyleResource;
+import com.github.ferstl.depgraph.graph.style.resource.StyleResource;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -152,12 +157,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Component
   DependencyTreeBuilder dependencyTreeBuilder;
 
-  StyleConfiguration styleConfiguration = StyleConfiguration.load("default-style.json");
+  StyleConfiguration styleConfiguration;
 
   @Override
   public final void execute() throws MojoExecutionException {
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
     ArtifactFilter targetFilter = createTargetArtifactFilter();
+
+    this.styleConfiguration = loadStyleConfiguration();
 
     try {
       GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter);
@@ -176,6 +183,17 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   }
 
   protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter);
+
+  /**
+   * Override this method to configure additional style resources. It is recommendet to call
+   * {@code super.getAdditionalStyleResources()} and add them to the set.
+   *
+   * @return A set of additional built-in style resources to use.
+   */
+  protected Set<BuiltInStyleResource> getAdditionalStyleResources() {
+    // We need to preserve the order of style configurations
+    return new LinkedHashSet<>();
+  }
 
   private ArtifactFilter createGlobalArtifactFilter() {
     AndArtifactFilter filter = new AndArtifactFilter();
@@ -203,6 +221,17 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
 
     return filter;
+  }
+
+  private StyleConfiguration loadStyleConfiguration() {
+    ClasspathStyleResource defaultStyleResource = BuiltInStyleResource.DEFAULT_STYLE.createStyleResource(getClass().getClassLoader());
+
+    Set<StyleResource> styleResources = new LinkedHashSet<>();
+    for (BuiltInStyleResource additionalResource : getAdditionalStyleResources()) {
+      styleResources.add(additionalResource.createStyleResource(getClass().getClassLoader()));
+    }
+
+    return StyleConfiguration.load(defaultStyleResource, styleResources.toArray(new StyleResource[0]));
   }
 
   private void writeDotFile(String dotGraph) throws IOException {
