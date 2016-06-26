@@ -28,6 +28,7 @@ import com.github.ferstl.depgraph.graph.GraphNode;
 import com.github.ferstl.depgraph.graph.NodeNameRenderers;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 import static java.util.EnumSet.allOf;
 
@@ -44,8 +45,8 @@ import static java.util.EnumSet.allOf;
 public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-    DotBuilder<GraphNode> dotBuilder = createDotBuilder();
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
+    DotBuilder<GraphNode> dotBuilder = createDotBuilder(styleConfiguration);
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, allOf(NodeResolution.class));
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
@@ -59,13 +60,13 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
     return resources;
   }
 
-  private DotBuilder<GraphNode> createDotBuilder() {
+  private DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
-        .nodeStyle(this.styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(this.styleConfiguration.defaultEdgeAttributes())
+        .nodeStyle(styleConfiguration.defaultNodeAttributes())
+        .edgeStyle(styleConfiguration.defaultEdgeAttributes())
         .useNodeNameRenderer(NodeNameRenderers.GROUP_ID_WITH_SCOPE)
-        .useNodeAttributeRenderer(new DependencyNodeLabelRenderer(true, false, false, this.styleConfiguration))
+        .useNodeAttributeRenderer(new DependencyNodeLabelRenderer(true, false, false, styleConfiguration))
         .omitSelfReferences();
 
     return dotBuilder;

@@ -30,6 +30,7 @@ import com.github.ferstl.depgraph.graph.GraphNode;
 import com.github.ferstl.depgraph.graph.NodeNameRenderers;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
 import static java.util.EnumSet.of;
@@ -85,26 +86,26 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   boolean showDuplicates;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-    DotBuilder<GraphNode> dotBuilder = createDotBuilder();
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
+    DotBuilder<GraphNode> dotBuilder = createDotBuilder(styleConfiguration);
     GraphBuilderAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
-  private DotBuilder<GraphNode> createDotBuilder() {
+  private DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<GraphNode>()
-        .nodeStyle(this.styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(this.styleConfiguration.defaultEdgeAttributes())
+        .nodeStyle(styleConfiguration.defaultNodeAttributes())
+        .edgeStyle(styleConfiguration.defaultEdgeAttributes())
         .useNodeNameRenderer(NodeNameRenderers.VERSIONLESS_ID);
 
     boolean fullGraph = requiresFullGraph();
     if (fullGraph) {
       // For the full graph we display the versions on the edges
-      dotBuilder.useEdgeAttributeRenderer(new DependencyEdgeAttributeRenderer(this.showVersions, this.styleConfiguration));
+      dotBuilder.useEdgeAttributeRenderer(new DependencyEdgeAttributeRenderer(this.showVersions, styleConfiguration));
     }
 
-    dotBuilder.useNodeAttributeRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions, this.styleConfiguration));
+    dotBuilder.useNodeAttributeRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration));
 
     return dotBuilder;
   }

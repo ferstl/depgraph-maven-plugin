@@ -157,17 +157,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Component
   DependencyTreeBuilder dependencyTreeBuilder;
 
-  StyleConfiguration styleConfiguration;
-
   @Override
   public final void execute() throws MojoExecutionException {
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
     ArtifactFilter targetFilter = createTargetArtifactFilter();
-
-    this.styleConfiguration = loadStyleConfiguration();
+    StyleConfiguration styleConfiguration = loadStyleConfiguration();
 
     try {
-      GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter);
+      GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter, styleConfiguration);
 
       writeDotFile(graphFactory.createGraph(this.project));
 
@@ -182,7 +179,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter);
+  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration);
 
   /**
    * Override this method to configure additional style resources. It is recommendet to call

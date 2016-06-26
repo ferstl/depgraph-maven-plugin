@@ -27,6 +27,7 @@ import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
 import com.github.ferstl.depgraph.graph.NodeNameRenderers;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 
 /**
@@ -43,14 +44,14 @@ import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregatingGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
 
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
-        .nodeStyle(this.styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(this.styleConfiguration.defaultEdgeAttributes())
+        .nodeStyle(styleConfiguration.defaultNodeAttributes())
+        .edgeStyle(styleConfiguration.defaultEdgeAttributes())
         .useNodeNameRenderer(this.mergeScopes ? NodeNameRenderers.GROUP_ID : NodeNameRenderers.GROUP_ID_WITH_SCOPE)
-        .useNodeAttributeRenderer(new DependencyNodeLabelRenderer(true, false, false, this.styleConfiguration))
+        .useNodeAttributeRenderer(new DependencyNodeLabelRenderer(true, false, false, styleConfiguration))
         .omitSelfReferences();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);

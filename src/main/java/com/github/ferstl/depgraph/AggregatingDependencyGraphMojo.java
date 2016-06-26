@@ -27,6 +27,7 @@ import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
 import com.github.ferstl.depgraph.graph.NodeNameRenderers;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 
 /**
  * Aggregates all dependencies of a multi-module project into one single graph.
@@ -67,11 +68,11 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   private boolean includeParentProjects;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
-    dotBuilder.useNodeAttributeRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions, this.styleConfiguration))
-        .nodeStyle(this.styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(this.styleConfiguration.defaultEdgeAttributes());
+    dotBuilder.useNodeAttributeRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration))
+        .nodeStyle(styleConfiguration.defaultNodeAttributes())
+        .edgeStyle(styleConfiguration.defaultEdgeAttributes());
     if (this.mergeScopes) {
       dotBuilder.useNodeNameRenderer(NodeNameRenderers.VERSIONLESS_ID);
     } else {
