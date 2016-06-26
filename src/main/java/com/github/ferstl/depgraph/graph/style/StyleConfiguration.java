@@ -17,8 +17,11 @@ import com.github.ferstl.depgraph.graph.style.resource.StyleResource;
 
 public class StyleConfiguration {
 
+  private static final Box EMPTY_NODE = new Box();
+  private static final Edge EMPTY_EDGE = new Edge();
+
   AbstractNode defaultNode;
-  Edge defaultEdge = new Edge();
+  Edge defaultEdge;
   Map<String, ? extends AbstractNode> scopedNodes;
   Map<NodeResolution, Edge> edgeTypes;
 
@@ -67,15 +70,15 @@ public class StyleConfiguration {
   public AttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
     Map<String, ? extends AbstractNode> scopedNodes = getScopedNodes();
     AbstractNode node = scopedNodes.containsKey(effectiveScope) ? scopedNodes.get(effectiveScope) : getDefaultNode();
-    return node.createAttributes(groupId, artifactId, version, scopes);
+    return node.createAttributes(groupId, artifactId, version, scopes, node != this.defaultNode && node != EMPTY_NODE);
   }
 
   private AbstractNode getDefaultNode() {
-    return this.defaultNode != null ? this.defaultNode : new Box();
+    return this.defaultNode != null ? this.defaultNode : EMPTY_NODE;
   }
 
   private Edge getDefaultEdge() {
-    return this.defaultEdge != null ? this.defaultEdge : new Edge();
+    return this.defaultEdge != null ? this.defaultEdge : EMPTY_EDGE;
   }
 
   private Map<String, ? extends AbstractNode> getScopedNodes() {

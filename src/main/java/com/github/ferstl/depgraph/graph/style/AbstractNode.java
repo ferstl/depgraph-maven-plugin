@@ -33,13 +33,14 @@ abstract class AbstractNode {
         .fontColor(defaultFont.color);
   }
 
-  AttributeBuilder createAttributes(String groupId, String artifactId, String version, String scopes) {
+  AttributeBuilder createAttributes(String groupId, String artifactId, String version, String scopes, boolean includeNodeAttributes) {
     Font groupIdFont = getGroupIdFont();
     Font artifactIdFont = getArtifactIdFont();
     Font versionFont = getVersionFont();
     Font scopeFont = getScopeFont();
 
-    return new AttributeBuilder()
+    AttributeBuilder builder = includeNodeAttributes ? createAttributes() : new AttributeBuilder();
+    return builder
         .label(new LabelBuilder()
             .font()
             .name(groupIdFont.name)
