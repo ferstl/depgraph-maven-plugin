@@ -19,12 +19,12 @@ class NodeTypeResolver extends TypeIdResolverBase {
 
   @Override
   public String idFromValue(Object value) {
-    return idFromValueAndType(value, value.getClass());
+    return idFromValueAndType(value, value != null ? value.getClass() : Box.class);
   }
 
   @Override
   public String idFromValueAndType(Object value, Class<?> suggestedType) {
-    return value.getClass().getSimpleName().toLowerCase();
+    return suggestedType.getSimpleName().toLowerCase();
   }
 
   @Override
