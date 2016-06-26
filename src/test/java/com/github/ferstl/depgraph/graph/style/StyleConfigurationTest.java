@@ -12,12 +12,14 @@ public class StyleConfigurationTest {
 
   private ClasspathStyleResource testStyle;
   private StyleConfiguration emptyConfig;
+  private ClasspathStyleResource testOverride;
 
 
   @Before
   public void before() {
     this.emptyConfig = new StyleConfiguration();
     this.testStyle = new ClasspathStyleResource("test-style.json", getClass().getClassLoader());
+    this.testOverride = new ClasspathStyleResource("test-override-style.json", getClass().getClassLoader());
   }
 
   @Test
@@ -30,6 +32,15 @@ public class StyleConfigurationTest {
     assertEquals("[style=\"dashed\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE).toString());
     assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>compile>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "compile", "compile").toString());
     assertEquals("[shape=\"box\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "test", "test").toString());
+  }
+
+  @Test
+  public void loadWithOverride() {
+    StyleConfiguration config = StyleConfiguration.load(this.testStyle, this.testOverride);
+
+    // the scoped nodes in the main config wil be completely replaced
+    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "test", "test").toString());
+    assertEquals("[shape=\"box\",color=\"blue\",label=<groupId<br/>artifactId<br/>1.0.0<br/>provided>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "provided", "provided").toString());
   }
 
   @Test
