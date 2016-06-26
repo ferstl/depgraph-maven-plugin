@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.Set;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -27,6 +28,7 @@ import com.github.ferstl.depgraph.graph.GraphNode;
 import com.github.ferstl.depgraph.graph.NodeNameRenderers;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
+import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 import static java.util.EnumSet.allOf;
 
 /**
@@ -49,6 +51,14 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
+  @Override
+  protected Set<BuiltInStyleResource> getAdditionalStyleResources() {
+    Set<BuiltInStyleResource> resources = super.getAdditionalStyleResources();
+    resources.add(BuiltInStyleResource.GROUP_ID_ONLY_STYLE);
+
+    return resources;
+  }
+
   private DotBuilder<GraphNode> createDotBuilder() {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
@@ -60,5 +70,4 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
     return dotBuilder;
   }
-
 }

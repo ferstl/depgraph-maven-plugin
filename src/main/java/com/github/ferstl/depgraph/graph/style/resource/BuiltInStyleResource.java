@@ -3,7 +3,8 @@ package com.github.ferstl.depgraph.graph.style.resource;
 
 public enum BuiltInStyleResource {
 
-  DEFAULT_STYLE("default-style.json");
+  DEFAULT_STYLE("default-style.json"),
+  GROUP_ID_ONLY_STYLE("group-id-only-style.json");
 
   private final String styleConfig;
 

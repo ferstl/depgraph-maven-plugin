@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.Set;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -26,6 +27,7 @@ import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
 import com.github.ferstl.depgraph.graph.NodeNameRenderers;
+import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 
 /**
  * Aggregates all dependencies of a multi-module by their group IDs.
@@ -53,5 +55,13 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, true);
+  }
+
+  @Override
+  protected Set<BuiltInStyleResource> getAdditionalStyleResources() {
+    Set<BuiltInStyleResource> resources = super.getAdditionalStyleResources();
+    resources.add(BuiltInStyleResource.GROUP_ID_ONLY_STYLE);
+
+    return resources;
   }
 }
