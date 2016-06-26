@@ -9,14 +9,14 @@ import com.github.ferstl.depgraph.dot.LabelBuilder;
 @JsonTypeIdResolver(NodeTypeResolver.class)
 abstract class AbstractNode {
 
-  final String type;
-  String color;
-  String style;
-  Font defaultFont;
-  Font groupIdFont;
-  Font artifactIdFont;
-  Font versionFont;
-  Font scopeFont;
+  private final String type;
+  private String color;
+  private String style;
+  private Font defaultFont;
+  private Font groupIdFont;
+  private Font artifactIdFont;
+  private Font versionFont;
+  private Font scopeFont;
 
   AbstractNode(String type) {
     this.type = type;

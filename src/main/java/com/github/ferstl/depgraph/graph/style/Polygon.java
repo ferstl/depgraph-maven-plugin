@@ -4,7 +4,7 @@ import com.github.ferstl.depgraph.dot.AttributeBuilder;
 
 class Polygon extends AbstractNode {
 
-  int sides = 4;
+  private int sides;
 
   Polygon() {
     super("polygon");

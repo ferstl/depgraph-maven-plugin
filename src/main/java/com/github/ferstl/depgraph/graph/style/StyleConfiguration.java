@@ -20,10 +20,10 @@ public class StyleConfiguration {
   private static final Box EMPTY_NODE = new Box();
   private static final Edge EMPTY_EDGE = new Edge();
 
-  AbstractNode defaultNode;
-  Edge defaultEdge;
-  Map<String, ? extends AbstractNode> scopedNodes;
-  Map<NodeResolution, Edge> edgeTypes;
+  private AbstractNode defaultNode;
+  private Edge defaultEdge;
+  private Map<String, ? extends AbstractNode> scopedNodes;
+  private Map<NodeResolution, Edge> edgeTypes;
 
 
   public static StyleConfiguration load(StyleResource mainConfig, StyleResource... overrides) {
@@ -35,7 +35,7 @@ public class StyleConfiguration {
         .registerModule(module)
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
         .setSerializationInclusion(Include.NON_EMPTY)
-        .setVisibility(PropertyAccessor.FIELD, Visibility.NON_PRIVATE);
+        .setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 
 
     StyleConfiguration styleConfiguration = readConfig(mapper.readerFor(StyleConfiguration.class), mainConfig);

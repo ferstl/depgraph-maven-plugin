@@ -4,9 +4,9 @@ import com.github.ferstl.depgraph.dot.AttributeBuilder;
 
 class Edge {
 
-  String style;
-  String color;
-  Font font;
+  private String style;
+  private String color;
+  private Font font;
 
   AttributeBuilder createAttributes() {
     AttributeBuilder builder = new AttributeBuilder()
