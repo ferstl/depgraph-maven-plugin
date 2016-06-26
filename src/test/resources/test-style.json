@@ -20,7 +20,9 @@
   },
   "scoped-nodes": {
     "test": {
-      "type": "box"
+      "type": "box",
+      "style": "filled",
+      "fill-color": "orange"
     }
   }
 }

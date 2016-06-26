@@ -81,6 +81,11 @@ public class AttributeBuilderTest {
   }
 
   @Test
+  public void fillColor() {
+    assertEquals("[fillcolor=\"red\"]", new AttributeBuilder().fillColor("red").toString());
+  }
+
+  @Test
   public void shape() {
     assertEquals("[shape=\"box\"]", new AttributeBuilder().shape("box").toString());
   }

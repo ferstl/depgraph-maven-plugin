@@ -69,6 +69,10 @@ public class AttributeBuilder {
     return addAttribute("color", color);
   }
 
+  public AttributeBuilder fillColor(String color) {
+    return addAttribute("fillcolor", color);
+  }
+
   public AttributeBuilder shape(String shape) {
     return addAttribute("shape", shape);
   }

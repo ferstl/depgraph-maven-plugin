@@ -11,6 +11,7 @@ abstract class AbstractNode {
 
   private final String type;
   private String color;
+  private String fillColor;
   private String style;
   private Font defaultFont;
   private Font groupIdFont;
@@ -28,6 +29,7 @@ abstract class AbstractNode {
         .shape(this.type)
         .style(this.style)
         .color(this.color)
+        .fillColor(this.fillColor)
         .fontName(defaultFont.name)
         .fontSize(defaultFont.size)
         .fontColor(defaultFont.color);
