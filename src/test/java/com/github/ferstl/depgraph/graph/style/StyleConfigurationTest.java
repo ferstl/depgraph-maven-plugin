@@ -1,33 +1,54 @@
 package com.github.ferstl.depgraph.graph.style;
 
+import org.junit.Before;
 import org.junit.Test;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
+import com.github.ferstl.depgraph.graph.style.resource.ClasspathStyleResource;
 import static org.junit.Assert.assertEquals;
 
 
 public class StyleConfigurationTest {
 
+  private ClasspathStyleResource testStyle;
+  private StyleConfiguration emptyConfig;
+
+
+  @Before
+  public void before() {
+    this.emptyConfig = new StyleConfiguration();
+    this.testStyle = new ClasspathStyleResource("test-style.json", getClass().getClassLoader());
+  }
+
+  @Test
+  public void load() {
+    StyleConfiguration config = StyleConfiguration.load(this.testStyle);
+
+    assertEquals("[shape=\"polygon\",color=\"black\",fontname=\"Courier\",fontsize=\"14\",fontcolor=\"green\",sides=\"8\"]", config.defaultNodeAttributes().toString());
+    assertEquals("[style=\"dotted\",color=\"blue\"]", config.defaultEdgeAttributes().toString());
+    assertEquals("", config.edgeAttributes(NodeResolution.INCLUDED).toString());
+    assertEquals("[style=\"dashed\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE).toString());
+    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>compile>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "compile", "compile").toString());
+    assertEquals("[shape=\"box\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "test", "test").toString());
+  }
+
   @Test
   public void defaultNodeAttributesForEmptyConfiguration() {
-    StyleConfiguration emptyConfig = new StyleConfiguration();
-    AttributeBuilder attributes = emptyConfig.defaultNodeAttributes();
+    AttributeBuilder attributes = this.emptyConfig.defaultNodeAttributes();
 
     assertEquals("[shape=\"box\"]", attributes.toString());
   }
 
   @Test
   public void defaultEdgeAttributesForEmptyConfiguration() {
-    StyleConfiguration emptyConfig = new StyleConfiguration();
-    AttributeBuilder attributes = emptyConfig.defaultEdgeAttributes();
+    AttributeBuilder attributes = this.emptyConfig.defaultEdgeAttributes();
 
     assertEquals("", attributes.toString());
   }
 
   @Test
   public void nodeAttributesForEmptyConfiguration() {
-    StyleConfiguration emptyConfig = new StyleConfiguration();
-    AttributeBuilder attributes = emptyConfig.nodeAttributes("groupId", "artifactId", "1.0.0", "compile", "compile");
+    AttributeBuilder attributes = this.emptyConfig.nodeAttributes("groupId", "artifactId", "1.0.0", "compile", "compile");
 
     assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>compile>]", attributes.toString());
   }
@@ -35,8 +56,7 @@ public class StyleConfigurationTest {
 
   @Test
   public void edgeAttributesForEmptyConfiguration() {
-    StyleConfiguration emptyConfig = new StyleConfiguration();
-    AttributeBuilder attributes = emptyConfig.edgeAttributes(NodeResolution.INCLUDED);
+    AttributeBuilder attributes = this.emptyConfig.edgeAttributes(NodeResolution.INCLUDED);
 
     assertEquals("", attributes.toString());
   }
