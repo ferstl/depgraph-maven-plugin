@@ -66,7 +66,7 @@ public class StyleConfiguration {
 
   public AttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
     Map<String, ? extends AbstractNode> scopedNodes = getScopedNodes();
-    AbstractNode node = scopedNodes.containsKey(effectiveScope) ? scopedNodes.get(effectiveScope) : this.defaultNode;
+    AbstractNode node = scopedNodes.containsKey(effectiveScope) ? scopedNodes.get(effectiveScope) : getDefaultNode();
     return node.createAttributes(groupId, artifactId, version, scopes);
   }
 
