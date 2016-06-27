@@ -1,5 +1,25 @@
 {
+  "default-node": {
+    "type": "ellipse"
+  },
+  "default-edge": {
+    "style": "dashed"
+  },
+  "edge-resolution-styles": {
+    "omitted-for-duplicate": {
+      "color": "green"
+    },
+    "omitted-for-conflict": {
+      "font": {
+        "name": "Courier"
+      }
+    }
+  },
   "scope-styles": {
+    "test": {
+      "type": "box",
+      "color": "red"
+    },
     "provided": {
       "type": "box",
       "color": "blue"

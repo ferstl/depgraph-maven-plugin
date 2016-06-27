@@ -38,8 +38,13 @@ public class StyleConfigurationTest {
   public void loadWithOverride() {
     StyleConfiguration config = StyleConfiguration.load(this.testStyle, this.testOverride);
 
-    // the scoped nodes in the main config wil be completely replaced
-    assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "test", "test").toString());
+    assertEquals("[shape=\"ellipse\",color=\"black\",fontname=\"Courier\",fontsize=\"14\",fontcolor=\"green\"]", config.defaultNodeAttributes().toString());
+    assertEquals("[style=\"dashed\",color=\"blue\"]", config.defaultEdgeAttributes().toString());
+    assertEquals("", config.edgeAttributes(NodeResolution.INCLUDED).toString());
+    assertEquals("[style=\"dashed\",color=\"green\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE).toString());
+    assertEquals("[fontname=\"Courier\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_CONFLICT).toString());
+
+    assertEquals("[shape=\"box\",style=\"filled\",color=\"red\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "test", "test").toString());
     assertEquals("[shape=\"box\",color=\"blue\",label=<groupId<br/>artifactId<br/>1.0.0<br/>provided>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "provided", "provided").toString());
   }
 
