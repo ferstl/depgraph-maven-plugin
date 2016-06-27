@@ -39,7 +39,7 @@ public class StyleConfigurationTest {
     StyleConfiguration config = StyleConfiguration.load(this.testStyle, this.testOverride);
 
     // the scoped nodes in the main config wil be completely replaced
-    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "test", "test").toString());
+    assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "test", "test").toString());
     assertEquals("[shape=\"box\",color=\"blue\",label=<groupId<br/>artifactId<br/>1.0.0<br/>provided>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "provided", "provided").toString());
   }
 

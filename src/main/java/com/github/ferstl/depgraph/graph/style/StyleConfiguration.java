@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -17,9 +18,9 @@ import com.github.ferstl.depgraph.graph.style.resource.StyleResource;
 
 public class StyleConfiguration {
 
-  private final AbstractNode defaultNode = new Box();
+  private AbstractNode defaultNode = new Box();
   private final Edge defaultEdge = new Edge();
-  private final Map<String, ? extends AbstractNode> scopeStyles = new LinkedHashMap<>();
+  private final Map<String, AbstractNode> scopeStyles = new LinkedHashMap<>();
   private final Map<NodeResolution, Edge> edgeResolutionStyles = new LinkedHashMap<>();
 
 
@@ -35,9 +36,11 @@ public class StyleConfiguration {
         .setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 
 
-    StyleConfiguration styleConfiguration = readConfig(mapper.readerFor(StyleConfiguration.class), mainConfig);
+    ObjectReader reader = mapper.readerFor(StyleConfiguration.class);
+    StyleConfiguration styleConfiguration = readConfig(reader, mainConfig);
     for (StyleResource override : overrides) {
-      styleConfiguration = readConfig(mapper.readerForUpdating(styleConfiguration), override);
+      StyleConfiguration overrideConfig = readConfig(reader, override);
+      styleConfiguration.merge(overrideConfig);
     }
 
     return styleConfiguration;
@@ -67,6 +70,41 @@ public class StyleConfiguration {
   public AttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
     AbstractNode node = this.scopeStyles.containsKey(effectiveScope) ? this.scopeStyles.get(effectiveScope) : this.defaultNode;
     return node.createAttributes(groupId, artifactId, version, scopes, node != this.defaultNode);
+  }
+
+  private void merge(StyleConfiguration other) {
+    // We have to deal with subclasses here. Hence the double merge.
+    this.defaultNode.merge(other.defaultNode);
+    other.defaultNode.merge(this.defaultNode);
+    this.defaultNode = other.defaultNode;
+
+    this.defaultEdge.merge(other.defaultEdge);
+
+    for (Entry<String, AbstractNode> entry : other.scopeStyles.entrySet()) {
+      String scope = entry.getKey();
+      AbstractNode node = entry.getValue();
+
+      if (this.scopeStyles.containsKey(scope)) {
+        AbstractNode originalNode = this.scopeStyles.get(scope);
+        // Double merge again
+        originalNode.merge(node);
+        node.merge(originalNode);
+        this.scopeStyles.put(scope, node);
+      } else {
+        this.scopeStyles.put(scope, node);
+      }
+    }
+
+    for (Entry<NodeResolution, Edge> entry : other.edgeResolutionStyles.entrySet()) {
+      NodeResolution resolution = entry.getKey();
+      Edge edge = entry.getValue();
+
+      if (this.edgeResolutionStyles.containsKey(resolution)) {
+        this.edgeResolutionStyles.get(resolution).merge(edge);
+      } else {
+        this.edgeResolutionStyles.put(resolution, edge);
+      }
+    }
   }
 
 }

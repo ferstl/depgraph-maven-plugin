@@ -1,5 +1,6 @@
 package com.github.ferstl.depgraph.graph.style;
 
+import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
@@ -68,5 +69,17 @@ abstract class AbstractNode {
             .size(scopeFont.size)
             .text(scopes)
             .build());
+  }
+
+  void merge(AbstractNode other) {
+    this.color = StringUtils.defaultIfBlank(other.color, this.color);
+    this.fillColor = StringUtils.defaultIfBlank(other.fillColor, this.fillColor);
+    this.style = StringUtils.defaultIfBlank(other.style, this.style);
+
+    this.defaultFont.merge(other.defaultFont);
+    this.groupIdFont.merge(other.groupIdFont);
+    this.artifactIdFont.merge(other.artifactIdFont);
+    this.versionFont.merge(other.versionFont);
+    this.scopeFont.merge(other.scopeFont);
   }
 }
