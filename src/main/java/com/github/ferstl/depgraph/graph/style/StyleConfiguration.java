@@ -2,7 +2,7 @@ package com.github.ferstl.depgraph.graph.style;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -17,13 +17,10 @@ import com.github.ferstl.depgraph.graph.style.resource.StyleResource;
 
 public class StyleConfiguration {
 
-  private static final Box EMPTY_NODE = new Box();
-  private static final Edge EMPTY_EDGE = new Edge();
-
-  private AbstractNode defaultNode;
-  private Edge defaultEdge;
-  private Map<String, ? extends AbstractNode> scopeStyles;
-  private Map<NodeResolution, Edge> edgeResolutionStyles;
+  private final AbstractNode defaultNode = new Box();
+  private final Edge defaultEdge = new Edge();
+  private final Map<String, ? extends AbstractNode> scopeStyles = new LinkedHashMap<>();
+  private final Map<NodeResolution, Edge> edgeResolutionStyles = new LinkedHashMap<>();
 
 
   public static StyleConfiguration load(StyleResource mainConfig, StyleResource... overrides) {
@@ -55,38 +52,21 @@ public class StyleConfiguration {
   }
 
   public AttributeBuilder defaultNodeAttributes() {
-    return getDefaultNode().createAttributes();
+    return this.defaultNode.createAttributes();
   }
 
   public AttributeBuilder defaultEdgeAttributes() {
-    return getDefaultEdge().createAttributes();
+    return this.defaultEdge.createAttributes();
   }
 
   public AttributeBuilder edgeAttributes(NodeResolution resolution) {
-    Edge edge = getEdgeTypes().get(resolution);
+    Edge edge = this.edgeResolutionStyles.get(resolution);
     return edge != null ? edge.createAttributes() : new AttributeBuilder();
   }
 
   public AttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
-    Map<String, ? extends AbstractNode> scopedNodes = getScopedNodes();
-    AbstractNode node = scopedNodes.containsKey(effectiveScope) ? scopedNodes.get(effectiveScope) : getDefaultNode();
-    return node.createAttributes(groupId, artifactId, version, scopes, node != this.defaultNode && node != EMPTY_NODE);
-  }
-
-  private AbstractNode getDefaultNode() {
-    return this.defaultNode != null ? this.defaultNode : EMPTY_NODE;
-  }
-
-  private Edge getDefaultEdge() {
-    return this.defaultEdge != null ? this.defaultEdge : EMPTY_EDGE;
-  }
-
-  private Map<String, ? extends AbstractNode> getScopedNodes() {
-    return this.scopeStyles != null ? this.scopeStyles : Collections.<String, AbstractNode>emptyMap();
-  }
-
-  private Map<NodeResolution, Edge> getEdgeTypes() {
-    return this.edgeResolutionStyles != null ? this.edgeResolutionStyles : Collections.<NodeResolution, Edge>emptyMap();
+    AbstractNode node = this.scopeStyles.containsKey(effectiveScope) ? this.scopeStyles.get(effectiveScope) : this.defaultNode;
+    return node.createAttributes(groupId, artifactId, version, scopes, node != this.defaultNode);
   }
 
 }

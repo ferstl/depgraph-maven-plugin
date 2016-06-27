@@ -13,18 +13,18 @@ abstract class AbstractNode {
   private String color;
   private String fillColor;
   private String style;
-  private Font defaultFont;
-  private Font groupIdFont;
-  private Font artifactIdFont;
-  private Font versionFont;
-  private Font scopeFont;
+  private final Font defaultFont = new Font();
+  private final Font groupIdFont = new Font();
+  private final Font artifactIdFont = new Font();
+  private final Font versionFont = new Font();
+  private final Font scopeFont = new Font();
 
   AbstractNode(String type) {
     this.type = type;
   }
 
   AttributeBuilder createAttributes() {
-    Font defaultFont = getDefaultFont();
+    Font defaultFont = this.defaultFont;
     return new AttributeBuilder()
         .shape(this.type)
         .style(this.style)
@@ -36,10 +36,10 @@ abstract class AbstractNode {
   }
 
   AttributeBuilder createAttributes(String groupId, String artifactId, String version, String scopes, boolean includeNodeAttributes) {
-    Font groupIdFont = getGroupIdFont();
-    Font artifactIdFont = getArtifactIdFont();
-    Font versionFont = getVersionFont();
-    Font scopeFont = getScopeFont();
+    Font groupIdFont = this.groupIdFont;
+    Font artifactIdFont = this.artifactIdFont;
+    Font versionFont = this.versionFont;
+    Font scopeFont = this.scopeFont;
 
     AttributeBuilder builder = includeNodeAttributes ? createAttributes() : new AttributeBuilder();
     return builder
@@ -68,25 +68,5 @@ abstract class AbstractNode {
             .size(scopeFont.size)
             .text(scopes)
             .build());
-  }
-
-  private Font getDefaultFont() {
-    return this.defaultFont != null ? this.defaultFont : new Font();
-  }
-
-  private Font getGroupIdFont() {
-    return this.groupIdFont != null ? this.groupIdFont : new Font();
-  }
-
-  private Font getArtifactIdFont() {
-    return this.artifactIdFont != null ? this.artifactIdFont : new Font();
-  }
-
-  private Font getVersionFont() {
-    return this.versionFont != null ? this.versionFont : new Font();
-  }
-
-  private Font getScopeFont() {
-    return this.scopeFont != null ? this.scopeFont : new Font();
   }
 }
