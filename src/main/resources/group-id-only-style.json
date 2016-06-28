@@ -1,9 +1,8 @@
 {
   "default-node": {
     "type": "box",
-    "default-font": {
-      "size": 14,
-      "name": "Helvetica"
+    "group-id-font": {
+      "size": 14
     }
   }
 }
