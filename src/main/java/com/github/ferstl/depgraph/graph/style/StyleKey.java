@@ -31,7 +31,7 @@ public final class StyleKey implements Comparable<StyleKey> {
   }
 
   public static StyleKey fromString(String keyString) {
-    String[] parts = keyString.split(":");
+    String[] parts = keyString.split(",");
     return new StyleKey(parts);
   }
 
