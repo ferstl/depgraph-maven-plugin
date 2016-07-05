@@ -1,5 +1,6 @@
 package com.github.ferstl.depgraph.graph.style;
 
+import org.apache.commons.lang3.StringUtils;
 import com.google.common.base.Joiner;
 
 public final class StyleKey implements Comparable<StyleKey> {
@@ -20,7 +21,7 @@ public final class StyleKey implements Comparable<StyleKey> {
 
     String[] expanded = new String[NUM_ELEMENTS];
     for (int i = 0; i < parts.length; i++) {
-      expanded[i] = parts[i];
+      expanded[i] = StringUtils.defaultIfEmpty(parts[i], null);
     }
 
     this.groupId = expanded[0];
