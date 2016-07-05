@@ -8,9 +8,9 @@ public final class StyleKey implements Comparable<StyleKey> {
 
   String groupId;
   String artifactId;
-  String version;
   String scope;
   String type;
+  String version;
 
 
   private StyleKey(String[] parts) {
@@ -25,9 +25,9 @@ public final class StyleKey implements Comparable<StyleKey> {
 
     this.groupId = expanded[0];
     this.artifactId = expanded[1];
-    this.version = expanded[2];
-    this.scope = expanded[3];
-    this.type = expanded[4];
+    this.scope = expanded[2];
+    this.type = expanded[3];
+    this.version = expanded[4];
   }
 
   public static StyleKey fromString(String keyString) {
@@ -65,16 +65,16 @@ public final class StyleKey implements Comparable<StyleKey> {
 
     rank += this.groupId != null ? 16 : 0;
     rank += this.artifactId != null ? 8 : 0;
-    rank += this.version != null ? 4 : 0;
-    rank += this.scope != null ? 2 : 0;
-    rank += this.type != null ? 1 : 0;
+    rank += this.scope != null ? 4 : 0;
+    rank += this.type != null ? 2 : 0;
+    rank += this.version != null ? 1 : 0;
 
     return rank;
   }
 
   @Override
   public String toString() {
-    return Joiner.on(",").useForNull("").join(this.groupId, this.artifactId, this.version, this.scope, this.type);
+    return Joiner.on(",").useForNull("").join(this.groupId, this.artifactId, this.scope, this.type, this.version);
   }
 
 }
