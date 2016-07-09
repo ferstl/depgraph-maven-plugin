@@ -6,8 +6,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 
 public class StyleKeyTest {
@@ -117,5 +119,45 @@ public class StyleKeyTest {
 
     assertEquals(this.groupId.hashCode(), groupId2.hashCode());
     assertNotEquals(this.artifactId.hashCode(), this.scope.hashCode());
+  }
+
+  @Test
+  public void matchesForGroupId() {
+    StyleKey wildcard = StyleKey.fromString("group.id*");
+
+    assertTrue(this.groupId.matches(this.groupId));
+    assertTrue(wildcard.matches(this.groupId));
+  }
+
+  @Test
+  public void matchesForArtifactId() {
+    StyleKey wildcard = StyleKey.fromString(",artifactId*");
+
+    assertTrue(this.artifactId.matches(this.artifactId));
+    assertTrue(wildcard.matches(this.artifactId));
+  }
+
+  @Test
+  public void matchesForScope() {
+    StyleKey unsupportedWildcard = StyleKey.fromString(",,scope*");
+
+    assertTrue(this.scope.matches(this.scope));
+    assertFalse(unsupportedWildcard.matches(this.scope));
+  }
+
+  @Test
+  public void matchesForType() {
+    StyleKey unsupportedWildcard = StyleKey.fromString(",,,type*");
+
+    assertTrue(this.type.matches(this.type));
+    assertFalse(unsupportedWildcard.matches(this.type));
+  }
+
+  @Test
+  public void matchesForVersion() {
+    StyleKey wildcard = StyleKey.fromString(",,,,version*");
+
+    assertTrue(this.version.matches(this.version));
+    assertTrue(wildcard.matches(this.version));
   }
 }

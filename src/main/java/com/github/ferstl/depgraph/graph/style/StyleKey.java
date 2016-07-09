@@ -36,6 +36,15 @@ public final class StyleKey implements Comparable<StyleKey> {
     return new StyleKey(parts);
   }
 
+  public boolean matches(StyleKey other) {
+    return (this.groupId == null || wildCardMatch(this.groupId, other.groupId))
+        && (this.artifactId == null || wildCardMatch(this.artifactId, other.artifactId))
+        && (this.scope == null || match(this.scope, other.scope))
+        && (this.type == null || match(this.type, other.type))
+        && (this.version == null || wildCardMatch(this.version, other.version));
+
+  }
+
   @Override
   public int compareTo(StyleKey o) {
     return getRank() - o.getRank();
@@ -76,6 +85,18 @@ public final class StyleKey implements Comparable<StyleKey> {
     rank += this.version != null ? 1 : 0;
 
     return rank;
+  }
+
+  private static boolean wildCardMatch(String value1, String value2) {
+    if (StringUtils.endsWith(value1, "*")) {
+      return StringUtils.startsWith(value2, value1.substring(0, value1.length() - 1));
+    }
+
+    return match(value1, value2);
+  }
+
+  private static boolean match(String value1, String value2) {
+    return StringUtils.equals(value1, value2);
   }
 
 }
