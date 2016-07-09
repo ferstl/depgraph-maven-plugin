@@ -61,6 +61,11 @@ public final class StyleKey implements Comparable<StyleKey> {
     return getRank();
   }
 
+  @Override
+  public String toString() {
+    return Joiner.on(",").useForNull("").join(this.groupId, this.artifactId, this.scope, this.type, this.version);
+  }
+
   private int getRank() {
     int rank = 0;
 
@@ -71,11 +76,6 @@ public final class StyleKey implements Comparable<StyleKey> {
     rank += this.version != null ? 1 : 0;
 
     return rank;
-  }
-
-  @Override
-  public String toString() {
-    return Joiner.on(",").useForNull("").join(this.groupId, this.artifactId, this.scope, this.type, this.version);
   }
 
 }
