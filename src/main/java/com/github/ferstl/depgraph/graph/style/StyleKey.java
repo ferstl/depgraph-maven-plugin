@@ -42,11 +42,11 @@ public final class StyleKey implements Comparable<StyleKey> {
   }
 
   public boolean matches(StyleKey other) {
-    return (this.groupId == null || wildCardMatch(this.groupId, other.groupId))
-        && (this.artifactId == null || wildCardMatch(this.artifactId, other.artifactId))
+    return (this.groupId == null || wildcardMatch(this.groupId, other.groupId))
+        && (this.artifactId == null || wildcardMatch(this.artifactId, other.artifactId))
         && (this.scope == null || match(this.scope, other.scope))
         && (this.type == null || match(this.type, other.type))
-        && (this.version == null || wildCardMatch(this.version, other.version));
+        && (this.version == null || wildcardMatch(this.version, other.version));
 
   }
 
@@ -96,7 +96,7 @@ public final class StyleKey implements Comparable<StyleKey> {
     return rank;
   }
 
-  private static boolean wildCardMatch(String value1, String value2) {
+  private static boolean wildcardMatch(String value1, String value2) {
     if (StringUtils.endsWith(value1, "*")) {
       return StringUtils.startsWith(value2, value1.substring(0, value1.length() - 1));
     }
