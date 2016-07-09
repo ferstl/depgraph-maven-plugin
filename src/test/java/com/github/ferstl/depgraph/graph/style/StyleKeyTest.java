@@ -116,15 +116,18 @@ public class StyleKeyTest {
 
   @Test
   public void equalsAndHashCode() {
-    StyleKey groupId2 = StyleKey.fromString("groupId2");
+    StyleKey groupIdEqual = StyleKey.fromString("group.id");
+    StyleKey groupIdDifferent = StyleKey.fromString("group.id2");
 
-    assertEquals(this.groupId, groupId2);
-    assertEquals(groupId2, this.groupId);
+    assertEquals(this.groupId, groupIdEqual);
+    assertEquals(groupIdEqual, this.groupId);
+    assertNotEquals(this.groupId, groupIdDifferent);
+    assertNotEquals(groupIdDifferent, this.groupId);
     assertEquals(this.artifactId, this.artifactId);
     assertNotEquals(this.version, "something else");
 
 
-    assertEquals(this.groupId.hashCode(), groupId2.hashCode());
+    assertEquals(this.groupId.hashCode(), groupIdEqual.hashCode());
     assertNotEquals(this.artifactId.hashCode(), this.scope.hashCode());
   }
 

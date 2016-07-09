@@ -1,5 +1,6 @@
 package com.github.ferstl.depgraph.graph.style;
 
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import com.google.common.base.Joiner;
 
@@ -66,12 +67,16 @@ public final class StyleKey implements Comparable<StyleKey> {
 
     StyleKey other = (StyleKey) obj;
 
-    return compareTo(other) == 0;
+    return Objects.equals(this.groupId, other.groupId)
+        && Objects.equals(this.artifactId, other.artifactId)
+        && Objects.equals(this.scope, other.scope)
+        && Objects.equals(this.type, other.type)
+        && Objects.equals(this.version, other.version);
   }
 
   @Override
   public int hashCode() {
-    return getRank();
+    return Objects.hash(this.groupId, this.artifactId, this.scope, this.type, this.version);
   }
 
   @Override
