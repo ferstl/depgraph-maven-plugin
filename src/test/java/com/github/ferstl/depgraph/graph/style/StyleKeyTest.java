@@ -67,6 +67,13 @@ public class StyleKeyTest {
   }
 
   @Test
+  public void create() {
+    StyleKey key = StyleKey.create("groupId", "artifactId", "scope", "type", "version");
+
+    assertEquals("groupId,artifactId,scope,type,version", key.toString());
+  }
+
+  @Test
   public void singleOrdering() {
     assertThat(this.groupId.compareTo(this.artifactId), greaterThan(0));
     assertThat(this.artifactId.compareTo(this.groupId), lessThan(0));

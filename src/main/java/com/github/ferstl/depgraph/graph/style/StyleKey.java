@@ -36,6 +36,10 @@ public final class StyleKey implements Comparable<StyleKey> {
     return new StyleKey(parts);
   }
 
+  public static StyleKey create(String groupId, String artifactId, String scope, String type, String version) {
+    return new StyleKey(new String[]{groupId, artifactId, scope, type, version});
+  }
+
   public boolean matches(StyleKey other) {
     return (this.groupId == null || wildCardMatch(this.groupId, other.groupId))
         && (this.artifactId == null || wildCardMatch(this.artifactId, other.artifactId))
