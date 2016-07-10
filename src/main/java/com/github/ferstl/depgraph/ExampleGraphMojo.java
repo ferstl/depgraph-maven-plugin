@@ -71,7 +71,8 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
       GraphNode nZ = new GraphNode(aZ);
 
       addEdge(nA, nB);
-      addEdge(nA, nCConfl);
+      addEdge(nA, nD);
+      addEdge(nG, nCConfl);
       addEdge(nB, nC);
       addEdge(nB, nD);
       addEdge(nZ, nCDup);
