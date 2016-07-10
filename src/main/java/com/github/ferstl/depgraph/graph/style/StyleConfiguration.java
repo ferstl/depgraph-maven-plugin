@@ -2,8 +2,6 @@ package com.github.ferstl.depgraph.graph.style;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,7 +20,7 @@ public class StyleConfiguration {
 
   private AbstractNode defaultNode = new Box();
   private final Edge defaultEdge = new Edge();
-  private final Map<StyleKey, AbstractNode> nodeStyles = new HashMap<>();
+  private final Map<StyleKey, AbstractNode> nodeStyles = new LinkedHashMap<>();
   private final Map<NodeResolution, Edge> edgeResolutionStyles = new LinkedHashMap<>();
 
 
@@ -73,14 +71,10 @@ public class StyleConfiguration {
     StyleKey artifactKey = StyleKey.create(groupId, artifactId, effectiveScope, type, version);
     AbstractNode node = this.defaultNode;
 
-    StyleKey[] styleKeys = this.nodeStyles.keySet().toArray(new StyleKey[0]);
-    Arrays.sort(styleKeys);
-
-    // Higher keys have precedence over lower keys
-    for (int i = styleKeys.length - 1; i >= 0; i--) {
-      StyleKey styleKey = styleKeys[i];
+    for (Entry<StyleKey, AbstractNode> entry : this.nodeStyles.entrySet()) {
+      StyleKey styleKey = entry.getKey();
       if (styleKey.matches(artifactKey)) {
-        node = this.nodeStyles.get(styleKey);
+        node = entry.getValue();
         break;
       }
     }
