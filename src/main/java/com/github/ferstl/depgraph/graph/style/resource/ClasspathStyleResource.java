@@ -29,4 +29,8 @@ public class ClasspathStyleResource implements StyleResource {
     return inputStream;
   }
 
+  @Override
+  public String toString() {
+    return "classpath:" + this.name;
+  }
 }

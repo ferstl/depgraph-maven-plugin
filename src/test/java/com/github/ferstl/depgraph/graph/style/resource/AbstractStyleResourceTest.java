@@ -3,7 +3,6 @@ package com.github.ferstl.depgraph.graph.style.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import org.junit.Test;
-import com.github.ferstl.depgraph.graph.style.resource.StyleResource;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -11,8 +10,8 @@ import static org.junit.Assert.fail;
 
 public abstract class AbstractStyleResourceTest {
 
-  private final StyleResource existingResource;
-  private final StyleResource nonExistingResource;
+  final StyleResource existingResource;
+  final StyleResource nonExistingResource;
 
   public AbstractStyleResourceTest(StyleResource existingResource, StyleResource nonExistingResource) {
     this.existingResource = existingResource;

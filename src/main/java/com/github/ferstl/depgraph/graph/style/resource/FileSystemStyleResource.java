@@ -25,4 +25,8 @@ public class FileSystemStyleResource implements StyleResource {
     return Files.newInputStream(this.location, StandardOpenOption.READ);
   }
 
+  @Override
+  public String toString() {
+    return "file:" + this.location;
+  }
 }
