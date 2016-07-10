@@ -244,15 +244,28 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
     // custom style resource
     if (StringUtils.isNotBlank(this.customStyleConfiguration)) {
-      FileSystemStyleResource customStyleResource = new FileSystemStyleResource(Paths.get(this.customStyleConfiguration));
-      if (!customStyleResource.exists()) {
-        throw new MojoFailureException("Custom configuration '" + this.customStyleConfiguration + "' does not exist.");
-      }
-      getLog().info("Using custom style configuration " + this.customStyleConfiguration);
+      StyleResource customStyleResource = getCustomStyleResource();
+      getLog().info("Using custom style configuration " + customStyleResource);
       styleResources.add(customStyleResource);
     }
 
     return StyleConfiguration.load(defaultStyleResource, styleResources.toArray(new StyleResource[0]));
+  }
+
+  private StyleResource getCustomStyleResource() throws MojoFailureException {
+    StyleResource customStyleResource;
+    if (StringUtils.startsWith(this.customStyleConfiguration, "classpath:")) {
+      String resourceName = StringUtils.substring(this.customStyleConfiguration, 10, this.customStyleConfiguration.length());
+      customStyleResource = new ClasspathStyleResource(resourceName, getClass().getClassLoader());
+    } else {
+      customStyleResource = new FileSystemStyleResource(Paths.get(this.customStyleConfiguration));
+    }
+
+    if (!customStyleResource.exists()) {
+      throw new MojoFailureException("Custom configuration '" + this.customStyleConfiguration + "' does not exist.");
+    }
+
+    return customStyleResource;
   }
 
   private void writeDotFile(String dotGraph) throws IOException {
