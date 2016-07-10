@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -49,6 +50,11 @@ public class StyleConfiguration {
   private static StyleConfiguration readConfig(ObjectReader reader, StyleResource config) {
     try (InputStream is = config.openStream()) {
       return reader.readValue(is);
+    } catch (JsonProcessingException e) {
+      String message = String.format("Unable to read style configuration %s.\nLocation: line %s, column %s\nDetails: %s",
+          config, e.getLocation().getLineNr(), e.getLocation().getColumnNr(), e.getOriginalMessage());
+
+      throw new RuntimeException(message);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
