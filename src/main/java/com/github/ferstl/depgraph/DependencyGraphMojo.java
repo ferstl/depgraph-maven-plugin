@@ -93,7 +93,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
-  private DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
+  DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<GraphNode>()
         .nodeStyle(styleConfiguration.defaultNodeAttributes())
         .edgeStyle(styleConfiguration.defaultEdgeAttributes())
