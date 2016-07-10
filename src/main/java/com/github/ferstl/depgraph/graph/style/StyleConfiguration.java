@@ -2,6 +2,8 @@ package com.github.ferstl.depgraph.graph.style;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,7 +22,7 @@ public class StyleConfiguration {
 
   private AbstractNode defaultNode = new Box();
   private final Edge defaultEdge = new Edge();
-  private final Map<String, AbstractNode> scopeStyles = new LinkedHashMap<>();
+  private final Map<StyleKey, AbstractNode> nodeStyles = new HashMap<>();
   private final Map<NodeResolution, Edge> edgeResolutionStyles = new LinkedHashMap<>();
 
 
@@ -68,7 +70,21 @@ public class StyleConfiguration {
   }
 
   public AttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
-    AbstractNode node = this.scopeStyles.containsKey(effectiveScope) ? this.scopeStyles.get(effectiveScope) : this.defaultNode;
+    StyleKey artifactKey = StyleKey.create(groupId, artifactId, effectiveScope, null, version);
+    AbstractNode node = this.defaultNode;
+
+    StyleKey[] styleKeys = this.nodeStyles.keySet().toArray(new StyleKey[0]);
+    Arrays.sort(styleKeys);
+
+    // Higher keys have precedence over lower keys
+    for (int i = styleKeys.length - 1; i >= 0; i--) {
+      StyleKey styleKey = styleKeys[i];
+      if (styleKey.matches(artifactKey)) {
+        node = this.nodeStyles.get(styleKey);
+        break;
+      }
+    }
+
     return node.createAttributes(groupId, artifactId, version, scopes, node != this.defaultNode);
   }
 
@@ -80,18 +96,18 @@ public class StyleConfiguration {
 
     this.defaultEdge.merge(other.defaultEdge);
 
-    for (Entry<String, AbstractNode> entry : other.scopeStyles.entrySet()) {
-      String scope = entry.getKey();
+    for (Entry<StyleKey, AbstractNode> entry : other.nodeStyles.entrySet()) {
+      StyleKey styleKey = entry.getKey();
       AbstractNode node = entry.getValue();
 
-      if (this.scopeStyles.containsKey(scope)) {
-        AbstractNode originalNode = this.scopeStyles.get(scope);
+      if (this.nodeStyles.containsKey(styleKey)) {
+        AbstractNode originalNode = this.nodeStyles.get(styleKey);
         // Double merge again
         originalNode.merge(node);
         node.merge(originalNode);
-        this.scopeStyles.put(scope, node);
+        this.nodeStyles.put(styleKey, node);
       } else {
-        this.scopeStyles.put(scope, node);
+        this.nodeStyles.put(styleKey, node);
       }
     }
 

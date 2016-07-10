@@ -18,8 +18,8 @@
       "style": "dashed"
     }
   },
-  "scope-styles": {
-    "test": {
+  "node-styles" : {
+    ",,test" : {
       "type": "box",
       "style": "filled",
       "fill-color": "orange"

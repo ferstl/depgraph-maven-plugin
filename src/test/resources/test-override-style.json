@@ -15,12 +15,12 @@
       }
     }
   },
-  "scope-styles": {
-    "test": {
+  "node-styles": {
+    ",,test": {
       "type": "box",
       "color": "red"
     },
-    "provided": {
+    ",,provided": {
       "type": "box",
       "color": "blue"
     }
