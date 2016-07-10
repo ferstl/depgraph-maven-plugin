@@ -270,7 +270,10 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
   private void writeDotFile(String dotGraph) throws IOException {
     Path outputFilePath = this.outputFile.toPath();
-    Files.createDirectories(outputFilePath.getParent());
+    Path parent = outputFilePath.getParent();
+    if (parent != null) {
+      Files.createDirectories(parent);
+    }
 
     try (Writer writer = Files.newBufferedWriter(outputFilePath, StandardCharsets.UTF_8)) {
       writer.write(dotGraph);
