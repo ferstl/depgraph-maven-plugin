@@ -30,16 +30,20 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
     DotBuilder<GraphNode> dotBuilder = createDotBuilder(styleConfiguration);
-    return new ExampleGraphFactory(dotBuilder);
+    return new ExampleGraphFactory(dotBuilder, globalFilter, targetFilter);
   }
 
 
   static class ExampleGraphFactory implements GraphFactory {
 
     private final DotBuilder<GraphNode> dotBuilder;
+    private final ArtifactFilter globalFilter;
+    private final ArtifactFilter targetFilter;
 
-    ExampleGraphFactory(DotBuilder<GraphNode> dotBuilder) {
+    ExampleGraphFactory(DotBuilder<GraphNode> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
       this.dotBuilder = dotBuilder;
+      this.globalFilter = globalFilter;
+      this.targetFilter = targetFilter;
     }
 
 
@@ -57,7 +61,7 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
 
       GraphNode nA = new GraphNode(aA);
       GraphNode nB = new GraphNode(aB);
-      GraphNode nCV1 = new GraphNode(aCV1);
+      GraphNode nC = new GraphNode(aC);
       GraphNode nCDup = new GraphNode(new DependencyNode(aC, DependencyNode.OMITTED_FOR_DUPLICATE, aC));
       GraphNode nCConfl = new GraphNode(new DependencyNode(aCV1, DependencyNode.OMITTED_FOR_CONFLICT, aCV1));
       GraphNode nD = new GraphNode(aD);
@@ -66,20 +70,27 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
       GraphNode nG = new GraphNode(aG);
       GraphNode nZ = new GraphNode(aZ);
 
-      this.dotBuilder
-          .addEdge(nA, nB)
-          .addEdge(nB, nCV1)
-          .addEdge(nA, nCConfl)
-          .addEdge(nB, nD)
-          .addEdge(nZ, nCDup)
-          .addEdge(nD, nE)
-          .addEdge(nD, nF)
-          .addEdge(nB, nG)
-          .addEdge(nB, nZ);
+      addEdge(nA, nB);
+      addEdge(nA, nCConfl);
+      addEdge(nB, nC);
+      addEdge(nB, nD);
+      addEdge(nZ, nCDup);
+      addEdge(nD, nE);
+      addEdge(nD, nF);
+      addEdge(nB, nG);
+      addEdge(nB, nZ);
 
       return this.dotBuilder.toString();
     }
 
-  }
+    private void addEdge(GraphNode from, GraphNode to) {
+      if (this.globalFilter.include(from.getArtifact())
+          && this.globalFilter.include(to.getArtifact())
+          && this.targetFilter.include(to.getArtifact())) {
 
+        this.dotBuilder.addEdge(from, to);
+      }
+    }
+
+  }
 }
