@@ -35,8 +35,8 @@ public class DependencyNodeLabelRenderer implements NodeAttributeRenderer<GraphN
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? artifact.getVersion() : null,
-        scopes,
-        Iterables.getFirst(node.getScopes(), null));
+        artifact.getType(),
+        scopes, Iterables.getFirst(node.getScopes(), null));
   }
 
   private static String createScopeString(Set<String> scopes) {

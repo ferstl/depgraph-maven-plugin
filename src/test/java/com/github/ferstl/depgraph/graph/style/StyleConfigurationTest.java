@@ -30,8 +30,8 @@ public class StyleConfigurationTest {
     assertEquals("[style=\"dotted\",color=\"blue\"]", config.defaultEdgeAttributes().toString());
     assertEquals("", config.edgeAttributes(NodeResolution.INCLUDED).toString());
     assertEquals("[style=\"dashed\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE).toString());
-    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>compile>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "compile", "compile").toString());
-    assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "test", "test").toString());
+    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>compile>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "compile", "compile").toString());
+    assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "test", "test").toString());
   }
 
   @Test
@@ -44,8 +44,8 @@ public class StyleConfigurationTest {
     assertEquals("[style=\"dashed\",color=\"green\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE).toString());
     assertEquals("[fontname=\"Courier\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_CONFLICT).toString());
 
-    assertEquals("[shape=\"box\",style=\"filled\",color=\"red\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "test", "test").toString());
-    assertEquals("[shape=\"box\",color=\"blue\",label=<groupId<br/>artifactId<br/>1.0.0<br/>provided>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "provided", "provided").toString());
+    assertEquals("[shape=\"box\",style=\"filled\",color=\"red\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "test", "test").toString());
+    assertEquals("[shape=\"box\",color=\"blue\",label=<groupId<br/>artifactId<br/>1.0.0<br/>provided>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "provided", "provided").toString());
   }
 
   @Test
@@ -64,7 +64,7 @@ public class StyleConfigurationTest {
 
   @Test
   public void nodeAttributesForEmptyConfiguration() {
-    AttributeBuilder attributes = this.emptyConfig.nodeAttributes("groupId", "artifactId", "1.0.0", "compile", "compile");
+    AttributeBuilder attributes = this.emptyConfig.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "compile", "compile");
 
     assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>compile>]", attributes.toString());
   }

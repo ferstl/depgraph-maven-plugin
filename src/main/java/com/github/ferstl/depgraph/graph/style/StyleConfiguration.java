@@ -69,8 +69,8 @@ public class StyleConfiguration {
     return edge != null ? edge.createAttributes() : new AttributeBuilder();
   }
 
-  public AttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String scopes, String effectiveScope) {
-    StyleKey artifactKey = StyleKey.create(groupId, artifactId, effectiveScope, null, version);
+  public AttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String type, String scopes, String effectiveScope) {
+    StyleKey artifactKey = StyleKey.create(groupId, artifactId, effectiveScope, type, version);
     AbstractNode node = this.defaultNode;
 
     StyleKey[] styleKeys = this.nodeStyles.keySet().toArray(new StyleKey[0]);
