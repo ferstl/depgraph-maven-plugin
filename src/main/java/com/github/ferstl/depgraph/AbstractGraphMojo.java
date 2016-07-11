@@ -149,7 +149,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   /**
    * Path to a custom style configuration in JSON format.
    *
-   * @since 1.0.5
+   * @since 2.0.0
    */
   @Parameter(property = "customStyleConfiguration", defaultValue = "")
   private String customStyleConfiguration;

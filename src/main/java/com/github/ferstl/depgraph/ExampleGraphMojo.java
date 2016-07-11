@@ -15,7 +15,7 @@ import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 /**
  * Creates an example graph.
  *
- * @since 1.0.5
+ * @since 2.0.0
  */
 @Mojo(
     name = "example",
