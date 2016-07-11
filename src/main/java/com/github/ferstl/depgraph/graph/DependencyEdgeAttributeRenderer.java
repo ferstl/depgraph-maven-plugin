@@ -18,6 +18,7 @@ package com.github.ferstl.depgraph.graph;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.EdgeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+import static com.google.common.collect.Iterables.getFirst;
 
 
 public class DependencyEdgeAttributeRenderer implements EdgeAttributeRenderer<GraphNode> {
@@ -36,7 +37,7 @@ public class DependencyEdgeAttributeRenderer implements EdgeAttributeRenderer<Gr
   public AttributeBuilder createEdgeAttributes(GraphNode from, GraphNode to) {
     NodeResolution resolution = to.getResolution();
 
-    AttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution);
+    AttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution, getFirst(to.getScopes(), null));
     if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions) {
       builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }

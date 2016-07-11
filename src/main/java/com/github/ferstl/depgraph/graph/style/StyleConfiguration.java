@@ -31,12 +31,14 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.style.resource.StyleResource;
+import static com.github.ferstl.depgraph.graph.NodeResolution.INCLUDED;
 
 public class StyleConfiguration {
 
   private AbstractNode defaultNode = new Box();
   private final Edge defaultEdge = new Edge();
   private final Map<StyleKey, AbstractNode> nodeStyles = new LinkedHashMap<>();
+  private final Map<String, Edge> edgeScopeStyles = new LinkedHashMap<>();
   private final Map<NodeResolution, Edge> edgeResolutionStyles = new LinkedHashMap<>();
 
 
@@ -83,8 +85,14 @@ public class StyleConfiguration {
     return this.defaultEdge.createAttributes();
   }
 
-  public AttributeBuilder edgeAttributes(NodeResolution resolution) {
+  public AttributeBuilder edgeAttributes(NodeResolution resolution, String targetScope) {
     Edge edge = this.edgeResolutionStyles.get(resolution);
+
+    // Scope style win over INCLUDED node resolution
+    if (resolution == INCLUDED && this.edgeScopeStyles.containsKey(targetScope)) {
+      edge = this.edgeScopeStyles.get(targetScope);
+    }
+
     return edge != null ? edge.createAttributes() : new AttributeBuilder();
   }
 
@@ -134,6 +142,17 @@ public class StyleConfiguration {
         this.edgeResolutionStyles.get(resolution).merge(edge);
       } else {
         this.edgeResolutionStyles.put(resolution, edge);
+      }
+    }
+
+    for (Entry<String, Edge> entry : other.edgeScopeStyles.entrySet()) {
+      String scope = entry.getKey();
+      Edge edge = entry.getValue();
+
+      if (this.edgeScopeStyles.containsKey(scope)) {
+        this.edgeScopeStyles.get(scope).merge(edge);
+      } else {
+        this.edgeScopeStyles.put(scope, edge);
       }
     }
   }

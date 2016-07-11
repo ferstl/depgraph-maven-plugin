@@ -5,6 +5,11 @@
   "default-edge": {
     "style": "dashed"
   },
+  "edge-scope-styles" : {
+    "test" : {
+      "color" : "blue"
+    }
+  },
   "edge-resolution-styles": {
     "omitted-for-duplicate": {
       "color": "green"

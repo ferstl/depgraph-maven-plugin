@@ -22,6 +22,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.graph.DependencyEdgeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.DependencyNodeLabelRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
@@ -78,6 +79,9 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
     } else {
       dotBuilder.useNodeNameRenderer(NodeNameRenderers.VERSIONLESS_ID_WITH_SCOPE);
     }
+
+    // This graph won't show any conflicting dependencies. So showVersions must always be false
+    dotBuilder.useEdgeAttributeRenderer(new DependencyEdgeAttributeRenderer(false, styleConfiguration));
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, this.includeParentProjects);
