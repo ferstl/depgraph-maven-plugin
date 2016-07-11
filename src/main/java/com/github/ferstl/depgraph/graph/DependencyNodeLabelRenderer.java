@@ -21,7 +21,7 @@ import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.NodeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
+import static com.google.common.collect.Iterables.getFirst;
 
 
 public class DependencyNodeLabelRenderer implements NodeAttributeRenderer<GraphNode> {
@@ -51,7 +51,8 @@ public class DependencyNodeLabelRenderer implements NodeAttributeRenderer<GraphN
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? artifact.getVersion() : null,
         artifact.getType(),
-        scopes, Iterables.getFirst(node.getScopes(), null));
+        scopes,
+        getFirst(node.getScopes(), null));
   }
 
   private static String createScopeString(Set<String> scopes) {
