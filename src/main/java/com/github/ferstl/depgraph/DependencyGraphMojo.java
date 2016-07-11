@@ -101,7 +101,6 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
     boolean fullGraph = requiresFullGraph();
     if (fullGraph) {
-      // For the full graph we display the versions on the edges
       dotBuilder.useEdgeAttributeRenderer(new DependencyEdgeAttributeRenderer(this.showVersions, styleConfiguration));
     }
 
