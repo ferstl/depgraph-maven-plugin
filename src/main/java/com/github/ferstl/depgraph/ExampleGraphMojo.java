@@ -20,7 +20,7 @@ import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 @Mojo(
     name = "example",
     aggregator = true,
-    requiresProject = false,
+    requiresProject = true,
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.NONE,
     requiresDirectInvocation = false,
