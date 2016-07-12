@@ -23,7 +23,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.graph.DependencyEdgeAttributeRenderer;
-import com.github.ferstl.depgraph.graph.DependencyNodeLabelRenderer;
+import com.github.ferstl.depgraph.graph.DependencyNodeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
@@ -104,7 +104,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
       dotBuilder.useEdgeAttributeRenderer(new DependencyEdgeAttributeRenderer(this.showVersions, styleConfiguration));
     }
 
-    dotBuilder.useNodeAttributeRenderer(new DependencyNodeLabelRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration));
+    dotBuilder.useNodeAttributeRenderer(new DependencyNodeAttributeRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration));
 
     return dotBuilder;
   }

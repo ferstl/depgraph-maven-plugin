@@ -24,7 +24,7 @@ import com.google.common.base.Joiner;
 import static com.google.common.collect.Iterables.getFirst;
 
 
-public class DependencyNodeLabelRenderer implements NodeAttributeRenderer<GraphNode> {
+public class DependencyNodeAttributeRenderer implements NodeAttributeRenderer<GraphNode> {
 
   private static final Joiner SLASH_JOINER = Joiner.on("/").skipNulls();
 
@@ -33,7 +33,7 @@ public class DependencyNodeLabelRenderer implements NodeAttributeRenderer<GraphN
   private final boolean showVersion;
   private final StyleConfiguration styleConfiguration;
 
-  public DependencyNodeLabelRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion, StyleConfiguration styleConfiguration) {
+  public DependencyNodeAttributeRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion, StyleConfiguration styleConfiguration) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showVersion = showVersion;
