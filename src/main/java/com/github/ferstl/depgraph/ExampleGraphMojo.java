@@ -28,8 +28,8 @@ import com.github.ferstl.depgraph.graph.GraphNode;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 
 /**
- * Creates an example graph. This Mojo has the same capabilities as the {@link DependencyGraphMojo}. So it might be
- * useful to try out different options and node stylings.
+ * Creates an example graph. This Mojo has the same capabilities as the {@code graph} Mojo. So it might be useful to
+ * try out different options and node stylings.
  *
  * @since 2.0.0
  */
