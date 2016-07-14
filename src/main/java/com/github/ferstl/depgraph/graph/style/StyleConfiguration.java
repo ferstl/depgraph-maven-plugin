@@ -17,6 +17,7 @@ package com.github.ferstl.depgraph.graph.style;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,16 +44,7 @@ public class StyleConfiguration {
 
 
   public static StyleConfiguration load(StyleResource mainConfig, StyleResource... overrides) {
-    SimpleModule module = new SimpleModule()
-        .addKeySerializer(NodeResolution.class, new NodeResolutionSerializer())
-        .addDeserializer(NodeResolution.class, new NodeResolutionDeserializer());
-
-    ObjectMapper mapper = new ObjectMapper()
-        .registerModule(module)
-        .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
-        .setSerializationInclusion(Include.NON_EMPTY)
-        .setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-
+    ObjectMapper mapper = createObjectMapper();
 
     ObjectReader reader = mapper.readerFor(StyleConfiguration.class);
     StyleConfiguration styleConfiguration = readConfig(reader, mainConfig);
@@ -62,6 +54,19 @@ public class StyleConfiguration {
     }
 
     return styleConfiguration;
+  }
+
+  private static ObjectMapper createObjectMapper() {
+    SimpleModule module = new SimpleModule()
+        .addKeySerializer(NodeResolution.class, new NodeResolutionSerializer())
+        .addDeserializer(NodeResolution.class, new NodeResolutionDeserializer());
+
+    ObjectMapper mapper = new ObjectMapper()
+        .registerModule(module)
+        .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
+        .setSerializationInclusion(Include.NON_EMPTY)
+        .setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+    return mapper;
   }
 
   private static StyleConfiguration readConfig(ObjectReader reader, StyleResource config) {
@@ -109,6 +114,17 @@ public class StyleConfiguration {
     }
 
     return node.createAttributes(groupId, artifactId, version, scopes, node != this.defaultNode);
+  }
+
+  public String toJson() {
+    ObjectMapper mapper = createObjectMapper();
+    try {
+      StringWriter w = new StringWriter();
+      mapper.writerWithDefaultPrettyPrinter().writeValue(w, this);
+      return w.toString();
+    } catch (IOException e) {
+      throw new RuntimeException(e.getMessage(), e);
+    }
   }
 
   private void merge(StyleConfiguration other) {

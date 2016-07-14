@@ -15,11 +15,19 @@
  */
 package com.github.ferstl.depgraph.graph.style;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.style.resource.ClasspathStyleResource;
+import com.github.ferstl.depgraph.graph.style.resource.FileSystemStyleResource;
+import com.google.common.io.Files;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
 
@@ -28,6 +36,9 @@ public class StyleConfigurationTest {
   private ClasspathStyleResource testStyle;
   private StyleConfiguration emptyConfig;
   private ClasspathStyleResource testOverride;
+
+  @Rule
+  public TemporaryFolder tmp = new TemporaryFolder(Paths.get("target").toFile());
 
 
   @Before
@@ -91,5 +102,17 @@ public class StyleConfigurationTest {
     AttributeBuilder attributes = this.emptyConfig.edgeAttributes(NodeResolution.INCLUDED, "compile");
 
     assertEquals("", attributes.toString());
+  }
+
+  @Test
+  public void toJson() throws IOException {
+    StyleConfiguration config = StyleConfiguration.load(this.testStyle, this.testOverride);
+
+    String json = config.toJson();
+    File configFile = this.tmp.newFile("config.json");
+    Files.write(json, configFile, UTF_8);
+
+    StyleConfiguration reloadedConfig = StyleConfiguration.load(new FileSystemStyleResource(configFile.toPath()));
+    assertEquals("[fontname=\"Courier\"]", reloadedConfig.edgeAttributes(NodeResolution.OMITTED_FOR_CONFLICT, "provided").toString());
   }
 }
