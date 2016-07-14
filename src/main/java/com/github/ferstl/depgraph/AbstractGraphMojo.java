@@ -155,6 +155,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private String customStyleConfiguration;
 
   /**
+   * If set to {@code true} the effective style configuration used to create this graph will be printed on the console.
+   *
+   * @since 2.0.0
+   */
+  @Parameter(property = "printStyleConfiguration", defaultValue = "false")
+  private boolean printStyleConfiguration;
+
+  /**
    * Local maven repository required by the {@link DependencyTreeBuilder}.
    */
   @Parameter(defaultValue = "${localRepository}", readonly = true)
@@ -249,7 +257,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
       styleResources.add(customStyleResource);
     }
 
-    return StyleConfiguration.load(defaultStyleResource, styleResources.toArray(new StyleResource[0]));
+    // load and print
+    StyleConfiguration styleConfiguration = StyleConfiguration.load(defaultStyleResource, styleResources.toArray(new StyleResource[0]));
+    if (this.printStyleConfiguration) {
+      getLog().info("Using effective style configuration:\n" + styleConfiguration.toJson());
+    }
+
+    return styleConfiguration;
   }
 
   private StyleResource getCustomStyleResource() throws MojoFailureException {
