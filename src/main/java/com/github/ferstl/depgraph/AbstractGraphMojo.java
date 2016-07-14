@@ -119,7 +119,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private File outputFile;
 
   /**
-   * If set to true and Graphviz is installed on the system where this plugin is executed, the dot file will be
+   * If set to {@code true} and Graphviz is installed on the system where this plugin is executed, the dot file will be
    * converted to a graph image using Graphviz' dot executable.
    *
    * @see #imageFormat
