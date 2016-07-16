@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.graph.style.resource;
 
-import org.apache.maven.plugins.annotations.Parameter;
 
-public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
+public enum BuiltInStyleResource {
 
-  /**
-   * Merge dependencies that occur in multiple scopes into one graph node instead of having a node per scope.
-   *
-   * @since 2.0.0
-   */
-  @Parameter(property = "mergeScopes", defaultValue = "false")
-  boolean mergeScopes;
+  DEFAULT_STYLE("default-style.json"),
+  GROUP_ID_ONLY_STYLE("group-id-only-style.json");
 
+  private final String styleConfig;
+
+  BuiltInStyleResource(String styleConfig) {
+    this.styleConfig = styleConfig;
+  }
+
+  public ClasspathStyleResource createStyleResource(ClassLoader classLoader) {
+    return new ClasspathStyleResource(this.styleConfig, classLoader);
+  }
 }

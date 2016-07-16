@@ -44,7 +44,17 @@ public class AttributeBuilder {
   }
 
   public AttributeBuilder fontSize(int fontSize) {
-    return addAttribute("fontsize", Integer.toString(fontSize));
+    if (fontSize > 0) {
+      return addAttribute("fontsize", Integer.toString(fontSize));
+    } else if (fontSize < 0) {
+      throw new IllegalArgumentException("Negative font size");
+    }
+
+    return this;
+  }
+
+  public AttributeBuilder fontSize(Integer fontSize) {
+    return fontSize(fontSize != null ? fontSize : 0);
   }
 
   public AttributeBuilder fontColor(String color) {
@@ -59,12 +69,18 @@ public class AttributeBuilder {
     return addAttribute("color", color);
   }
 
+  public AttributeBuilder fillColor(String color) {
+    return addAttribute("fillcolor", color);
+  }
+
   public AttributeBuilder shape(String shape) {
     return addAttribute("shape", shape);
   }
 
   public AttributeBuilder addAttribute(String key, String value) {
-    this.attributes.put(key, escape(value));
+    if (value != null) {
+      this.attributes.put(key, escape(value));
+    }
     return this;
   }
 

@@ -13,18 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.graph.style;
 
-import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.commons.lang3.StringUtils;
+import com.github.ferstl.depgraph.dot.AttributeBuilder;
 
-public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
+class Font {
 
-  /**
-   * Merge dependencies that occur in multiple scopes into one graph node instead of having a node per scope.
-   *
-   * @since 2.0.0
-   */
-  @Parameter(property = "mergeScopes", defaultValue = "false")
-  boolean mergeScopes;
+  String color;
+  Integer size;
+  String name;
 
+  AttributeBuilder setAttributes(AttributeBuilder builder) {
+    return builder
+        .fontColor(this.color)
+        .fontSize(this.size)
+        .fontName(this.name);
+  }
+
+  void merge(Font other) {
+    this.color = StringUtils.defaultIfBlank(other.color, this.color);
+    this.size = other.size != null ? other.size : this.size;
+    this.name = StringUtils.defaultIfBlank(other.name, this.name);
+  }
 }

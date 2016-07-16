@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph.graph;
 
+import java.util.Set;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
@@ -23,26 +24,33 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import static java.util.EnumSet.allOf;
 
 /**
  * Adapter for {@link DependencyGraphBuilder} and {@link DependencyTreeBuilder}.
  */
 public final class GraphBuilderAdapter {
 
-  private DependencyGraphBuilder dependencyGraphBuilder;
-  private DependencyTreeBuilder dependencyTreeBuilder;
-  private ArtifactRepository artifactRepository;
+  private final DependencyGraphBuilder dependencyGraphBuilder;
+  private final DependencyTreeBuilder dependencyTreeBuilder;
+  private final ArtifactRepository artifactRepository;
   private final ArtifactFilter targetFilter;
+  private final Set<NodeResolution> includedResolutions;
 
   public GraphBuilderAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
     this.dependencyGraphBuilder = builder;
     this.targetFilter = targetFilter;
+    this.includedResolutions = allOf(NodeResolution.class);
+    this.dependencyTreeBuilder = null;
+    this.artifactRepository = null;
   }
 
-  public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter) {
+  public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.dependencyTreeBuilder = builder;
     this.artifactRepository = artifactRepository;
     this.targetFilter = targetFilter;
+    this.includedResolutions = includedResolutions;
+    this.dependencyGraphBuilder = null;
   }
 
   public void buildDependencyGraph(MavenProject project, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder) {
@@ -75,7 +83,7 @@ public final class GraphBuilderAdapter {
     }
 
     // Due to MNG-3236, we need to filter the artifacts on our own.
-    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder, globalFilter, this.targetFilter);
+    DotBuildingVisitor visitor = new DotBuildingVisitor(dotBuilder, globalFilter, this.targetFilter, this.includedResolutions);
     root.accept(visitor);
   }
 }

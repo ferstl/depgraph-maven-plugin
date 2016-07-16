@@ -26,9 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
-import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
-import com.github.ferstl.depgraph.graph.GraphNode;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
 import static org.junit.Assert.assertThat;
@@ -96,9 +93,9 @@ public class AggregatingGraphFactoryTest {
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child1:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]",
-            "\"groupId:child2:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child1:jar:version:compile\"",
+            "\"groupId:child2:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\"[style=dotted]",
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\"[style=dotted]"}));
@@ -163,12 +160,12 @@ public class AggregatingGraphFactoryTest {
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child1-1:jar:version:compile\"[label=\"groupId:child1-1:jar:version:compile\"]",
-            "\"groupId:child1-2:jar:version:compile\"[label=\"groupId:child1-2:jar:version:compile\"]",
-            "\"groupId:subParent:jar:version:compile\"[label=\"groupId:subParent:jar:version:compile\"]",
-            "\"groupId:child2-1:jar:version:compile\"[label=\"groupId:child2-1:jar:version:compile\"]",
-            "\"groupId:child2-2:jar:version:compile\"[label=\"groupId:child2-2:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child1-1:jar:version:compile\"",
+            "\"groupId:child1-2:jar:version:compile\"",
+            "\"groupId:subParent:jar:version:compile\"",
+            "\"groupId:child2-1:jar:version:compile\"",
+            "\"groupId:child2-2:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-1:jar:version:compile\"[style=dotted]",
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-2:jar:version:compile\"[style=dotted]",
@@ -198,8 +195,8 @@ public class AggregatingGraphFactoryTest {
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child:jar:version:compile\"[label=\"groupId:child:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\"[style=dotted]"}));
   }
@@ -235,9 +232,9 @@ public class AggregatingGraphFactoryTest {
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child1-1:jar:version:compile\"[label=\"groupId:child1-1:jar:version:compile\"]",
-            "\"groupId:child1-2:jar:version:compile\"[label=\"groupId:child1-2:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child1-1:jar:version:compile\"",
+            "\"groupId:child1-2:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-1:jar:version:compile\"[style=dotted]",
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-2:jar:version:compile\"[style=dotted]"}));
@@ -273,8 +270,8 @@ public class AggregatingGraphFactoryTest {
     // module tree must not contain child1
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child2:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child2:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\"[style=dotted]"}));
   }

@@ -22,13 +22,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -43,6 +48,11 @@ import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
 import com.github.ferstl.depgraph.graph.DependencyGraphException;
 import com.github.ferstl.depgraph.graph.GraphFactory;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
+import com.github.ferstl.depgraph.graph.style.resource.ClasspathStyleResource;
+import com.github.ferstl.depgraph.graph.style.resource.FileSystemStyleResource;
+import com.github.ferstl.depgraph.graph.style.resource.StyleResource;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -109,7 +119,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private File outputFile;
 
   /**
-   * If set to true and Graphviz is installed on the system where this plugin is executed, the dot file will be
+   * If set to {@code true} and Graphviz is installed on the system where this plugin is executed, the dot file will be
    * converted to a graph image using Graphviz' dot executable.
    *
    * @see #imageFormat
@@ -137,6 +147,22 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private File dotExecutable;
 
   /**
+   * Path to a custom style configuration in JSON format.
+   *
+   * @since 2.0.0
+   */
+  @Parameter(property = "customStyleConfiguration", defaultValue = "")
+  private String customStyleConfiguration;
+
+  /**
+   * If set to {@code true} the effective style configuration used to create this graph will be printed on the console.
+   *
+   * @since 2.0.0
+   */
+  @Parameter(property = "printStyleConfiguration", defaultValue = "false")
+  private boolean printStyleConfiguration;
+
+  /**
    * Local maven repository required by the {@link DependencyTreeBuilder}.
    */
   @Parameter(defaultValue = "${localRepository}", readonly = true)
@@ -152,12 +178,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   DependencyTreeBuilder dependencyTreeBuilder;
 
   @Override
-  public void execute() throws MojoExecutionException {
+  public final void execute() throws MojoExecutionException, MojoFailureException {
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
     ArtifactFilter targetFilter = createTargetArtifactFilter();
+    StyleConfiguration styleConfiguration = loadStyleConfiguration();
 
     try {
-      GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter);
+      GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter, styleConfiguration);
 
       writeDotFile(graphFactory.createGraph(this.project));
 
@@ -172,7 +199,18 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter);
+  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration);
+
+  /**
+   * Override this method to configure additional style resources. It is recommendet to call
+   * {@code super.getAdditionalStyleResources()} and add them to the set.
+   *
+   * @return A set of additional built-in style resources to use.
+   */
+  protected Set<BuiltInStyleResource> getAdditionalStyleResources() {
+    // We need to preserve the order of style configurations
+    return new LinkedHashSet<>();
+  }
 
   private ArtifactFilter createGlobalArtifactFilter() {
     AndArtifactFilter filter = new AndArtifactFilter();
@@ -202,9 +240,54 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     return filter;
   }
 
+  private StyleConfiguration loadStyleConfiguration() throws MojoFailureException {
+    // default style resources
+    ClasspathStyleResource defaultStyleResource = BuiltInStyleResource.DEFAULT_STYLE.createStyleResource(getClass().getClassLoader());
+
+    // additional style resources from the mojo
+    Set<StyleResource> styleResources = new LinkedHashSet<>();
+    for (BuiltInStyleResource additionalResource : getAdditionalStyleResources()) {
+      styleResources.add(additionalResource.createStyleResource(getClass().getClassLoader()));
+    }
+
+    // custom style resource
+    if (StringUtils.isNotBlank(this.customStyleConfiguration)) {
+      StyleResource customStyleResource = getCustomStyleResource();
+      getLog().info("Using custom style configuration " + customStyleResource);
+      styleResources.add(customStyleResource);
+    }
+
+    // load and print
+    StyleConfiguration styleConfiguration = StyleConfiguration.load(defaultStyleResource, styleResources.toArray(new StyleResource[0]));
+    if (this.printStyleConfiguration) {
+      getLog().info("Using effective style configuration:\n" + styleConfiguration.toJson());
+    }
+
+    return styleConfiguration;
+  }
+
+  private StyleResource getCustomStyleResource() throws MojoFailureException {
+    StyleResource customStyleResource;
+    if (StringUtils.startsWith(this.customStyleConfiguration, "classpath:")) {
+      String resourceName = StringUtils.substring(this.customStyleConfiguration, 10, this.customStyleConfiguration.length());
+      customStyleResource = new ClasspathStyleResource(resourceName, getClass().getClassLoader());
+    } else {
+      customStyleResource = new FileSystemStyleResource(Paths.get(this.customStyleConfiguration));
+    }
+
+    if (!customStyleResource.exists()) {
+      throw new MojoFailureException("Custom configuration '" + this.customStyleConfiguration + "' does not exist.");
+    }
+
+    return customStyleResource;
+  }
+
   private void writeDotFile(String dotGraph) throws IOException {
     Path outputFilePath = this.outputFile.toPath();
-    Files.createDirectories(outputFilePath.getParent());
+    Path parent = outputFilePath.getParent();
+    if (parent != null) {
+      Files.createDirectories(parent);
+    }
 
     try (Writer writer = Files.newBufferedWriter(outputFilePath, StandardCharsets.UTF_8)) {
       writer.write(dotGraph);

@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Matchers;
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import static java.util.EnumSet.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -70,7 +71,7 @@ public class GraphBuilderAdapterTest {
 
     this.artifactRepository = mock(ArtifactRepository.class);
     this.graphAdapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetFilter);
-    this.treeAdapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.targetFilter);
+    this.treeAdapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.targetFilter, allOf(NodeResolution.class));
   }
 
   @Test

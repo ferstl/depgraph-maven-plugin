@@ -17,10 +17,12 @@ package com.github.ferstl.depgraph.graph;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import static com.github.ferstl.depgraph.graph.NodeResolution.OMITTED_FOR_CONFLICT;
+import static java.util.EnumSet.allOf;
 
 
 /**
@@ -34,16 +36,18 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
   private final Deque<GraphNode> stack;
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter targetFilter;
+  private final Set<NodeResolution> includedResolutions;
 
-  DotBuildingVisitor(DotBuilder<GraphNode> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
+  DotBuildingVisitor(DotBuilder<GraphNode> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
     this.targetFilter = targetFilter;
+    this.includedResolutions = includedResolutions;
   }
 
   DotBuildingVisitor(DotBuilder<GraphNode> dotBuilder, ArtifactFilter targetFilter) {
-    this(dotBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter);
+    this(dotBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter, allOf(NodeResolution.class));
   }
 
   @Override
@@ -70,7 +74,7 @@ class DotBuildingVisitor implements org.apache.maven.shared.dependency.graph.tra
     GraphNode currentParent = this.stack.peek();
 
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
-      if (currentParent != null) {
+      if (currentParent != null && this.includedResolutions.contains(node.getResolution())) {
         GraphNode effectiveSource = getEffectiveNode(currentParent);
         GraphNode effectiveTarget = getEffectiveNode(node);
         effectiveTarget.addScope(node.getArtifact().getScope());

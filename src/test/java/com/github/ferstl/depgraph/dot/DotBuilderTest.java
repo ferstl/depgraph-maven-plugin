@@ -122,22 +122,36 @@ public class DotBuilderTest {
 
 
   @Test
-  public void customNodeRenderer() {
-    this.dotBuilder.useNodeRenderer(TestRenderer.INSTANCE);
+  public void customNodeNameRenderer() {
+    this.dotBuilder.useNodeNameRenderer(TestRenderer.INSTANCE);
 
     this.dotBuilder.addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[]{
-            "\"from\"[label=\"group:from:jar:1.0.0:compile\"]",
-            "\"to\"[label=\"group:to:jar:1.0.0:compile\"]"},
+            "\"from\"",
+            "\"to\""},
         new String[]{"from -> to"}));
   }
 
   @Test
-  public void customEdgeRenderer() {
+  public void customNodeAttributeRenderer() {
+    this.dotBuilder.useNodeAttributeRenderer(TestRenderer.INSTANCE);
+
+    this.dotBuilder.addEdge(this.fromNode, this.toNode);
+
+    assertThat(this.dotBuilder, hasNodesAndEdges(
+        new String[]{
+            "\"group:from:jar:1.0.0:compile\"[label=\"from\"]",
+            "\"group:to:jar:1.0.0:compile\"[label=\"to\"]"},
+        new String[]{"from -> to"}));
+  }
+
+
+  @Test
+  public void customEdgeAttributeRenderer() {
     this.dotBuilder
-        .useEdgeRenderer(TestRenderer.INSTANCE)
+        .useEdgeAttributeRenderer(TestRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
@@ -158,7 +172,7 @@ public class DotBuilderTest {
   @Test
   public void customNodeLabelRenderer() {
     this.dotBuilder
-        .useNodeLabelRenderer(TestRenderer.INSTANCE)
+        .useNodeAttributeRenderer(TestRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
@@ -175,19 +189,24 @@ public class DotBuilderTest {
     return new GraphNode(artifact);
   }
 
-  enum TestRenderer implements EdgeRenderer<GraphNode>, NodeRenderer<GraphNode> {
+  enum TestRenderer implements EdgeAttributeRenderer<GraphNode>, NodeNameRenderer<GraphNode>, NodeAttributeRenderer<GraphNode> {
     INSTANCE;
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       return node.getArtifact().getArtifactId();
     }
 
     @Override
-    public String createEdgeAttributes(GraphNode from, GraphNode to) {
+    public AttributeBuilder createEdgeAttributes(GraphNode from, GraphNode to) {
       return new AttributeBuilder()
-          .label(to.getArtifact().getVersion())
-          .toString();
+          .label(to.getArtifact().getVersion());
+    }
+
+    @Override
+    public AttributeBuilder createNodeAttributes(GraphNode node) {
+      return new AttributeBuilder()
+          .label(node.getArtifact().getArtifactId());
     }
 
   }

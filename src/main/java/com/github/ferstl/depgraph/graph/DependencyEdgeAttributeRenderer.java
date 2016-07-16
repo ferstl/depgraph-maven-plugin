@@ -16,44 +16,33 @@
 package com.github.ferstl.depgraph.graph;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
-import com.github.ferstl.depgraph.dot.EdgeRenderer;
+import com.github.ferstl.depgraph.dot.EdgeAttributeRenderer;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+import static com.google.common.collect.Iterables.getFirst;
 
 
-public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
+public class DependencyEdgeAttributeRenderer implements EdgeAttributeRenderer<GraphNode> {
 
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
   private final boolean renderVersions;
-  private final boolean renderDuplicates;
-  private final boolean renderConflicts;
+  private final StyleConfiguration styleConfiguration;
 
-  public DependencyEdgeRenderer(boolean renderVersions, boolean renderDuplicates, boolean renderConflicts) {
+  public DependencyEdgeAttributeRenderer(boolean renderVersions, StyleConfiguration styleConfiguration) {
     this.renderVersions = renderVersions;
-    this.renderDuplicates = renderDuplicates;
-    this.renderConflicts = renderConflicts;
+    this.styleConfiguration = styleConfiguration;
   }
 
   @Override
-  public String createEdgeAttributes(GraphNode from, GraphNode to) {
-    AttributeBuilder builder = new AttributeBuilder();
+  public AttributeBuilder createEdgeAttributes(GraphNode from, GraphNode to) {
     NodeResolution resolution = to.getResolution();
 
-    if (this.renderDuplicates && resolution == NodeResolution.OMITTED_FOR_DUPLICATE) {
-      builder.style("dashed");
+    AttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution, getFirst(to.getScopes(), null));
+    if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions) {
+      builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }
 
-    if (this.renderConflicts && resolution == NodeResolution.OMITTED_FOR_CONFLICT) {
-      builder
-          .style("dashed")
-          .color("red")
-          .fontColor("red");
-
-      if (this.renderVersions) {
-        builder.label(abbreviateVersion(to.getArtifact().getVersion()));
-      }
-    }
-
-    return builder.toString();
+    return builder;
   }
 
   private String abbreviateVersion(String version) {

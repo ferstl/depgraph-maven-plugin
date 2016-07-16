@@ -51,6 +51,21 @@ public class AttributeBuilderTest {
   }
 
   @Test
+  public void fontSizeZero() {
+    assertEquals("", new AttributeBuilder().fontSize(0).toString());
+  }
+
+  @Test
+  public void fontSizeNull() {
+    assertEquals("", new AttributeBuilder().fontSize(null).toString());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void fontSizeNegative() {
+    new AttributeBuilder().fontSize(-1).toString();
+  }
+
+  @Test
   public void fontColor() {
     assertEquals("[fontcolor=\"green\"]", new AttributeBuilder().fontColor("green").toString());
   }
@@ -66,6 +81,11 @@ public class AttributeBuilderTest {
   }
 
   @Test
+  public void fillColor() {
+    assertEquals("[fillcolor=\"red\"]", new AttributeBuilder().fillColor("red").toString());
+  }
+
+  @Test
   public void shape() {
     assertEquals("[shape=\"box\"]", new AttributeBuilder().shape("box").toString());
   }
@@ -73,6 +93,11 @@ public class AttributeBuilderTest {
   @Test
   public void addAttribute() {
     assertEquals("[someAttribute=\"someValue\"]", new AttributeBuilder().addAttribute("someAttribute", "someValue").toString());
+  }
+
+  @Test
+  public void addAttributeWithNullValue() {
+    assertEquals("", new AttributeBuilder().addAttribute("someAttribute", null).toString());
   }
 
   @Test

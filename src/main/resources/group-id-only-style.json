@@ -1,0 +1,8 @@
+{
+  "default-node": {
+    "type": "box",
+    "group-id-font": {
+      "size": 14
+    }
+  }
+}

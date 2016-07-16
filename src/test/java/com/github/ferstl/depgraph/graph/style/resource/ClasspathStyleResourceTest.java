@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.graph.style.resource;
 
-import org.apache.maven.plugins.annotations.Parameter;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
+public class ClasspathStyleResourceTest extends AbstractStyleResourceTest {
 
-  /**
-   * Merge dependencies that occur in multiple scopes into one graph node instead of having a node per scope.
-   *
-   * @since 2.0.0
-   */
-  @Parameter(property = "mergeScopes", defaultValue = "false")
-  boolean mergeScopes;
+  public ClasspathStyleResourceTest() {
+    super(
+        new ClasspathStyleResource("default-style.json", ClasspathStyleResourceTest.class.getClassLoader()),
+        new ClasspathStyleResource("does-not-exist", ClasspathStyleResourceTest.class.getClassLoader()));
+  }
 
+  @Test
+  public void toStringTest() {
+    assertEquals("classpath:default-style.json", this.existingResource.toString());
+  }
 }

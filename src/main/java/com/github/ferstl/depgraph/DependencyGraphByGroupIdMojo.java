@@ -15,17 +15,22 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.Set;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.DependencyNodeLabelRenderer;
+import com.github.ferstl.depgraph.graph.DependencyNodeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeRenderers;
+import com.github.ferstl.depgraph.graph.NodeNameRenderers;
+import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
+import static java.util.EnumSet.allOf;
 
 /**
  * Creates a graph containing the group IDs of all dependencies.
@@ -40,21 +45,30 @@ import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
 public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-    DotBuilder<GraphNode> dotBuilder = createDotBuilder();
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
+    DotBuilder<GraphNode> dotBuilder = createDotBuilder(styleConfiguration);
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter);
+    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, allOf(NodeResolution.class));
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
-  private DotBuilder<GraphNode> createDotBuilder() {
+  @Override
+  protected Set<BuiltInStyleResource> getAdditionalStyleResources() {
+    Set<BuiltInStyleResource> resources = super.getAdditionalStyleResources();
+    resources.add(BuiltInStyleResource.GROUP_ID_ONLY_STYLE);
+
+    return resources;
+  }
+
+  private DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
-        .useNodeRenderer(NodeRenderers.GROUP_ID_WITH_SCOPE)
-        .useNodeLabelRenderer(new DependencyNodeLabelRenderer(true, false, false))
+        .nodeStyle(styleConfiguration.defaultNodeAttributes())
+        .edgeStyle(styleConfiguration.defaultEdgeAttributes())
+        .useNodeNameRenderer(NodeNameRenderers.GROUP_ID_WITH_SCOPE)
+        .useNodeAttributeRenderer(new DependencyNodeAttributeRenderer(true, false, false, styleConfiguration))
         .omitSelfReferences();
 
     return dotBuilder;
   }
-
 }

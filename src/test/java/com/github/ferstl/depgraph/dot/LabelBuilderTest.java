@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2014 - 2016 by Stefan Ferstl <st.ferstl@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.github.ferstl.depgraph.dot;
 
 import org.junit.Test;
@@ -101,7 +116,7 @@ public class LabelBuilderTest {
         .smartNewLine()
         .build();
 
-    assertEquals("<text<br/>>", label);
+    assertEquals("<text>", label);
   }
 
   @Test
@@ -114,7 +129,7 @@ public class LabelBuilderTest {
         .smartNewLine()
         .build();
 
-    assertEquals("<text1<br/>text2<br/>>", label);
+    assertEquals("<text1<br/>text2>", label);
   }
 
   @Test
@@ -137,6 +152,28 @@ public class LabelBuilderTest {
         .build();
 
     assertEquals("<<font point-size=\"10\">text</font>>", label);
+  }
+
+  @Test
+  public void fontSizeZero() {
+    String label = new LabelBuilder()
+        .font()
+        .size(0)
+        .text("text")
+        .build();
+
+    assertEquals("<text>", label);
+  }
+
+  @Test
+  public void fontSizeNull() {
+    String label = new LabelBuilder()
+        .font()
+        .size(null)
+        .text("text")
+        .build();
+
+    assertEquals("<text>", label);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -168,6 +205,29 @@ public class LabelBuilderTest {
         .build();
 
     assertEquals("<<font color=\"green\" face=\"Helvetica\" point-size=\"12\">text</font>>", label);
+  }
+
+  @Test
+  public void fontNullValues() {
+    String label = new LabelBuilder()
+        .font()
+        .name(null)
+        .color(null)
+        .size(12)
+        .text("text")
+        .build();
+
+    assertEquals("<<font point-size=\"12\">text</font>>", label);
+  }
+
+  @Test
+  public void fontEmpty() {
+    String label = new LabelBuilder()
+        .font()
+        .text("text")
+        .build();
+
+    assertEquals("<text>", label);
   }
 
   @Test

@@ -1,0 +1,34 @@
+{
+  "default-node": {
+    "type": "polygon",
+    "sides": 8,
+    "color": "black",
+    "default-font": {
+      "size": 14,
+      "name": "Courier",
+      "color": "green"
+    }
+  },
+  "default-edge": {
+    "style": "dotted",
+    "color": "blue"
+  },
+  "edge-scope-styles" : {
+    "test" : {
+      "style" : "dotted",
+      "color" : "gray"
+    }
+  },
+  "edge-resolution-styles": {
+    "omitted-for-duplicate": {
+      "style": "dashed"
+    }
+  },
+  "node-styles" : {
+    ",,test" : {
+      "type": "box",
+      "style": "filled",
+      "fill-color": "orange"
+    }
+  }
+}

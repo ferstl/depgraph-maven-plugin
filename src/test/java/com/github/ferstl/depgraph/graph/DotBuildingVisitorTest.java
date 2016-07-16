@@ -16,6 +16,7 @@
 package com.github.ferstl.depgraph.graph;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -25,6 +26,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
+import static java.util.EnumSet.allOf;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -38,6 +40,7 @@ public class DotBuildingVisitorTest {
   private DotBuildingVisitor visitor;
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
+  private EnumSet<NodeResolution> includedResolutions;
 
   @Before
   public void before() {
@@ -50,7 +53,8 @@ public class DotBuildingVisitorTest {
     this.targetFilter = mock(ArtifactFilter.class);
     when(this.targetFilter.include(Matchers.<Artifact>any())).thenReturn(true);
 
-    this.visitor = new DotBuildingVisitor(this.dotBuilder, this.globalFilter, this.targetFilter);
+    this.includedResolutions = allOf(NodeResolution.class);
+    this.visitor = new DotBuildingVisitor(this.dotBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
   }
 
   /**

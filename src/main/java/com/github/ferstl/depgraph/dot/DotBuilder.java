@@ -24,7 +24,8 @@ import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 /**
  * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by defining edges between
- * Nodes. The builder allows some customizations including custom {@link NodeRenderer}s and {@link EdgeRenderer}s.
+ * Nodes. The builder allows some customizations including custom {@link NodeNameRenderer}s and
+ * {@link EdgeAttributeRenderer}s.
  *
  * @param <T> Type of the graph nodes.
  */
@@ -33,9 +34,9 @@ public final class DotBuilder<T> {
   private String graphName;
   private AttributeBuilder nodeAttributeBuilder;
   private AttributeBuilder edgeAttributeBuilder;
-  private NodeRenderer<? super T> nodeRenderer;
-  private NodeRenderer<? super T> nodeLabelRenderer;
-  private EdgeRenderer<? super T> edgeRenderer;
+  private NodeNameRenderer<? super T> nodeNameRenderer;
+  private NodeAttributeRenderer<? super T> nodeAttributeRenderer;
+  private EdgeAttributeRenderer<? super T> edgeAttributeRenderer;
   private boolean omitSelfReferences;
   private final Map<String, T> nodeDefinitions;
   private final Set<String> edgeDefinitions;
@@ -44,9 +45,9 @@ public final class DotBuilder<T> {
     this.graphName = "G";
     this.nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
     this.edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
-    this.nodeLabelRenderer = createDefaultNodeRenderer();
-    this.nodeRenderer = createDefaultNodeRenderer();
-    this.edgeRenderer = createDefaultEdgeRenderer();
+    this.nodeNameRenderer = createDefaultNodeNameRenderer();
+    this.nodeAttributeRenderer = createDefaultNodeAttributeRenderer();
+    this.edgeAttributeRenderer = createDefaultEdgeAttributeRenderer();
 
     this.nodeDefinitions = new LinkedHashMap<>();
     this.edgeDefinitions = new LinkedHashSet<>();
@@ -67,18 +68,18 @@ public final class DotBuilder<T> {
     return this;
   }
 
-  public DotBuilder<T> useNodeRenderer(NodeRenderer<? super T> nodeRenderer) {
-    this.nodeRenderer = nodeRenderer;
+  public DotBuilder<T> useNodeNameRenderer(NodeNameRenderer<? super T> nodeNameRenderer) {
+    this.nodeNameRenderer = nodeNameRenderer;
     return this;
   }
 
-  public DotBuilder<T> useNodeLabelRenderer(NodeRenderer<? super T> nodeLabelRenderer) {
-    this.nodeLabelRenderer = nodeLabelRenderer;
+  public DotBuilder<T> useNodeAttributeRenderer(NodeAttributeRenderer<? super T> nodeAttributeRenderer) {
+    this.nodeAttributeRenderer = nodeAttributeRenderer;
     return this;
   }
 
-  public DotBuilder<T> useEdgeRenderer(EdgeRenderer<? super T> edgeRenderer) {
-    this.edgeRenderer = edgeRenderer;
+  public DotBuilder<T> useEdgeAttributeRenderer(EdgeAttributeRenderer<? super T> edgeAttributeRenderer) {
+    this.edgeAttributeRenderer = edgeAttributeRenderer;
     return this;
   }
 
@@ -99,11 +100,11 @@ public final class DotBuilder<T> {
     return this;
   }
 
-  public DotBuilder<T> addEdge(T from, T to, EdgeRenderer<? super T> edgeRenderer) {
-    EdgeRenderer<? super T> originalEdgeRenderer = this.edgeRenderer;
-    this.edgeRenderer = edgeRenderer;
+  public DotBuilder<T> addEdge(T from, T to, EdgeAttributeRenderer<? super T> edgeAttributeRenderer) {
+    EdgeAttributeRenderer<? super T> originalEdgeAttributeRenderer = this.edgeAttributeRenderer;
+    this.edgeAttributeRenderer = edgeAttributeRenderer;
     addEdge(from, to);
-    this.edgeRenderer = originalEdgeRenderer;
+    this.edgeAttributeRenderer = originalEdgeAttributeRenderer;
 
     return this;
   }
@@ -115,7 +116,7 @@ public final class DotBuilder<T> {
    * @return The firstly added node or the given node if not present.
    */
   public T getEffectiveNode(T node) {
-    String key = escape(this.nodeRenderer.render(node));
+    String key = escape(this.nodeNameRenderer.createNodeName(node));
     if (this.nodeDefinitions.containsKey(key)) {
       return this.nodeDefinitions.get(key);
     }
@@ -131,10 +132,10 @@ public final class DotBuilder<T> {
 
     sb.append("\n\n  // Node Definitions:");
     for (Entry<String, T> entry : this.nodeDefinitions.entrySet()) {
-      String nodeLabel = this.nodeLabelRenderer.render(entry.getValue());
+      AttributeBuilder nodeAttributes = this.nodeAttributeRenderer.createNodeAttributes(entry.getValue());
       sb.append("\n  ")
           .append(entry.getKey())
-          .append(new AttributeBuilder().label(nodeLabel));
+          .append(nodeAttributes.toString());
     }
 
     sb.append("\n\n  // Edge Definitions:");
@@ -146,37 +147,47 @@ public final class DotBuilder<T> {
   }
 
   private void addNode(T node) {
-    String nodeName = this.nodeRenderer.render(node);
+    String nodeName = this.nodeNameRenderer.createNodeName(node);
     this.nodeDefinitions.put(escape(nodeName), node);
   }
 
   private void safelyAddEdge(T fromNode, T toNode) {
-    String fromName = this.nodeRenderer.render(fromNode);
-    String toName = this.nodeRenderer.render(toNode);
+    String fromName = this.nodeNameRenderer.createNodeName(fromNode);
+    String toName = this.nodeNameRenderer.createNodeName(toNode);
 
     if (!this.omitSelfReferences || !fromName.equals(toName)) {
-      String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.createEdgeAttributes(fromNode, toNode);
+      String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeAttributeRenderer.createEdgeAttributes(fromNode, toNode);
       this.edgeDefinitions.add(edgeDefinition);
     }
   }
 
-  static <T> EdgeRenderer<T> createDefaultEdgeRenderer() {
-    return new EdgeRenderer<T>() {
+  static <T> EdgeAttributeRenderer<T> createDefaultEdgeAttributeRenderer() {
+    return new EdgeAttributeRenderer<T>() {
 
       @Override
-      public String createEdgeAttributes(T from, T to) {
-        return "";
+      public AttributeBuilder createEdgeAttributes(T from, T to) {
+        return new AttributeBuilder();
       }
 
     };
   }
 
-  static <T> NodeRenderer<T> createDefaultNodeRenderer() {
-    return new NodeRenderer<T>() {
+  static <T> NodeNameRenderer<T> createDefaultNodeNameRenderer() {
+    return new NodeNameRenderer<T>() {
 
       @Override
-      public String render(T node) {
+      public String createNodeName(T node) {
         return node.toString();
+      }
+    };
+  }
+
+  static <T> NodeAttributeRenderer<T> createDefaultNodeAttributeRenderer() {
+    return new NodeAttributeRenderer<T>() {
+
+      @Override
+      public AttributeBuilder createNodeAttributes(T node) {
+        return new AttributeBuilder();
       }
     };
   }

@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2014 - 2016 by Stefan Ferstl <st.ferstl@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.github.ferstl.depgraph.dot;
 
 import java.util.Map;
@@ -12,6 +27,7 @@ public class LabelBuilder {
 
   private static final String NEWLINE = "<br/>";
   private final StringBuilder labelBuilder = new StringBuilder();
+  private boolean smartNewLine;
 
   /**
    * Add the given text.
@@ -59,7 +75,7 @@ public class LabelBuilder {
 
   /**
    * Add a line break.
-   * 
+   *
    * @return This builder.
    */
   public LabelBuilder newLine() {
@@ -74,16 +90,18 @@ public class LabelBuilder {
    * <li>The label does not already end with a line break</li>
    * </ul>
    * .
-   * 
+   *
    * @return This builder.
    */
   public LabelBuilder smartNewLine() {
-    int length = this.labelBuilder.length();
-    int nLength = NEWLINE.length();
-
-    if ((length > 0 && length < nLength) || (length >= nLength && !NEWLINE.equals(this.labelBuilder.substring(length - nLength, length)))) {
-      return newLine();
-    }
+    this.smartNewLine = true;
+    // int length = this.labelBuilder.length();
+    // int nLength = NEWLINE.length();
+    //
+    // if ((length > 0 && length < nLength) || (length >= nLength && !NEWLINE.equals(this.labelBuilder.substring(length
+    // - nLength, length)))) {
+    // return newLine();
+    // }
 
     return this;
   }
@@ -134,6 +152,10 @@ public class LabelBuilder {
       return;
     }
 
+    if (this.smartNewLine && this.labelBuilder.length() > 0) {
+      newLine();
+      this.smartNewLine = false;
+    }
     this.labelBuilder.append(HtmlEscapers.htmlEscaper().escape(text));
   }
 
@@ -159,11 +181,23 @@ public class LabelBuilder {
      * @return This builder.
      */
     public FontBuilder size(int size) {
-      if (size < 0) {
+      if (size > 0) {
+        addAttribute("point-size", size);
+      } else if (size < 0) {
         throw new IllegalArgumentException("Font size must not be negative");
       }
-      addAttribute("point-size", size);
+
       return this;
+    }
+
+    /**
+     * Set the font size.
+     *
+     * @param size Size.
+     * @return This builder.
+     */
+    public FontBuilder size(Integer size) {
+      return size(size != null ? size : 0);
     }
 
     /**
@@ -184,12 +218,19 @@ public class LabelBuilder {
      * @return The encapsulating label builder.
      */
     public LabelBuilder text(String text) {
-      LabelBuilder.this.addText(text, "font", this.attributes.values().toArray(new String[0]));
+      if (this.attributes.size() > 0) {
+        LabelBuilder.this.addText(text, "font", this.attributes.values().toArray(new String[0]));
+      } else {
+        LabelBuilder.this.text(text);
+      }
+
       return LabelBuilder.this;
     }
 
     private void addAttribute(String name, Object value) {
-      this.attributes.put(name, name + "=\"" + value + "\"");
+      if (value != null) {
+        this.attributes.put(name, name + "=\"" + value + "\"");
+      }
     }
   }
 }

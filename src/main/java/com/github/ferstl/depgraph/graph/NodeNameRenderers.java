@@ -16,16 +16,16 @@
 package com.github.ferstl.depgraph.graph;
 
 import org.apache.maven.artifact.Artifact;
-import com.github.ferstl.depgraph.dot.NodeRenderer;
+import com.github.ferstl.depgraph.dot.NodeNameRenderer;
 import com.google.common.base.Joiner;
 
 
-public enum NodeRenderers implements NodeRenderer<GraphNode> {
+public enum NodeNameRenderers implements NodeNameRenderer<GraphNode> {
 
   GROUP_ID {
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       return node.getArtifact().getGroupId();
     }
   },
@@ -33,7 +33,7 @@ public enum NodeRenderers implements NodeRenderer<GraphNode> {
   GROUP_ID_WITH_SCOPE {
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       Artifact artifact = node.getArtifact();
       return COLON_JOINER.join(artifact.getGroupId(), artifact.getScope());
     }
@@ -42,7 +42,7 @@ public enum NodeRenderers implements NodeRenderer<GraphNode> {
   VERSIONLESS_ID {
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       Artifact artifact = node.getArtifact();
 
       return COLON_JOINER.join(
@@ -56,7 +56,7 @@ public enum NodeRenderers implements NodeRenderer<GraphNode> {
   VERSIONLESS_ID_WITH_SCOPE {
 
     @Override
-    public String render(GraphNode node) {
+    public String createNodeName(GraphNode node) {
       Artifact artifact = node.getArtifact();
 
       return COLON_JOINER.join(

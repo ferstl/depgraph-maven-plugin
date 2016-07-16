@@ -13,18 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph;
+package com.github.ferstl.depgraph.dot;
 
-import org.apache.maven.plugins.annotations.Parameter;
 
-public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
+public interface NodeNameRenderer<T> {
 
-  /**
-   * Merge dependencies that occur in multiple scopes into one graph node instead of having a node per scope.
-   *
-   * @since 2.0.0
-   */
-  @Parameter(property = "mergeScopes", defaultValue = "false")
-  boolean mergeScopes;
-
+  String createNodeName(T node);
 }
