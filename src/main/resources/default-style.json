@@ -1,6 +1,7 @@
 {
   "default-node": {
     "type": "box",
+    "style": "rounded",
     "default-font": {
       "size": 14,
       "name": "Helvetica"
