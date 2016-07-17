@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="Date-Revision-yyyymmdd" content="20160717" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>Depgraph Maven Plugin &#x2013; depgraph:aggregate</title>
+    <title>Depgraph Maven Plugin &#x2013; depgraph:example</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.3.1.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -111,16 +111,17 @@
             
   
     <div class="section">
-<h2><a name="depgraph:aggregate"></a>depgraph:aggregate</h2>
+<h2><a name="depgraph:example"></a>depgraph:example</h2>
       
 <p><b>Full name</b>:</p>
       
-<p>com.github.ferstl:depgraph-maven-plugin:2.0.0:aggregate</p>
+<p>com.github.ferstl:depgraph-maven-plugin:2.0.0:example</p>
       
 <p><b>Description</b>:</p>
       
-<div>Aggregates all dependencies of a multi-module project into one
-single graph.</div>
+<div>Creates an example graph. This Mojo has the same capabilities as
+the <tt>graph</tt> Mojo. So it might be useful to try out
+different options and node stylings.</div>
       
 <p><b>Attributes</b>:</p>
       
@@ -130,11 +131,9 @@ single graph.</div>
         
 <li>Executes as an aggregator plugin.</li>
         
-<li>Requires dependency collection of artifacts in scope: <tt>test</tt>.</li>
-        
 <li>The goal is thread-safe and supports parallel builds.</li>
         
-<li>Is NOT inherited by default in multi-project builds.</li>
+<li>Since version: <tt>2.0.0</tt>.</li>
       </ul>
       
 <div class="section">
@@ -216,19 +215,6 @@ to <tt>true</tt>.<br /><b>Default value is</b>: <tt>png</tt>.<br /><b>User prope
           
 <tr class="a">
             
-<td><b><a href="#includeParentProjects">includeParentProjects</a></b></td>
-            
-<td><tt>boolean</tt></td>
-            
-<td><tt>1.0.0</tt></td>
-            
-<td>If set to <tt>true</tt>, all parent modules
-(&lt;packaging&gt;pom&lt;/packaging&gt;) will be shown with a
-dotted arrow pointing to their child modules.<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>includeParentProjects</tt>.</td>
-          </tr>
-          
-<tr class="b">
-            
 <td><b><a href="#includes">includes</a></b></td>
             
 <td><tt>List</tt></td>
@@ -237,18 +223,6 @@ dotted arrow pointing to their child modules.<br /><b>Default value is</b>: <tt>
             
 <td>List of artifacts to be included in the form of
 <tt>groupId:artifactId:type:classifier</tt>.<br /><b>User property is</b>: <tt>includes</tt>.</td>
-          </tr>
-          
-<tr class="a">
-            
-<td><b><a href="#mergeScopes">mergeScopes</a></b></td>
-            
-<td><tt>boolean</tt></td>
-            
-<td><tt>2.0.0</tt></td>
-            
-<td>Merge dependencies that occur in multiple scopes into one graph
-node instead of having a node per scope.<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>mergeScopes</tt>.</td>
           </tr>
           
 <tr class="b">
@@ -305,6 +279,34 @@ dependencies</li>
           
 <tr class="a">
             
+<td><b><a href="#showConflicts">showConflicts</a></b></td>
+            
+<td><tt>boolean</tt></td>
+            
+<td><tt>1.0.0</tt></td>
+            
+<td>If set to <tt>true</tt>, the graph will additionally contain
+conflicting dependencies. Note that the dependency graph may not be
+100% accurate when this flag is enabled and the plugin is executed
+with a Maven version greater or equal 3.0!<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>showConflicts</tt>.</td>
+          </tr>
+          
+<tr class="b">
+            
+<td><b><a href="#showDuplicates">showDuplicates</a></b></td>
+            
+<td><tt>boolean</tt></td>
+            
+<td><tt>1.0.0</tt></td>
+            
+<td>If set to <tt>true</tt>, the graph will additionally contain
+duplicate dependencies. Note that the dependency graph may not be
+100% accurate when this flag is enabled and the plugin is executed
+with a Maven version greater or equal 3.0!<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>showDuplicates</tt>.</td>
+          </tr>
+          
+<tr class="a">
+            
 <td><b><a href="#showGroupIds">showGroupIds</a></b></td>
             
 <td><tt>boolean</tt></td>
@@ -323,8 +325,11 @@ dependencies</li>
             
 <td><tt>1.0.0</tt></td>
             
-<td>If set to <tt>true</tt> the artifact nodes will show version
-information.<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>showVersions</tt>.</td>
+<td>If set to <tt>true</tt>, the created graph will show version
+information an all artifacts. Depending on the flags
+<tt>showDuplicates</tt> and <tt>showConflicts</tt>, the
+version will either be shown directly in the artifact nodes or on
+the dependency edges.<br /><b>Default value is</b>: <tt>false</tt>.<br /><b>User property is</b>: <tt>showVersions</tt>.</td>
           </tr>
           
 <tr class="a">
@@ -425,24 +430,6 @@ to <tt>true</tt>.</div>
           
 <li><b>Default</b>: <tt>png</tt></li>
         </ul><hr />
-<p><b><a name="includeParentProjects">includeParentProjects</a>:</b></p>
-        
-<div>If set to <tt>true</tt>, all parent modules
-(&lt;packaging&gt;pom&lt;/packaging&gt;) will be shown with a
-dotted arrow pointing to their child modules.</div>
-        
-<ul>
-          
-<li><b>Type</b>: <tt>boolean</tt></li>
-          
-<li><b>Since</b>: <tt>1.0.0</tt></li>
-          
-<li><b>Required</b>: <tt>No</tt></li>
-          
-<li><b>User Property</b>: <tt>includeParentProjects</tt></li>
-          
-<li><b>Default</b>: <tt>false</tt></li>
-        </ul><hr />
 <p><b><a name="includes">includes</a>:</b></p>
         
 <div>List of artifacts to be included in the form of
@@ -457,23 +444,6 @@ dotted arrow pointing to their child modules.</div>
 <li><b>Required</b>: <tt>No</tt></li>
           
 <li><b>User Property</b>: <tt>includes</tt></li>
-        </ul><hr />
-<p><b><a name="mergeScopes">mergeScopes</a>:</b></p>
-        
-<div>Merge dependencies that occur in multiple scopes into one graph
-node instead of having a node per scope.</div>
-        
-<ul>
-          
-<li><b>Type</b>: <tt>boolean</tt></li>
-          
-<li><b>Since</b>: <tt>2.0.0</tt></li>
-          
-<li><b>Required</b>: <tt>No</tt></li>
-          
-<li><b>User Property</b>: <tt>mergeScopes</tt></li>
-          
-<li><b>Default</b>: <tt>false</tt></li>
         </ul><hr />
 <p><b><a name="outputFile">outputFile</a>:</b></p>
         
@@ -540,6 +510,44 @@ dependencies</li>
           
 <li><b>User Property</b>: <tt>scope</tt></li>
         </ul><hr />
+<p><b><a name="showConflicts">showConflicts</a>:</b></p>
+        
+<div>If set to <tt>true</tt>, the graph will additionally contain
+conflicting dependencies. Note that the dependency graph may not be
+100% accurate when this flag is enabled and the plugin is executed
+with a Maven version greater or equal 3.0!</div>
+        
+<ul>
+          
+<li><b>Type</b>: <tt>boolean</tt></li>
+          
+<li><b>Since</b>: <tt>1.0.0</tt></li>
+          
+<li><b>Required</b>: <tt>No</tt></li>
+          
+<li><b>User Property</b>: <tt>showConflicts</tt></li>
+          
+<li><b>Default</b>: <tt>false</tt></li>
+        </ul><hr />
+<p><b><a name="showDuplicates">showDuplicates</a>:</b></p>
+        
+<div>If set to <tt>true</tt>, the graph will additionally contain
+duplicate dependencies. Note that the dependency graph may not be
+100% accurate when this flag is enabled and the plugin is executed
+with a Maven version greater or equal 3.0!</div>
+        
+<ul>
+          
+<li><b>Type</b>: <tt>boolean</tt></li>
+          
+<li><b>Since</b>: <tt>1.0.0</tt></li>
+          
+<li><b>Required</b>: <tt>No</tt></li>
+          
+<li><b>User Property</b>: <tt>showDuplicates</tt></li>
+          
+<li><b>Default</b>: <tt>false</tt></li>
+        </ul><hr />
 <p><b><a name="showGroupIds">showGroupIds</a>:</b></p>
         
 <div>If set to <tt>true</tt>, the created graph will show the
@@ -559,8 +567,11 @@ dependencies</li>
         </ul><hr />
 <p><b><a name="showVersions">showVersions</a>:</b></p>
         
-<div>If set to <tt>true</tt> the artifact nodes will show version
-information.</div>
+<div>If set to <tt>true</tt>, the created graph will show version
+information an all artifacts. Depending on the flags
+<tt>showDuplicates</tt> and <tt>showConflicts</tt>, the
+version will either be shown directly in the artifact nodes or on
+the dependency edges.</div>
         
 <ul>
           
