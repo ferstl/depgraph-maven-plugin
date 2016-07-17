@@ -67,7 +67,15 @@ public final class GraphNode {
     this.scopes = new TreeSet<>();
     this.artifact = artifact;
     this.resolution = resolution;
-    addScope(artifact.getScope());
+    this.scopes.add(artifact.getScope());
+  }
+
+  public void merge(GraphNode other) {
+    if (this == other) {
+      return;
+    }
+
+    this.scopes.addAll(other.getScopes());
   }
 
   public Artifact getArtifact() {
@@ -78,12 +86,23 @@ public final class GraphNode {
     return this.resolution;
   }
 
-  public void addScope(String scope) {
-    this.scopes.add(scope);
-  }
-
   public Set<String> getScopes() {
     return ImmutableSet.copyOf(this.scopes);
+  }
+
+  /**
+   * Returns the <strong>effective</strong> version of this node, i.e. the version that is actually used. This is
+   * important for nodes with a resolution of {@link NodeResolution#OMITTED_FOR_CONFLICT} where
+   * {@code getArtifact().getVersion()} will return the omitted version.
+   *
+   * @return The effective version of this node.
+   */
+  public String getEffectiveVersion() {
+    if (this.treeNode == null || this.treeNode.getRelatedArtifact() == null) {
+      return this.artifact.getVersion();
+    }
+
+    return this.treeNode.getRelatedArtifact().getVersion();
   }
 
   public Collection<GraphNode> getChildren() {

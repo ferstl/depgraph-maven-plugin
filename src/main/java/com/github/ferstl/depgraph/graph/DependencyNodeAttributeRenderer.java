@@ -49,7 +49,7 @@ public class DependencyNodeAttributeRenderer implements NodeAttributeRenderer<Gr
     return this.styleConfiguration.nodeAttributes(
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
-        this.showVersion ? artifact.getVersion() : null,
+        this.showVersion ? node.getEffectiveVersion() : null,
         artifact.getType(),
         scopes,
         getFirst(node.getScopes(), null));
