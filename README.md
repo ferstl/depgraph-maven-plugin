@@ -82,7 +82,7 @@ Such graphs give a higher-level overview of a project, i.e. they show better whi
 
 ### Aggregated Graphs
 
-The goal [`depgraph:aggregate`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-mojo.html) creates an aggregated dependency graph on the root of a multi-module project. It shows the sub-modules with dotted black arrows and the **union** of all the modules' dependencies (the `sub-parent` and its `module-3` were excluded from the graph for clarity):
+The goals [`depgraph:aggregate`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-mojo.html) and [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) create aggregated dependency graphs on the root of a multi-module project. They show the **union** of all the modules' dependencies. Here is an example of an aggregated graph, which connects the parent project and its modules with dotted black arrows (the `sub-parent` and its `module-3` were excluded from the graph for clarity):
 
 <img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/aggregated.png" alt="Aggregated ependency graph"/>
 
