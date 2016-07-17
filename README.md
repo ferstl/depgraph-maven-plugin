@@ -3,10 +3,10 @@
 
 [![Build Status](https://travis-ci.org/ferstl/depgraph-maven-plugin.svg?branch=master)](https://travis-ci.org/ferstl/depgraph-maven-plugin) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/depgraph-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/depgraph-maven-plugin)
 
-This Maven plugin generates dependency graphs on single modules or in an aggregated form on multi-module projects. The graphs are represented by `.dot` files. In case that [Graphviz](http://www.graphviz.org/) is installed on the machine where this plugin is run, the `.dot` file can be directly converted into all supported image files.
+This Maven plugin generates dependency graphs on single modules or in an aggregated form on multi-module projects. The graphs are represented by `.dot` files. In case that [Graphviz](http://www.graphviz.org/) is installed on the machine where this plugin is run, the `.dot` file can be directly converted into all supported image files. The plugin does also allow you to apply various stylings on the dependency graphs.
 
 
-For more information take a look at the generated [plugin page](https://ferstl.github.io/depgraph-maven-plugin/plugin-info.html).
+For more information take a look at the [plugin documentation](https://ferstl.github.io/depgraph-maven-plugin/plugin-info.html) and the [Wiki](https://github.com/ferstl/depgraph-maven-plugin/wiki).
 
 
 ## Plugin Coordinates
@@ -20,18 +20,13 @@ These are the plugin coordinates:
         <plugin>
           <groupId>com.github.ferstl</groupId>
           <artifactId>depgraph-maven-plugin</artifactId>
-          <version>1.0.4</version>
+          <version>2.0.1</version>
         </plugin>
       </plugins>
     </build>
-    
-## Release Notes
 
-- [Version 1.0.4](https://github.com/ferstl/depgraph-maven-plugin/issues?q=milestone%3A%22Version+1.0.4%22+is%3Aclosed)
-- [Version 1.0.3](https://github.com/ferstl/depgraph-maven-plugin/issues?q=milestone%3A%22Version+1.0.3%22+is%3Aclosed)
-- [Version 1.0.2](https://github.com/ferstl/depgraph-maven-plugin/issues?q=milestone%3A%22Version+1.0.2%22+is%3Aclosed)
-- [Version 1.0.1](https://github.com/ferstl/depgraph-maven-plugin/issues?q=milestone%3A%22Version+1.0.1%22+is%3Aclosed)
-- Version 1.0.0 (first version)
+The release notes can be found in the [Wiki](https://github.com/ferstl/depgraph-maven-plugin/wiki/Release-Notes)
+
 
 ## Examples
 
@@ -82,13 +77,21 @@ Such graphs give a higher-level overview of a project, i.e. they show better whi
 
 ### Aggregated Graphs
 
-The goal [`depgraph:aggregate`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-mojo.html) creates an aggregated dependency graph on the root of a multi-module project. It shows the sub-modules with dotted black arrows and the **union** of all the modules' dependencies (the `sub-parent` and its `module-3` were excluded from the graph for clarity):
+The goals [`depgraph:aggregate`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-mojo.html) and [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) create aggregated dependency graphs on the root of a multi-module project. They show the **union** of all the modules' dependencies. Here is an example of an aggregated graph, which connects the parent project and its modules with dotted black arrows (the `sub-parent` and its `module-3` were excluded from the graph for clarity):
 
-<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/aggregated.png" alt="Aggregated ependency graph"/>
+<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/aggregated.png" alt="Aggregated dependency graph"/>
 
 
 The goal [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) does the same for the group IDs of all modules and their dependencies.
 
+
+### Styling
+
+This maven plugin offers you a variety of styling options. These options are explained in detail on the [Styling Wiki page](https://github.com/ferstl/depgraph-maven-plugin/wiki/Styling). This is an example of the aggregated graph with some custom styles:
+
+<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/aggregated-styled.png" alt="Dependency graph with custom styles"/>
+
+It shows all dependencies with group ID `com.github.ferstl` with a blue background, all test dependencies with grey text and all other dependencies with grey background.
 
 ## FAQ
 
