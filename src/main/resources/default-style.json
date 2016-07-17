@@ -24,7 +24,7 @@
   },
   "edge-resolution-styles": {
     "omitted-for-duplicate": {
-      "style": "dashed"
+      "style": "dotted"
     },
     "omitted-for-conflict": {
       "style": "dashed",
