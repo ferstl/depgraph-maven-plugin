@@ -25,11 +25,11 @@ public class IntegrationTest {
   }
 
   @Test
-  public void aggregate() throws Exception {
+  public void graph() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .execute("clean", "depgraph:aggregate");
+        .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
   }
