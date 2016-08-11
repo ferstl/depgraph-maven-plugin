@@ -151,12 +151,20 @@
       <version>${maven.version}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-compat</artifactId>
       <version>${maven.version}</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.takari.maven.plugins</groupId>
+      <artifactId>takari-plugin-integration-testing</artifactId>
+      <version>2.9.0</version>
+      <type>pom</type>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
