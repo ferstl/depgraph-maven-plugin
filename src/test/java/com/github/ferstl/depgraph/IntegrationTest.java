@@ -30,7 +30,7 @@ public class IntegrationTest {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .execute("clean", "depgraph:graph");
+        .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
     assertFilesPresent(
