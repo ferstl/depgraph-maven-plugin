@@ -10,6 +10,7 @@ import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenRuntime.MavenRuntimeBuilder;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
+import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions("3.3.9")
@@ -32,5 +33,10 @@ public class IntegrationTest {
         .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.dot",
+        "module-2/target/dependency-graph.dot",
+        "sub-parent/module-3/target/dependency-graph.dot");
   }
 }
