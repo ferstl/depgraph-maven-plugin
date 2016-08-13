@@ -8,6 +8,7 @@ before_script:
 
 script:
 - mvn clean install javadoc:javadoc
+- dot --help
 
 cache:
   directories:
