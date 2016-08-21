@@ -37,6 +37,9 @@ public class IntegrationTest {
         basedir,
         "module-1/target/dependency-graph.dot",
         "module-2/target/dependency-graph.dot",
+        "sub-parent/module-3/target/dependency-graph.dot",
+        // not wanted in the future
+        "target/dependency-graph.dot",
         "sub-parent/module-3/target/dependency-graph.dot");
   }
 }
