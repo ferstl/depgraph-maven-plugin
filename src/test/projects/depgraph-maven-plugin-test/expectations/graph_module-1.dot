@@ -1,0 +1,17 @@
+digraph "module-1" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:module-1:jar:"[label=<module-1>]
+  "commons-codec:commons-codec:jar:"[label=<commons-codec>]
+  "org.apache.commons:commons-lang3:jar:"[label=<commons-lang3>]
+  "junit:junit:jar:"[label=<junit<font point-size="10"><br/>(test)</font>>]
+  "org.hamcrest:hamcrest-core:jar:"[label=<hamcrest-core<font point-size="10"><br/>(test)</font>>]
+
+  // Edge Definitions:
+  "com.github.ferstl:module-1:jar:" -> "commons-codec:commons-codec:jar:"
+  "com.github.ferstl:module-1:jar:" -> "org.apache.commons:commons-lang3:jar:"
+  "com.github.ferstl:module-1:jar:" -> "junit:junit:jar:"
+  "junit:junit:jar:" -> "org.hamcrest:hamcrest-core:jar:"
+}

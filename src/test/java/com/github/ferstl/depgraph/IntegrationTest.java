@@ -10,6 +10,7 @@ import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenRuntime.MavenRuntimeBuilder;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
+import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
@@ -40,6 +41,10 @@ public class IntegrationTest {
         "sub-parent/module-3/target/dependency-graph.dot",
         // not wanted in the future
         "target/dependency-graph.dot",
-        "sub-parent/module-3/target/dependency-graph.dot");
+        "sub-parent/target/dependency-graph.dot");
+
+    assertFileContents(basedir, "expectations/graph_module-1.dot", "module-1/target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/graph_module-2.dot", "module-2/target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/graph_module-3.dot", "sub-parent/module-3/target/dependency-graph.dot");
   }
 }

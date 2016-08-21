@@ -1,0 +1,29 @@
+digraph "module-3" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:module-3:jar:"[label=<module-3>]
+  "com.github.ferstl:module-1:jar:"[label=<module-1>]
+  "commons-codec:commons-codec:jar:"[label=<commons-codec>]
+  "org.apache.commons:commons-lang3:jar:"[label=<commons-lang3>]
+  "com.github.ferstl:module-2:jar:"[label=<module-2>]
+  "com.google.guava:guava:jar:"[label=<guava>]
+  "com.mysema.querydsl:querydsl-core:jar:"[label=<querydsl-core>]
+  "com.google.code.findbugs:jsr305:jar:"[label=<jsr305>]
+  "com.mysema.commons:mysema-commons-lang:jar:"[label=<mysema-commons-lang>]
+  "cglib:cglib:jar:"[label=<cglib>]
+  "asm:asm:jar:"[label=<asm>]
+
+  // Edge Definitions:
+  "com.github.ferstl:module-3:jar:" -> "com.github.ferstl:module-1:jar:"
+  "com.github.ferstl:module-1:jar:" -> "commons-codec:commons-codec:jar:"
+  "com.github.ferstl:module-1:jar:" -> "org.apache.commons:commons-lang3:jar:"
+  "com.github.ferstl:module-3:jar:" -> "com.github.ferstl:module-2:jar:"
+  "com.github.ferstl:module-2:jar:" -> "com.google.guava:guava:jar:"
+  "com.github.ferstl:module-3:jar:" -> "com.mysema.querydsl:querydsl-core:jar:"
+  "com.mysema.querydsl:querydsl-core:jar:" -> "com.google.code.findbugs:jsr305:jar:"
+  "com.mysema.querydsl:querydsl-core:jar:" -> "com.mysema.commons:mysema-commons-lang:jar:"
+  "com.mysema.querydsl:querydsl-core:jar:" -> "cglib:cglib:jar:"
+  "cglib:cglib:jar:" -> "asm:asm:jar:"
+}
