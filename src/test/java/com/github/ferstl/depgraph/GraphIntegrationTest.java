@@ -15,14 +15,14 @@ import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions("3.3.9")
-public class IntegrationTest {
+public class GraphIntegrationTest {
 
   @Rule
   public final TestResources resources = new TestResources();
 
   private final MavenRuntime mavenRuntime;
 
-  public IntegrationTest(MavenRuntimeBuilder builder) throws Exception {
+  public GraphIntegrationTest(MavenRuntimeBuilder builder) throws Exception {
     this.mavenRuntime = builder.build();
   }
 
