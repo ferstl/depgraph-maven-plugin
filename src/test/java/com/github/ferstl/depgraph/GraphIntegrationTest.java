@@ -1,6 +1,8 @@
 package com.github.ferstl.depgraph;
 
 import java.io.File;
+import java.nio.file.FileSystems;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,12 @@ public class GraphIntegrationTest {
 
   public GraphIntegrationTest(MavenRuntimeBuilder builder) throws Exception {
     this.mavenRuntime = builder.build();
+  }
+
+  @Before
+  public void before() {
+    // Workaround for https://github.com/takari/takari-plugin-testing-project/issues/14
+    FileSystems.getDefault();
   }
 
   @Test
