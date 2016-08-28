@@ -2,6 +2,11 @@ package com.github.ferstl.depgraph;
 
 import java.io.File;
 import java.nio.file.FileSystems;
+import java.util.Locale;
+import org.codehaus.plexus.util.cli.CommandLineException;
+import org.codehaus.plexus.util.cli.CommandLineUtils;
+import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
+import org.codehaus.plexus.util.cli.Commandline;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,5 +59,36 @@ public class GraphIntegrationTest {
     assertFileContents(basedir, "expectations/graph_module-1.dot", "module-1/target/dependency-graph.dot");
     assertFileContents(basedir, "expectations/graph_module-2.dot", "module-2/target/dependency-graph.dot");
     assertFileContents(basedir, "expectations/graph_module-3.dot", "sub-parent/module-3/target/dependency-graph.dot");
+  }
+
+  private boolean isDotInstalled() {
+    return getDotExecutable() != null;
+  }
+
+  private String getDotExecutable() {
+    Commandline cmd = new Commandline();
+    String finderExecutable = isWindows() ? "where.exe" : "which";
+
+    cmd.setExecutable(finderExecutable);
+    cmd.addArguments(new String[]{"dot"});
+
+    StringStreamConsumer systemOut = new StringStreamConsumer();
+    StringStreamConsumer systemErr = new StringStreamConsumer();
+
+    try {
+      int exitCode = CommandLineUtils.executeCommandLine(cmd, systemOut, systemErr);
+      if (exitCode != 0) {
+        return null;
+      }
+    } catch (CommandLineException e) {
+      return null;
+    }
+
+    return systemOut.getOutput();
+  }
+
+  private boolean isWindows() {
+    String osName = System.getProperty("os.name", "n/a");
+    return osName.toLowerCase(Locale.US).contains("windows");
   }
 }
