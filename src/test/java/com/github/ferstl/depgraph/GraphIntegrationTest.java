@@ -19,6 +19,7 @@ import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
+import static org.junit.Assume.assumeTrue;
 
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions("3.3.9")
@@ -61,7 +62,29 @@ public class GraphIntegrationTest {
     assertFileContents(basedir, "expectations/graph_module-3.dot", "sub-parent/module-3/target/dependency-graph.dot");
   }
 
-  private boolean isDotInstalled() {
+  @Test
+  public void graphWithImageFile() throws Exception {
+    // Skip if graviz is not installed
+    assumeTrue(isGraphvizInstalled());
+
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOptions("-DcreateImage=true")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.png",
+        "module-2/target/dependency-graph.png",
+        "sub-parent/module-3/target/dependency-graph.png",
+        // not wanted in the future
+        "target/dependency-graph.png",
+        "sub-parent/target/dependency-graph.png");
+  }
+
+  private boolean isGraphvizInstalled() {
     return getDotExecutable() != null;
   }
 
