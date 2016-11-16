@@ -88,6 +88,8 @@
     <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
     <maven-site-plugin.version>3.4</maven-site-plugin.version>
     <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+    <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
+    <jacoco-mavan-plugin.version>0.7.7.201606060606</jacoco-mavan-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -330,6 +332,18 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.eluder.coveralls</groupId>
+          <artifactId>coveralls-maven-plugin</artifactId>
+          <version>${coveralls-maven-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco-mavan-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
