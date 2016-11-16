@@ -3,9 +3,10 @@ language: java
 jdk:
 - oraclejdk8
 
-before_script:
- - sudo apt-get -qq update
- - sudo apt-get -qq install graphviz
+addons:
+  apt:
+    packages:
+      - graphviz
 
 script:
 - mvn clean install javadoc:javadoc
