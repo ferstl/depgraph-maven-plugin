@@ -16,7 +16,7 @@
 package com.github.ferstl.depgraph;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.DependencyEdgeAttributeRenderer;
+import com.github.ferstl.depgraph.graph.DependencyEdgeRenderer;
 import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
@@ -103,7 +103,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
     boolean fullGraph = requiresFullGraph();
     if (fullGraph) {
-      dotBuilder.useEdgeNameRenderer(new DependencyEdgeAttributeRenderer(this.showVersions, styleConfiguration));
+      dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions, styleConfiguration));
     }
 
     dotBuilder.useNodeNameRenderer(new DependencyNodeNameRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration));

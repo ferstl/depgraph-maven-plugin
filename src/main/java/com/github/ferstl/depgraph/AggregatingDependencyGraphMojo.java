@@ -17,7 +17,7 @@ package com.github.ferstl.depgraph;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
 import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
-import com.github.ferstl.depgraph.graph.DependencyEdgeAttributeRenderer;
+import com.github.ferstl.depgraph.graph.DependencyEdgeRenderer;
 import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
@@ -81,7 +81,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
     }
 
     // This graph won't show any conflicting dependencies. So showVersions must always be false
-    dotBuilder.useEdgeNameRenderer(new DependencyEdgeAttributeRenderer(false, styleConfiguration));
+    dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(false, styleConfiguration));
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, this.includeParentProjects);

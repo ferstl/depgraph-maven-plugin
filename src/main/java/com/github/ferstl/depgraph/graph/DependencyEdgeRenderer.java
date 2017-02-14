@@ -16,26 +16,26 @@
 package com.github.ferstl.depgraph.graph;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
-import com.github.ferstl.depgraph.dot.EdgeAttributeRenderer;
+import com.github.ferstl.depgraph.dot.EdgeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 
 import static com.google.common.collect.Iterables.getFirst;
 
 
-public class DependencyEdgeAttributeRenderer implements EdgeAttributeRenderer<GraphNode> {
+public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
 
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
   private final boolean renderVersions;
   private final StyleConfiguration styleConfiguration;
 
-  public DependencyEdgeAttributeRenderer(boolean renderVersions, StyleConfiguration styleConfiguration) {
+  public DependencyEdgeRenderer(boolean renderVersions, StyleConfiguration styleConfiguration) {
     this.renderVersions = renderVersions;
     this.styleConfiguration = styleConfiguration;
   }
 
   @Override
-  public String createEdgeAttributes(GraphNode from, GraphNode to) {
+  public String render(GraphNode from, GraphNode to) {
     NodeResolution resolution = to.getResolution();
 
     AttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution, getFirst(to.getScopes(), null));

@@ -16,7 +16,7 @@
 package com.github.ferstl.depgraph.dot;
 
 
-public interface EdgeAttributeRenderer<T> {
+public interface EdgeRenderer<T> {
 
-  String createEdgeAttributes(T from, T to);
+  String render(T from, T to);
 }

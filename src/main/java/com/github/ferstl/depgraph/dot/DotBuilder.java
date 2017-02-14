@@ -26,7 +26,7 @@ import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 /**
  * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by defining edges between
  * Nodes. The builder allows some customizations including custom {@link NodeRenderer}s and
- * {@link EdgeAttributeRenderer}s.
+ * {@link EdgeRenderer}s.
  *
  * @param <T> Type of the graph nodes.
  */
@@ -37,7 +37,7 @@ public final class DotBuilder<T> {
   private AttributeBuilder edgeAttributeBuilder;
   private NodeRenderer<? super T> nodeIdRenderer;
   private NodeAttributeRenderer<? super T> nodeNameRenderer;
-  private EdgeAttributeRenderer<? super T> edgeNameRenderer;
+  private EdgeRenderer<? super T> edgeRenderer;
   private boolean omitSelfReferences;
   private final Map<String, T> nodeDefinitions;
   private final Set<String> edgeDefinitions;
@@ -48,7 +48,7 @@ public final class DotBuilder<T> {
     this.edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
     this.nodeIdRenderer = createDefaultNodeIdRenderer();
     this.nodeNameRenderer = createDefaultNodeNameRenderer();
-    this.edgeNameRenderer = createDefaultEdgeNameRenderer();
+    this.edgeRenderer = createDefaultEdgeRenderer();
 
     this.nodeDefinitions = new LinkedHashMap<>();
     this.edgeDefinitions = new LinkedHashSet<>();
@@ -79,8 +79,8 @@ public final class DotBuilder<T> {
     return this;
   }
 
-  public DotBuilder<T> useEdgeNameRenderer(EdgeAttributeRenderer<? super T> edgeNameRenderer) {
-    this.edgeNameRenderer = edgeNameRenderer;
+  public DotBuilder<T> useEdgeRenderer(EdgeRenderer<? super T> edgeRenderer) {
+    this.edgeRenderer = edgeRenderer;
     return this;
   }
 
@@ -101,11 +101,11 @@ public final class DotBuilder<T> {
     return this;
   }
 
-  public DotBuilder<T> addEdge(T from, T to, EdgeAttributeRenderer<? super T> edgeAttributeRenderer) {
-    EdgeAttributeRenderer<? super T> originalEdgeAttributeRenderer = this.edgeNameRenderer;
-    this.edgeNameRenderer = edgeAttributeRenderer;
+  public DotBuilder<T> addEdge(T from, T to, EdgeRenderer<? super T> edgeRenderer) {
+    EdgeRenderer<? super T> originalEdgeRenderer = this.edgeRenderer;
+    this.edgeRenderer = edgeRenderer;
     addEdge(from, to);
-    this.edgeNameRenderer = originalEdgeAttributeRenderer;
+    this.edgeRenderer = originalEdgeRenderer;
 
     return this;
   }
@@ -157,16 +157,16 @@ public final class DotBuilder<T> {
     String toName = this.nodeIdRenderer.render(toNode);
 
     if (!this.omitSelfReferences || !fromName.equals(toName)) {
-      String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeNameRenderer.createEdgeAttributes(fromNode, toNode);
+      String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.render(fromNode, toNode);
       this.edgeDefinitions.add(edgeDefinition);
     }
   }
 
-  static <T> EdgeAttributeRenderer<T> createDefaultEdgeNameRenderer() {
-    return new EdgeAttributeRenderer<T>() {
+  static <T> EdgeRenderer<T> createDefaultEdgeRenderer() {
+    return new EdgeRenderer<T>() {
 
       @Override
-      public String createEdgeAttributes(T from, T to) {
+      public String render(T from, T to) {
         return "";
       }
 

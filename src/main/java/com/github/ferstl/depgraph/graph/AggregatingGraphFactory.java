@@ -17,7 +17,7 @@ package com.github.ferstl.depgraph.graph;
 
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.dot.EdgeAttributeRenderer;
+import com.github.ferstl.depgraph.dot.EdgeRenderer;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
@@ -73,7 +73,7 @@ public class AggregatingGraphFactory implements GraphFactory {
         GraphNode parentNode = filterProject(parent);
         GraphNode childNode = filterProject(child);
 
-        dotBuilder.addEdge(parentNode, childNode, DottedEdgeAttributeRenderer.INSTANCE);
+        dotBuilder.addEdge(parentNode, childNode, DottedEdgeRenderer.INSTANCE);
 
         // Stop if we reached the original parent project!
         if (parent.equals(parentProject)) {
@@ -105,11 +105,11 @@ public class AggregatingGraphFactory implements GraphFactory {
     return null;
   }
 
-  enum DottedEdgeAttributeRenderer implements EdgeAttributeRenderer<GraphNode> {
+  enum DottedEdgeRenderer implements EdgeRenderer<GraphNode> {
     INSTANCE {
 
       @Override
-      public String createEdgeAttributes(GraphNode from, GraphNode to) {
+      public String render(GraphNode from, GraphNode to) {
         return new AttributeBuilder()
             .style("dotted")
             .toString();
