@@ -15,16 +15,18 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import java.util.Set;
-import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.NodeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.google.common.base.Joiner;
+import org.apache.maven.artifact.Artifact;
+
+import java.util.Set;
+
 import static com.google.common.collect.Iterables.getFirst;
 
 
-public class DependencyNodeAttributeRenderer implements NodeAttributeRenderer<GraphNode> {
+public class DependencyNodeNameRenderer implements NodeAttributeRenderer<GraphNode> {
 
   private static final Joiner SLASH_JOINER = Joiner.on("/").skipNulls();
 
@@ -33,7 +35,7 @@ public class DependencyNodeAttributeRenderer implements NodeAttributeRenderer<Gr
   private final boolean showVersion;
   private final StyleConfiguration styleConfiguration;
 
-  public DependencyNodeAttributeRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion, StyleConfiguration styleConfiguration) {
+  public DependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion, StyleConfiguration styleConfiguration) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showVersion = showVersion;

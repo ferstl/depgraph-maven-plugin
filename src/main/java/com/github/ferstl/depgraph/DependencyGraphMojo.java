@@ -15,22 +15,24 @@
  */
 package com.github.ferstl.depgraph;
 
-import java.util.EnumSet;
+import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.DependencyEdgeAttributeRenderer;
+import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
+import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
+import com.github.ferstl.depgraph.graph.GraphFactory;
+import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.NodeIdRenderers;
+import com.github.ferstl.depgraph.graph.NodeResolution;
+import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.DependencyEdgeAttributeRenderer;
-import com.github.ferstl.depgraph.graph.DependencyNodeAttributeRenderer;
-import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
-import com.github.ferstl.depgraph.graph.GraphFactory;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeNameRenderers;
-import com.github.ferstl.depgraph.graph.NodeResolution;
-import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+
+import java.util.EnumSet;
+
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
 import static java.util.EnumSet.of;
@@ -97,14 +99,14 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<GraphNode>()
         .nodeStyle(styleConfiguration.defaultNodeAttributes())
         .edgeStyle(styleConfiguration.defaultEdgeAttributes())
-        .useNodeNameRenderer(NodeNameRenderers.VERSIONLESS_ID);
+        .useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
 
     boolean fullGraph = requiresFullGraph();
     if (fullGraph) {
-      dotBuilder.useEdgeAttributeRenderer(new DependencyEdgeAttributeRenderer(this.showVersions, styleConfiguration));
+      dotBuilder.useEdgeNameRenderer(new DependencyEdgeAttributeRenderer(this.showVersions, styleConfiguration));
     }
 
-    dotBuilder.useNodeAttributeRenderer(new DependencyNodeAttributeRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration));
+    dotBuilder.useNodeNameRenderer(new DependencyNodeNameRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration));
 
     return dotBuilder;
   }

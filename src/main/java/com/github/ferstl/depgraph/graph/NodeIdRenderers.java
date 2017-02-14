@@ -15,12 +15,12 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dot.NodeNameRenderer;
 import com.google.common.base.Joiner;
+import org.apache.maven.artifact.Artifact;
 
 
-public enum NodeNameRenderers implements NodeNameRenderer<GraphNode> {
+public enum NodeIdRenderers implements NodeNameRenderer<GraphNode> {
 
   GROUP_ID {
 

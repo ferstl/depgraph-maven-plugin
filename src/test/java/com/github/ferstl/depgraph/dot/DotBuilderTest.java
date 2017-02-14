@@ -15,11 +15,12 @@
  */
 package com.github.ferstl.depgraph.dot;
 
+import com.github.ferstl.depgraph.graph.GraphNode;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Before;
 import org.junit.Test;
-import com.github.ferstl.depgraph.graph.GraphNode;
+
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodes;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
@@ -122,8 +123,8 @@ public class DotBuilderTest {
 
 
   @Test
-  public void customNodeNameRenderer() {
-    this.dotBuilder.useNodeNameRenderer(TestRenderer.INSTANCE);
+  public void customNodeIdRenderer() {
+    this.dotBuilder.useNodeIdRenderer(TestRenderer.INSTANCE);
 
     this.dotBuilder.addEdge(this.fromNode, this.toNode);
 
@@ -135,23 +136,22 @@ public class DotBuilderTest {
   }
 
   @Test
-  public void customNodeAttributeRenderer() {
-    this.dotBuilder.useNodeAttributeRenderer(TestRenderer.INSTANCE);
-
-    this.dotBuilder.addEdge(this.fromNode, this.toNode);
+  public void customNodeNameRenderer() {
+    this.dotBuilder.useNodeNameRenderer(TestRenderer.INSTANCE)
+        .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[]{
             "\"group:from:jar:1.0.0:compile\"[label=\"from\"]",
             "\"group:to:jar:1.0.0:compile\"[label=\"to\"]"},
-        new String[]{"from -> to"}));
+        new String[]{DEFAULT_TO_NODE}));
   }
 
 
   @Test
   public void customEdgeAttributeRenderer() {
     this.dotBuilder
-        .useEdgeAttributeRenderer(TestRenderer.INSTANCE)
+        .useEdgeNameRenderer(TestRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
@@ -167,19 +167,6 @@ public class DotBuilderTest {
         new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
         new String[]{DEFAULT_EDGE + "[label=\"1.0.0\"]"}));
 
-  }
-
-  @Test
-  public void customNodeLabelRenderer() {
-    this.dotBuilder
-        .useNodeAttributeRenderer(TestRenderer.INSTANCE)
-        .addEdge(this.fromNode, this.toNode);
-
-    assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[]{
-            "\"group:from:jar:1.0.0:compile\"[label=\"from\"]",
-            "\"group:to:jar:1.0.0:compile\"[label=\"to\"]"},
-        new String[]{DEFAULT_EDGE}));
   }
 
 

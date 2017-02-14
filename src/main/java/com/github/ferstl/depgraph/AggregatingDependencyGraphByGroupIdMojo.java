@@ -15,20 +15,21 @@
  */
 package com.github.ferstl.depgraph;
 
-import java.util.Set;
+import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
+import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
+import com.github.ferstl.depgraph.graph.GraphFactory;
+import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.NodeIdRenderers;
+import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
-import com.github.ferstl.depgraph.graph.DependencyNodeAttributeRenderer;
-import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
-import com.github.ferstl.depgraph.graph.GraphFactory;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeNameRenderers;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
-import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
+
+import java.util.Set;
 
 /**
  * Aggregates all dependencies of a multi-module by their group IDs.
@@ -50,8 +51,8 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
     dotBuilder
         .nodeStyle(styleConfiguration.defaultNodeAttributes())
         .edgeStyle(styleConfiguration.defaultEdgeAttributes())
-        .useNodeNameRenderer(this.mergeScopes ? NodeNameRenderers.GROUP_ID : NodeNameRenderers.GROUP_ID_WITH_SCOPE)
-        .useNodeAttributeRenderer(new DependencyNodeAttributeRenderer(true, false, false, styleConfiguration))
+        .useNodeIdRenderer(this.mergeScopes ? NodeIdRenderers.GROUP_ID : NodeIdRenderers.GROUP_ID_WITH_SCOPE)
+        .useNodeNameRenderer(new DependencyNodeNameRenderer(true, false, false, styleConfiguration))
         .omitSelfReferences();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
