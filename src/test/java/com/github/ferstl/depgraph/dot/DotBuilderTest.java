@@ -185,15 +185,17 @@ public class DotBuilderTest {
     }
 
     @Override
-    public AttributeBuilder createEdgeAttributes(GraphNode from, GraphNode to) {
+    public String createEdgeAttributes(GraphNode from, GraphNode to) {
       return new AttributeBuilder()
-          .label(to.getArtifact().getVersion());
+          .label(to.getArtifact().getVersion())
+          .toString();
     }
 
     @Override
-    public AttributeBuilder createNodeAttributes(GraphNode node) {
+    public String createNodeAttributes(GraphNode node) {
       return new AttributeBuilder()
-          .label(node.getArtifact().getArtifactId());
+          .label(node.getArtifact().getArtifactId())
+          .toString();
     }
 
   }

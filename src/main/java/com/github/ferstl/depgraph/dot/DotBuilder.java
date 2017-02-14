@@ -133,10 +133,10 @@ public final class DotBuilder<T> {
 
     sb.append("\n\n  // Node Definitions:");
     for (Entry<String, T> entry : this.nodeDefinitions.entrySet()) {
-      AttributeBuilder nodeAttributes = this.nodeNameRenderer.createNodeAttributes(entry.getValue());
+      String nodeAttributes = this.nodeNameRenderer.createNodeAttributes(entry.getValue());
       sb.append("\n  ")
           .append(entry.getKey())
-          .append(nodeAttributes.toString());
+          .append(nodeAttributes);
     }
 
     sb.append("\n\n  // Edge Definitions:");
@@ -166,8 +166,8 @@ public final class DotBuilder<T> {
     return new EdgeAttributeRenderer<T>() {
 
       @Override
-      public AttributeBuilder createEdgeAttributes(T from, T to) {
-        return new AttributeBuilder();
+      public String createEdgeAttributes(T from, T to) {
+        return "";
       }
 
     };
@@ -187,8 +187,8 @@ public final class DotBuilder<T> {
     return new NodeAttributeRenderer<T>() {
 
       @Override
-      public AttributeBuilder createNodeAttributes(T node) {
-        return new AttributeBuilder();
+      public String createNodeAttributes(T node) {
+        return "";
       }
     };
   }

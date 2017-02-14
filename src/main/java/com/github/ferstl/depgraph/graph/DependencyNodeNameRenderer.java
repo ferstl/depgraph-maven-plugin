@@ -15,7 +15,6 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.NodeAttributeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.google.common.base.Joiner;
@@ -44,7 +43,7 @@ public class DependencyNodeNameRenderer implements NodeAttributeRenderer<GraphNo
 
 
   @Override
-  public AttributeBuilder createNodeAttributes(GraphNode node) {
+  public String createNodeAttributes(GraphNode node) {
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
 
@@ -54,7 +53,8 @@ public class DependencyNodeNameRenderer implements NodeAttributeRenderer<GraphNo
         this.showVersion ? node.getEffectiveVersion() : null,
         artifact.getType(),
         scopes,
-        getFirst(node.getScopes(), null));
+        getFirst(node.getScopes(), null))
+        .toString();
   }
 
   private static String createScopeString(Set<String> scopes) {
