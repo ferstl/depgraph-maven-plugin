@@ -43,7 +43,7 @@ public class DependencyNodeNameRenderer implements NodeAttributeRenderer<GraphNo
 
 
   @Override
-  public String createNodeAttributes(GraphNode node) {
+  public String render(GraphNode node) {
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
 

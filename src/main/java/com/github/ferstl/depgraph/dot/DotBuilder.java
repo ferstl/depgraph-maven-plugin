@@ -133,7 +133,7 @@ public final class DotBuilder<T> {
 
     sb.append("\n\n  // Node Definitions:");
     for (Entry<String, T> entry : this.nodeDefinitions.entrySet()) {
-      String nodeAttributes = this.nodeNameRenderer.createNodeAttributes(entry.getValue());
+      String nodeAttributes = this.nodeNameRenderer.render(entry.getValue());
       sb.append("\n  ")
           .append(entry.getKey())
           .append(nodeAttributes);
@@ -187,7 +187,7 @@ public final class DotBuilder<T> {
     return new NodeAttributeRenderer<T>() {
 
       @Override
-      public String createNodeAttributes(T node) {
+      public String render(T node) {
         return "";
       }
     };

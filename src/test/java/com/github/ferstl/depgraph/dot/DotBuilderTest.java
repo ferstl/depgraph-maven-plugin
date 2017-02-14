@@ -124,7 +124,7 @@ public class DotBuilderTest {
 
   @Test
   public void customNodeIdRenderer() {
-    this.dotBuilder.useNodeIdRenderer(TestRenderer.INSTANCE);
+    this.dotBuilder.useNodeIdRenderer(TestNodeIdRenderer.INSTANCE);
 
     this.dotBuilder.addEdge(this.fromNode, this.toNode);
 
@@ -137,7 +137,7 @@ public class DotBuilderTest {
 
   @Test
   public void customNodeNameRenderer() {
-    this.dotBuilder.useNodeNameRenderer(TestRenderer.INSTANCE)
+    this.dotBuilder.useNodeNameRenderer(TestNodeNameRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
@@ -151,7 +151,7 @@ public class DotBuilderTest {
   @Test
   public void customEdgeRenderer() {
     this.dotBuilder
-        .useEdgeRenderer(TestRenderer.INSTANCE)
+        .useEdgeRenderer(TestEdgeRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
@@ -161,7 +161,7 @@ public class DotBuilderTest {
 
   @Test
   public void addEdgeWithCustomRenderer() {
-    this.dotBuilder.addEdge(this.fromNode, this.toNode, TestRenderer.INSTANCE);
+    this.dotBuilder.addEdge(this.fromNode, this.toNode, TestEdgeRenderer.INSTANCE);
 
     assertThat(this.dotBuilder, hasNodesAndEdges(
         new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
@@ -176,25 +176,34 @@ public class DotBuilderTest {
     return new GraphNode(artifact);
   }
 
-  enum TestRenderer implements EdgeRenderer<GraphNode>, NodeRenderer<GraphNode>, NodeAttributeRenderer<GraphNode> {
+  enum TestNodeIdRenderer implements NodeRenderer<GraphNode> {
     INSTANCE;
 
     @Override
     public String render(GraphNode node) {
       return node.getArtifact().getArtifactId();
     }
+  }
+
+  enum TestNodeNameRenderer implements NodeAttributeRenderer<GraphNode> {
+    INSTANCE;
+
+    @Override
+    public String render(GraphNode node) {
+      return new AttributeBuilder()
+          .label(node.getArtifact().getArtifactId())
+          .toString();
+    }
+
+  }
+
+  enum TestEdgeRenderer implements EdgeRenderer<GraphNode> {
+    INSTANCE;
 
     @Override
     public String render(GraphNode from, GraphNode to) {
       return new AttributeBuilder()
           .label(to.getArtifact().getVersion())
-          .toString();
-    }
-
-    @Override
-    public String createNodeAttributes(GraphNode node) {
-      return new AttributeBuilder()
-          .label(node.getArtifact().getArtifactId())
           .toString();
     }
 
