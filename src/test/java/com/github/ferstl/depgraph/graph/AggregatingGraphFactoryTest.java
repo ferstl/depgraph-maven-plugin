@@ -15,7 +15,7 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import java.util.ArrayList;
+import com.github.ferstl.depgraph.dot.DotBuilder;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -24,8 +24,11 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
-import com.github.ferstl.depgraph.dot.DotBuilder;
+
+import java.util.ArrayList;
+
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
 import static org.junit.Assert.assertThat;
@@ -58,8 +61,8 @@ public class AggregatingGraphFactoryTest {
   public void before() throws Exception {
     this.globalFilter = mock(ArtifactFilter.class);
     this.targetFilter = mock(ArtifactFilter.class);
-    when(this.globalFilter.include(Matchers.<Artifact>any())).thenReturn(true);
-    when(this.targetFilter.include(Matchers.<Artifact>any())).thenReturn(true);
+    when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
+    when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     DependencyNode dependencyNode = mock(DependencyNode.class);
     this.graphBuilder = mock(DependencyGraphBuilder.class);

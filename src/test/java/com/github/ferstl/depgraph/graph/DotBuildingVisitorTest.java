@@ -15,16 +15,18 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import java.util.Arrays;
-import java.util.EnumSet;
+import com.github.ferstl.depgraph.dot.DotBuilder;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.shared.dependency.graph.DependencyNode;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import org.mockito.ArgumentMatchers;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
 import static java.util.EnumSet.allOf;
 import static org.junit.Assert.assertFalse;
@@ -47,11 +49,11 @@ public class DotBuildingVisitorTest {
     this.dotBuilder = new DotBuilder<GraphNode>();
 
     this.globalFilter = mock(ArtifactFilter.class);
-    when(this.globalFilter.include(Matchers.<Artifact>any())).thenReturn(true);
+    when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     // this is the same as an empty list of target dependencies
     this.targetFilter = mock(ArtifactFilter.class);
-    when(this.targetFilter.include(Matchers.<Artifact>any())).thenReturn(true);
+    when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     this.includedResolutions = allOf(NodeResolution.class);
     this.visitor = new DotBuildingVisitor(this.dotBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
@@ -132,7 +134,7 @@ public class DotBuildingVisitorTest {
     DependencyNode child2 = createGraphNode("child2");
     DependencyNode parent = createGraphNode("parent", child1, child2);
 
-    when(this.targetFilter.include(Matchers.<Artifact>any())).thenReturn(false);
+    when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(false);
     when(this.targetFilter.include(child2.getArtifact())).thenReturn(true);
 
     assertTrue(this.visitor.visit(parent));
