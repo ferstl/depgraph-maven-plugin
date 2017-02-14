@@ -36,7 +36,7 @@ public final class DotBuilder<T> {
   private AttributeBuilder nodeAttributeBuilder;
   private AttributeBuilder edgeAttributeBuilder;
   private NodeRenderer<? super T> nodeIdRenderer;
-  private NodeAttributeRenderer<? super T> nodeNameRenderer;
+  private NodeRenderer<? super T> nodeNameRenderer;
   private EdgeRenderer<? super T> edgeRenderer;
   private boolean omitSelfReferences;
   private final Map<String, T> nodeDefinitions;
@@ -74,7 +74,7 @@ public final class DotBuilder<T> {
     return this;
   }
 
-  public DotBuilder<T> useNodeNameRenderer(NodeAttributeRenderer<? super T> nodeNameRenderer) {
+  public DotBuilder<T> useNodeNameRenderer(NodeRenderer<? super T> nodeNameRenderer) {
     this.nodeNameRenderer = nodeNameRenderer;
     return this;
   }
@@ -183,8 +183,8 @@ public final class DotBuilder<T> {
     };
   }
 
-  static <T> NodeAttributeRenderer<T> createDefaultNodeNameRenderer() {
-    return new NodeAttributeRenderer<T>() {
+  static <T> NodeRenderer<T> createDefaultNodeNameRenderer() {
+    return new NodeRenderer<T>() {
 
       @Override
       public String render(T node) {

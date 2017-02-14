@@ -15,7 +15,7 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import com.github.ferstl.depgraph.dot.NodeAttributeRenderer;
+import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.google.common.base.Joiner;
 import org.apache.maven.artifact.Artifact;
@@ -25,7 +25,7 @@ import java.util.Set;
 import static com.google.common.collect.Iterables.getFirst;
 
 
-public class DependencyNodeNameRenderer implements NodeAttributeRenderer<GraphNode> {
+public class DependencyNodeNameRenderer implements NodeRenderer<GraphNode> {
 
   private static final Joiner SLASH_JOINER = Joiner.on("/").skipNulls();
 

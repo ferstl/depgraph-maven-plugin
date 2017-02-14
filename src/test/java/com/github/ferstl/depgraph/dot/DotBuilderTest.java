@@ -185,7 +185,7 @@ public class DotBuilderTest {
     }
   }
 
-  enum TestNodeNameRenderer implements NodeAttributeRenderer<GraphNode> {
+  enum TestNodeNameRenderer implements NodeRenderer<GraphNode> {
     INSTANCE;
 
     @Override
