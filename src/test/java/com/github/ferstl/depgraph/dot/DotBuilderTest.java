@@ -176,11 +176,11 @@ public class DotBuilderTest {
     return new GraphNode(artifact);
   }
 
-  enum TestRenderer implements EdgeAttributeRenderer<GraphNode>, NodeNameRenderer<GraphNode>, NodeAttributeRenderer<GraphNode> {
+  enum TestRenderer implements EdgeAttributeRenderer<GraphNode>, NodeRenderer<GraphNode>, NodeAttributeRenderer<GraphNode> {
     INSTANCE;
 
     @Override
-    public String createNodeName(GraphNode node) {
+    public String render(GraphNode node) {
       return node.getArtifact().getArtifactId();
     }
 

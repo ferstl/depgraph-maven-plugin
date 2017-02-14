@@ -25,7 +25,7 @@ import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 /**
  * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by defining edges between
- * Nodes. The builder allows some customizations including custom {@link NodeNameRenderer}s and
+ * Nodes. The builder allows some customizations including custom {@link NodeRenderer}s and
  * {@link EdgeAttributeRenderer}s.
  *
  * @param <T> Type of the graph nodes.
@@ -35,7 +35,7 @@ public final class DotBuilder<T> {
   private String graphName;
   private AttributeBuilder nodeAttributeBuilder;
   private AttributeBuilder edgeAttributeBuilder;
-  private NodeNameRenderer<? super T> nodeIdRenderer;
+  private NodeRenderer<? super T> nodeIdRenderer;
   private NodeAttributeRenderer<? super T> nodeNameRenderer;
   private EdgeAttributeRenderer<? super T> edgeNameRenderer;
   private boolean omitSelfReferences;
@@ -69,7 +69,7 @@ public final class DotBuilder<T> {
     return this;
   }
 
-  public DotBuilder<T> useNodeIdRenderer(NodeNameRenderer<? super T> nodeIdRenderer) {
+  public DotBuilder<T> useNodeIdRenderer(NodeRenderer<? super T> nodeIdRenderer) {
     this.nodeIdRenderer = nodeIdRenderer;
     return this;
   }
@@ -117,7 +117,7 @@ public final class DotBuilder<T> {
    * @return The firstly added node or the given node if not present.
    */
   public T getEffectiveNode(T node) {
-    String key = escape(this.nodeIdRenderer.createNodeName(node));
+    String key = escape(this.nodeIdRenderer.render(node));
     if (this.nodeDefinitions.containsKey(key)) {
       return this.nodeDefinitions.get(key);
     }
@@ -148,13 +148,13 @@ public final class DotBuilder<T> {
   }
 
   private void addNode(T node) {
-    String nodeName = this.nodeIdRenderer.createNodeName(node);
+    String nodeName = this.nodeIdRenderer.render(node);
     this.nodeDefinitions.put(escape(nodeName), node);
   }
 
   private void safelyAddEdge(T fromNode, T toNode) {
-    String fromName = this.nodeIdRenderer.createNodeName(fromNode);
-    String toName = this.nodeIdRenderer.createNodeName(toNode);
+    String fromName = this.nodeIdRenderer.render(fromNode);
+    String toName = this.nodeIdRenderer.render(toNode);
 
     if (!this.omitSelfReferences || !fromName.equals(toName)) {
       String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeNameRenderer.createEdgeAttributes(fromNode, toNode);
@@ -173,11 +173,11 @@ public final class DotBuilder<T> {
     };
   }
 
-  static <T> NodeNameRenderer<T> createDefaultNodeIdRenderer() {
-    return new NodeNameRenderer<T>() {
+  static <T> NodeRenderer<T> createDefaultNodeIdRenderer() {
+    return new NodeRenderer<T>() {
 
       @Override
-      public String createNodeName(T node) {
+      public String render(T node) {
         return node.toString();
       }
     };

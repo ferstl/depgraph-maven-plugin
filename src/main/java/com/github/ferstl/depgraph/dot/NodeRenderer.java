@@ -16,7 +16,7 @@
 package com.github.ferstl.depgraph.dot;
 
 
-public interface NodeNameRenderer<T> {
+public interface NodeRenderer<T> {
 
-  String createNodeName(T node);
+  String render(T node);
 }
