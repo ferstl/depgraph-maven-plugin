@@ -40,7 +40,7 @@ public final class DotBuilder<T> {
   private EdgeRenderer<? super T> edgeRenderer;
   private boolean omitSelfReferences;
   private final Map<String, T> nodeDefinitions;
-  private final Set<String> edgeDefinitions;
+  private final Set<Edge> edgeDefinitions;
 
   public DotBuilder() {
     this.graphName = "G";
@@ -140,8 +140,9 @@ public final class DotBuilder<T> {
     }
 
     sb.append("\n\n  // Edge Definitions:");
-    for (String edge : this.edgeDefinitions) {
-      sb.append("\n  ").append(edge);
+    for (Edge edge : this.edgeDefinitions) {
+      String edgeDefinition = edge.fromNodeId + " -> " + edge.toNodeId + edge.name;
+      sb.append("\n  ").append(edgeDefinition);
     }
 
     return sb.append("\n}").toString();
@@ -153,12 +154,12 @@ public final class DotBuilder<T> {
   }
 
   private void safelyAddEdge(T fromNode, T toNode) {
-    String fromName = this.nodeIdRenderer.render(fromNode);
-    String toName = this.nodeIdRenderer.render(toNode);
+    String fromNodeId = this.nodeIdRenderer.render(fromNode);
+    String toNodeId = this.nodeIdRenderer.render(toNode);
 
-    if (!this.omitSelfReferences || !fromName.equals(toName)) {
-      String edgeDefinition = escape(fromName) + " -> " + escape(toName) + this.edgeRenderer.render(fromNode, toNode);
-      this.edgeDefinitions.add(edgeDefinition);
+    if (!this.omitSelfReferences || !fromNodeId.equals(toNodeId)) {
+      Edge edge = new Edge(escape(fromNodeId), escape(toNodeId), this.edgeRenderer.render(fromNode, toNode));
+      this.edgeDefinitions.add(edge);
     }
   }
 
@@ -191,5 +192,18 @@ public final class DotBuilder<T> {
         return "";
       }
     };
+  }
+
+  static class Edge<T> {
+
+    private String fromNodeId;
+    private String toNodeId;
+    private String name;
+
+    Edge(String fromNodeId, String toNodeId, String name) {
+      this.fromNodeId = fromNodeId;
+      this.toNodeId = toNodeId;
+      this.name = name;
+    }
   }
 }
