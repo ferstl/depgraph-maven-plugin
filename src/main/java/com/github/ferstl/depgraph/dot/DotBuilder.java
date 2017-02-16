@@ -196,7 +196,7 @@ public final class DotBuilder<T> {
     };
   }
 
-  static class Edge<T> {
+  static class Edge {
 
     private final String fromNodeId;
     private final String toNodeId;
@@ -213,7 +213,7 @@ public final class DotBuilder<T> {
       if (this == o) { return true; }
       if (!(o instanceof Edge)) { return false; }
 
-      Edge<?> edge = (Edge<?>) o;
+      Edge edge = (Edge) o;
       return Objects.equals(this.fromNodeId, edge.fromNodeId)
           && Objects.equals(this.toNodeId, edge.toNodeId)
           && Objects.equals(this.name, edge.name);
