@@ -40,7 +40,7 @@ public final class DotBuilder<T> {
   private NodeRenderer<? super T> nodeNameRenderer;
   private EdgeRenderer<? super T> edgeRenderer;
   private boolean omitSelfReferences;
-  private final Map<String, T> nodeDefinitions;
+  private final Map<String, Node<T>> nodeDefinitions;
   private final Set<Edge> edges;
 
   public DotBuilder() {
@@ -120,7 +120,7 @@ public final class DotBuilder<T> {
   public T getEffectiveNode(T node) {
     String key = this.nodeIdRenderer.render(node);
     if (this.nodeDefinitions.containsKey(key)) {
-      return this.nodeDefinitions.get(key);
+      return this.nodeDefinitions.get(key).nodeObject;
     }
 
     return node;
@@ -133,9 +133,9 @@ public final class DotBuilder<T> {
         .append("\n  edge ").append(this.edgeAttributeBuilder);
 
     sb.append("\n\n  // Node Definitions:");
-    for (Entry<String, T> entry : this.nodeDefinitions.entrySet()) {
+    for (Entry<String, Node<T>> entry : this.nodeDefinitions.entrySet()) {
       String nodeId = entry.getKey();
-      String nodeName = this.nodeNameRenderer.render(entry.getValue());
+      String nodeName = entry.getValue().nodeName;
       sb.append("\n  ")
           .append(escape(nodeId))
           .append(nodeName);
@@ -152,7 +152,8 @@ public final class DotBuilder<T> {
 
   private void addNode(T node) {
     String nodeId = this.nodeIdRenderer.render(node);
-    this.nodeDefinitions.put(nodeId, node);
+    String nodeName = this.nodeNameRenderer.render(node);
+    this.nodeDefinitions.put(nodeId, new Node<>(nodeId, nodeName, node));
   }
 
   private void safelyAddEdge(T fromNode, T toNode) {
@@ -196,7 +197,32 @@ public final class DotBuilder<T> {
     };
   }
 
-  static class Edge {
+  public static class Node<T> {
+
+    private final String nodeId;
+    private final String nodeName;
+    private final T nodeObject;
+
+    public Node(String nodeId, String nodeName, T nodeObject) {
+      this.nodeId = nodeId;
+      this.nodeName = nodeName;
+      this.nodeObject = nodeObject;
+    }
+
+    public String getNodeId() {
+      return this.nodeId;
+    }
+
+    public String getNodeName() {
+      return this.nodeName;
+    }
+
+    T getNodeObject() {
+      return this.nodeObject;
+    }
+  }
+
+  public static class Edge {
 
     private final String fromNodeId;
     private final String toNodeId;
@@ -222,6 +248,18 @@ public final class DotBuilder<T> {
     @Override
     public int hashCode() {
       return Objects.hash(this.fromNodeId, this.toNodeId, this.name);
+    }
+
+    public String getFromNodeId() {
+      return this.fromNodeId;
+    }
+
+    public String getToNodeId() {
+      return this.toNodeId;
+    }
+
+    public String getName() {
+      return this.name;
     }
   }
 }
