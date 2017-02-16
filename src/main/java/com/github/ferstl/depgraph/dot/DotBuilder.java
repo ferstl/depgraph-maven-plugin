@@ -15,13 +15,13 @@
  */
 package com.github.ferstl.depgraph.dot;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-
-import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
 /**
  * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by defining edges between
@@ -127,26 +127,15 @@ public final class DotBuilder<T> {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("digraph ").append(escape(this.graphName)).append(" {")
-        .append("\n  node ").append(this.nodeAttributeBuilder)
-        .append("\n  edge ").append(this.edgeAttributeBuilder);
-
-    sb.append("\n\n  // Node Definitions:");
-    for (Entry<String, Node<T>> entry : this.nodeDefinitions.entrySet()) {
-      String nodeId = entry.getKey();
-      String nodeName = entry.getValue().getNodeName();
-      sb.append("\n  ")
-          .append(escape(nodeId))
-          .append(nodeName);
+    // Work around some generics restrictions
+    ImmutableList.Builder<Node<?>> nodeListBuilder = ImmutableList.builder();
+    for (Node<?> node : this.nodeDefinitions.values()) {
+      nodeListBuilder.add(node);
     }
+    ImmutableList<Node<?>> nodeList = nodeListBuilder.build();
+    ImmutableSet<Edge> edgeSet = ImmutableSet.copyOf(this.edges);
 
-    sb.append("\n\n  // Edge Definitions:");
-    for (Edge edge : this.edges) {
-      String edgeDefinition = escape(edge.getFromNodeId()) + " -> " + escape(edge.getToNodeId()) + edge.getName();
-      sb.append("\n  ").append(edgeDefinition);
-    }
-
-    return sb.append("\n}").toString();
+    return new DotGraphPrinter(this.nodeAttributeBuilder, this.edgeAttributeBuilder).printGraph(this.graphName, nodeList, edgeSet);
   }
 
   private void addNode(T node) {
