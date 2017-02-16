@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
@@ -205,6 +206,22 @@ public final class DotBuilder<T> {
       this.fromNodeId = fromNodeId;
       this.toNodeId = toNodeId;
       this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) { return true; }
+      if (!(o instanceof Edge)) { return false; }
+
+      Edge<?> edge = (Edge<?>) o;
+      return Objects.equals(this.fromNodeId, edge.fromNodeId)
+          && Objects.equals(this.toNodeId, edge.toNodeId)
+          && Objects.equals(this.name, edge.name);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(this.fromNodeId, this.toNodeId, this.name);
     }
   }
 }
