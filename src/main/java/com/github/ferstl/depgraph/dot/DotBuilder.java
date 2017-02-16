@@ -40,7 +40,7 @@ public final class DotBuilder<T> {
   private EdgeRenderer<? super T> edgeRenderer;
   private boolean omitSelfReferences;
   private final Map<String, T> nodeDefinitions;
-  private final Set<Edge> edgeDefinitions;
+  private final Set<Edge> edges;
 
   public DotBuilder() {
     this.graphName = "G";
@@ -51,7 +51,7 @@ public final class DotBuilder<T> {
     this.edgeRenderer = createDefaultEdgeRenderer();
 
     this.nodeDefinitions = new LinkedHashMap<>();
-    this.edgeDefinitions = new LinkedHashSet<>();
+    this.edges = new LinkedHashSet<>();
   }
 
   public DotBuilder<T> graphName(String name) {
@@ -140,7 +140,7 @@ public final class DotBuilder<T> {
     }
 
     sb.append("\n\n  // Edge Definitions:");
-    for (Edge edge : this.edgeDefinitions) {
+    for (Edge edge : this.edges) {
       String edgeDefinition = edge.fromNodeId + " -> " + edge.toNodeId + edge.name;
       sb.append("\n  ").append(edgeDefinition);
     }
@@ -159,7 +159,7 @@ public final class DotBuilder<T> {
 
     if (!this.omitSelfReferences || !fromNodeId.equals(toNodeId)) {
       Edge edge = new Edge(escape(fromNodeId), escape(toNodeId), this.edgeRenderer.render(fromNode, toNode));
-      this.edgeDefinitions.add(edge);
+      this.edges.add(edge);
     }
   }
 
@@ -196,9 +196,9 @@ public final class DotBuilder<T> {
 
   static class Edge<T> {
 
-    private String fromNodeId;
-    private String toNodeId;
-    private String name;
+    private final String fromNodeId;
+    private final String toNodeId;
+    private final String name;
 
     Edge(String fromNodeId, String toNodeId, String name) {
       this.fromNodeId = fromNodeId;
