@@ -133,10 +133,11 @@ public final class DotBuilder<T> {
 
     sb.append("\n\n  // Node Definitions:");
     for (Entry<String, T> entry : this.nodeDefinitions.entrySet()) {
-      String nodeAttributes = this.nodeNameRenderer.render(entry.getValue());
+      String nodeId = entry.getKey();
+      String nodeName = this.nodeNameRenderer.render(entry.getValue());
       sb.append("\n  ")
-          .append(entry.getKey())
-          .append(nodeAttributes);
+          .append(nodeId)
+          .append(nodeName);
     }
 
     sb.append("\n\n  // Edge Definitions:");
