@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
 
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
@@ -135,7 +134,7 @@ public final class DotBuilder<T> {
     sb.append("\n\n  // Node Definitions:");
     for (Entry<String, Node<T>> entry : this.nodeDefinitions.entrySet()) {
       String nodeId = entry.getKey();
-      String nodeName = entry.getValue().nodeName;
+      String nodeName = entry.getValue().getNodeName();
       sb.append("\n  ")
           .append(escape(nodeId))
           .append(nodeName);
@@ -143,7 +142,7 @@ public final class DotBuilder<T> {
 
     sb.append("\n\n  // Edge Definitions:");
     for (Edge edge : this.edges) {
-      String edgeDefinition = escape(edge.fromNodeId) + " -> " + escape(edge.toNodeId) + edge.name;
+      String edgeDefinition = escape(edge.getFromNodeId()) + " -> " + escape(edge.getToNodeId()) + edge.getName();
       sb.append("\n  ").append(edgeDefinition);
     }
 
@@ -197,69 +196,4 @@ public final class DotBuilder<T> {
     };
   }
 
-  public static class Node<T> {
-
-    private final String nodeId;
-    private final String nodeName;
-    private final T nodeObject;
-
-    public Node(String nodeId, String nodeName, T nodeObject) {
-      this.nodeId = nodeId;
-      this.nodeName = nodeName;
-      this.nodeObject = nodeObject;
-    }
-
-    public String getNodeId() {
-      return this.nodeId;
-    }
-
-    public String getNodeName() {
-      return this.nodeName;
-    }
-
-    T getNodeObject() {
-      return this.nodeObject;
-    }
-  }
-
-  public static class Edge {
-
-    private final String fromNodeId;
-    private final String toNodeId;
-    private final String name;
-
-    Edge(String fromNodeId, String toNodeId, String name) {
-      this.fromNodeId = fromNodeId;
-      this.toNodeId = toNodeId;
-      this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) { return true; }
-      if (!(o instanceof Edge)) { return false; }
-
-      Edge edge = (Edge) o;
-      return Objects.equals(this.fromNodeId, edge.fromNodeId)
-          && Objects.equals(this.toNodeId, edge.toNodeId)
-          && Objects.equals(this.name, edge.name);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(this.fromNodeId, this.toNodeId, this.name);
-    }
-
-    public String getFromNodeId() {
-      return this.fromNodeId;
-    }
-
-    public String getToNodeId() {
-      return this.toNodeId;
-    }
-
-    public String getName() {
-      return this.name;
-    }
-  }
 }
