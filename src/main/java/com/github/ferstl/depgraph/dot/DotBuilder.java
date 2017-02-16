@@ -117,7 +117,7 @@ public final class DotBuilder<T> {
    * @return The firstly added node or the given node if not present.
    */
   public T getEffectiveNode(T node) {
-    String key = escape(this.nodeIdRenderer.render(node));
+    String key = this.nodeIdRenderer.render(node);
     if (this.nodeDefinitions.containsKey(key)) {
       return this.nodeDefinitions.get(key);
     }
@@ -136,13 +136,13 @@ public final class DotBuilder<T> {
       String nodeId = entry.getKey();
       String nodeName = this.nodeNameRenderer.render(entry.getValue());
       sb.append("\n  ")
-          .append(nodeId)
+          .append(escape(nodeId))
           .append(nodeName);
     }
 
     sb.append("\n\n  // Edge Definitions:");
     for (Edge edge : this.edges) {
-      String edgeDefinition = edge.fromNodeId + " -> " + edge.toNodeId + edge.name;
+      String edgeDefinition = escape(edge.fromNodeId) + " -> " + escape(edge.toNodeId) + edge.name;
       sb.append("\n  ").append(edgeDefinition);
     }
 
@@ -150,8 +150,8 @@ public final class DotBuilder<T> {
   }
 
   private void addNode(T node) {
-    String nodeName = this.nodeIdRenderer.render(node);
-    this.nodeDefinitions.put(escape(nodeName), node);
+    String nodeId = this.nodeIdRenderer.render(node);
+    this.nodeDefinitions.put(nodeId, node);
   }
 
   private void safelyAddEdge(T fromNode, T toNode) {
@@ -159,7 +159,7 @@ public final class DotBuilder<T> {
     String toNodeId = this.nodeIdRenderer.render(toNode);
 
     if (!this.omitSelfReferences || !fromNodeId.equals(toNodeId)) {
-      Edge edge = new Edge(escape(fromNodeId), escape(toNodeId), this.edgeRenderer.render(fromNode, toNode));
+      Edge edge = new Edge(fromNodeId, toNodeId, this.edgeRenderer.render(fromNode, toNode));
       this.edges.add(edge);
     }
   }
