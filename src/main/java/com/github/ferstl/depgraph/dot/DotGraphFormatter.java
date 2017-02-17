@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
 
-public class DotGraphFormatter {
+public class DotGraphFormatter implements GraphFormatter {
 
   private final AttributeBuilder nodeAttributeBuilder;
   private final AttributeBuilder edgeAttributeBuilder;
@@ -20,6 +20,7 @@ public class DotGraphFormatter {
     this.edgeAttributeBuilder = edgeAttributeBuilder;
   }
 
+  @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
     StringBuilder sb = new StringBuilder("digraph ").append(escape(graphName)).append(" {")
         .append("\n  node ").append(this.nodeAttributeBuilder)
