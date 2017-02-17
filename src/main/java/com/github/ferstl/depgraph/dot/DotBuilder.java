@@ -135,7 +135,7 @@ public final class DotBuilder<T> {
     ImmutableList<Node<?>> nodeList = nodeListBuilder.build();
     ImmutableSet<Edge> edgeSet = ImmutableSet.copyOf(this.edges);
 
-    return new DotGraphPrinter(this.nodeAttributeBuilder, this.edgeAttributeBuilder).printGraph(this.graphName, nodeList, edgeSet);
+    return new DotGraphFormatter(this.nodeAttributeBuilder, this.edgeAttributeBuilder).format(this.graphName, nodeList, edgeSet);
   }
 
   private void addNode(T node) {
