@@ -16,6 +16,7 @@
 package com.github.ferstl.depgraph;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.DotGraphFormatter;
 import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
 import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
@@ -49,8 +50,7 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
 
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
-        .nodeStyle(styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(styleConfiguration.defaultEdgeAttributes())
+        .graphFormatter(new DotGraphFormatter(styleConfiguration.defaultNodeAttributes(), styleConfiguration.defaultEdgeAttributes()))
         .useNodeIdRenderer(this.mergeScopes ? NodeIdRenderers.GROUP_ID : NodeIdRenderers.GROUP_ID_WITH_SCOPE)
         .useNodeNameRenderer(new DependencyNodeNameRenderer(true, false, false, styleConfiguration))
         .omitSelfReferences();

@@ -16,6 +16,7 @@
 package com.github.ferstl.depgraph;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.DotGraphFormatter;
 import com.github.ferstl.depgraph.graph.DependencyEdgeRenderer;
 import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
@@ -97,8 +98,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<GraphNode>()
-        .nodeStyle(styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(styleConfiguration.defaultEdgeAttributes())
+        .graphFormatter(new DotGraphFormatter(styleConfiguration.defaultNodeAttributes(), styleConfiguration.defaultEdgeAttributes()))
         .useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
 
     boolean fullGraph = requiresFullGraph();

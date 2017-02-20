@@ -16,6 +16,7 @@
 package com.github.ferstl.depgraph;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.DotGraphFormatter;
 import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
 import com.github.ferstl.depgraph.graph.DependencyEdgeRenderer;
 import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
@@ -72,8 +73,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder.useNodeNameRenderer(new DependencyNodeNameRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration))
-        .nodeStyle(styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(styleConfiguration.defaultEdgeAttributes());
+        .graphFormatter(new DotGraphFormatter(styleConfiguration.defaultNodeAttributes(), styleConfiguration.defaultEdgeAttributes()));
     if (this.mergeScopes) {
       dotBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
     } else {

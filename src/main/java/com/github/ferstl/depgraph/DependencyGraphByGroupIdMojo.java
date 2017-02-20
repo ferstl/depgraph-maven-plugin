@@ -16,6 +16,7 @@
 package com.github.ferstl.depgraph;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.DotGraphFormatter;
 import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
@@ -65,8 +66,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
   private DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
     DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
     dotBuilder
-        .nodeStyle(styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(styleConfiguration.defaultEdgeAttributes())
+        .graphFormatter(new DotGraphFormatter(styleConfiguration.defaultNodeAttributes(), styleConfiguration.defaultEdgeAttributes()))
         .useNodeIdRenderer(NodeIdRenderers.GROUP_ID_WITH_SCOPE)
         .useNodeNameRenderer(new DependencyNodeNameRenderer(true, false, false, styleConfiguration))
         .omitSelfReferences();

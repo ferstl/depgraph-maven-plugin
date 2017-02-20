@@ -33,8 +33,6 @@ import java.util.Set;
 public final class DotBuilder<T> {
 
   private String graphName;
-  private AttributeBuilder nodeAttributeBuilder;
-  private AttributeBuilder edgeAttributeBuilder;
   private GraphFormatter graphFormatter;
   private NodeRenderer<? super T> nodeIdRenderer;
   private NodeRenderer<? super T> nodeNameRenderer;
@@ -44,10 +42,11 @@ public final class DotBuilder<T> {
   private final Set<Edge> edges;
 
   public DotBuilder() {
+    AttributeBuilder nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
+    AttributeBuilder edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
+
     this.graphName = "G";
-    this.nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
-    this.edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
-    this.graphFormatter = new DotGraphFormatter(this.nodeAttributeBuilder, this.edgeAttributeBuilder);
+    this.graphFormatter = new DotGraphFormatter(nodeAttributeBuilder, edgeAttributeBuilder);
     this.nodeIdRenderer = createDefaultNodeIdRenderer();
     this.nodeNameRenderer = createDefaultNodeNameRenderer();
     this.edgeRenderer = createDefaultEdgeRenderer();
@@ -58,16 +57,6 @@ public final class DotBuilder<T> {
 
   public DotBuilder<T> graphName(String name) {
     this.graphName = name;
-    return this;
-  }
-
-  public DotBuilder<T> nodeStyle(AttributeBuilder attributeBuilder) {
-    this.nodeAttributeBuilder = attributeBuilder;
-    return this;
-  }
-
-  public DotBuilder<T> edgeStyle(AttributeBuilder attributeBuilder) {
-    this.edgeAttributeBuilder = attributeBuilder;
     return this;
   }
 

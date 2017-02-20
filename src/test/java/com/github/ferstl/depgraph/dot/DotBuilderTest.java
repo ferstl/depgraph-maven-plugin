@@ -63,24 +63,29 @@ public class DotBuilderTest {
     assertThat(graph, startsWith("digraph \"test-graph\""));
   }
 
+  // TODO: #19 - Move test
   @Test
   public void nodeStyle() {
+    AttributeBuilder nodeStyle = new AttributeBuilder()
+        .shape("polygon")
+        .addAttribute("sides", "6");
     String graph = this.dotBuilder
-        .nodeStyle(new AttributeBuilder()
-            .shape("polygon")
-            .addAttribute("sides", "6"))
+        .graphFormatter(new DotGraphFormatter(nodeStyle, new AttributeBuilder()))
         .toString();
 
     assertThat(graph, containsString("node [shape=\"polygon\",sides=\"6\"]"));
   }
 
+  // TODO: #19 - Move test
   @Test
   public void edgeStyle() {
+    AttributeBuilder edgeStyle = new AttributeBuilder()
+        .style("dotted")
+        .fontName("Courier italic")
+        .fontSize(10);
+
     String graph = this.dotBuilder
-        .edgeStyle(new AttributeBuilder()
-            .style("dotted")
-            .fontName("Courier italic")
-            .fontSize(10))
+        .graphFormatter(new DotGraphFormatter(new AttributeBuilder(), edgeStyle))
         .toString();
 
     assertThat(graph, containsString("edge [style=\"dotted\",fontname=\"Courier italic\",fontsize=\"10\"]"));
