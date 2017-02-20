@@ -35,6 +35,7 @@ public final class DotBuilder<T> {
   private String graphName;
   private AttributeBuilder nodeAttributeBuilder;
   private AttributeBuilder edgeAttributeBuilder;
+  private GraphFormatter graphFormatter;
   private NodeRenderer<? super T> nodeIdRenderer;
   private NodeRenderer<? super T> nodeNameRenderer;
   private EdgeRenderer<? super T> edgeRenderer;
@@ -46,6 +47,7 @@ public final class DotBuilder<T> {
     this.graphName = "G";
     this.nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
     this.edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
+    this.graphFormatter = new DotGraphFormatter(this.nodeAttributeBuilder, this.edgeAttributeBuilder);
     this.nodeIdRenderer = createDefaultNodeIdRenderer();
     this.nodeNameRenderer = createDefaultNodeNameRenderer();
     this.edgeRenderer = createDefaultEdgeRenderer();
@@ -86,6 +88,11 @@ public final class DotBuilder<T> {
 
   public DotBuilder<T> omitSelfReferences() {
     this.omitSelfReferences = true;
+    return this;
+  }
+
+  public DotBuilder<T> graphFormatter(GraphFormatter formatter) {
+    this.graphFormatter = formatter;
     return this;
   }
 
@@ -135,7 +142,7 @@ public final class DotBuilder<T> {
     ImmutableList<Node<?>> nodeList = nodeListBuilder.build();
     ImmutableSet<Edge> edgeSet = ImmutableSet.copyOf(this.edges);
 
-    return new DotGraphFormatter(this.nodeAttributeBuilder, this.edgeAttributeBuilder).format(this.graphName, nodeList, edgeSet);
+    return this.graphFormatter.format(this.graphName, nodeList, edgeSet);
   }
 
   private void addNode(T node) {
