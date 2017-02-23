@@ -15,22 +15,19 @@
  */
 package com.github.ferstl.depgraph;
 
-import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.dot.DotGraphFormatter;
-import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
-import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
-import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
-import com.github.ferstl.depgraph.graph.GraphFactory;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeIdRenderers;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
-import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
+import java.util.Set;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
-import java.util.Set;
+import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
+import com.github.ferstl.depgraph.graph.GraphFactory;
+import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.graph.NodeIdRenderers;
+import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 
 /**
  * Aggregates all dependencies of a multi-module by their group IDs.
@@ -46,13 +43,15 @@ import java.util.Set;
 public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregatingGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
 
-    DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
-    dotBuilder
-        .graphFormatter(new DotGraphFormatter(styleConfiguration.defaultNodeAttributes(), styleConfiguration.defaultEdgeAttributes()))
+    DotBuilder<GraphNode> dotBuilder = graphStyleConfigurer
+        .showGroupIds(true)
+        .showArtifactIds(false)
+        .showVersionsOnNodes(false)
+        .showVersionsOnEdges(false)
+        .configure(DotBuilder.<GraphNode>create())
         .useNodeIdRenderer(this.mergeScopes ? NodeIdRenderers.GROUP_ID : NodeIdRenderers.GROUP_ID_WITH_SCOPE)
-        .useNodeNameRenderer(new DependencyNodeNameRenderer(true, false, false, styleConfiguration))
         .omitSelfReferences();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);

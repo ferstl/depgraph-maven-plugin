@@ -16,15 +16,12 @@
 package com.github.ferstl.depgraph;
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.dot.DotGraphFormatter;
 import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
-import com.github.ferstl.depgraph.graph.DependencyEdgeRenderer;
-import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.NodeIdRenderers;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -70,18 +67,19 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   private boolean includeParentProjects;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
-    dotBuilder.useNodeNameRenderer(new DependencyNodeNameRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration))
-        .graphFormatter(new DotGraphFormatter(styleConfiguration.defaultNodeAttributes(), styleConfiguration.defaultEdgeAttributes()));
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+    DotBuilder<GraphNode> dotBuilder = graphStyleConfigurer
+        .showGroupIds(this.showGroupIds)
+        .showArtifactIds(true)
+        .showVersionsOnNodes(this.showVersions)
+        // This graph won't show any conflicting dependencies. So don't show versions on edges
+        .showVersionsOnEdges(false)
+        .configure(DotBuilder.<GraphNode>create());
     if (this.mergeScopes) {
       dotBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
     } else {
       dotBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID_WITH_SCOPE);
     }
-
-    // This graph won't show any conflicting dependencies. So showVersions must always be false
-    dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(false, styleConfiguration));
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, this.includeParentProjects);

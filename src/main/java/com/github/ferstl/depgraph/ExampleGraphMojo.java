@@ -15,6 +15,10 @@
  */
 package com.github.ferstl.depgraph;
 
+import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphFactory;
+import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.GraphStyleConfigurer;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -22,10 +26,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
-import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.GraphFactory;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 
 /**
  * Creates an example graph. This Mojo has the same capabilities as the {@code graph} Mojo. So it might be useful to
@@ -44,8 +44,8 @@ import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 public class ExampleGraphMojo extends DependencyGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = createDotBuilder(styleConfiguration);
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+    DotBuilder<GraphNode> dotBuilder = createDotBuilder(graphStyleConfigurer);
     return new ExampleGraphFactory(dotBuilder, globalFilter, targetFilter);
   }
 

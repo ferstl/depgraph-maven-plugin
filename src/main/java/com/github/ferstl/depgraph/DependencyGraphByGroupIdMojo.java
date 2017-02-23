@@ -15,23 +15,20 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.Set;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.dot.DotGraphFormatter;
-import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.NodeIdRenderers;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
-import java.util.Set;
 
 import static java.util.EnumSet.allOf;
 
@@ -48,8 +45,15 @@ import static java.util.EnumSet.allOf;
 public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = createDotBuilder(styleConfiguration);
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+    DotBuilder<GraphNode> dotBuilder = graphStyleConfigurer
+        .showGroupIds(true)
+        .showArtifactIds(false)
+        .showVersionsOnNodes(false)
+        .showVersionsOnEdges(false)
+        .configure(DotBuilder.<GraphNode>create())
+        .useNodeIdRenderer(NodeIdRenderers.GROUP_ID_WITH_SCOPE)
+        .omitSelfReferences();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, allOf(NodeResolution.class));
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
@@ -61,16 +65,5 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
     resources.add(BuiltInStyleResource.GROUP_ID_ONLY_STYLE);
 
     return resources;
-  }
-
-  private DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
-    dotBuilder
-        .graphFormatter(new DotGraphFormatter(styleConfiguration.defaultNodeAttributes(), styleConfiguration.defaultEdgeAttributes()))
-        .useNodeIdRenderer(NodeIdRenderers.GROUP_ID_WITH_SCOPE)
-        .useNodeNameRenderer(new DependencyNodeNameRenderer(true, false, false, styleConfiguration))
-        .omitSelfReferences();
-
-    return dotBuilder;
   }
 }

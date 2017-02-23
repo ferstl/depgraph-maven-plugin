@@ -47,7 +47,9 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
 import com.github.ferstl.depgraph.graph.DependencyGraphException;
+import com.github.ferstl.depgraph.graph.DotGraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.GraphFactory;
+import com.github.ferstl.depgraph.graph.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.style.resource.ClasspathStyleResource;
@@ -182,9 +184,10 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
     ArtifactFilter targetFilter = createTargetArtifactFilter();
     StyleConfiguration styleConfiguration = loadStyleConfiguration();
+    DotGraphStyleConfigurer graphStyleConfigurer = new DotGraphStyleConfigurer(styleConfiguration);
 
     try {
-      GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter, styleConfiguration);
+      GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter, graphStyleConfigurer);
 
       writeDotFile(graphFactory.createGraph(this.project));
 
@@ -199,7 +202,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration);
+  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer);
 
   /**
    * Override this method to configure additional style resources. It is recommendet to call

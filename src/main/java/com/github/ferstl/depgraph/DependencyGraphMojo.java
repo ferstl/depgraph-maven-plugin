@@ -15,24 +15,20 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.EnumSet;
 import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.dot.DotGraphFormatter;
-import com.github.ferstl.depgraph.graph.DependencyEdgeRenderer;
-import com.github.ferstl.depgraph.graph.DependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphNode;
+import com.github.ferstl.depgraph.graph.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.NodeIdRenderers;
 import com.github.ferstl.depgraph.graph.NodeResolution;
 import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
-import java.util.EnumSet;
 
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
@@ -89,26 +85,21 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   boolean showDuplicates;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = createDotBuilder(styleConfiguration);
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+    DotBuilder<GraphNode> dotBuilder = createDotBuilder(graphStyleConfigurer);
     GraphBuilderAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
-  DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = new DotBuilder<GraphNode>()
-        .graphFormatter(new DotGraphFormatter(styleConfiguration.defaultNodeAttributes(), styleConfiguration.defaultEdgeAttributes()))
+  DotBuilder<GraphNode> createDotBuilder(GraphStyleConfigurer graphStyleConfigurer) {
+    return graphStyleConfigurer
+        .showGroupIds(this.showGroupIds)
+        .showArtifactIds(true)
+        .showVersionsOnNodes(this.showVersions)
+        .showVersionsOnEdges(this.showVersions && requiresFullGraph())
+        .configure(DotBuilder.<GraphNode>create())
         .useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
-
-    boolean fullGraph = requiresFullGraph();
-    if (fullGraph) {
-      dotBuilder.useEdgeRenderer(new DependencyEdgeRenderer(this.showVersions, styleConfiguration));
-    }
-
-    dotBuilder.useNodeNameRenderer(new DependencyNodeNameRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration));
-
-    return dotBuilder;
   }
 
   private GraphBuilderAdapter createGraphBuilderAdapter(ArtifactFilter targetFilter) {
