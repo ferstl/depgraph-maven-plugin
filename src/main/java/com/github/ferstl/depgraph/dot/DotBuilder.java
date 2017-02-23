@@ -41,6 +41,10 @@ public final class DotBuilder<T> {
   private final Map<String, Node<T>> nodeDefinitions;
   private final Set<Edge> edges;
 
+  public static <T> DotBuilder<T> create() {
+    return new DotBuilder<>();
+  }
+
   public DotBuilder() {
     AttributeBuilder nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
     AttributeBuilder edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
