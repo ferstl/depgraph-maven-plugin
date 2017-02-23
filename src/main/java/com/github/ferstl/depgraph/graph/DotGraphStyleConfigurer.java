@@ -10,31 +10,41 @@ public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
   private final StyleConfiguration styleConfiguration;
   private boolean showGroupId;
   private boolean showArtifactId;
-  private boolean showVersion;
+  private boolean showVersionsOnNodes;
+  private boolean showVersionOnEdges;
 
   public DotGraphStyleConfigurer(StyleConfiguration styleConfiguration) {
     this.styleConfiguration = styleConfiguration;
   }
 
   @Override
-  public void showGroupId() {
-    this.showGroupId = true;
+  public GraphStyleConfigurer showGroupIds(boolean showGroupId) {
+    this.showGroupId = showGroupId;
+    return this;
   }
 
   @Override
-  public void showArtifactId() {
-    this.showArtifactId = true;
+  public GraphStyleConfigurer showArtifactIds(boolean showArtifactId) {
+    this.showArtifactId = showArtifactId;
+    return this;
   }
 
   @Override
-  public void showVersion() {
-    this.showVersion = true;
+  public GraphStyleConfigurer showVersionsOnNodes(boolean showVersionsOnNodes) {
+    this.showVersionsOnNodes = showVersionsOnNodes;
+    return this;
+  }
+
+  @Override
+  public GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges) {
+    this.showVersionOnEdges = showVersionOnEdges;
+    return this;
   }
 
   @Override
   public DotBuilder<GraphNode> configure(DotBuilder<GraphNode> graphBuilder) {
-    DependencyNodeNameRenderer nodeNameRenderer = new DependencyNodeNameRenderer(true, false, false, this.styleConfiguration);
-    DependencyEdgeRenderer edgeRenderer = new DependencyEdgeRenderer(this.showVersion, this.styleConfiguration);
+    DependencyNodeNameRenderer nodeNameRenderer = new DependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes, this.styleConfiguration);
+    DependencyEdgeRenderer edgeRenderer = new DependencyEdgeRenderer(this.showVersionOnEdges, this.styleConfiguration);
 
     return graphBuilder
         .graphFormatter(new DotGraphFormatter(this.styleConfiguration.defaultNodeAttributes(), this.styleConfiguration.defaultEdgeAttributes()))

@@ -4,11 +4,13 @@ import com.github.ferstl.depgraph.dot.DotBuilder;
 
 public interface GraphStyleConfigurer {
 
-  void showGroupId();
+  GraphStyleConfigurer showGroupIds(boolean showGroupId);
 
-  void showArtifactId();
+  GraphStyleConfigurer showArtifactIds(boolean showArtifactId);
 
-  void showVersion();
+  GraphStyleConfigurer showVersionsOnNodes(boolean showVersionsOnNodes);
+
+  GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges);
 
   DotBuilder<GraphNode> configure(DotBuilder<GraphNode> graphBuilder);
 }
