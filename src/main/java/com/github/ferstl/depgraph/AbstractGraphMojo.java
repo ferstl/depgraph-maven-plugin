@@ -112,6 +112,15 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    */
   @Parameter(property = "targetIncludes", defaultValue = "")
   private List<String> targetIncludes;
+
+  /**
+   * Format of the graph, either &quot;dot&quot; (default) or &quot;gml&quot;.
+   *
+   * @since 2.1.0
+   */
+  @Parameter(property = "outputFormat", defaultValue = "dot")
+  private String outputFormat;
+
   /**
    * The path to the generated dot file.
    *
@@ -121,8 +130,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private File outputFile;
 
   /**
-   * If set to {@code true} and Graphviz is installed on the system where this plugin is executed, the dot file will be
-   * converted to a graph image using Graphviz' dot executable.
+   * Only relevant when {@code outputFormat=dot}: If set to {@code true} and Graphviz is installed on the system where
+   * this plugin is executed, the dot file will be converted to a graph image using Graphviz' dot executable.
    *
    * @see #imageFormat
    * @see #dotExecutable
@@ -132,7 +141,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private boolean createImage;
 
   /**
-   * The format for the graph image when {@link #createImage} is set to {@code true}.
+   * Only relevant when {@code outputFormat=dot}: The format for the graph image when {@link #createImage} is set to
+   * {@code true}.
    *
    * @since 1.0.0
    */
@@ -140,8 +150,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private String imageFormat;
 
   /**
-   * Path to the dot executable. Use this option in case {@link #createImage} is set to {@code true} and the dot
-   * executable is not on the system {@code PATH}.
+   * Only relevant when {@code outputFormat=dot}: Path to the dot executable. Use this option in case
+   * {@link #createImage} is set to {@code true} and the dot executable is not on the system {@code PATH}.
    *
    * @since 1.0.0
    */
@@ -149,7 +159,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private File dotExecutable;
 
   /**
-   * Path to a custom style configuration in JSON format.
+   * Only relevant when {@code outputFormat=dot}: Path to a custom style configuration in JSON format.
    *
    * @since 2.0.0
    */
@@ -157,7 +167,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private String customStyleConfiguration;
 
   /**
-   * If set to {@code true} the effective style configuration used to create this graph will be printed on the console.
+   * Only relevant when {@code outputFormat=dot}: If set to {@code true} the effective style configuration used to
+   * create this graph will be printed on the console.
    *
    * @since 2.0.0
    */
@@ -340,13 +351,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   }
 
   private String createGraphFileName() {
-    String dotFileName = this.outputFile.getName();
+    String outputFileName = this.outputFile.getName();
 
     String graphFileName;
-    if (dotFileName.endsWith(DOT_EXTENSION)) {
-      graphFileName = dotFileName.substring(0, dotFileName.lastIndexOf(".")) + "." + this.imageFormat;
+    if (outputFileName.endsWith(DOT_EXTENSION)) {
+      graphFileName = outputFileName.substring(0, outputFileName.lastIndexOf(".")) + "." + this.imageFormat;
     } else {
-      graphFileName = dotFileName + this.imageFormat;
+      graphFileName = outputFileName + this.imageFormat;
     }
     return graphFileName;
   }
