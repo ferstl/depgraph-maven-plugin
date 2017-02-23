@@ -2,6 +2,7 @@ package com.github.ferstl.depgraph.graph;
 
 
 import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.dot.DotGraphFormatter;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 
 public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
@@ -36,6 +37,7 @@ public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
     DependencyEdgeRenderer edgeRenderer = new DependencyEdgeRenderer(this.showVersion, this.styleConfiguration);
 
     return graphBuilder
+        .graphFormatter(new DotGraphFormatter(this.styleConfiguration.defaultNodeAttributes(), this.styleConfiguration.defaultEdgeAttributes()))
         .useNodeNameRenderer(nodeNameRenderer)
         .useEdgeRenderer(edgeRenderer);
   }
