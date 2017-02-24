@@ -2,6 +2,8 @@ package com.github.ferstl.depgraph.graph;
 
 import com.github.ferstl.depgraph.dot.EdgeRenderer;
 
+import static com.github.ferstl.depgraph.graph.VersionAbbreviator.abbreviateVersion;
+
 public class SimpleDependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
 
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
@@ -20,13 +22,5 @@ public class SimpleDependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
     }
 
     return "";
-  }
-
-  private String abbreviateVersion(String version) {
-    if (version.endsWith(SNAPSHOT_SUFFIX)) {
-      return version.substring(0, version.length() - SNAPSHOT_SUFFIX.length()) + "-S.";
-    }
-
-    return version;
   }
 }

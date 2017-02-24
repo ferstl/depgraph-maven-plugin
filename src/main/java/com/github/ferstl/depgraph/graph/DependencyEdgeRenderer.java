@@ -19,6 +19,7 @@ import com.github.ferstl.depgraph.dot.AttributeBuilder;
 import com.github.ferstl.depgraph.dot.EdgeRenderer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 
+import static com.github.ferstl.depgraph.graph.VersionAbbreviator.abbreviateVersion;
 import static com.google.common.collect.Iterables.getFirst;
 
 
@@ -46,11 +47,4 @@ public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
     return builder.toString();
   }
 
-  private String abbreviateVersion(String version) {
-    if (version.endsWith(SNAPSHOT_SUFFIX)) {
-      return version.substring(0, version.length() - SNAPSHOT_SUFFIX.length()) + "-S.";
-    }
-
-    return version;
-  }
 }
