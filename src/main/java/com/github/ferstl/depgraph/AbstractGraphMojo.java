@@ -48,6 +48,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
 import com.github.ferstl.depgraph.graph.DependencyGraphException;
 import com.github.ferstl.depgraph.graph.DotGraphStyleConfigurer;
+import com.github.ferstl.depgraph.graph.GmlGraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.GraphFactory;
 import com.github.ferstl.depgraph.graph.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
@@ -69,8 +70,7 @@ import com.google.common.collect.Iterables;
 abstract class AbstractGraphMojo extends AbstractMojo {
 
   private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\r?\n");
-  private static final String DOT_EXTENSION = ".dot";
-  private static final String OUTPUT_DOT_FILE_NAME = "dependency-graph" + DOT_EXTENSION;
+  private static final String OUTPUT_FILE_NAME = "dependency-graph";
 
   /**
    * The scope of the artifacts that should be included in the graph. An empty string indicates all scopes (default).
@@ -122,12 +122,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private String outputFormat;
 
   /**
-   * The path to the generated dot file.
+   * The path to the generated output file. A file extension matching the configured {@code outputFormat} will be
+   * added if not specified.
    *
    * @since 1.0.0
    */
-  @Parameter(property = "outputFile", defaultValue = "${project.build.directory}/" + OUTPUT_DOT_FILE_NAME)
-  private File outputFile;
+  @Parameter(property = "outputFile", defaultValue = "${project.build.directory}/" + OUTPUT_FILE_NAME)
+  private String outputFile;
 
   /**
    * Only relevant when {@code outputFormat=dot}: If set to {@code true} and Graphviz is installed on the system where
@@ -192,18 +193,18 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
   @Override
   public final void execute() throws MojoExecutionException, MojoFailureException {
+    OutputFormat outputFormat = OutputFormat.forName(this.outputFormat);
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
     ArtifactFilter targetFilter = createTargetArtifactFilter();
-    StyleConfiguration styleConfiguration = loadStyleConfiguration();
-    DotGraphStyleConfigurer graphStyleConfigurer = new DotGraphStyleConfigurer(styleConfiguration);
+    GraphStyleConfigurer graphStyleConfigurer = createGraphStyleConfigurer(outputFormat);
+    Path graphFilePath = createGraphFilePath(outputFormat);
 
     try {
       GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter, graphStyleConfigurer);
+      writeGraphFile(graphFactory.createGraph(this.project), graphFilePath);
 
-      writeDotFile(graphFactory.createGraph(this.project));
-
-      if (this.createImage) {
-        createGraphImage();
+      if (this.createImage && outputFormat == OutputFormat.DOT) {
+        createDotGraphImage(graphFilePath);
       }
 
     } catch (DependencyGraphException e) {
@@ -254,6 +255,18 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     return filter;
   }
 
+  private GraphStyleConfigurer createGraphStyleConfigurer(OutputFormat outputFormat) throws MojoFailureException {
+    switch (outputFormat) {
+      case DOT:
+        StyleConfiguration styleConfiguration = loadStyleConfiguration();
+        return new DotGraphStyleConfigurer(styleConfiguration);
+      case GML:
+        return new GmlGraphStyleConfigurer();
+      default:
+        throw new IllegalArgumentException("Unsupported output format: " + outputFormat);
+    }
+  }
+
   private StyleConfiguration loadStyleConfiguration() throws MojoFailureException {
     // default style resources
     ClasspathStyleResource defaultStyleResource = BuiltInStyleResource.DEFAULT_STYLE.createStyleResource(getClass().getClassLoader());
@@ -296,27 +309,38 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     return customStyleResource;
   }
 
-  private void writeDotFile(String dotGraph) throws IOException {
-    Path outputFilePath = this.outputFile.toPath();
-    Path parent = outputFilePath.getParent();
+  private Path createGraphFilePath(OutputFormat outputFormat) {
+    Path outputFilePath = Paths.get(this.outputFile);
+    String fileExtension = outputFormat.getFileExtension();
+    String fileName = outputFilePath.getFileName().toString();
+
+    if (!fileName.endsWith(fileExtension)) {
+      fileName += fileExtension;
+      outputFilePath = outputFilePath.resolveSibling(fileName);
+    }
+    return outputFilePath;
+  }
+
+  private void writeGraphFile(String graph, Path graphFilePath) throws IOException {
+    Path parent = graphFilePath.getParent();
     if (parent != null) {
       Files.createDirectories(parent);
     }
 
-    try (Writer writer = Files.newBufferedWriter(outputFilePath, StandardCharsets.UTF_8)) {
-      writer.write(dotGraph);
+    try (Writer writer = Files.newBufferedWriter(graphFilePath, StandardCharsets.UTF_8)) {
+      writer.write(graph);
     }
   }
 
-  private void createGraphImage() throws IOException {
-    String graphFileName = createGraphFileName();
-    Path graphFile = this.outputFile.toPath().getParent().resolve(graphFileName);
+  private void createDotGraphImage(Path graphFilePath) throws IOException {
+    String graphFileName = createDotImageFileName(graphFilePath);
+    Path graphFile = graphFilePath.resolveSibling(graphFileName);
 
     String dotExecutable = determineDotExecutable();
     String[] arguments = new String[]{
         "-T", this.imageFormat,
         "-o", graphFile.toAbsolutePath().toString(),
-        this.outputFile.getAbsolutePath()};
+        graphFilePath.toAbsolutePath().toString()};
 
     Commandline cmd = new Commandline();
     cmd.setExecutable(dotExecutable);
@@ -350,15 +374,15 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     getLog().info("Graph image created on " + graphFile.toAbsolutePath());
   }
 
-  private String createGraphFileName() {
-    String outputFileName = this.outputFile.getName();
+  private String createDotImageFileName(Path graphFilePath) {
+    String graphFileName = graphFilePath.getFileName().toString();
 
-    String graphFileName;
-    if (outputFileName.endsWith(DOT_EXTENSION)) {
-      graphFileName = outputFileName.substring(0, outputFileName.lastIndexOf(".")) + "." + this.imageFormat;
+    if (graphFileName.endsWith(OutputFormat.DOT.getFileExtension())) {
+      graphFileName = graphFileName.substring(0, graphFileName.lastIndexOf(".")) + "." + this.imageFormat;
     } else {
-      graphFileName = outputFileName + this.imageFormat;
+      graphFileName = graphFileName + this.imageFormat;
     }
+
     return graphFileName;
   }
 
