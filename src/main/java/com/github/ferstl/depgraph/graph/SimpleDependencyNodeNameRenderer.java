@@ -5,7 +5,7 @@ import com.google.common.base.Joiner;
 
 public class SimpleDependencyNodeNameRenderer implements NodeRenderer<GraphNode> {
 
-  private static final Joiner COLON_JOINER = Joiner.on(":").skipNulls();
+  private static final Joiner NEWLINE_JOINER = Joiner.on("\n").skipNulls();
 
   private final boolean showGroupId;
   private final boolean showArtifactId;
@@ -19,7 +19,7 @@ public class SimpleDependencyNodeNameRenderer implements NodeRenderer<GraphNode>
 
   @Override
   public String render(GraphNode node) {
-    return COLON_JOINER.join(
+    return NEWLINE_JOINER.join(
         this.showGroupId ? node.getArtifact().getGroupId() : null,
         this.showArtifactId ? node.getArtifact().getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null);
