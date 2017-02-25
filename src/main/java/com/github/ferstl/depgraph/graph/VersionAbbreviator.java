@@ -1,5 +1,8 @@
 package com.github.ferstl.depgraph.graph;
 
+/**
+ * Utility class to abbreviate version strings.
+ */
 final class VersionAbbreviator {
 
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
