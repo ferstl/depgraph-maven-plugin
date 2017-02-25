@@ -6,7 +6,6 @@ import static com.github.ferstl.depgraph.graph.VersionAbbreviator.abbreviateVers
 
 public class SimpleDependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
 
-  private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
   private final boolean renderVersion;
 
   public SimpleDependencyEdgeRenderer(boolean renderVersion) {
