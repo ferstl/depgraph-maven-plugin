@@ -17,6 +17,7 @@ import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenRuntime.MavenRuntimeBuilder;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
+
 import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 import static org.junit.Assume.assumeTrue;
@@ -82,6 +83,17 @@ public class GraphIntegrationTest {
         // not wanted in the future
         "target/dependency-graph.png",
         "sub-parent/target/dependency-graph.png");
+  }
+
+  @Test
+  public void graphInGml() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=gml")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
   }
 
   private boolean isGraphvizInstalled() {
