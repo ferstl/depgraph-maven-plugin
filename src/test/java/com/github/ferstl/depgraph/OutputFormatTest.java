@@ -4,6 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 public class OutputFormatTest {
@@ -55,5 +56,11 @@ public class OutputFormatTest {
 
     // act/assert
     OutputFormat.forName("unknown_format");
+  }
+
+  @Test
+  public void getFileExtension() {
+    assertEquals(".dot", OutputFormat.DOT.getFileExtension());
+    assertEquals(".gml", OutputFormat.GML.getFileExtension());
   }
 }

@@ -10,4 +10,8 @@ public enum OutputFormat {
       throw new IllegalArgumentException("Unsupported output format: " + name, e);
     }
   }
+
+  public String getFileExtension() {
+    return "." + name().toLowerCase();
+  }
 }
