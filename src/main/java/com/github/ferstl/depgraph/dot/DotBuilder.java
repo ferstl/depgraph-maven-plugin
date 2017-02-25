@@ -15,13 +15,12 @@
  */
 package com.github.ferstl.depgraph.dot;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by defining edges between
@@ -97,15 +96,6 @@ public final class DotBuilder<T> {
 
       safelyAddEdge(from, to);
     }
-
-    return this;
-  }
-
-  public DotBuilder<T> addEdge(T from, T to, EdgeRenderer<? super T> edgeRenderer) {
-    EdgeRenderer<? super T> originalEdgeRenderer = this.edgeRenderer;
-    this.edgeRenderer = edgeRenderer;
-    addEdge(from, to);
-    this.edgeRenderer = originalEdgeRenderer;
 
     return this;
   }

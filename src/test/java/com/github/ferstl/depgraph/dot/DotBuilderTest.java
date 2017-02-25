@@ -15,11 +15,11 @@
  */
 package com.github.ferstl.depgraph.dot;
 
-import com.github.ferstl.depgraph.graph.GraphNode;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Before;
 import org.junit.Test;
+import com.github.ferstl.depgraph.graph.GraphNode;
 
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodes;
@@ -163,17 +163,6 @@ public class DotBuilderTest {
         new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
         new String[]{DEFAULT_EDGE + "[label=\"1.0.0\"]"}));
   }
-
-  @Test
-  public void addEdgeWithCustomRenderer() {
-    this.dotBuilder.addEdge(this.fromNode, this.toNode, TestEdgeRenderer.INSTANCE);
-
-    assertThat(this.dotBuilder, hasNodesAndEdges(
-        new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
-        new String[]{DEFAULT_EDGE + "[label=\"1.0.0\"]"}));
-
-  }
-
 
   private GraphNode createNode(String name) {
     Artifact artifact = new DefaultArtifact("group", name, "1.0.0", "compile", "jar", "", null);
