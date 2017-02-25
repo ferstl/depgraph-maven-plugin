@@ -42,7 +42,7 @@ public class GraphIntegrationTest {
   }
 
   @Test
-  public void graph() throws Exception {
+  public void graphInDot() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -91,9 +91,23 @@ public class GraphIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DgraphFormat=gml")
+        .withCliOption("-DshowGroupIds=true")
+        .withCliOption("-DshowVersions=true")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.gml",
+        "module-2/target/dependency-graph.gml",
+        "sub-parent/module-3/target/dependency-graph.gml",
+        // not wanted in the future
+        "target/dependency-graph.gml",
+        "sub-parent/target/dependency-graph.gml");
+
+    assertFileContents(basedir, "expectations/graph_module-1.gml", "module-1/target/dependency-graph.gml");
+    assertFileContents(basedir, "expectations/graph_module-2.gml", "module-2/target/dependency-graph.gml");
+    assertFileContents(basedir, "expectations/graph_module-3.gml", "sub-parent/module-3/target/dependency-graph.gml");
   }
 
   private boolean isGraphvizInstalled() {
