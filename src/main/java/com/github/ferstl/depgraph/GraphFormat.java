@@ -1,9 +1,9 @@
 package com.github.ferstl.depgraph;
 
-public enum OutputFormat {
+public enum GraphFormat {
   DOT, GML;
 
-  public static OutputFormat forName(String name) {
+  public static GraphFormat forName(String name) {
     try {
       return valueOf(name.toUpperCase());
     } catch (IllegalArgumentException e) {

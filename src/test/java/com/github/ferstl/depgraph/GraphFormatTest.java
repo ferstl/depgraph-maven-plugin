@@ -7,7 +7,7 @@ import org.junit.rules.ExpectedException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-public class OutputFormatTest {
+public class GraphFormatTest {
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
@@ -20,14 +20,14 @@ public class OutputFormatTest {
     String name3 = "DOT";
 
     // act
-    OutputFormat result1 = OutputFormat.forName(name1);
-    OutputFormat result2 = OutputFormat.forName(name2);
-    OutputFormat result3 = OutputFormat.forName(name3);
+    GraphFormat result1 = GraphFormat.forName(name1);
+    GraphFormat result2 = GraphFormat.forName(name2);
+    GraphFormat result3 = GraphFormat.forName(name3);
 
     // assert
-    assertSame(OutputFormat.DOT, result1);
-    assertSame(OutputFormat.DOT, result2);
-    assertSame(OutputFormat.DOT, result3);
+    assertSame(GraphFormat.DOT, result1);
+    assertSame(GraphFormat.DOT, result2);
+    assertSame(GraphFormat.DOT, result3);
   }
 
   @Test
@@ -38,14 +38,14 @@ public class OutputFormatTest {
     String name3 = "GML";
 
     // act
-    OutputFormat result1 = OutputFormat.forName(name1);
-    OutputFormat result2 = OutputFormat.forName(name2);
-    OutputFormat result3 = OutputFormat.forName(name3);
+    GraphFormat result1 = GraphFormat.forName(name1);
+    GraphFormat result2 = GraphFormat.forName(name2);
+    GraphFormat result3 = GraphFormat.forName(name3);
 
     // assert
-    assertSame(OutputFormat.GML, result1);
-    assertSame(OutputFormat.GML, result2);
-    assertSame(OutputFormat.GML, result3);
+    assertSame(GraphFormat.GML, result1);
+    assertSame(GraphFormat.GML, result2);
+    assertSame(GraphFormat.GML, result3);
   }
 
   @Test
@@ -55,12 +55,12 @@ public class OutputFormatTest {
     this.expectedException.expectMessage("unknown_format");
 
     // act/assert
-    OutputFormat.forName("unknown_format");
+    GraphFormat.forName("unknown_format");
   }
 
   @Test
   public void getFileExtension() {
-    assertEquals(".dot", OutputFormat.DOT.getFileExtension());
-    assertEquals(".gml", OutputFormat.GML.getFileExtension());
+    assertEquals(".dot", GraphFormat.DOT.getFileExtension());
+    assertEquals(".gml", GraphFormat.GML.getFileExtension());
   }
 }
