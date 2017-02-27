@@ -35,10 +35,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class DotBuildingVisitorTest {
+public class GraphBuildingVisitorTest {
 
   private DotBuilder<GraphNode> dotBuilder;
-  private DotBuildingVisitor visitor;
+  private GraphBuildingVisitor visitor;
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
   private EnumSet<NodeResolution> includedResolutions;
@@ -55,7 +55,7 @@ public class DotBuildingVisitorTest {
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     this.includedResolutions = allOf(NodeResolution.class);
-    this.visitor = new DotBuildingVisitor(this.dotBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    this.visitor = new GraphBuildingVisitor(this.dotBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
   }
 
   /**
@@ -152,7 +152,7 @@ public class DotBuildingVisitorTest {
 
   @Test
   public void defaultArtifactFilter() {
-    this.visitor = new DotBuildingVisitor(this.dotBuilder, this.targetFilter);
+    this.visitor = new GraphBuildingVisitor(this.dotBuilder, this.targetFilter);
 
     // Use other test (I know this is ugly...)
     parentAndChild();
