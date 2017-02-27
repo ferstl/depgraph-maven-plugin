@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
-import com.github.ferstl.depgraph.graph.LabelBuilder;
+import com.github.ferstl.depgraph.graph.DotLabelBuilder;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
 @JsonTypeIdResolver(NodeTypeResolver.class)
@@ -59,7 +59,7 @@ abstract class AbstractNode {
 
     DotAttributeBuilder builder = includeNodeAttributes ? createAttributes() : new DotAttributeBuilder();
     return builder
-        .label(new LabelBuilder()
+        .label(new DotLabelBuilder()
             .font()
             .name(groupIdFont.name)
             .color(groupIdFont.color)

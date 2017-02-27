@@ -22,11 +22,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 
-public class LabelBuilderTest {
+public class DotLabelBuilderTest {
 
   @Test
   public void mixed() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .bold("bold text")
         .text("intermediate text")
         .italic("italic text")
@@ -55,7 +55,7 @@ public class LabelBuilderTest {
 
   @Test
   public void htmlEscape() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .text("<foo>")
         .underline("&bar&")
         .build();
@@ -65,7 +65,7 @@ public class LabelBuilderTest {
 
   @Test
   public void text() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .text("text")
         .build();
 
@@ -74,7 +74,7 @@ public class LabelBuilderTest {
 
   @Test
   public void bold() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .bold("text")
         .build();
 
@@ -83,7 +83,7 @@ public class LabelBuilderTest {
 
   @Test
   public void italic() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .italic("text")
         .build();
 
@@ -92,7 +92,7 @@ public class LabelBuilderTest {
 
   @Test
   public void underline() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .underline("text")
         .build();
 
@@ -101,7 +101,7 @@ public class LabelBuilderTest {
 
   @Test
   public void newLine() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .text("text")
         .newLine()
         .build();
@@ -111,7 +111,7 @@ public class LabelBuilderTest {
 
   @Test
   public void smartNewLineAtBeginning() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .smartNewLine()
         .text("text")
         .smartNewLine()
@@ -122,7 +122,7 @@ public class LabelBuilderTest {
 
   @Test
   public void smartNewLineWithinText() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .text("text1")
         .smartNewLine()
         .smartNewLine()
@@ -135,7 +135,7 @@ public class LabelBuilderTest {
 
   @Test
   public void fontName() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .font()
         .name("Helvetica")
         .text("text")
@@ -146,7 +146,7 @@ public class LabelBuilderTest {
 
   @Test
   public void fontSize() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .font()
         .size(10)
         .text("text")
@@ -157,7 +157,7 @@ public class LabelBuilderTest {
 
   @Test
   public void fontSizeZero() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .font()
         .size(0)
         .text("text")
@@ -168,7 +168,7 @@ public class LabelBuilderTest {
 
   @Test
   public void fontSizeNull() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .font()
         .size(null)
         .text("text")
@@ -179,14 +179,14 @@ public class LabelBuilderTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void fontSizeNegative() {
-    new LabelBuilder()
+    new DotLabelBuilder()
         .font()
         .size(-1);
   }
 
   @Test
   public void fontColor() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .font()
         .color("red")
         .text("text")
@@ -197,7 +197,7 @@ public class LabelBuilderTest {
 
   @Test
   public void fontAll() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .font()
         .name("Helvetica")
         .color("green")
@@ -210,7 +210,7 @@ public class LabelBuilderTest {
 
   @Test
   public void fontNullValues() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .font()
         .name(null)
         .color(null)
@@ -223,7 +223,7 @@ public class LabelBuilderTest {
 
   @Test
   public void fontEmpty() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .font()
         .text("text")
         .build();
@@ -233,14 +233,14 @@ public class LabelBuilderTest {
 
   @Test
   public void empty() {
-    String label = new LabelBuilder().build();
+    String label = new DotLabelBuilder().build();
 
     assertThat(label, emptyString());
   }
 
   @Test
   public void emptyText() {
-    String label = new LabelBuilder()
+    String label = new DotLabelBuilder()
         .text(null)
         .font()
         .color("red")

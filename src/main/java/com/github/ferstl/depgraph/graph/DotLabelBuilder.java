@@ -23,7 +23,7 @@ import com.google.common.html.HtmlEscapers;
 /**
  * <a href=http://www.graphviz.org/doc/info/shapes.html#html>HTML-like labels</a>.
  */
-public class LabelBuilder {
+public class DotLabelBuilder {
 
   private static final String NEWLINE = "<br/>";
   private final StringBuilder labelBuilder = new StringBuilder();
@@ -35,7 +35,7 @@ public class LabelBuilder {
    * @param text Text.
    * @return This builder.
    */
-  public LabelBuilder text(String text) {
+  public DotLabelBuilder text(String text) {
     addText(text);
     return this;
   }
@@ -46,7 +46,7 @@ public class LabelBuilder {
    * @param text Text.
    * @return This builder.
    */
-  public LabelBuilder italic(String text) {
+  public DotLabelBuilder italic(String text) {
     addText(text, "i");
     return this;
   }
@@ -57,7 +57,7 @@ public class LabelBuilder {
    * @param text Text.
    * @return This builder.
    */
-  public LabelBuilder bold(String text) {
+  public DotLabelBuilder bold(String text) {
     addText(text, "b");
     return this;
   }
@@ -68,7 +68,7 @@ public class LabelBuilder {
    * @param text Text.
    * @return This builder.
    */
-  public LabelBuilder underline(String text) {
+  public DotLabelBuilder underline(String text) {
     addText(text, "u");
     return this;
   }
@@ -78,7 +78,7 @@ public class LabelBuilder {
    *
    * @return This builder.
    */
-  public LabelBuilder newLine() {
+  public DotLabelBuilder newLine() {
     this.labelBuilder.append(NEWLINE);
     return this;
   }
@@ -93,7 +93,7 @@ public class LabelBuilder {
    *
    * @return This builder.
    */
-  public LabelBuilder smartNewLine() {
+  public DotLabelBuilder smartNewLine() {
     this.smartNewLine = true;
     // int length = this.labelBuilder.length();
     // int nLength = NEWLINE.length();
@@ -217,14 +217,14 @@ public class LabelBuilder {
      * @param text Text.
      * @return The encapsulating label builder.
      */
-    public LabelBuilder text(String text) {
+    public DotLabelBuilder text(String text) {
       if (this.attributes.size() > 0) {
-        LabelBuilder.this.addText(text, "font", this.attributes.values().toArray(new String[0]));
+        DotLabelBuilder.this.addText(text, "font", this.attributes.values().toArray(new String[0]));
       } else {
-        LabelBuilder.this.text(text);
+        DotLabelBuilder.this.text(text);
       }
 
-      return LabelBuilder.this;
+      return DotLabelBuilder.this;
     }
 
     private void addAttribute(String name, Object value) {
