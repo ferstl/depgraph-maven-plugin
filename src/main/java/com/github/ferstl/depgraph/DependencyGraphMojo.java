@@ -16,19 +16,19 @@
 package com.github.ferstl.depgraph;
 
 import java.util.EnumSet;
-import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
-import com.github.ferstl.depgraph.graph.GraphFactory;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.GraphStyleConfigurer;
-import com.github.ferstl.depgraph.graph.NodeIdRenderers;
-import com.github.ferstl.depgraph.graph.NodeResolution;
-import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import com.github.ferstl.depgraph.dependency.GraphBuilderAdapter;
+import com.github.ferstl.depgraph.dependency.GraphFactory;
+import com.github.ferstl.depgraph.dependency.GraphNode;
+import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
+import com.github.ferstl.depgraph.dependency.NodeResolution;
+import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
+import com.github.ferstl.depgraph.dot.DotBuilder;
 
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
