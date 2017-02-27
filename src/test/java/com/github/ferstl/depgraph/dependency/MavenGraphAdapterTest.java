@@ -37,9 +37,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * JUnit tests for {@link GraphBuilderAdapter}.
+ * JUnit tests for {@link MavenGraphAdapter}.
  */
-public class GraphBuilderAdapterTest {
+public class MavenGraphAdapterTest {
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
@@ -52,8 +52,8 @@ public class GraphBuilderAdapterTest {
   private ArtifactFilter targetFilter;
   private ArtifactRepository artifactRepository;
 
-  private GraphBuilderAdapter graphAdapter;
-  private GraphBuilderAdapter treeAdapter;
+  private MavenGraphAdapter graphAdapter;
+  private MavenGraphAdapter treeAdapter;
 
 
   @Before
@@ -71,8 +71,8 @@ public class GraphBuilderAdapterTest {
 
 
     this.artifactRepository = mock(ArtifactRepository.class);
-    this.graphAdapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetFilter);
-    this.treeAdapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.targetFilter, allOf(NodeResolution.class));
+    this.graphAdapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter);
+    this.treeAdapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.targetFilter, allOf(NodeResolution.class));
   }
 
   @Test

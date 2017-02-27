@@ -30,7 +30,7 @@ import static java.util.EnumSet.allOf;
 /**
  * Adapter for {@link DependencyGraphBuilder} and {@link DependencyTreeBuilder}.
  */
-public final class GraphBuilderAdapter {
+public final class MavenGraphAdapter {
 
   private final DependencyGraphBuilder dependencyGraphBuilder;
   private final DependencyTreeBuilder dependencyTreeBuilder;
@@ -38,7 +38,7 @@ public final class GraphBuilderAdapter {
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
-  public GraphBuilderAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
+  public MavenGraphAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
     this.dependencyGraphBuilder = builder;
     this.targetFilter = targetFilter;
     this.includedResolutions = allOf(NodeResolution.class);
@@ -46,7 +46,7 @@ public final class GraphBuilderAdapter {
     this.artifactRepository = null;
   }
 
-  public GraphBuilderAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
+  public MavenGraphAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.dependencyTreeBuilder = builder;
     this.artifactRepository = artifactRepository;
     this.targetFilter = targetFilter;

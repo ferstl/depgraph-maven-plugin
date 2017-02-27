@@ -22,9 +22,9 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dependency.AggregatingGraphFactory;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
-import com.github.ferstl.depgraph.dependency.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
@@ -81,7 +81,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
       graphBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID_WITH_SCOPE);
     }
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, this.includeParentProjects);
   }
 }

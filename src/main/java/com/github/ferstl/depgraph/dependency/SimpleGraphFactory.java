@@ -24,12 +24,12 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
  */
 public class SimpleGraphFactory implements GraphFactory {
 
-  private final GraphBuilderAdapter graphBuilderAdapter;
+  private final MavenGraphAdapter mavenGraphAdapter;
   private final ArtifactFilter globalFilter;
   private final GraphBuilder<DependencyNode> graphBuilder;
 
-  public SimpleGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) {
-    this.graphBuilderAdapter = graphBuilderAdapter;
+  public SimpleGraphFactory(MavenGraphAdapter mavenGraphAdapter, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) {
+    this.mavenGraphAdapter = mavenGraphAdapter;
     this.globalFilter = globalFilter;
     this.graphBuilder = graphBuilder;
   }
@@ -37,7 +37,7 @@ public class SimpleGraphFactory implements GraphFactory {
   @Override
   public String createGraph(MavenProject project) {
     this.graphBuilder.graphName(project.getArtifactId());
-    this.graphBuilderAdapter.buildDependencyGraph(project, this.globalFilter, this.graphBuilder);
+    this.mavenGraphAdapter.buildDependencyGraph(project, this.globalFilter, this.graphBuilder);
     return this.graphBuilder.toString();
   }
 

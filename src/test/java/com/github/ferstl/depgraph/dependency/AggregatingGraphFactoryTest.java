@@ -52,7 +52,7 @@ public class AggregatingGraphFactoryTest {
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
   private DependencyGraphBuilder dependencyGraphBuilder;
-  private GraphBuilderAdapter adapter;
+  private MavenGraphAdapter adapter;
   private GraphBuilder<DependencyNode> graphBuilder;
 
   @Before
@@ -66,7 +66,7 @@ public class AggregatingGraphFactoryTest {
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
     when(this.dependencyGraphBuilder.buildDependencyGraph(Matchers.<MavenProject>any(), Matchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
 
-    this.adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetFilter);
+    this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter);
 
     this.graphBuilder = new GraphBuilder<>();
   }

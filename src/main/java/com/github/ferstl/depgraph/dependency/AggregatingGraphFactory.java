@@ -29,13 +29,13 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
  */
 public class AggregatingGraphFactory implements GraphFactory {
 
-  private final GraphBuilderAdapter graphBuilderAdapter;
+  private final MavenGraphAdapter mavenGraphAdapter;
   private final ArtifactFilter globalFilter;
   private final GraphBuilder<DependencyNode> graphBuilder;
   private final boolean includeParentProjects;
 
-  public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder, boolean includeParentProjects) {
-    this.graphBuilderAdapter = graphBuilderAdapter;
+  public AggregatingGraphFactory(MavenGraphAdapter mavenGraphAdapter, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder, boolean includeParentProjects) {
+    this.mavenGraphAdapter = mavenGraphAdapter;
     this.globalFilter = globalFilter;
     this.graphBuilder = graphBuilder;
     this.includeParentProjects = includeParentProjects;
@@ -53,7 +53,7 @@ public class AggregatingGraphFactory implements GraphFactory {
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
       if (isPartOfGraph(collectedProject)) {
-        this.graphBuilderAdapter.buildDependencyGraph(collectedProject, this.globalFilter, this.graphBuilder);
+        this.mavenGraphAdapter.buildDependencyGraph(collectedProject, this.globalFilter, this.graphBuilder);
       }
     }
 
