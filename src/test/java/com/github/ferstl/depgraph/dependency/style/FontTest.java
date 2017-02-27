@@ -17,7 +17,7 @@ package com.github.ferstl.depgraph.dependency.style;
 
 import org.junit.Before;
 import org.junit.Test;
-import com.github.ferstl.depgraph.dot.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.AttributeBuilder;
 
 import static org.junit.Assert.assertEquals;
 

@@ -16,8 +16,8 @@
 package com.github.ferstl.depgraph.dependency;
 
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
-import com.github.ferstl.depgraph.dot.AttributeBuilder;
-import com.github.ferstl.depgraph.dot.EdgeRenderer;
+import com.github.ferstl.depgraph.graph.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
 import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviateVersion;
 import static com.google.common.collect.Iterables.getFirst;

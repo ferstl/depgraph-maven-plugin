@@ -18,7 +18,7 @@ package com.github.ferstl.depgraph.dependency;
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
-import com.github.ferstl.depgraph.dot.NodeRenderer;
+import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
 
 import static com.google.common.collect.Iterables.getFirst;

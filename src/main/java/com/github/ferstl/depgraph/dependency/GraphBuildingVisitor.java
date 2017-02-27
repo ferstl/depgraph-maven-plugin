@@ -20,7 +20,7 @@ import java.util.Deque;
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.DotBuilder;
 
 import static java.util.EnumSet.allOf;
 

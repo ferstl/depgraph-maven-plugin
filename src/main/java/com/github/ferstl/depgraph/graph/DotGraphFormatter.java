@@ -1,9 +1,9 @@
-package com.github.ferstl.depgraph.dot;
+package com.github.ferstl.depgraph.graph;
 
 
 import java.util.Collection;
 
-import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
+import static com.github.ferstl.depgraph.graph.DotEscaper.escape;
 
 public class DotGraphFormatter implements GraphFormatter {
 

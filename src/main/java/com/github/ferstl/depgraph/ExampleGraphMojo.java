@@ -24,7 +24,7 @@ import org.apache.maven.project.MavenProject;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.DotBuilder;
 
 /**
  * Creates an example graph. This Mojo has the same capabilities as the {@code graph} Mojo. So it might be useful to

@@ -1,6 +1,6 @@
 package com.github.ferstl.depgraph.dependency;
 
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.DotBuilder;
 
 /**
  * API to configure the style of the dependency graph.

@@ -1,4 +1,4 @@
-package com.github.ferstl.depgraph.dot;
+package com.github.ferstl.depgraph.graph;
 
 public final class Node<T> {
 

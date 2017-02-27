@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.dot;
+package com.github.ferstl.depgraph.graph;
 
 
-public interface NodeRenderer<T> {
+public interface EdgeRenderer<T> {
 
-  String render(T node);
+  String render(T from, T to);
 }

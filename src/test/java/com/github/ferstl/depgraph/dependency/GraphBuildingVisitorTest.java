@@ -23,9 +23,9 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.DotBuilder;
 
-import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
+import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.hasNodesAndEdges;
 import static java.util.EnumSet.allOf;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;

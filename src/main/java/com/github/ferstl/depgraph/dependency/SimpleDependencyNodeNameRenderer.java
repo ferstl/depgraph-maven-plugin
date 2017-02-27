@@ -1,6 +1,6 @@
 package com.github.ferstl.depgraph.dependency;
 
-import com.github.ferstl.depgraph.dot.NodeRenderer;
+import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
 
 public class SimpleDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {

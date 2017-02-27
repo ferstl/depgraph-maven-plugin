@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.dot;
+package com.github.ferstl.depgraph.graph;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
-import static com.github.ferstl.depgraph.dot.DotEscaper.escape;
+
+import static com.github.ferstl.depgraph.graph.DotEscaper.escape;
 
 
 public class AttributeBuilder {

@@ -26,7 +26,7 @@ import com.github.ferstl.depgraph.dependency.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.DotBuilder;
 
 /**
  * Aggregates all dependencies of a multi-module project into one single graph.

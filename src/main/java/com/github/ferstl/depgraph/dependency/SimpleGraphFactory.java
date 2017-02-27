@@ -17,7 +17,7 @@ package com.github.ferstl.depgraph.dependency;
 
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.DotBuilder;
 
 /**
  * A graph factory that creates a graph from a non multi-module project.

@@ -25,10 +25,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
-import com.github.ferstl.depgraph.dot.DotBuilder;
+import com.github.ferstl.depgraph.graph.DotBuilder;
 
-import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
-import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodesAndEdges;
+import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.emptyGraph;
+import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.hasNodesAndEdges;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;

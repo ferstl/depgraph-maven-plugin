@@ -16,7 +16,7 @@
 package com.github.ferstl.depgraph.dependency;
 
 import org.apache.maven.artifact.Artifact;
-import com.github.ferstl.depgraph.dot.NodeRenderer;
+import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
 
 
