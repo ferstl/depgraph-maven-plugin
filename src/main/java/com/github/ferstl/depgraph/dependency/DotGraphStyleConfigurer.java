@@ -2,8 +2,8 @@ package com.github.ferstl.depgraph.dependency;
 
 
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
-import com.github.ferstl.depgraph.graph.DotGraphFormatter;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
+import com.github.ferstl.depgraph.graph.dot.DotGraphFormatter;
 
 public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
 

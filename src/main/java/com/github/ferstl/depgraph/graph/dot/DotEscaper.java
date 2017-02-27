@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.graph;
+package com.github.ferstl.depgraph.graph.dot;
 
 import java.util.regex.Pattern;
 
 
-final class DotEscaper {
+public final class DotEscaper {
 
   private static final String QUOTE_REPLACEMENT = "\\\\\"";
   private static final Pattern REPLACE_NEWLINE_PATTERN = Pattern.compile("(\\r\\n)|[\\r\\n]", Pattern.DOTALL);

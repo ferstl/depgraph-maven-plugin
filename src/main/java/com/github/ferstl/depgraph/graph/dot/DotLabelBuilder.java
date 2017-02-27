@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.graph;
+package com.github.ferstl.depgraph.graph.dot;
 
 import java.util.Map;
 import java.util.TreeMap;

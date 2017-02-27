@@ -20,6 +20,8 @@ import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Before;
 import org.junit.Test;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
+import com.github.ferstl.depgraph.graph.dot.DotGraphFormatter;
 
 import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.hasNodes;

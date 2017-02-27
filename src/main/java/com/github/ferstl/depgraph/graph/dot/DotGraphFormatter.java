@@ -1,9 +1,12 @@
-package com.github.ferstl.depgraph.graph;
+package com.github.ferstl.depgraph.graph.dot;
 
 
 import java.util.Collection;
+import com.github.ferstl.depgraph.graph.Edge;
+import com.github.ferstl.depgraph.graph.GraphFormatter;
+import com.github.ferstl.depgraph.graph.Node;
 
-import static com.github.ferstl.depgraph.graph.DotEscaper.escape;
+import static com.github.ferstl.depgraph.graph.dot.DotEscaper.escape;
 
 public class DotGraphFormatter implements GraphFormatter {
 

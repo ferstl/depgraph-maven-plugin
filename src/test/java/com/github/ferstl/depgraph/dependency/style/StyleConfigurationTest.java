@@ -25,7 +25,7 @@ import org.junit.rules.TemporaryFolder;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.style.resource.ClasspathStyleResource;
 import com.github.ferstl.depgraph.dependency.style.resource.FileSystemStyleResource;
-import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
+import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
 import com.google.common.io.Files;
 
 import static java.nio.charset.StandardCharsets.UTF_8;

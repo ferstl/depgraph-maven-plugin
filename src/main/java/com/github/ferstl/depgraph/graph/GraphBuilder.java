@@ -19,6 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
+import com.github.ferstl.depgraph.graph.dot.DotGraphFormatter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 

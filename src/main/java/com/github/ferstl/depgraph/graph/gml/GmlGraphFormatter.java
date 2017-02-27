@@ -1,6 +1,9 @@
-package com.github.ferstl.depgraph.graph;
+package com.github.ferstl.depgraph.graph.gml;
 
 import java.util.Collection;
+import com.github.ferstl.depgraph.graph.Edge;
+import com.github.ferstl.depgraph.graph.GraphFormatter;
+import com.github.ferstl.depgraph.graph.Node;
 
 public class GmlGraphFormatter implements GraphFormatter {
 

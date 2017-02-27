@@ -18,8 +18,8 @@ package com.github.ferstl.depgraph.dependency.style;
 import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
-import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
-import com.github.ferstl.depgraph.graph.DotLabelBuilder;
+import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
+import com.github.ferstl.depgraph.graph.dot.DotLabelBuilder;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
 @JsonTypeIdResolver(NodeTypeResolver.class)

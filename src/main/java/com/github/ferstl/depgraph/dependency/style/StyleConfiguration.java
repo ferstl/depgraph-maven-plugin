@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.style.resource.StyleResource;
-import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
+import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
 
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 

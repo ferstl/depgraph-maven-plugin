@@ -1,9 +1,9 @@
 package com.github.ferstl.depgraph.dependency;
 
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
-import com.github.ferstl.depgraph.graph.GmlGraphFormatter;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
+import com.github.ferstl.depgraph.graph.gml.GmlGraphFormatter;
 
 public class GmlGraphStyleConfigurer implements GraphStyleConfigurer {
 

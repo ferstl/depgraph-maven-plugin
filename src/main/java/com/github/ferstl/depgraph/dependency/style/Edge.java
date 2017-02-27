@@ -16,7 +16,7 @@
 package com.github.ferstl.depgraph.dependency.style;
 
 import org.apache.commons.lang3.StringUtils;
-import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
+import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
 
 class Edge {
 
