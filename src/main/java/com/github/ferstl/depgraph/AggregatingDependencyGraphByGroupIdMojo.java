@@ -27,7 +27,7 @@ import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
  * Aggregates all dependencies of a multi-module by their group IDs.
@@ -45,17 +45,17 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
 
-    DotBuilder<DependencyNode> dotBuilder = graphStyleConfigurer
+    GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
         .showGroupIds(true)
         .showArtifactIds(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
-        .configure(DotBuilder.<DependencyNode>create())
+        .configure(GraphBuilder.<DependencyNode>create())
         .useNodeIdRenderer(this.mergeScopes ? NodeIdRenderers.GROUP_ID : NodeIdRenderers.GROUP_ID_WITH_SCOPE)
         .omitSelfReferences();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
-    return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, true);
+    return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, true);
   }
 
   @Override

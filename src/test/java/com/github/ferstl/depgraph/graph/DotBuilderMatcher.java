@@ -25,7 +25,7 @@ import com.github.ferstl.depgraph.dependency.DependencyNode;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 
-public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder<DependencyNode>> {
+public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<GraphBuilder<DependencyNode>> {
 
   private static final String[] EMPTY_ARRAY = new String[0];
   private static final String NODE_PATTERN = "\\s*\"[\\w\\p{Punct}]+\"(\\[.+\\])?\\s*";
@@ -83,8 +83,8 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
 
 
   @Override
-  protected boolean matchesSafely(DotBuilder<DependencyNode> dotBuilder, Description mismatchDescription) {
-    init(dotBuilder);
+  protected boolean matchesSafely(GraphBuilder<DependencyNode> graphBuilder, Description mismatchDescription) {
+    init(graphBuilder);
 
     mismatchDescription.appendText("was\nNodes:");
     for (String node : this.nodes) {
@@ -99,8 +99,8 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
         | containsInAnyOrder(this.expectedEdges).matches(this.edges);
   }
 
-  private void init(DotBuilder<DependencyNode> dotBuilder) {
-    String graph = dotBuilder.toString();
+  private void init(GraphBuilder<DependencyNode> graphBuilder) {
+    String graph = graphBuilder.toString();
     String[] lines = graph.split("\n");
     this.nodes = new ArrayList<>();
     this.edges = new ArrayList<>();

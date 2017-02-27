@@ -20,34 +20,34 @@ import java.util.Deque;
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static java.util.EnumSet.allOf;
 
 
 /**
- * A node visitor that creates edges between the visited nodes using a {@link DotBuilder}. This class implements the
+ * A node visitor that creates edges between the visited nodes using a {@link GraphBuilder}. This class implements the
  * {@code DependencyNodeVisitor} interfaces for dependency trees and dependency graphs and adapts the different node
  * instances using {@link DependencyNode}.
  */
 class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
 
-  private final DotBuilder<DependencyNode> dotBuilder;
+  private final GraphBuilder<DependencyNode> graphBuilder;
   private final Deque<DependencyNode> stack;
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
-  GraphBuildingVisitor(DotBuilder<DependencyNode> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
-    this.dotBuilder = dotBuilder;
+  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
+    this.graphBuilder = graphBuilder;
     this.stack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
     this.targetFilter = targetFilter;
     this.includedResolutions = includedResolutions;
   }
 
-  GraphBuildingVisitor(DotBuilder<DependencyNode> dotBuilder, ArtifactFilter targetFilter) {
-    this(dotBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter, allOf(NodeResolution.class));
+  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter targetFilter) {
+    this(graphBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter, allOf(NodeResolution.class));
   }
 
   @Override
@@ -77,7 +77,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
       if (currentParent != null && this.includedResolutions.contains(node.getResolution())) {
         mergeWithExisting(node);
 
-        this.dotBuilder.addEdge(currentParent, node);
+        this.graphBuilder.addEdge(currentParent, node);
       }
 
       this.stack.push(node);
@@ -89,7 +89,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   private void mergeWithExisting(DependencyNode node) {
-    DependencyNode effectiveNode = this.dotBuilder.getEffectiveNode(node);
+    DependencyNode effectiveNode = this.graphBuilder.getEffectiveNode(node);
     node.merge(effectiveNode);
   }
 

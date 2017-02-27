@@ -30,36 +30,36 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 /**
- * JUnit tests for {@link DotBuilder}.
+ * JUnit tests for {@link GraphBuilder}.
  */
-public class DotBuilderTest {
+public class GraphBuilderTest {
 
   private static final String DEFAULT_FROM_NODE = "\"group:from:jar:1.0.0:compile\"[label=\"group:from:jar:1.0.0:compile\"]";
   private static final String DEFAULT_TO_NODE = "\"group:to:jar:1.0.0:compile\"[label=\"group:to:jar:1.0.0:compile\"]";
   private static final String DEFAULT_SINGLE_NODE = "\"group:start:jar:1.0.0:compile\"[label=\"group:start:jar:1.0.0:compile\"]";
   private static final String DEFAULT_EDGE = "\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\"";
 
-  private DotBuilder<DependencyNode> dotBuilder;
+  private GraphBuilder<DependencyNode> graphBuilder;
   private DependencyNode fromNode;
   private DependencyNode toNode;
 
   @Before
   public void before() {
-    this.dotBuilder = new DotBuilder<>();
+    this.graphBuilder = new GraphBuilder<>();
     this.fromNode = createNode("from");
     this.toNode = createNode("to");
   }
 
   @Test
   public void graphStructure() {
-    String graph = this.dotBuilder.toString();
+    String graph = this.graphBuilder.toString();
     assertThat(graph, startsWith("digraph \"G\" {"));
     assertThat(graph, endsWith("}"));
   }
 
   @Test
   public void graphName() {
-    String graph = this.dotBuilder.graphName("test-graph").toString();
+    String graph = this.graphBuilder.graphName("test-graph").toString();
     assertThat(graph, startsWith("digraph \"test-graph\""));
   }
 
@@ -69,7 +69,7 @@ public class DotBuilderTest {
     AttributeBuilder nodeStyle = new AttributeBuilder()
         .shape("polygon")
         .addAttribute("sides", "6");
-    String graph = this.dotBuilder
+    String graph = this.graphBuilder
         .graphFormatter(new DotGraphFormatter(nodeStyle, new AttributeBuilder()))
         .toString();
 
@@ -84,7 +84,7 @@ public class DotBuilderTest {
         .fontName("Courier italic")
         .fontSize(10);
 
-    String graph = this.dotBuilder
+    String graph = this.graphBuilder
         .graphFormatter(new DotGraphFormatter(new AttributeBuilder(), edgeStyle))
         .toString();
 
@@ -93,9 +93,9 @@ public class DotBuilderTest {
 
   @Test
   public void defaults() {
-    this.dotBuilder.addEdge(this.fromNode, this.toNode);
+    this.graphBuilder.addEdge(this.fromNode, this.toNode);
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
         new String[]{DEFAULT_EDGE}));
 
@@ -105,23 +105,23 @@ public class DotBuilderTest {
   public void nullNodes() {
     DependencyNode node = createNode("node");
 
-    this.dotBuilder.addEdge(node, null);
-    assertThat(this.dotBuilder, emptyGraph());
+    this.graphBuilder.addEdge(node, null);
+    assertThat(this.graphBuilder, emptyGraph());
 
-    this.dotBuilder.addEdge(null, node);
-    assertThat(this.dotBuilder, emptyGraph());
+    this.graphBuilder.addEdge(null, node);
+    assertThat(this.graphBuilder, emptyGraph());
   }
 
   @Test
   public void omitSelfReferences() {
-    this.dotBuilder
+    this.graphBuilder
         .omitSelfReferences()
         .addEdge(createNode("start"), createNode("start"));
 
-    assertThat(this.dotBuilder, hasNodes(DEFAULT_SINGLE_NODE));
+    assertThat(this.graphBuilder, hasNodes(DEFAULT_SINGLE_NODE));
 
-    this.dotBuilder.addEdge(this.fromNode, this.toNode);
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    this.graphBuilder.addEdge(this.fromNode, this.toNode);
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{DEFAULT_SINGLE_NODE, DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
         new String[]{DEFAULT_EDGE}));
   }
@@ -129,11 +129,11 @@ public class DotBuilderTest {
 
   @Test
   public void customNodeIdRenderer() {
-    this.dotBuilder.useNodeIdRenderer(TestNodeIdRenderer.INSTANCE);
+    this.graphBuilder.useNodeIdRenderer(TestNodeIdRenderer.INSTANCE);
 
-    this.dotBuilder.addEdge(this.fromNode, this.toNode);
+    this.graphBuilder.addEdge(this.fromNode, this.toNode);
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"from\"",
             "\"to\""},
@@ -142,10 +142,10 @@ public class DotBuilderTest {
 
   @Test
   public void customNodeNameRenderer() {
-    this.dotBuilder.useNodeNameRenderer(TestNodeNameRenderer.INSTANCE)
+    this.graphBuilder.useNodeNameRenderer(TestNodeNameRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"group:from:jar:1.0.0:compile\"[label=\"from\"]",
             "\"group:to:jar:1.0.0:compile\"[label=\"to\"]"},
@@ -155,11 +155,11 @@ public class DotBuilderTest {
 
   @Test
   public void customEdgeRenderer() {
-    this.dotBuilder
+    this.graphBuilder
         .useEdgeRenderer(TestEdgeRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
         new String[]{DEFAULT_EDGE + "[label=\"1.0.0\"]"}));
   }

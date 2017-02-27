@@ -26,7 +26,7 @@ import com.github.ferstl.depgraph.dependency.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
  * Aggregates all dependencies of a multi-module project into one single graph.
@@ -68,20 +68,20 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
-    DotBuilder<DependencyNode> dotBuilder = graphStyleConfigurer
+    GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
         .showGroupIds(this.showGroupIds)
         .showArtifactIds(true)
         .showVersionsOnNodes(this.showVersions)
         // This graph won't show any conflicting dependencies. So don't show versions on edges
         .showVersionsOnEdges(false)
-        .configure(DotBuilder.<DependencyNode>create());
+        .configure(GraphBuilder.<DependencyNode>create());
     if (this.mergeScopes) {
-      dotBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
+      graphBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
     } else {
-      dotBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID_WITH_SCOPE);
+      graphBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID_WITH_SCOPE);
     }
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
-    return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, this.includeParentProjects);
+    return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, this.includeParentProjects);
   }
 }

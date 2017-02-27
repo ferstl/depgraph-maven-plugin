@@ -1,8 +1,8 @@
 package com.github.ferstl.depgraph.dependency;
 
-import com.github.ferstl.depgraph.graph.DotBuilder;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
 import com.github.ferstl.depgraph.graph.GmlGraphFormatter;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 
 public class GmlGraphStyleConfigurer implements GraphStyleConfigurer {
@@ -37,7 +37,7 @@ public class GmlGraphStyleConfigurer implements GraphStyleConfigurer {
   }
 
   @Override
-  public DotBuilder<DependencyNode> configure(DotBuilder<DependencyNode> graphBuilder) {
+  public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
     NodeRenderer<DependencyNode> nodeNameRenderer = new SimpleDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes);
     EdgeRenderer<DependencyNode> edgeRenderer = new SimpleDependencyEdgeRenderer(this.showVersionOnEdges);
     return graphBuilder

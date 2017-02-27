@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableSet;
  *
  * @param <T> Type of the graph nodes.
  */
-public final class DotBuilder<T> {
+public final class GraphBuilder<T> {
 
   private String graphName;
   private GraphFormatter graphFormatter;
@@ -40,11 +40,11 @@ public final class DotBuilder<T> {
   private final Map<String, Node<T>> nodeDefinitions;
   private final Set<Edge> edges;
 
-  public static <T> DotBuilder<T> create() {
-    return new DotBuilder<>();
+  public static <T> GraphBuilder<T> create() {
+    return new GraphBuilder<>();
   }
 
-  public DotBuilder() {
+  public GraphBuilder() {
     AttributeBuilder nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
     AttributeBuilder edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
 
@@ -58,38 +58,38 @@ public final class DotBuilder<T> {
     this.edges = new LinkedHashSet<>();
   }
 
-  public DotBuilder<T> graphName(String name) {
+  public GraphBuilder<T> graphName(String name) {
     this.graphName = name;
     return this;
   }
 
-  public DotBuilder<T> useNodeIdRenderer(NodeRenderer<? super T> nodeIdRenderer) {
+  public GraphBuilder<T> useNodeIdRenderer(NodeRenderer<? super T> nodeIdRenderer) {
     this.nodeIdRenderer = nodeIdRenderer;
     return this;
   }
 
-  public DotBuilder<T> useNodeNameRenderer(NodeRenderer<? super T> nodeNameRenderer) {
+  public GraphBuilder<T> useNodeNameRenderer(NodeRenderer<? super T> nodeNameRenderer) {
     this.nodeNameRenderer = nodeNameRenderer;
     return this;
   }
 
-  public DotBuilder<T> useEdgeRenderer(EdgeRenderer<? super T> edgeRenderer) {
+  public GraphBuilder<T> useEdgeRenderer(EdgeRenderer<? super T> edgeRenderer) {
     this.edgeRenderer = edgeRenderer;
     return this;
   }
 
-  public DotBuilder<T> omitSelfReferences() {
+  public GraphBuilder<T> omitSelfReferences() {
     this.omitSelfReferences = true;
     return this;
   }
 
-  public DotBuilder<T> graphFormatter(GraphFormatter formatter) {
+  public GraphBuilder<T> graphFormatter(GraphFormatter formatter) {
     this.graphFormatter = formatter;
     return this;
   }
 
   // no edge will be created in case one or both nodes are null.
-  public DotBuilder<T> addEdge(T from, T to) {
+  public GraphBuilder<T> addEdge(T from, T to) {
     if (from != null && to != null) {
       addNode(from);
       addNode(to);

@@ -28,7 +28,7 @@ import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static java.util.EnumSet.allOf;
 
@@ -46,17 +46,17 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
-    DotBuilder<DependencyNode> dotBuilder = graphStyleConfigurer
+    GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
         .showGroupIds(true)
         .showArtifactIds(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
-        .configure(DotBuilder.<DependencyNode>create())
+        .configure(GraphBuilder.<DependencyNode>create())
         .useNodeIdRenderer(NodeIdRenderers.GROUP_ID_WITH_SCOPE)
         .omitSelfReferences();
 
     GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, allOf(NodeResolution.class));
-    return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
+    return new SimpleGraphFactory(adapter, globalFilter, graphBuilder);
   }
 
   @Override

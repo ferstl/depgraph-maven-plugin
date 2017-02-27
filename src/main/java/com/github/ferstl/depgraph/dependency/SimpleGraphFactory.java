@@ -17,7 +17,7 @@ package com.github.ferstl.depgraph.dependency;
 
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
  * A graph factory that creates a graph from a non multi-module project.
@@ -26,19 +26,19 @@ public class SimpleGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
   private final ArtifactFilter globalFilter;
-  private final DotBuilder<DependencyNode> dotBuilder;
+  private final GraphBuilder<DependencyNode> graphBuilder;
 
-  public SimpleGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder) {
+  public SimpleGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) {
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;
-    this.dotBuilder = dotBuilder;
+    this.graphBuilder = graphBuilder;
   }
 
   @Override
   public String createGraph(MavenProject project) {
-    this.dotBuilder.graphName(project.getArtifactId());
-    this.graphBuilderAdapter.buildDependencyGraph(project, this.globalFilter, this.dotBuilder);
-    return this.dotBuilder.toString();
+    this.graphBuilder.graphName(project.getArtifactId());
+    this.graphBuilderAdapter.buildDependencyGraph(project, this.globalFilter, this.graphBuilder);
+    return this.graphBuilder.toString();
   }
 
 }

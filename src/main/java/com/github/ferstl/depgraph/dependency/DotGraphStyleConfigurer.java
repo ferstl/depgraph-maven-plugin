@@ -2,8 +2,8 @@ package com.github.ferstl.depgraph.dependency;
 
 
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
-import com.github.ferstl.depgraph.graph.DotBuilder;
 import com.github.ferstl.depgraph.graph.DotGraphFormatter;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
 
@@ -42,7 +42,7 @@ public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
   }
 
   @Override
-  public DotBuilder<DependencyNode> configure(DotBuilder<DependencyNode> graphBuilder) {
+  public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
     DependencyNodeNameRenderer nodeNameRenderer = new DependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes, this.styleConfiguration);
     DependencyEdgeRenderer edgeRenderer = new DependencyEdgeRenderer(this.showVersionOnEdges, this.styleConfiguration);
 

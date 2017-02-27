@@ -25,7 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.hasNodesAndEdges;
@@ -43,17 +43,17 @@ import static org.mockito.Mockito.when;
  * mock of the {@link DependencyGraphBuilder} here. So to verify the correct behavior of
  * {@link AggregatingGraphFactory}, we can only check for the expected invocations of {@link DependencyGraphBuilder}
  * instead of verifying the created graph. However, the parent/child relations are not a result of
- * {@link DependencyGraphBuilder} invocations since they are directly created via the {@link DotBuilder}. So these
- * relations need to be tested by verifying the {@link DotBuilder}.
+ * {@link DependencyGraphBuilder} invocations since they are directly created via the {@link GraphBuilder}. So these
+ * relations need to be tested by verifying the {@link GraphBuilder}.
  * </p>
  */
 public class AggregatingGraphFactoryTest {
 
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
-  private DependencyGraphBuilder graphBuilder;
+  private DependencyGraphBuilder dependencyGraphBuilder;
   private GraphBuilderAdapter adapter;
-  private DotBuilder<DependencyNode> dotBuilder;
+  private GraphBuilder<DependencyNode> graphBuilder;
 
   @Before
   public void before() throws Exception {
@@ -63,12 +63,12 @@ public class AggregatingGraphFactoryTest {
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode = mock(org.apache.maven.shared.dependency.graph.DependencyNode.class);
-    this.graphBuilder = mock(DependencyGraphBuilder.class);
-    when(this.graphBuilder.buildDependencyGraph(Matchers.<MavenProject>any(), Matchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
+    this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
+    when(this.dependencyGraphBuilder.buildDependencyGraph(Matchers.<MavenProject>any(), Matchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
 
-    this.adapter = new GraphBuilderAdapter(this.graphBuilder, this.targetFilter);
+    this.adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, this.targetFilter);
 
-    this.dotBuilder = new DotBuilder<>();
+    this.graphBuilder = new GraphBuilder<>();
   }
 
   /**
@@ -82,7 +82,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void moduleTree() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     createMavenProject("child1", parent);
@@ -90,7 +90,7 @@ public class AggregatingGraphFactoryTest {
 
     graphFactory.createGraph(parent);
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"",
             "\"groupId:child1:jar:version:compile\"",
@@ -111,7 +111,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void excludeParentProjects() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, false);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, false);
 
     MavenProject parent = createMavenProject("parent");
     MavenProject child1 = createMavenProject("child1", parent);
@@ -119,12 +119,12 @@ public class AggregatingGraphFactoryTest {
 
     graphFactory.createGraph(parent);
 
-    verify(this.graphBuilder, never()).buildDependencyGraph(parent, this.globalFilter);
-    verify(this.graphBuilder).buildDependencyGraph(child1, this.globalFilter);
-    verify(this.graphBuilder).buildDependencyGraph(child2, this.globalFilter);
+    verify(this.dependencyGraphBuilder, never()).buildDependencyGraph(parent, this.globalFilter);
+    verify(this.dependencyGraphBuilder).buildDependencyGraph(child1, this.globalFilter);
+    verify(this.dependencyGraphBuilder).buildDependencyGraph(child2, this.globalFilter);
 
     // There are no module nodes. So because of the mocked graph builder the graph must be empty here.
-    assertThat(this.dotBuilder, emptyGraph());
+    assertThat(this.graphBuilder, emptyGraph());
   }
 
 
@@ -142,7 +142,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void nestedProjects() {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     createMavenProject("child1-1", parent);
@@ -153,7 +153,7 @@ public class AggregatingGraphFactoryTest {
 
     graphFactory.createGraph(parent);
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"",
             "\"groupId:child1-1:jar:version:compile\"",
@@ -179,7 +179,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void stopAtParent() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parentParent = createMavenProject("parentParent");
     MavenProject parent = createMavenProject("parent", parentParent);
@@ -187,7 +187,7 @@ public class AggregatingGraphFactoryTest {
 
     graphFactory.createGraph(parent);
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"",
             "\"groupId:child:jar:version:compile\""},
@@ -209,7 +209,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void filteredParent() {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     createMavenProject("child1-1", parent);
@@ -222,7 +222,7 @@ public class AggregatingGraphFactoryTest {
 
     graphFactory.createGraph(parent);
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"",
             "\"groupId:child1-1:jar:version:compile\"",
@@ -243,7 +243,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void excludedArtifact() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.dotBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     MavenProject child1 = createMavenProject("child1", parent);
@@ -254,11 +254,11 @@ public class AggregatingGraphFactoryTest {
     graphFactory.createGraph(parent);
 
     // graph builder must not be invoked for child1
-    verify(this.graphBuilder, never()).buildDependencyGraph(child1, this.globalFilter);
+    verify(this.dependencyGraphBuilder, never()).buildDependencyGraph(child1, this.globalFilter);
 
 
     // module tree must not contain child1
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"",
             "\"groupId:child2:jar:version:compile\""},

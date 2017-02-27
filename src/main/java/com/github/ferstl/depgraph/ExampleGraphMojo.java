@@ -24,7 +24,7 @@ import org.apache.maven.project.MavenProject;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
  * Creates an example graph. This Mojo has the same capabilities as the {@code graph} Mojo. So it might be useful to
@@ -44,19 +44,19 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
-    DotBuilder<DependencyNode> dotBuilder = createDotBuilder(graphStyleConfigurer);
-    return new ExampleGraphFactory(dotBuilder, globalFilter, targetFilter);
+    GraphBuilder<DependencyNode> graphBuilder = createDotBuilder(graphStyleConfigurer);
+    return new ExampleGraphFactory(graphBuilder, globalFilter, targetFilter);
   }
 
 
   static class ExampleGraphFactory implements GraphFactory {
 
-    private final DotBuilder<DependencyNode> dotBuilder;
+    private final GraphBuilder<DependencyNode> graphBuilder;
     private final ArtifactFilter globalFilter;
     private final ArtifactFilter targetFilter;
 
-    ExampleGraphFactory(DotBuilder<DependencyNode> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-      this.dotBuilder = dotBuilder;
+    ExampleGraphFactory(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
+      this.graphBuilder = graphBuilder;
       this.globalFilter = globalFilter;
       this.targetFilter = targetFilter;
     }
@@ -96,7 +96,7 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
       addEdge(nB, nG);
       addEdge(nB, nZ);
 
-      return this.dotBuilder.toString();
+      return this.graphBuilder.toString();
     }
 
     private void addEdge(DependencyNode from, DependencyNode to) {
@@ -104,7 +104,7 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
           && this.globalFilter.include(to.getArtifact())
           && this.targetFilter.include(to.getArtifact())) {
 
-        this.dotBuilder.addEdge(from, to);
+        this.graphBuilder.addEdge(from, to);
       }
     }
 

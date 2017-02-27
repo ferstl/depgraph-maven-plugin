@@ -28,7 +28,7 @@ import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
@@ -86,19 +86,19 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
-    DotBuilder<DependencyNode> dotBuilder = createDotBuilder(graphStyleConfigurer);
+    GraphBuilder<DependencyNode> graphBuilder = createDotBuilder(graphStyleConfigurer);
     GraphBuilderAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
-    return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
+    return new SimpleGraphFactory(adapter, globalFilter, graphBuilder);
   }
 
-  DotBuilder<DependencyNode> createDotBuilder(GraphStyleConfigurer graphStyleConfigurer) {
+  GraphBuilder<DependencyNode> createDotBuilder(GraphStyleConfigurer graphStyleConfigurer) {
     return graphStyleConfigurer
         .showGroupIds(this.showGroupIds)
         .showArtifactIds(true)
         .showVersionsOnNodes(this.showVersions)
         .showVersionsOnEdges(this.showVersions && requiresFullGraph())
-        .configure(DotBuilder.<DependencyNode>create())
+        .configure(GraphBuilder.<DependencyNode>create())
         .useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
   }
 

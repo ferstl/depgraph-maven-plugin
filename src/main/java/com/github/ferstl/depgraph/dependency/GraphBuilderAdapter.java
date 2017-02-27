@@ -23,7 +23,7 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static java.util.EnumSet.allOf;
 
@@ -54,16 +54,16 @@ public final class GraphBuilderAdapter {
     this.dependencyGraphBuilder = null;
   }
 
-  public void buildDependencyGraph(MavenProject project, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder) {
+  public void buildDependencyGraph(MavenProject project, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) {
 
     if (this.dependencyGraphBuilder != null) {
-      createGraph(project, globalFilter, dotBuilder);
+      createGraph(project, globalFilter, graphBuilder);
     } else {
-      createTree(project, globalFilter, dotBuilder);
+      createTree(project, globalFilter, graphBuilder);
     }
   }
 
-  private void createGraph(MavenProject project, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder) throws DependencyGraphException {
+  private void createGraph(MavenProject project, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) throws DependencyGraphException {
     org.apache.maven.shared.dependency.graph.DependencyNode root;
     try {
       root = this.dependencyGraphBuilder.buildDependencyGraph(project, globalFilter);
@@ -71,11 +71,11 @@ public final class GraphBuilderAdapter {
       throw new DependencyGraphException(e);
     }
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(dotBuilder, this.targetFilter);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, this.targetFilter);
     root.accept(visitor);
   }
 
-  private void createTree(MavenProject project, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder) throws DependencyGraphException {
+  private void createTree(MavenProject project, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) throws DependencyGraphException {
     org.apache.maven.shared.dependency.tree.DependencyNode root;
     try {
       root = this.dependencyTreeBuilder.buildDependencyTree(project, this.artifactRepository, globalFilter);
@@ -84,7 +84,7 @@ public final class GraphBuilderAdapter {
     }
 
     // Due to MNG-3236, we need to filter the artifacts on our own.
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(dotBuilder, globalFilter, this.targetFilter, this.includedResolutions);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, globalFilter, this.targetFilter, this.includedResolutions);
     root.accept(visitor);
   }
 }

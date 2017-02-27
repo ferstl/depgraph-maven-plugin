@@ -20,7 +20,7 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
  * A graph factory that creates a dependency graph from a multi-module project. Child modules are treated as
@@ -31,36 +31,36 @@ public class AggregatingGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
   private final ArtifactFilter globalFilter;
-  private final DotBuilder<DependencyNode> dotBuilder;
+  private final GraphBuilder<DependencyNode> graphBuilder;
   private final boolean includeParentProjects;
 
-  public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder, boolean includeParentProjects) {
+  public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder, boolean includeParentProjects) {
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;
-    this.dotBuilder = dotBuilder;
+    this.graphBuilder = graphBuilder;
     this.includeParentProjects = includeParentProjects;
   }
 
   @Override
   public String createGraph(MavenProject parent) {
-    this.dotBuilder.graphName(parent.getArtifactId());
+    this.graphBuilder.graphName(parent.getArtifactId());
 
     if (this.includeParentProjects) {
-      buildModuleTree(parent, this.dotBuilder);
+      buildModuleTree(parent, this.graphBuilder);
     }
 
     List<MavenProject> collectedProjects = parent.getCollectedProjects();
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
       if (isPartOfGraph(collectedProject)) {
-        this.graphBuilderAdapter.buildDependencyGraph(collectedProject, this.globalFilter, this.dotBuilder);
+        this.graphBuilderAdapter.buildDependencyGraph(collectedProject, this.globalFilter, this.graphBuilder);
       }
     }
 
-    return this.dotBuilder.toString();
+    return this.graphBuilder.toString();
   }
 
-  private void buildModuleTree(MavenProject parentProject, DotBuilder<DependencyNode> dotBuilder) {
+  private void buildModuleTree(MavenProject parentProject, GraphBuilder<DependencyNode> graphBuilder) {
     Collection<MavenProject> collectedProjects = parentProject.getCollectedProjects();
     for (MavenProject collectedProject : collectedProjects) {
       MavenProject child = collectedProject;
@@ -70,7 +70,7 @@ public class AggregatingGraphFactory implements GraphFactory {
         DependencyNode parentNode = filterProject(parent);
         DependencyNode childNode = filterProject(child);
 
-        dotBuilder.addEdge(parentNode, childNode);
+        graphBuilder.addEdge(parentNode, childNode);
 
         // Stop if we reached the original parent project!
         if (parent.equals(parentProject)) {

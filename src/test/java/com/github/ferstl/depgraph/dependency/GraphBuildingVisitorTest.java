@@ -23,7 +23,7 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.hasNodesAndEdges;
 import static java.util.EnumSet.allOf;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
 
 public class GraphBuildingVisitorTest {
 
-  private DotBuilder<DependencyNode> dotBuilder;
+  private GraphBuilder<DependencyNode> graphBuilder;
   private GraphBuildingVisitor visitor;
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
@@ -44,7 +44,7 @@ public class GraphBuildingVisitorTest {
 
   @Before
   public void before() {
-    this.dotBuilder = new DotBuilder<>();
+    this.graphBuilder = new GraphBuilder<>();
 
     this.globalFilter = mock(ArtifactFilter.class);
     when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
@@ -54,7 +54,7 @@ public class GraphBuildingVisitorTest {
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     this.includedResolutions = allOf(NodeResolution.class);
-    this.visitor = new GraphBuildingVisitor(this.dotBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    this.visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
   }
 
   /**
@@ -74,7 +74,7 @@ public class GraphBuildingVisitorTest {
     assertTrue(this.visitor.endVisit(child));
     assertTrue(this.visitor.endVisit(parent));
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
             "\"groupId:child:jar:version:compile\"[label=\"groupId:child:jar:version:compile\"]"},
@@ -107,7 +107,7 @@ public class GraphBuildingVisitorTest {
 
     assertTrue(this.visitor.endVisit(child2));
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
             "\"groupId:child:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]"},
@@ -141,7 +141,7 @@ public class GraphBuildingVisitorTest {
     assertTrue(this.visitor.visit(child2));
     assertTrue(this.visitor.endVisit(child2));
 
-    assertThat(this.dotBuilder, hasNodesAndEdges(
+    assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
             "\"groupId:child:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
@@ -151,7 +151,7 @@ public class GraphBuildingVisitorTest {
 
   @Test
   public void defaultArtifactFilter() {
-    this.visitor = new GraphBuildingVisitor(this.dotBuilder, this.targetFilter);
+    this.visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter);
 
     // Use other test (I know this is ugly...)
     parentAndChild();

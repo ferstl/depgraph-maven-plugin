@@ -1,6 +1,6 @@
 package com.github.ferstl.depgraph.dependency;
 
-import com.github.ferstl.depgraph.graph.DotBuilder;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
  * API to configure the style of the dependency graph.
@@ -15,5 +15,5 @@ public interface GraphStyleConfigurer {
 
   GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges);
 
-  DotBuilder<DependencyNode> configure(DotBuilder<DependencyNode> graphBuilder);
+  GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder);
 }
