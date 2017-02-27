@@ -17,7 +17,7 @@ package com.github.ferstl.depgraph.dependency.style;
 
 import org.junit.Before;
 import org.junit.Test;
-import com.github.ferstl.depgraph.graph.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
 
 import static org.junit.Assert.assertEquals;
 
@@ -40,7 +40,7 @@ public class FontTest {
   @Test
   public void setAttributes() {
     // arrange
-    AttributeBuilder builder = new AttributeBuilder();
+    DotAttributeBuilder builder = new DotAttributeBuilder();
 
     // act
     this.font.setAttributes(builder);
@@ -51,7 +51,7 @@ public class FontTest {
 
   @Test
   public void setAttributesEmpty() {
-    AttributeBuilder builder = new AttributeBuilder();
+    DotAttributeBuilder builder = new DotAttributeBuilder();
 
     // act
     this.emptyFont.setAttributes(builder);

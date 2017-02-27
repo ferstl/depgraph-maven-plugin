@@ -18,7 +18,7 @@ package com.github.ferstl.depgraph.dependency.style;
 import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
-import com.github.ferstl.depgraph.graph.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
 import com.github.ferstl.depgraph.graph.LabelBuilder;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
@@ -39,9 +39,9 @@ abstract class AbstractNode {
     this.type = type;
   }
 
-  AttributeBuilder createAttributes() {
+  DotAttributeBuilder createAttributes() {
     Font defaultFont = this.defaultFont;
-    return new AttributeBuilder()
+    return new DotAttributeBuilder()
         .shape(this.type)
         .style(this.style)
         .color(this.color)
@@ -51,13 +51,13 @@ abstract class AbstractNode {
         .fontColor(defaultFont.color);
   }
 
-  AttributeBuilder createAttributes(String groupId, String artifactId, String version, String scopes, boolean includeNodeAttributes) {
+  DotAttributeBuilder createAttributes(String groupId, String artifactId, String version, String scopes, boolean includeNodeAttributes) {
     Font groupIdFont = this.groupIdFont;
     Font artifactIdFont = this.artifactIdFont;
     Font versionFont = this.versionFont;
     Font scopeFont = this.scopeFont;
 
-    AttributeBuilder builder = includeNodeAttributes ? createAttributes() : new AttributeBuilder();
+    DotAttributeBuilder builder = includeNodeAttributes ? createAttributes() : new DotAttributeBuilder();
     return builder
         .label(new LabelBuilder()
             .font()

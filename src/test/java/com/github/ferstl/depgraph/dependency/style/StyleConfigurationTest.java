@@ -25,7 +25,7 @@ import org.junit.rules.TemporaryFolder;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.style.resource.ClasspathStyleResource;
 import com.github.ferstl.depgraph.dependency.style.resource.FileSystemStyleResource;
-import com.github.ferstl.depgraph.graph.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
 import com.google.common.io.Files;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -78,21 +78,21 @@ public class StyleConfigurationTest {
 
   @Test
   public void defaultNodeAttributesForEmptyConfiguration() {
-    AttributeBuilder attributes = this.emptyConfig.defaultNodeAttributes();
+    DotAttributeBuilder attributes = this.emptyConfig.defaultNodeAttributes();
 
     assertEquals("[shape=\"box\"]", attributes.toString());
   }
 
   @Test
   public void defaultEdgeAttributesForEmptyConfiguration() {
-    AttributeBuilder attributes = this.emptyConfig.defaultEdgeAttributes();
+    DotAttributeBuilder attributes = this.emptyConfig.defaultEdgeAttributes();
 
     assertEquals("", attributes.toString());
   }
 
   @Test
   public void nodeAttributesForEmptyConfiguration() {
-    AttributeBuilder attributes = this.emptyConfig.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "compile", "compile");
+    DotAttributeBuilder attributes = this.emptyConfig.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "compile", "compile");
 
     assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>compile>]", attributes.toString());
   }
@@ -100,7 +100,7 @@ public class StyleConfigurationTest {
 
   @Test
   public void edgeAttributesForEmptyConfiguration() {
-    AttributeBuilder attributes = this.emptyConfig.edgeAttributes(NodeResolution.INCLUDED, "compile");
+    DotAttributeBuilder attributes = this.emptyConfig.edgeAttributes(NodeResolution.INCLUDED, "compile");
 
     assertEquals("", attributes.toString());
   }

@@ -15,7 +15,7 @@
  */
 package com.github.ferstl.depgraph.dependency.style;
 
-import com.github.ferstl.depgraph.graph.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
 
 class Polygon extends AbstractNode {
 
@@ -26,7 +26,7 @@ class Polygon extends AbstractNode {
   }
 
   @Override
-  AttributeBuilder createAttributes() {
+  DotAttributeBuilder createAttributes() {
     return super.createAttributes().addAttribute("sides", this.sides > 0 ? Integer.toString(this.sides) : null);
   }
 

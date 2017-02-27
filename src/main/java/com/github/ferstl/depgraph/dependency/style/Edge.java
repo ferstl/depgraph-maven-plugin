@@ -16,7 +16,7 @@
 package com.github.ferstl.depgraph.dependency.style;
 
 import org.apache.commons.lang3.StringUtils;
-import com.github.ferstl.depgraph.graph.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
 
 class Edge {
 
@@ -24,8 +24,8 @@ class Edge {
   private String color;
   private final Font font = new Font();
 
-  AttributeBuilder createAttributes() {
-    AttributeBuilder builder = new AttributeBuilder()
+  DotAttributeBuilder createAttributes() {
+    DotAttributeBuilder builder = new DotAttributeBuilder()
         .style(this.style)
         .color(this.color);
 

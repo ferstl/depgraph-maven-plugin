@@ -16,7 +16,7 @@
 package com.github.ferstl.depgraph.dependency;
 
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
-import com.github.ferstl.depgraph.graph.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
 import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviateVersion;
@@ -39,7 +39,7 @@ public class DependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
   public String render(DependencyNode from, DependencyNode to) {
     NodeResolution resolution = to.getResolution();
 
-    AttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution, getFirst(to.getScopes(), null));
+    DotAttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution, getFirst(to.getScopes(), null));
     if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions) {
       builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }

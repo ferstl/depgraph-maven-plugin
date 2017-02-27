@@ -7,15 +7,15 @@ import static com.github.ferstl.depgraph.graph.DotEscaper.escape;
 
 public class DotGraphFormatter implements GraphFormatter {
 
-  private final AttributeBuilder nodeAttributeBuilder;
-  private final AttributeBuilder edgeAttributeBuilder;
+  private final DotAttributeBuilder nodeAttributeBuilder;
+  private final DotAttributeBuilder edgeAttributeBuilder;
 
   public DotGraphFormatter() {
-    this.nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
-    this.edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
+    this.nodeAttributeBuilder = new DotAttributeBuilder().shape("box").fontName("Helvetica");
+    this.edgeAttributeBuilder = new DotAttributeBuilder().fontName("Helvetica").fontSize(10);
   }
 
-  public DotGraphFormatter(AttributeBuilder nodeAttributeBuilder, AttributeBuilder edgeAttributeBuilder) {
+  public DotGraphFormatter(DotAttributeBuilder nodeAttributeBuilder, DotAttributeBuilder edgeAttributeBuilder) {
     this.nodeAttributeBuilder = nodeAttributeBuilder;
     this.edgeAttributeBuilder = edgeAttributeBuilder;
   }

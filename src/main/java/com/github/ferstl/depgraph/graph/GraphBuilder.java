@@ -45,8 +45,8 @@ public final class GraphBuilder<T> {
   }
 
   public GraphBuilder() {
-    AttributeBuilder nodeAttributeBuilder = new AttributeBuilder().shape("box").fontName("Helvetica");
-    AttributeBuilder edgeAttributeBuilder = new AttributeBuilder().fontName("Helvetica").fontSize(10);
+    DotAttributeBuilder nodeAttributeBuilder = new DotAttributeBuilder().shape("box").fontName("Helvetica");
+    DotAttributeBuilder edgeAttributeBuilder = new DotAttributeBuilder().fontName("Helvetica").fontSize(10);
 
     this.graphName = "G";
     this.graphFormatter = new DotGraphFormatter(nodeAttributeBuilder, edgeAttributeBuilder);

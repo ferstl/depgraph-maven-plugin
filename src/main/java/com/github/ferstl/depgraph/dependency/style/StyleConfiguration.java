@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.style.resource.StyleResource;
-import com.github.ferstl.depgraph.graph.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
 
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 
@@ -83,15 +83,15 @@ public class StyleConfiguration {
     }
   }
 
-  public AttributeBuilder defaultNodeAttributes() {
+  public DotAttributeBuilder defaultNodeAttributes() {
     return this.defaultNode.createAttributes();
   }
 
-  public AttributeBuilder defaultEdgeAttributes() {
+  public DotAttributeBuilder defaultEdgeAttributes() {
     return this.defaultEdge.createAttributes();
   }
 
-  public AttributeBuilder edgeAttributes(NodeResolution resolution, String targetScope) {
+  public DotAttributeBuilder edgeAttributes(NodeResolution resolution, String targetScope) {
     Edge edge = this.edgeResolutionStyles.get(resolution);
 
     // Scope style win over INCLUDED node resolution
@@ -99,10 +99,10 @@ public class StyleConfiguration {
       edge = this.edgeScopeStyles.get(targetScope);
     }
 
-    return edge != null ? edge.createAttributes() : new AttributeBuilder();
+    return edge != null ? edge.createAttributes() : new DotAttributeBuilder();
   }
 
-  public AttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String type, String scopes, String effectiveScope) {
+  public DotAttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String type, String scopes, String effectiveScope) {
     StyleKey artifactKey = StyleKey.create(groupId, artifactId, effectiveScope, type, version);
     AbstractNode node = this.defaultNode;
 

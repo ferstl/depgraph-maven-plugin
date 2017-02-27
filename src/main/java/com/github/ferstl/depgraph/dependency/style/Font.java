@@ -16,7 +16,7 @@
 package com.github.ferstl.depgraph.dependency.style;
 
 import org.apache.commons.lang3.StringUtils;
-import com.github.ferstl.depgraph.graph.AttributeBuilder;
+import com.github.ferstl.depgraph.graph.DotAttributeBuilder;
 
 class Font {
 
@@ -24,7 +24,7 @@ class Font {
   Integer size;
   String name;
 
-  AttributeBuilder setAttributes(AttributeBuilder builder) {
+  DotAttributeBuilder setAttributes(DotAttributeBuilder builder) {
     return builder
         .fontColor(this.color)
         .fontSize(this.size)

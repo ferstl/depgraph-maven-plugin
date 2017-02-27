@@ -66,11 +66,11 @@ public class GraphBuilderTest {
   // TODO: #19 - Move test
   @Test
   public void nodeStyle() {
-    AttributeBuilder nodeStyle = new AttributeBuilder()
+    DotAttributeBuilder nodeStyle = new DotAttributeBuilder()
         .shape("polygon")
         .addAttribute("sides", "6");
     String graph = this.graphBuilder
-        .graphFormatter(new DotGraphFormatter(nodeStyle, new AttributeBuilder()))
+        .graphFormatter(new DotGraphFormatter(nodeStyle, new DotAttributeBuilder()))
         .toString();
 
     assertThat(graph, containsString("node [shape=\"polygon\",sides=\"6\"]"));
@@ -79,13 +79,13 @@ public class GraphBuilderTest {
   // TODO: #19 - Move test
   @Test
   public void edgeStyle() {
-    AttributeBuilder edgeStyle = new AttributeBuilder()
+    DotAttributeBuilder edgeStyle = new DotAttributeBuilder()
         .style("dotted")
         .fontName("Courier italic")
         .fontSize(10);
 
     String graph = this.graphBuilder
-        .graphFormatter(new DotGraphFormatter(new AttributeBuilder(), edgeStyle))
+        .graphFormatter(new DotGraphFormatter(new DotAttributeBuilder(), edgeStyle))
         .toString();
 
     assertThat(graph, containsString("edge [style=\"dotted\",fontname=\"Courier italic\",fontsize=\"10\"]"));
@@ -184,7 +184,7 @@ public class GraphBuilderTest {
 
     @Override
     public String render(DependencyNode node) {
-      return new AttributeBuilder()
+      return new DotAttributeBuilder()
           .label(node.getArtifact().getArtifactId())
           .toString();
     }
@@ -196,7 +196,7 @@ public class GraphBuilderTest {
 
     @Override
     public String render(DependencyNode from, DependencyNode to) {
-      return new AttributeBuilder()
+      return new DotAttributeBuilder()
           .label(to.getArtifact().getVersion())
           .toString();
     }

@@ -23,15 +23,15 @@ import org.apache.commons.lang3.StringUtils;
 import static com.github.ferstl.depgraph.graph.DotEscaper.escape;
 
 
-public class AttributeBuilder {
+public class DotAttributeBuilder {
 
   private final Map<String, String> attributes;
 
-  public AttributeBuilder() {
+  public DotAttributeBuilder() {
     this.attributes = new LinkedHashMap<>();
   }
 
-  public AttributeBuilder label(String label) {
+  public DotAttributeBuilder label(String label) {
     if (StringUtils.startsWith(label, "<") && StringUtils.endsWith(label, ">")) {
       this.attributes.put("label", label);
       return this;
@@ -40,11 +40,11 @@ public class AttributeBuilder {
     return addAttribute("label", label);
   }
 
-  public AttributeBuilder fontName(String fontName) {
+  public DotAttributeBuilder fontName(String fontName) {
     return addAttribute("fontname", fontName);
   }
 
-  public AttributeBuilder fontSize(int fontSize) {
+  public DotAttributeBuilder fontSize(int fontSize) {
     if (fontSize > 0) {
       return addAttribute("fontsize", Integer.toString(fontSize));
     } else if (fontSize < 0) {
@@ -54,31 +54,31 @@ public class AttributeBuilder {
     return this;
   }
 
-  public AttributeBuilder fontSize(Integer fontSize) {
+  public DotAttributeBuilder fontSize(Integer fontSize) {
     return fontSize(fontSize != null ? fontSize : 0);
   }
 
-  public AttributeBuilder fontColor(String color) {
+  public DotAttributeBuilder fontColor(String color) {
     return addAttribute("fontcolor", color);
   }
 
-  public AttributeBuilder style(String style) {
+  public DotAttributeBuilder style(String style) {
     return addAttribute("style", style);
   }
 
-  public AttributeBuilder color(String color) {
+  public DotAttributeBuilder color(String color) {
     return addAttribute("color", color);
   }
 
-  public AttributeBuilder fillColor(String color) {
+  public DotAttributeBuilder fillColor(String color) {
     return addAttribute("fillcolor", color);
   }
 
-  public AttributeBuilder shape(String shape) {
+  public DotAttributeBuilder shape(String shape) {
     return addAttribute("shape", shape);
   }
 
-  public AttributeBuilder addAttribute(String key, String value) {
+  public DotAttributeBuilder addAttribute(String key, String value) {
     if (value != null) {
       this.attributes.put(key, escape(value));
     }
