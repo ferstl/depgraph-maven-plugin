@@ -26,9 +26,9 @@ public class SimpleGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
   private final ArtifactFilter globalFilter;
-  private final DotBuilder<GraphNode> dotBuilder;
+  private final DotBuilder<DependencyNode> dotBuilder;
 
-  public SimpleGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder) {
+  public SimpleGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder) {
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;
     this.dotBuilder = dotBuilder;

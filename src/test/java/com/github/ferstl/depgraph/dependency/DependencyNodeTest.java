@@ -26,16 +26,16 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
 /**
- * JUnit tests for {@link GraphNode}.
+ * JUnit tests for {@link DependencyNode}.
  */
-public class GraphNodeTest {
+public class DependencyNodeTest {
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
 
   @Test
   public void defaultResolutionFromArtifact() {
-    GraphNode adapter = new GraphNode(createArtifact());
+    DependencyNode adapter = new DependencyNode(createArtifact());
     assertEquals(NodeResolution.INCLUDED, adapter.getResolution());
   }
 
@@ -43,7 +43,7 @@ public class GraphNodeTest {
   public void defaultResolutionFromDependencyGraphNode() {
     org.apache.maven.shared.dependency.graph.DependencyNode node =
         new org.apache.maven.shared.dependency.graph.internal.DefaultDependencyNode(null, createArtifact(), "", "", "");
-    GraphNode adapter = new GraphNode(node);
+    DependencyNode adapter = new DependencyNode(node);
 
     assertEquals(NodeResolution.INCLUDED, adapter.getResolution());
   }
@@ -52,7 +52,7 @@ public class GraphNodeTest {
   public void defaultResolutionFromDependencyTreeNode() {
     org.apache.maven.shared.dependency.tree.DependencyNode node =
         new org.apache.maven.shared.dependency.tree.DependencyNode(createArtifact());
-    GraphNode adapter = new GraphNode(node);
+    DependencyNode adapter = new DependencyNode(node);
 
     assertEquals(NodeResolution.INCLUDED, adapter.getResolution());
   }
@@ -64,15 +64,15 @@ public class GraphNodeTest {
 
     org.apache.maven.shared.dependency.tree.DependencyNode node =
         new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT, relatedArtifact);
-    GraphNode adapter = new GraphNode(node);
+    DependencyNode adapter = new DependencyNode(node);
     assertEquals(NodeResolution.OMITTED_FOR_CONFLICT, adapter.getResolution());
 
     node = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE, relatedArtifact);
-    adapter = new GraphNode(node);
+    adapter = new DependencyNode(node);
     assertEquals(NodeResolution.OMITTED_FOR_DUPLICATE, adapter.getResolution());
 
     node = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CYCLE);
-    adapter = new GraphNode(node);
+    adapter = new DependencyNode(node);
     assertEquals(NodeResolution.OMITTED_FOR_CYCLE, adapter.getResolution());
   }
 
@@ -81,7 +81,7 @@ public class GraphNodeTest {
     Artifact artifact = createArtifact();
     artifact.setScope(null);
 
-    GraphNode adapter = new GraphNode(artifact);
+    DependencyNode adapter = new DependencyNode(artifact);
     assertEquals("compile", adapter.getArtifact().getScope());
   }
 
@@ -90,7 +90,7 @@ public class GraphNodeTest {
     this.expectedException.expect(NullPointerException.class);
     this.expectedException.expectMessage(not(emptyString()));
 
-    new GraphNode((Artifact) null);
+    new DependencyNode((Artifact) null);
   }
 
 

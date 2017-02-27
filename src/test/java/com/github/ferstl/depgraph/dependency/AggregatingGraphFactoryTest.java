@@ -21,7 +21,6 @@ import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.graph.DependencyNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
@@ -54,7 +53,7 @@ public class AggregatingGraphFactoryTest {
   private ArtifactFilter targetFilter;
   private DependencyGraphBuilder graphBuilder;
   private GraphBuilderAdapter adapter;
-  private DotBuilder<GraphNode> dotBuilder;
+  private DotBuilder<DependencyNode> dotBuilder;
 
   @Before
   public void before() throws Exception {
@@ -63,7 +62,7 @@ public class AggregatingGraphFactoryTest {
     when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
-    DependencyNode dependencyNode = mock(DependencyNode.class);
+    org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode = mock(org.apache.maven.shared.dependency.graph.DependencyNode.class);
     this.graphBuilder = mock(DependencyGraphBuilder.class);
     when(this.graphBuilder.buildDependencyGraph(Matchers.<MavenProject>any(), Matchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
 

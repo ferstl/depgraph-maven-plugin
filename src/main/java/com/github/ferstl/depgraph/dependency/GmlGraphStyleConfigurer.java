@@ -37,9 +37,9 @@ public class GmlGraphStyleConfigurer implements GraphStyleConfigurer {
   }
 
   @Override
-  public DotBuilder<GraphNode> configure(DotBuilder<GraphNode> graphBuilder) {
-    NodeRenderer<GraphNode> nodeNameRenderer = new SimpleDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes);
-    EdgeRenderer<GraphNode> edgeRenderer = new SimpleDependencyEdgeRenderer(this.showVersionOnEdges);
+  public DotBuilder<DependencyNode> configure(DotBuilder<DependencyNode> graphBuilder) {
+    NodeRenderer<DependencyNode> nodeNameRenderer = new SimpleDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes);
+    EdgeRenderer<DependencyNode> edgeRenderer = new SimpleDependencyEdgeRenderer(this.showVersionOnEdges);
     return graphBuilder
         .useNodeNameRenderer(nodeNameRenderer)
         .useEdgeRenderer(edgeRenderer)

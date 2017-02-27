@@ -15,5 +15,5 @@ public interface GraphStyleConfigurer {
 
   GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges);
 
-  DotBuilder<GraphNode> configure(DotBuilder<GraphNode> graphBuilder);
+  DotBuilder<DependencyNode> configure(DotBuilder<DependencyNode> graphBuilder);
 }

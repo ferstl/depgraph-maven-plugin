@@ -20,12 +20,12 @@ import java.util.List;
 import org.codehaus.plexus.util.StringUtils;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import com.github.ferstl.depgraph.dependency.GraphNode;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 
-public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder<GraphNode>> {
+public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilder<DependencyNode>> {
 
   private static final String[] EMPTY_ARRAY = new String[0];
   private static final String NODE_PATTERN = "\\s*\"[\\w\\p{Punct}]+\"(\\[.+\\])?\\s*";
@@ -83,7 +83,7 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
 
 
   @Override
-  protected boolean matchesSafely(DotBuilder<GraphNode> dotBuilder, Description mismatchDescription) {
+  protected boolean matchesSafely(DotBuilder<DependencyNode> dotBuilder, Description mismatchDescription) {
     init(dotBuilder);
 
     mismatchDescription.appendText("was\nNodes:");
@@ -99,7 +99,7 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<DotBuilde
         | containsInAnyOrder(this.expectedEdges).matches(this.edges);
   }
 
-  private void init(DotBuilder<GraphNode> dotBuilder) {
+  private void init(DotBuilder<DependencyNode> dotBuilder) {
     String graph = dotBuilder.toString();
     String[] lines = graph.split("\n");
     this.nodes = new ArrayList<>();

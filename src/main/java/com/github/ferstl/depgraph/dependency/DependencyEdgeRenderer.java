@@ -23,7 +23,7 @@ import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviat
 import static com.google.common.collect.Iterables.getFirst;
 
 
-public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
+public class DependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
 
   private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
@@ -36,7 +36,7 @@ public class DependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
   }
 
   @Override
-  public String render(GraphNode from, GraphNode to) {
+  public String render(DependencyNode from, DependencyNode to) {
     NodeResolution resolution = to.getResolution();
 
     AttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution, getFirst(to.getScopes(), null));

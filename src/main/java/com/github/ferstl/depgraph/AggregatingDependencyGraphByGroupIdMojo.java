@@ -21,9 +21,9 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dependency.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
-import com.github.ferstl.depgraph.dependency.GraphNode;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
@@ -45,12 +45,12 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
 
-    DotBuilder<GraphNode> dotBuilder = graphStyleConfigurer
+    DotBuilder<DependencyNode> dotBuilder = graphStyleConfigurer
         .showGroupIds(true)
         .showArtifactIds(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
-        .configure(DotBuilder.<GraphNode>create())
+        .configure(DotBuilder.<DependencyNode>create())
         .useNodeIdRenderer(this.mergeScopes ? NodeIdRenderers.GROUP_ID : NodeIdRenderers.GROUP_ID_WITH_SCOPE)
         .omitSelfReferences();
 

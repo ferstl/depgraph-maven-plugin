@@ -54,7 +54,7 @@ public final class GraphBuilderAdapter {
     this.dependencyGraphBuilder = null;
   }
 
-  public void buildDependencyGraph(MavenProject project, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder) {
+  public void buildDependencyGraph(MavenProject project, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder) {
 
     if (this.dependencyGraphBuilder != null) {
       createGraph(project, globalFilter, dotBuilder);
@@ -63,7 +63,7 @@ public final class GraphBuilderAdapter {
     }
   }
 
-  private void createGraph(MavenProject project, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder) throws DependencyGraphException {
+  private void createGraph(MavenProject project, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder) throws DependencyGraphException {
     org.apache.maven.shared.dependency.graph.DependencyNode root;
     try {
       root = this.dependencyGraphBuilder.buildDependencyGraph(project, globalFilter);
@@ -75,7 +75,7 @@ public final class GraphBuilderAdapter {
     root.accept(visitor);
   }
 
-  private void createTree(MavenProject project, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder) throws DependencyGraphException {
+  private void createTree(MavenProject project, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder) throws DependencyGraphException {
     org.apache.maven.shared.dependency.tree.DependencyNode root;
     try {
       root = this.dependencyTreeBuilder.buildDependencyTree(project, this.artifactRepository, globalFilter);

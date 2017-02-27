@@ -31,10 +31,10 @@ public class AggregatingGraphFactory implements GraphFactory {
 
   private final GraphBuilderAdapter graphBuilderAdapter;
   private final ArtifactFilter globalFilter;
-  private final DotBuilder<GraphNode> dotBuilder;
+  private final DotBuilder<DependencyNode> dotBuilder;
   private final boolean includeParentProjects;
 
-  public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<GraphNode> dotBuilder, boolean includeParentProjects) {
+  public AggregatingGraphFactory(GraphBuilderAdapter graphBuilderAdapter, ArtifactFilter globalFilter, DotBuilder<DependencyNode> dotBuilder, boolean includeParentProjects) {
     this.graphBuilderAdapter = graphBuilderAdapter;
     this.globalFilter = globalFilter;
     this.dotBuilder = dotBuilder;
@@ -60,15 +60,15 @@ public class AggregatingGraphFactory implements GraphFactory {
     return this.dotBuilder.toString();
   }
 
-  private void buildModuleTree(MavenProject parentProject, DotBuilder<GraphNode> dotBuilder) {
+  private void buildModuleTree(MavenProject parentProject, DotBuilder<DependencyNode> dotBuilder) {
     Collection<MavenProject> collectedProjects = parentProject.getCollectedProjects();
     for (MavenProject collectedProject : collectedProjects) {
       MavenProject child = collectedProject;
       MavenProject parent = collectedProject.getParent();
 
       while (parent != null) {
-        GraphNode parentNode = filterProject(parent);
-        GraphNode childNode = filterProject(child);
+        DependencyNode parentNode = filterProject(parent);
+        DependencyNode childNode = filterProject(child);
 
         dotBuilder.addEdge(parentNode, childNode);
 
@@ -93,10 +93,10 @@ public class AggregatingGraphFactory implements GraphFactory {
     return result;
   }
 
-  private GraphNode filterProject(MavenProject project) {
+  private DependencyNode filterProject(MavenProject project) {
     Artifact artifact = project.getArtifact();
     if (this.globalFilter.include(artifact)) {
-      return new GraphNode(artifact);
+      return new DependencyNode(artifact);
     }
 
     return null;

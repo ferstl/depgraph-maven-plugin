@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableSet;
  * <li>{@link org.apache.maven.shared.dependency.tree.DependencyNode}</li>
  * </ul>
  */
-public final class GraphNode {
+public final class DependencyNode {
 
   private org.apache.maven.shared.dependency.graph.DependencyNode graphNode;
   private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
@@ -40,21 +40,21 @@ public final class GraphNode {
   private final TreeSet<String> scopes;
 
 
-  public GraphNode(Artifact artifact) {
+  public DependencyNode(Artifact artifact) {
     this(artifact, NodeResolution.INCLUDED);
   }
 
-  public GraphNode(org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode) {
+  public DependencyNode(org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode) {
     this(dependencyNode.getArtifact());
     this.graphNode = dependencyNode;
   }
 
-  public GraphNode(org.apache.maven.shared.dependency.tree.DependencyNode dependencyNode) {
+  public DependencyNode(org.apache.maven.shared.dependency.tree.DependencyNode dependencyNode) {
     this(dependencyNode.getArtifact(), determineResolution(dependencyNode.getState()));
     this.treeNode = dependencyNode;
   }
 
-  private GraphNode(Artifact artifact, NodeResolution resolution) {
+  private DependencyNode(Artifact artifact, NodeResolution resolution) {
     if (artifact == null) {
       throw new NullPointerException("Artifact must not be null");
     }
@@ -70,7 +70,7 @@ public final class GraphNode {
     this.scopes.add(artifact.getScope());
   }
 
-  public void merge(GraphNode other) {
+  public void merge(DependencyNode other) {
     if (this == other) {
       return;
     }
@@ -105,7 +105,7 @@ public final class GraphNode {
     return this.treeNode.getRelatedArtifact().getVersion();
   }
 
-  public Collection<GraphNode> getChildren() {
+  public Collection<DependencyNode> getChildren() {
     if (this.treeNode != null) {
       return Collections2.transform(this.treeNode.getChildren(), TreeNode2Adapter.INSTANCE);
     } else if (this.graphNode != null) {
@@ -134,21 +134,21 @@ public final class GraphNode {
     }
   }
 
-  private enum TreeNode2Adapter implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, GraphNode> {
+  private enum TreeNode2Adapter implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, DependencyNode> {
     INSTANCE;
 
     @Override
-    public GraphNode apply(org.apache.maven.shared.dependency.tree.DependencyNode tn) {
-      return new GraphNode(tn);
+    public DependencyNode apply(org.apache.maven.shared.dependency.tree.DependencyNode tn) {
+      return new DependencyNode(tn);
     }
   }
 
-  private enum GraphNode2Adapter implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, GraphNode> {
+  private enum GraphNode2Adapter implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, DependencyNode> {
     INSTANCE;
 
     @Override
-    public GraphNode apply(org.apache.maven.shared.dependency.graph.DependencyNode tn) {
-      return new GraphNode(tn);
+    public DependencyNode apply(org.apache.maven.shared.dependency.graph.DependencyNode tn) {
+      return new DependencyNode(tn);
     }
   }
 }

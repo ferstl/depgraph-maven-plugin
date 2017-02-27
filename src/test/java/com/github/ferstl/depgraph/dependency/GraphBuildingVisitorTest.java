@@ -20,7 +20,6 @@ import java.util.EnumSet;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
-import org.apache.maven.shared.dependency.graph.DependencyNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
@@ -37,7 +36,7 @@ import static org.mockito.Mockito.when;
 
 public class GraphBuildingVisitorTest {
 
-  private DotBuilder<GraphNode> dotBuilder;
+  private DotBuilder<DependencyNode> dotBuilder;
   private GraphBuildingVisitor visitor;
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
@@ -67,8 +66,8 @@ public class GraphBuildingVisitorTest {
    */
   @Test
   public void parentAndChild() {
-    DependencyNode child = createGraphNode("child");
-    DependencyNode parent = createGraphNode("parent", child);
+    org.apache.maven.shared.dependency.graph.DependencyNode child = createGraphNode("child");
+    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child);
 
     assertTrue(this.visitor.visit(parent));
     assertTrue(this.visitor.visit(child));
@@ -93,9 +92,9 @@ public class GraphBuildingVisitorTest {
    */
   @Test
   public void ignoredNode() {
-    DependencyNode child1 = createGraphNode("child1");
-    DependencyNode child2 = createGraphNode("child2");
-    DependencyNode parent = createGraphNode("parent", child1, child2);
+    org.apache.maven.shared.dependency.graph.DependencyNode child1 = createGraphNode("child1");
+    org.apache.maven.shared.dependency.graph.DependencyNode child2 = createGraphNode("child2");
+    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child1, child2);
 
     when(this.globalFilter.include(child2.getArtifact())).thenReturn(false);
 
@@ -126,9 +125,9 @@ public class GraphBuildingVisitorTest {
    */
   @Test
   public void targetDepNode() {
-    DependencyNode child1 = createGraphNode("child1");
-    DependencyNode child2 = createGraphNode("child2");
-    DependencyNode parent = createGraphNode("parent", child1, child2);
+    org.apache.maven.shared.dependency.graph.DependencyNode child1 = createGraphNode("child1");
+    org.apache.maven.shared.dependency.graph.DependencyNode child2 = createGraphNode("child2");
+    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child1, child2);
 
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(false);
     when(this.targetFilter.include(child2.getArtifact())).thenReturn(true);
@@ -158,8 +157,8 @@ public class GraphBuildingVisitorTest {
     parentAndChild();
   }
 
-  private static DependencyNode createGraphNode(String artifactId, DependencyNode... children) {
-    DependencyNode node = mock(DependencyNode.class);
+  private static org.apache.maven.shared.dependency.graph.DependencyNode createGraphNode(String artifactId, org.apache.maven.shared.dependency.graph.DependencyNode... children) {
+    org.apache.maven.shared.dependency.graph.DependencyNode node = mock(org.apache.maven.shared.dependency.graph.DependencyNode.class);
     when(node.getArtifact()).thenReturn(createArtifact(artifactId));
     when(node.getChildren()).thenReturn(Arrays.asList(children));
     return node;

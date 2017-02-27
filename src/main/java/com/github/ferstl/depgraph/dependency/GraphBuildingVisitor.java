@@ -28,17 +28,17 @@ import static java.util.EnumSet.allOf;
 /**
  * A node visitor that creates edges between the visited nodes using a {@link DotBuilder}. This class implements the
  * {@code DependencyNodeVisitor} interfaces for dependency trees and dependency graphs and adapts the different node
- * instances using {@link GraphNode}.
+ * instances using {@link DependencyNode}.
  */
 class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
 
-  private final DotBuilder<GraphNode> dotBuilder;
-  private final Deque<GraphNode> stack;
+  private final DotBuilder<DependencyNode> dotBuilder;
+  private final Deque<DependencyNode> stack;
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
-  GraphBuildingVisitor(DotBuilder<GraphNode> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
+  GraphBuildingVisitor(DotBuilder<DependencyNode> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.dotBuilder = dotBuilder;
     this.stack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
@@ -46,32 +46,32 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
     this.includedResolutions = includedResolutions;
   }
 
-  GraphBuildingVisitor(DotBuilder<GraphNode> dotBuilder, ArtifactFilter targetFilter) {
+  GraphBuildingVisitor(DotBuilder<DependencyNode> dotBuilder, ArtifactFilter targetFilter) {
     this(dotBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter, allOf(NodeResolution.class));
   }
 
   @Override
   public boolean visit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalVisit(new GraphNode(node));
+    return internalVisit(new DependencyNode(node));
   }
 
   @Override
   public boolean endVisit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalEndVisit(new GraphNode(node));
+    return internalEndVisit(new DependencyNode(node));
   }
 
   @Override
   public boolean visit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalVisit(new GraphNode(node));
+    return internalVisit(new DependencyNode(node));
   }
 
   @Override
   public boolean endVisit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalEndVisit(new GraphNode(node));
+    return internalEndVisit(new DependencyNode(node));
   }
 
-  private boolean internalVisit(GraphNode node) {
-    GraphNode currentParent = this.stack.peek();
+  private boolean internalVisit(DependencyNode node) {
+    DependencyNode currentParent = this.stack.peek();
 
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       if (currentParent != null && this.includedResolutions.contains(node.getResolution())) {
@@ -88,17 +88,17 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
     return false;
   }
 
-  private void mergeWithExisting(GraphNode node) {
-    GraphNode effectiveNode = this.dotBuilder.getEffectiveNode(node);
+  private void mergeWithExisting(DependencyNode node) {
+    DependencyNode effectiveNode = this.dotBuilder.getEffectiveNode(node);
     node.merge(effectiveNode);
   }
 
-  private boolean leadsToTargetDependency(GraphNode node) {
+  private boolean leadsToTargetDependency(DependencyNode node) {
     if (this.targetFilter.include(node.getArtifact())) {
       return true;
     }
 
-    for (GraphNode c : node.getChildren()) {
+    for (DependencyNode c : node.getChildren()) {
       if (leadsToTargetDependency(c)) {
         return true;
       }
@@ -107,7 +107,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
     return false;
   }
 
-  private boolean internalEndVisit(GraphNode node) {
+  private boolean internalEndVisit(DependencyNode node) {
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       this.stack.pop();
     }

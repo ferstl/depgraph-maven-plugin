@@ -4,7 +4,7 @@ import com.github.ferstl.depgraph.dot.EdgeRenderer;
 
 import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviateVersion;
 
-public class SimpleDependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
+public class SimpleDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
 
   private final boolean renderVersion;
 
@@ -13,7 +13,7 @@ public class SimpleDependencyEdgeRenderer implements EdgeRenderer<GraphNode> {
   }
 
   @Override
-  public String render(GraphNode from, GraphNode to) {
+  public String render(DependencyNode from, DependencyNode to) {
     NodeResolution resolution = to.getResolution();
 
     if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersion) {

@@ -21,9 +21,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dependency.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
-import com.github.ferstl.depgraph.dependency.GraphNode;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dot.DotBuilder;
@@ -68,13 +68,13 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
-    DotBuilder<GraphNode> dotBuilder = graphStyleConfigurer
+    DotBuilder<DependencyNode> dotBuilder = graphStyleConfigurer
         .showGroupIds(this.showGroupIds)
         .showArtifactIds(true)
         .showVersionsOnNodes(this.showVersions)
         // This graph won't show any conflicting dependencies. So don't show versions on edges
         .showVersionsOnEdges(false)
-        .configure(DotBuilder.<GraphNode>create());
+        .configure(DotBuilder.<DependencyNode>create());
     if (this.mergeScopes) {
       dotBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
     } else {

@@ -24,7 +24,7 @@ import com.google.common.base.Joiner;
 import static com.google.common.collect.Iterables.getFirst;
 
 
-public class DependencyNodeNameRenderer implements NodeRenderer<GraphNode> {
+public class DependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
   private static final Joiner SLASH_JOINER = Joiner.on("/").skipNulls();
 
@@ -42,7 +42,7 @@ public class DependencyNodeNameRenderer implements NodeRenderer<GraphNode> {
 
 
   @Override
-  public String render(GraphNode node) {
+  public String render(DependencyNode node) {
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
 

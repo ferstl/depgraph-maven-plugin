@@ -47,7 +47,7 @@ public class GraphBuilderAdapterTest {
   private DependencyGraphBuilder dependencyGraphBuilder;
   private DependencyTreeBuilder dependencyTreeBuilder;
   private MavenProject mavenProject;
-  private DotBuilder<GraphNode> dotBuilder;
+  private DotBuilder<DependencyNode> dotBuilder;
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
   private ArtifactRepository artifactRepository;

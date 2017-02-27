@@ -20,18 +20,18 @@ import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.google.common.base.Joiner;
 
 
-public enum NodeIdRenderers implements NodeRenderer<GraphNode> {
+public enum NodeIdRenderers implements NodeRenderer<DependencyNode> {
 
   GROUP_ID {
     @Override
-    public String render(GraphNode node) {
+    public String render(DependencyNode node) {
       return node.getArtifact().getGroupId();
     }
   },
 
   GROUP_ID_WITH_SCOPE {
     @Override
-    public String render(GraphNode node) {
+    public String render(DependencyNode node) {
       Artifact artifact = node.getArtifact();
       return COLON_JOINER.join(artifact.getGroupId(), artifact.getScope());
     }
@@ -39,7 +39,7 @@ public enum NodeIdRenderers implements NodeRenderer<GraphNode> {
 
   VERSIONLESS_ID {
     @Override
-    public String render(GraphNode node) {
+    public String render(DependencyNode node) {
       Artifact artifact = node.getArtifact();
 
       return COLON_JOINER.join(
@@ -52,7 +52,7 @@ public enum NodeIdRenderers implements NodeRenderer<GraphNode> {
 
   VERSIONLESS_ID_WITH_SCOPE {
     @Override
-    public String render(GraphNode node) {
+    public String render(DependencyNode node) {
       Artifact artifact = node.getArtifact();
 
       return COLON_JOINER.join(

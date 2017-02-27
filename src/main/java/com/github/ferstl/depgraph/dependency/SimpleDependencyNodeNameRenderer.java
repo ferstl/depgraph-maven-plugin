@@ -3,7 +3,7 @@ package com.github.ferstl.depgraph.dependency;
 import com.github.ferstl.depgraph.dot.NodeRenderer;
 import com.google.common.base.Joiner;
 
-public class SimpleDependencyNodeNameRenderer implements NodeRenderer<GraphNode> {
+public class SimpleDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
   private static final Joiner NEWLINE_JOINER = Joiner.on("\n").skipNulls();
 
@@ -18,7 +18,7 @@ public class SimpleDependencyNodeNameRenderer implements NodeRenderer<GraphNode>
   }
 
   @Override
-  public String render(GraphNode node) {
+  public String render(DependencyNode node) {
     return NEWLINE_JOINER.join(
         this.showGroupId ? node.getArtifact().getGroupId() : null,
         this.showArtifactId ? node.getArtifact().getArtifactId() : null,

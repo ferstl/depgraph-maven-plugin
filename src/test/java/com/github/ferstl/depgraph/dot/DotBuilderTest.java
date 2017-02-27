@@ -19,7 +19,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Before;
 import org.junit.Test;
-import com.github.ferstl.depgraph.dependency.GraphNode;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
 
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.dot.DotBuilderMatcher.hasNodes;
@@ -39,9 +39,9 @@ public class DotBuilderTest {
   private static final String DEFAULT_SINGLE_NODE = "\"group:start:jar:1.0.0:compile\"[label=\"group:start:jar:1.0.0:compile\"]";
   private static final String DEFAULT_EDGE = "\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\"";
 
-  private DotBuilder<GraphNode> dotBuilder;
-  private GraphNode fromNode;
-  private GraphNode toNode;
+  private DotBuilder<DependencyNode> dotBuilder;
+  private DependencyNode fromNode;
+  private DependencyNode toNode;
 
   @Before
   public void before() {
@@ -103,7 +103,7 @@ public class DotBuilderTest {
 
   @Test
   public void nullNodes() {
-    GraphNode node = createNode("node");
+    DependencyNode node = createNode("node");
 
     this.dotBuilder.addEdge(node, null);
     assertThat(this.dotBuilder, emptyGraph());
@@ -164,26 +164,26 @@ public class DotBuilderTest {
         new String[]{DEFAULT_EDGE + "[label=\"1.0.0\"]"}));
   }
 
-  private GraphNode createNode(String name) {
+  private DependencyNode createNode(String name) {
     Artifact artifact = new DefaultArtifact("group", name, "1.0.0", "compile", "jar", "", null);
 
-    return new GraphNode(artifact);
+    return new DependencyNode(artifact);
   }
 
-  enum TestNodeIdRenderer implements NodeRenderer<GraphNode> {
+  enum TestNodeIdRenderer implements NodeRenderer<DependencyNode> {
     INSTANCE;
 
     @Override
-    public String render(GraphNode node) {
+    public String render(DependencyNode node) {
       return node.getArtifact().getArtifactId();
     }
   }
 
-  enum TestNodeNameRenderer implements NodeRenderer<GraphNode> {
+  enum TestNodeNameRenderer implements NodeRenderer<DependencyNode> {
     INSTANCE;
 
     @Override
-    public String render(GraphNode node) {
+    public String render(DependencyNode node) {
       return new AttributeBuilder()
           .label(node.getArtifact().getArtifactId())
           .toString();
@@ -191,11 +191,11 @@ public class DotBuilderTest {
 
   }
 
-  enum TestEdgeRenderer implements EdgeRenderer<GraphNode> {
+  enum TestEdgeRenderer implements EdgeRenderer<DependencyNode> {
     INSTANCE;
 
     @Override
-    public String render(GraphNode from, GraphNode to) {
+    public String render(DependencyNode from, DependencyNode to) {
       return new AttributeBuilder()
           .label(to.getArtifact().getVersion())
           .toString();

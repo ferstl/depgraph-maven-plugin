@@ -21,9 +21,9 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphBuilderAdapter;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
-import com.github.ferstl.depgraph.dependency.GraphNode;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
@@ -86,19 +86,19 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
-    DotBuilder<GraphNode> dotBuilder = createDotBuilder(graphStyleConfigurer);
+    DotBuilder<DependencyNode> dotBuilder = createDotBuilder(graphStyleConfigurer);
     GraphBuilderAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
     return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
   }
 
-  DotBuilder<GraphNode> createDotBuilder(GraphStyleConfigurer graphStyleConfigurer) {
+  DotBuilder<DependencyNode> createDotBuilder(GraphStyleConfigurer graphStyleConfigurer) {
     return graphStyleConfigurer
         .showGroupIds(this.showGroupIds)
         .showArtifactIds(true)
         .showVersionsOnNodes(this.showVersions)
         .showVersionsOnEdges(this.showVersions && requiresFullGraph())
-        .configure(DotBuilder.<GraphNode>create())
+        .configure(DotBuilder.<DependencyNode>create())
         .useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
   }
 
