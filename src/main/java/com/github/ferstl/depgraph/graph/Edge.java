@@ -8,7 +8,7 @@ public final class Edge {
   private final String toNodeId;
   private final String name;
 
-  Edge(String fromNodeId, String toNodeId, String name) {
+  public Edge(String fromNodeId, String toNodeId, String name) {
     this.fromNodeId = fromNodeId;
     this.toNodeId = toNodeId;
     this.name = name;
@@ -28,6 +28,10 @@ public final class Edge {
   @Override
   public int hashCode() {
     return Objects.hash(this.fromNodeId, this.toNodeId, this.name);
+  }
+
+  @Override public String toString() {
+    return this.fromNodeId + " -> " + this.toNodeId + " (" + this.name + ")";
   }
 
   public String getFromNodeId() {
