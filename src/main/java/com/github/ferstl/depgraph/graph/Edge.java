@@ -14,6 +14,18 @@ public final class Edge {
     this.name = name;
   }
 
+  public String getFromNodeId() {
+    return this.fromNodeId;
+  }
+
+  public String getToNodeId() {
+    return this.toNodeId;
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) { return true; }
@@ -32,17 +44,5 @@ public final class Edge {
 
   @Override public String toString() {
     return this.fromNodeId + " -> " + this.toNodeId + " (" + this.name + ")";
-  }
-
-  public String getFromNodeId() {
-    return this.fromNodeId;
-  }
-
-  public String getToNodeId() {
-    return this.toNodeId;
-  }
-
-  public String getName() {
-    return this.name;
   }
 }
