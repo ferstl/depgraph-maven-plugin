@@ -1,5 +1,7 @@
 package com.github.ferstl.depgraph.graph;
 
+import java.util.Objects;
+
 public final class Node<T> {
 
   private final String nodeId;
@@ -18,5 +20,30 @@ public final class Node<T> {
 
   public String getNodeName() {
     return this.nodeName;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (!(o instanceof Node)) {
+      return false;
+    }
+
+    Node<?> other = (Node<?>) o;
+    return Objects.equals(this.nodeId, other.nodeId)
+        && Objects.equals(this.nodeName, other.nodeName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.nodeId, this.nodeName);
+  }
+
+  @Override
+  public String toString() {
+    return this.nodeId + "(" + this.nodeName + ")";
   }
 }
