@@ -1,9 +1,12 @@
 package com.github.ferstl.depgraph.graph.gml;
 
-import java.util.Collection;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
+
+import java.util.Collection;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class GmlGraphFormatter implements GraphFormatter {
 
@@ -16,7 +19,9 @@ public class GmlGraphFormatter implements GraphFormatter {
     for (Node<?> node : nodes) {
       result.append("node [\n");
       result.append("id \"").append(node.getNodeId()).append("\"\n");
-      result.append("label \"").append(node.getNodeName()).append("\"\n");
+      if (isNotBlank(node.getNodeName())) {
+        result.append("label \"").append(node.getNodeName()).append("\"\n");
+      }
       result.append("]\n\n");
     }
 
@@ -25,6 +30,9 @@ public class GmlGraphFormatter implements GraphFormatter {
       result.append("edge [\n");
       result.append("source \"").append(edge.getFromNodeId()).append("\"\n");
       result.append("target \"").append(edge.getToNodeId()).append("\"\n");
+      if (isNotBlank(edge.getName())) {
+        result.append("label \"").append(edge.getName()).append("\"\n");
+      }
       result.append("]\n\n");
     }
 
