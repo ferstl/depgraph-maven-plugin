@@ -4,18 +4,16 @@ import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
-import org.apache.maven.artifact.Artifact;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
 
+import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
+import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNodeWithConflict;
 import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_ID;
-import static org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public abstract class AbstractGraphStyleConfigurerTest {
 
@@ -232,28 +230,6 @@ public abstract class AbstractGraphStyleConfigurerTest {
   protected abstract String getNodeNameForAllAttributes(String groupId, String artifactId, String version);
 
   protected abstract String getEmptyNodeName();
-
-  private DependencyNode createDependencyNode(String groupId, String artifactId, String version) {
-    return new DependencyNode(createArtifact(groupId, artifactId, version));
-  }
-
-  private Artifact createArtifact(String groupId, String artifactId, String version) {
-    Artifact artifact = mock(Artifact.class);
-    when(artifact.getGroupId()).thenReturn(groupId);
-    when(artifact.getArtifactId()).thenReturn(artifactId);
-    when(artifact.getVersion()).thenReturn(version);
-    when(artifact.getScope()).thenReturn("compile");
-    return artifact;
-  }
-
-  private DependencyNode createDependencyNodeWithConflict(String groupId, String artifactId, String version) {
-    Artifact artifact = createArtifact(groupId, artifactId, version);
-    Artifact conflictingArtifact = mock(Artifact.class);
-    when(conflictingArtifact.getVersion()).thenReturn(version + "-alpha");
-
-    org.apache.maven.shared.dependency.tree.DependencyNode mavenDependencyNode = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, OMITTED_FOR_CONFLICT, conflictingArtifact);
-    return new DependencyNode(mavenDependencyNode);
-  }
 
   static class TestFormatter implements GraphFormatter {
 
