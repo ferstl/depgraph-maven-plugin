@@ -23,12 +23,12 @@ import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviat
 import static com.google.common.collect.Iterables.getFirst;
 
 
-public class DependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
+public class DotDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
 
   private final boolean renderVersions;
   private final StyleConfiguration styleConfiguration;
 
-  public DependencyEdgeRenderer(boolean renderVersions, StyleConfiguration styleConfiguration) {
+  public DotDependencyEdgeRenderer(boolean renderVersions, StyleConfiguration styleConfiguration) {
     this.renderVersions = renderVersions;
     this.styleConfiguration = styleConfiguration;
   }
