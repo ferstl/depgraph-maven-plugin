@@ -172,6 +172,32 @@ public class GraphBuilderTest {
     assertThat(this.formatter.edges, contains(new Edge(this.fromNode, this.toNode, "f->t")));
   }
 
+  @Test
+  public void getEffectiveNode() {
+    // arrange
+    this.graphBuilder.addEdge(this.fromNode, this.toNode);
+    this.graphBuilder.useNodeNameRenderer(TestNodeRenderer.INSTANCE)
+        .addEdge(this.fromNode, this.toNode);
+
+    // act
+    String effectiveNode = this.graphBuilder.getEffectiveNode(this.fromNode);
+
+    // assert
+    assertEquals(this.fromNode, effectiveNode);
+  }
+
+  @Test
+  public void getEffectiveNodeForUnknownNode() {
+    // arrange
+    this.graphBuilder.addEdge(this.fromNode, this.toNode);
+
+    // act
+    String effectiveNode = this.graphBuilder.getEffectiveNode("somethingCompletelyDifferent");
+
+    // assert
+    assertEquals("somethingCompletelyDifferent", effectiveNode);
+  }
+
   enum TestNodeRenderer implements NodeRenderer<String> {
     INSTANCE;
 
