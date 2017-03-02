@@ -12,10 +12,10 @@ public final class DependencyNodeUtil {
     throw new AssertionError("not instantiable");
   }
 
-  public static DependencyNode createDependencyNodeWithConflict(String groupId, String artifactId, String version) {
-    Artifact artifact = createArtifact(groupId, artifactId, version);
+  public static DependencyNode createDependencyNodeWithConflict(String groupId, String artifactId, String effectiveVersion) {
+    Artifact artifact = createArtifact(groupId, artifactId, effectiveVersion);
     Artifact conflictingArtifact = mock(Artifact.class);
-    when(conflictingArtifact.getVersion()).thenReturn(version + "-alpha");
+    when(conflictingArtifact.getVersion()).thenReturn(effectiveVersion + "-alpha");
 
     org.apache.maven.shared.dependency.tree.DependencyNode mavenDependencyNode = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, OMITTED_FOR_CONFLICT, conflictingArtifact);
     return new DependencyNode(mavenDependencyNode);
