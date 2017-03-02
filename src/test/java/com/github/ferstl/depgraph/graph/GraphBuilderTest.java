@@ -38,7 +38,7 @@ public class GraphBuilderTest {
   @Before
   public void before() {
     this.formatter = new TestFormatter();
-    this.graphBuilder = new GraphBuilder<>();
+    this.graphBuilder = GraphBuilder.create();
     this.graphBuilder.graphFormatter(this.formatter);
 
     this.fromNode = "from";
