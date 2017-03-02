@@ -25,8 +25,6 @@ import static com.google.common.collect.Iterables.getFirst;
 
 public class DependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
 
-  private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
-
   private final boolean renderVersions;
   private final StyleConfiguration styleConfiguration;
 
