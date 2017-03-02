@@ -2,13 +2,11 @@ package com.github.ferstl.depgraph.dependency;
 
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
+import com.github.ferstl.depgraph.graph.TestFormatter;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Collection;
 
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNodeWithConflict;
@@ -230,17 +228,4 @@ public abstract class AbstractGraphStyleConfigurerTest {
   protected abstract String getNodeNameForAllAttributes(String groupId, String artifactId, String version);
 
   protected abstract String getEmptyNodeName();
-
-  static class TestFormatter implements GraphFormatter {
-
-    Collection<Node<?>> nodes;
-    Collection<Edge> edges;
-
-    @Override
-    public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
-      this.nodes = nodes;
-      this.edges = edges;
-      return "";
-    }
-  }
 }
