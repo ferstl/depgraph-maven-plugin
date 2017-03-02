@@ -15,20 +15,14 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Before;
 import org.junit.Test;
-import com.github.ferstl.depgraph.dependency.DependencyNode;
-import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
-import com.github.ferstl.depgraph.graph.dot.DotGraphFormatter;
 
-import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.emptyGraph;
-import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.hasNodes;
-import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.hasNodesAndEdges;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.endsWith;
-import static org.hamcrest.Matchers.startsWith;
+import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -36,172 +30,164 @@ import static org.junit.Assert.assertThat;
  */
 public class GraphBuilderTest {
 
-  private static final String DEFAULT_FROM_NODE = "\"group:from:jar:1.0.0:compile\"[label=\"group:from:jar:1.0.0:compile\"]";
-  private static final String DEFAULT_TO_NODE = "\"group:to:jar:1.0.0:compile\"[label=\"group:to:jar:1.0.0:compile\"]";
-  private static final String DEFAULT_SINGLE_NODE = "\"group:start:jar:1.0.0:compile\"[label=\"group:start:jar:1.0.0:compile\"]";
-  private static final String DEFAULT_EDGE = "\"group:from:jar:1.0.0:compile\" -> \"group:to:jar:1.0.0:compile\"";
-
-  private GraphBuilder<DependencyNode> graphBuilder;
-  private DependencyNode fromNode;
-  private DependencyNode toNode;
+  private GraphBuilder<String> graphBuilder;
+  private String fromNode;
+  private String toNode;
+  private TestFormatter formatter;
 
   @Before
   public void before() {
+    this.formatter = new TestFormatter();
     this.graphBuilder = new GraphBuilder<>();
-    this.fromNode = createNode("from");
-    this.toNode = createNode("to");
-  }
+    this.graphBuilder.graphFormatter(this.formatter);
 
-  @Test
-  public void graphStructure() {
-    String graph = this.graphBuilder.toString();
-    assertThat(graph, startsWith("digraph \"G\" {"));
-    assertThat(graph, endsWith("}"));
+    this.fromNode = "from";
+    this.toNode = "to";
   }
 
   @Test
   public void graphName() {
-    String graph = this.graphBuilder.graphName("test-graph").toString();
-    assertThat(graph, startsWith("digraph \"test-graph\""));
+    // arrange
+    this.graphBuilder.graphName("test-graph");
+
+    // act
+    this.graphBuilder.toString();
+
+    // assert
+    assertEquals(this.formatter.graphName, "test-graph");
   }
 
-  // TODO: #19 - Move test
-  @Test
-  public void nodeStyle() {
-    DotAttributeBuilder nodeStyle = new DotAttributeBuilder()
-        .shape("polygon")
-        .addAttribute("sides", "6");
-    String graph = this.graphBuilder
-        .graphFormatter(new DotGraphFormatter(nodeStyle, new DotAttributeBuilder()))
-        .toString();
-
-    assertThat(graph, containsString("node [shape=\"polygon\",sides=\"6\"]"));
-  }
-
-  // TODO: #19 - Move test
-  @Test
-  public void edgeStyle() {
-    DotAttributeBuilder edgeStyle = new DotAttributeBuilder()
-        .style("dotted")
-        .fontName("Courier italic")
-        .fontSize(10);
-
-    String graph = this.graphBuilder
-        .graphFormatter(new DotGraphFormatter(new DotAttributeBuilder(), edgeStyle))
-        .toString();
-
-    assertThat(graph, containsString("edge [style=\"dotted\",fontname=\"Courier italic\",fontsize=\"10\"]"));
-  }
 
   @Test
   public void defaults() {
+    // arrange
     this.graphBuilder.addEdge(this.fromNode, this.toNode);
 
-    assertThat(this.graphBuilder, hasNodesAndEdges(
-        new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
-        new String[]{DEFAULT_EDGE}));
+    // act
+    this.graphBuilder.toString();
+
+    // assert
+    Node<?> fromNode = new Node<>(this.fromNode, "", "");
+    Node<?> toNode = new Node<>(this.toNode, "", "");
+
+    assertThat(this.formatter.nodes, containsInAnyOrder(fromNode, toNode));
+    assertThat(this.formatter.edges, contains(new Edge(this.fromNode, this.toNode, "")));
 
   }
 
   @Test
   public void nullNodes() {
-    DependencyNode node = createNode("node");
+    // arrange
+    this.graphBuilder.addEdge(this.fromNode, null);
 
-    this.graphBuilder.addEdge(node, null);
-    assertThat(this.graphBuilder, emptyGraph());
+    // act
+    this.graphBuilder.toString();
 
-    this.graphBuilder.addEdge(null, node);
-    assertThat(this.graphBuilder, emptyGraph());
+    // assert
+    assertThat(this.formatter.nodes, empty());
+    assertThat(this.formatter.edges, empty());
+  }
+
+  @Test
+  public void dontOmitSelfReferences() {
+    // arrange
+    this.graphBuilder
+        .addEdge(this.fromNode, this.fromNode);
+
+
+    // act
+    this.graphBuilder.toString();
+
+    // assert
+    Node<?> fromNode = new Node<>("from", "", "");
+    assertEquals(this.formatter.nodes, singletonList(fromNode));
+    assertThat(this.formatter.edges, contains(new Edge(this.fromNode, this.fromNode, "")));
   }
 
   @Test
   public void omitSelfReferences() {
+    // arrange
     this.graphBuilder
         .omitSelfReferences()
-        .addEdge(createNode("start"), createNode("start"));
+        .addEdge(this.fromNode, this.fromNode);
 
-    assertThat(this.graphBuilder, hasNodes(DEFAULT_SINGLE_NODE));
+    // act
+    this.graphBuilder.toString();
 
-    this.graphBuilder.addEdge(this.fromNode, this.toNode);
-    assertThat(this.graphBuilder, hasNodesAndEdges(
-        new String[]{DEFAULT_SINGLE_NODE, DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
-        new String[]{DEFAULT_EDGE}));
+    // assert
+    Node<?> fromNode = new Node<>("from", "", "");
+    assertEquals(this.formatter.nodes, singletonList(fromNode));
+    assertThat(this.formatter.edges, empty());
   }
 
 
   @Test
   public void customNodeIdRenderer() {
-    this.graphBuilder.useNodeIdRenderer(TestNodeIdRenderer.INSTANCE);
+    // arrange
+    this.graphBuilder.useNodeIdRenderer(TestNodeRenderer.INSTANCE)
+        .addEdge(this.fromNode, this.toNode);
 
-    this.graphBuilder.addEdge(this.fromNode, this.toNode);
+    // act
+    this.graphBuilder.toString();
 
-    assertThat(this.graphBuilder, hasNodesAndEdges(
-        new String[]{
-            "\"from\"",
-            "\"to\""},
-        new String[]{"from -> to"}));
+    // assert
+    Node<?> fromNode = new Node<>(this.fromNode + "-custom", "", "");
+    Node<?> toNode = new Node<>(this.toNode + "-custom", "", "");
+    assertThat(this.formatter.nodes, containsInAnyOrder(fromNode, toNode));
+    assertThat(this.formatter.edges, contains(new Edge(this.fromNode + "-custom", this.toNode + "-custom", "")));
   }
+
 
   @Test
   public void customNodeNameRenderer() {
-    this.graphBuilder.useNodeNameRenderer(TestNodeNameRenderer.INSTANCE)
+    // arrange
+    this.graphBuilder.useNodeNameRenderer(TestNodeRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
-    assertThat(this.graphBuilder, hasNodesAndEdges(
-        new String[]{
-            "\"group:from:jar:1.0.0:compile\"[label=\"from\"]",
-            "\"group:to:jar:1.0.0:compile\"[label=\"to\"]"},
-        new String[]{DEFAULT_TO_NODE}));
+    // act
+    this.graphBuilder.toString();
+
+    // assert
+    Node<?> fromNode = new Node<>(this.fromNode, this.fromNode + "-custom", "");
+    Node<?> toNode = new Node<>(this.toNode, this.toNode + "-custom", "");
+    assertThat(this.formatter.nodes, containsInAnyOrder(fromNode, toNode));
+    assertThat(this.formatter.edges, contains(new Edge(this.fromNode, this.toNode, "")));
   }
 
 
   @Test
   public void customEdgeRenderer() {
+    // arrange
     this.graphBuilder
         .useEdgeRenderer(TestEdgeRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
 
-    assertThat(this.graphBuilder, hasNodesAndEdges(
-        new String[]{DEFAULT_FROM_NODE, DEFAULT_TO_NODE},
-        new String[]{DEFAULT_EDGE + "[label=\"1.0.0\"]"}));
+    // act
+    this.graphBuilder.toString();
+
+    // assert
+    Node<?> fromNode = new Node<>(this.fromNode, "", "");
+    Node<?> toNode = new Node<>(this.toNode, "", "");
+    assertThat(this.formatter.nodes, containsInAnyOrder(fromNode, toNode));
+    assertThat(this.formatter.edges, contains(new Edge(this.fromNode, this.toNode, "f->t")));
   }
 
-  private DependencyNode createNode(String name) {
-    Artifact artifact = new DefaultArtifact("group", name, "1.0.0", "compile", "jar", "", null);
-
-    return new DependencyNode(artifact);
-  }
-
-  enum TestNodeIdRenderer implements NodeRenderer<DependencyNode> {
+  enum TestNodeRenderer implements NodeRenderer<String> {
     INSTANCE;
 
     @Override
-    public String render(DependencyNode node) {
-      return node.getArtifact().getArtifactId();
+    public String render(String node) {
+      return node + "-custom";
     }
   }
 
-  enum TestNodeNameRenderer implements NodeRenderer<DependencyNode> {
+
+  enum TestEdgeRenderer implements EdgeRenderer<String> {
     INSTANCE;
 
     @Override
-    public String render(DependencyNode node) {
-      return new DotAttributeBuilder()
-          .label(node.getArtifact().getArtifactId())
-          .toString();
+    public String render(String from, String to) {
+      return from.substring(0, 1) + "->" + to.substring(0, 1);
     }
-
-  }
-
-  enum TestEdgeRenderer implements EdgeRenderer<DependencyNode> {
-    INSTANCE;
-
-    @Override
-    public String render(DependencyNode from, DependencyNode to) {
-      return new DotAttributeBuilder()
-          .label(to.getArtifact().getVersion())
-          .toString();
-    }
-
   }
 }
