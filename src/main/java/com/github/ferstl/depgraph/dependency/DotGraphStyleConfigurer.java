@@ -43,7 +43,7 @@ public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
 
   @Override
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
-    DependencyNodeNameRenderer nodeNameRenderer = new DependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes, this.styleConfiguration);
+    DotDependencyNodeNameRenderer nodeNameRenderer = new DotDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes, this.styleConfiguration);
     DotDependencyEdgeRenderer edgeRenderer = new DotDependencyEdgeRenderer(this.showVersionOnEdges, this.styleConfiguration);
 
     return graphBuilder
