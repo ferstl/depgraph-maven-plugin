@@ -153,6 +153,25 @@ public class DocumentationIntegrationTest {
     collectFile("target/dependency-graph.png", "by-group-id.png");
   }
 
+  @Test
+  public void gmlWithConflicts() throws Exception {
+    runTest("graph",
+        "-DgraphFormat=gml",
+        "-DshowVersions=true",
+        "-DshowConflicts=true");
+
+    assertFilesPresent(
+        this.basedir,
+        "module-1/target/dependency-graph.gml",
+        "module-2/target/dependency-graph.gml",
+        "sub-parent/module-3/target/dependency-graph.gml",
+        // not wanted in the future
+        "target/dependency-graph.gml",
+        "sub-parent/target/dependency-graph.gml");
+
+    collectFile("sub-parent/module-3/target/dependency-graph.gml", "with-conflicts.gml");
+  }
+
   private void runTest(String goal, String... cliOptions) throws Exception {
     File basedir = getBaseDir();
     MavenExecution execution = this.mavenRuntime.forProject(basedir);
