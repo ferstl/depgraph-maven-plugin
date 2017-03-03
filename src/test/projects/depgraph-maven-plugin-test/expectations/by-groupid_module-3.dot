@@ -1,0 +1,28 @@
+digraph "module-3" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:compile"[label=<<font point-size="14">com.github.ferstl</font>>]
+  "commons-codec:compile"[label=<<font point-size="14">commons-codec</font>>]
+  "org.apache.commons:compile"[label=<<font point-size="14">org.apache.commons</font>>]
+  "com.google.guava:compile"[label=<<font point-size="14">com.google.guava</font>>]
+  "com.mysema.querydsl:compile"[label=<<font point-size="14">com.mysema.querydsl</font>>]
+  "com.google.code.findbugs:compile"[label=<<font point-size="14">com.google.code.findbugs</font>>]
+  "com.mysema.commons:compile"[label=<<font point-size="14">com.mysema.commons</font>>]
+  "cglib:compile"[label=<<font point-size="14">cglib</font>>]
+  "asm:compile"[label=<<font point-size="14">asm</font>>]
+
+  // Edge Definitions:
+  "com.github.ferstl:compile" -> "commons-codec:compile"
+  "com.github.ferstl:compile" -> "org.apache.commons:compile"
+  "com.github.ferstl:compile" -> "com.google.guava:compile"
+  "com.github.ferstl:compile" -> "commons-codec:compile"[style="dotted"]
+  "com.github.ferstl:compile" -> "org.apache.commons:compile"[style="dashed",color="red",fontcolor="red"]
+  "com.github.ferstl:compile" -> "com.mysema.querydsl:compile"
+  "com.mysema.querydsl:compile" -> "com.google.guava:compile"[style="dotted"]
+  "com.mysema.querydsl:compile" -> "com.google.code.findbugs:compile"
+  "com.mysema.querydsl:compile" -> "com.mysema.commons:compile"
+  "com.mysema.querydsl:compile" -> "cglib:compile"
+  "cglib:compile" -> "asm:compile"
+}

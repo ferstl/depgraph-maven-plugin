@@ -59,6 +59,28 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void byGroupIdInDot() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .execute("clean", "package", "depgraph:by-groupid");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.dot",
+        "module-2/target/dependency-graph.dot",
+        "sub-parent/module-3/target/dependency-graph.dot",
+        // not wanted in the future
+        "target/dependency-graph.dot",
+        "sub-parent/target/dependency-graph.dot");
+
+    assertFileContents(basedir, "expectations/by-groupid_module-1.dot", "module-1/target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/by-groupid_module-2.dot", "module-2/target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/by-groupid_module-3.dot", "sub-parent/module-3/target/dependency-graph.dot");
+  }
+
+  @Test
   public void graphInGml() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
