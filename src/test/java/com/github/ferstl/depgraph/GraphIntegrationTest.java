@@ -81,6 +81,18 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void exampleInDot() throws Exception {
+    File basedir = this.resources.getBasedir("empty");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .execute("clean", "package", "depgraph:example");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/example.dot", "target/dependency-graph.dot");
+  }
+
+  @Test
   public void graphInGml() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
