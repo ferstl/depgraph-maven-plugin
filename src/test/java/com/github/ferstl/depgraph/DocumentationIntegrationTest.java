@@ -1,6 +1,7 @@
 package com.github.ferstl.depgraph;
 
 import io.takari.maven.testing.TestResources;
+import io.takari.maven.testing.executor.MavenExecution;
 import io.takari.maven.testing.executor.MavenExecutionResult;
 import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenVersions;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
@@ -30,28 +32,25 @@ public class DocumentationIntegrationTest {
   public final TestResources resources = new TestResources();
 
   private final MavenRuntime mavenRuntime;
+  private File basedir;
 
   public DocumentationIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
     this.mavenRuntime = builder.build();
   }
 
   @Before
-  public void before() {
+  public void before() throws IOException {
     // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
+    this.basedir = getBaseDir();
   }
 
   @Test
   public void documentationSimpleGraph() throws Exception {
-    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
-    MavenExecutionResult result = this.mavenRuntime
-        .forProject(basedir)
-        .withCliOptions("-DcreateImage=true")
-        .execute("clean", "package", "depgraph:graph");
+    runTest("graph", "-DcreateImage=true");
 
-    result.assertErrorFreeLog();
     assertFilesPresent(
-        basedir,
+        this.basedir,
         "module-1/target/dependency-graph.png",
         "module-2/target/dependency-graph.png",
         "sub-parent/module-3/target/dependency-graph.png",
@@ -62,16 +61,10 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationWithVersions() throws Exception {
-    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
-    MavenExecutionResult result = this.mavenRuntime
-        .forProject(basedir)
-        .withCliOptions("-DcreateImage=true")
-        .withCliOption("-DshowVersions=true")
-        .execute("clean", "package", "depgraph:graph");
+    runTest("graph", "-DcreateImage=true", "-DshowVersions=true");
 
-    result.assertErrorFreeLog();
     assertFilesPresent(
-        basedir,
+        this.basedir,
         "module-1/target/dependency-graph.png",
         "module-2/target/dependency-graph.png",
         "sub-parent/module-3/target/dependency-graph.png",
@@ -82,16 +75,10 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationWithGroupIds() throws Exception {
-    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
-    MavenExecutionResult result = this.mavenRuntime
-        .forProject(basedir)
-        .withCliOptions("-DcreateImage=true")
-        .withCliOption("-DshowGroupIds=true")
-        .execute("clean", "package", "depgraph:graph");
+    runTest("graph", "-DcreateImage=true", "-DshowGroupIds=true");
 
-    result.assertErrorFreeLog();
     assertFilesPresent(
-        basedir,
+        this.basedir,
         "module-1/target/dependency-graph.png",
         "module-2/target/dependency-graph.png",
         "sub-parent/module-3/target/dependency-graph.png",
@@ -102,18 +89,14 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationWithDuplicatesAndConflicts() throws Exception {
-    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
-    MavenExecutionResult result = this.mavenRuntime
-        .forProject(basedir)
-        .withCliOptions("-DcreateImage=true")
-        .withCliOption("-DshowVersions=true")
-        .withCliOption("-DshowDuplicates=true")
-        .withCliOption("-DshowConflictes=true")
-        .execute("clean", "package", "depgraph:graph");
+    runTest("graph",
+        "-DcreateImage=true",
+        "-DshowVersions=true",
+        "-DshowDuplicates=true",
+        "-DshowConflictes=true");
 
-    result.assertErrorFreeLog();
     assertFilesPresent(
-        basedir,
+        this.basedir,
         "module-1/target/dependency-graph.png",
         "module-2/target/dependency-graph.png",
         "sub-parent/module-3/target/dependency-graph.png",
@@ -124,45 +107,48 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationAggregated() throws Exception {
-    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
-    MavenExecutionResult result = this.mavenRuntime
-        .forProject(basedir)
-        .withCliOption("-DincludeParentProjects=true")
-        .withCliOption("-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3")
-        .withCliOptions("-DcreateImage=true")
-        .execute("clean", "package", "depgraph:aggregate");
+    runTest("aggregate",
+        "-DcreateImage=true",
+        "-DincludeParentProjects=true",
+        "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3");
 
-    result.assertErrorFreeLog();
-    assertFilesPresent(basedir, "target/dependency-graph.png");
+    assertFilesPresent(this.basedir, "target/dependency-graph.png");
   }
 
   @Test
   public void documentationAggregatedByGroupId() throws Exception {
-    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
-    MavenExecutionResult result = this.mavenRuntime
-        .forProject(basedir)
-        .withCliOptions("-DcreateImage=true")
-        .execute("clean", "package", "depgraph:aggregate-by-groupid");
+    runTest("aggregate-by-groupid", "-DcreateImage=true");
 
-    result.assertErrorFreeLog();
-    assertFilesPresent(basedir, "target/dependency-graph.png");
+    assertFilesPresent(this.basedir, "target/dependency-graph.png");
   }
 
   @Test
   public void documentationCustomStyle() throws Exception {
-    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
-    String styleConfiguration = basedir.toPath().resolve("custom-style.json").toAbsolutePath().toString();
-    MavenExecutionResult result = this.mavenRuntime
-        .forProject(basedir)
-        .withCliOptions("-DcreateImage=true")
-        .withCliOption("-DshowGroupIds=true")
-        .withCliOption("-DincludeParentProjects=true")
-        .withCliOption("-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3")
-        .withCliOption("-DcustomStyleConfiguration=" + styleConfiguration)
-        .execute("clean", "package", "depgraph:aggregate");
+    String styleConfiguration = this.basedir.toPath().resolve("custom-style.json").toAbsolutePath().toString();
+    runTest(
+        "aggregate",
+        "-DcreateImage=true",
+        "-DshowGroupIds=true",
+        "-DincludeParentProjects=true",
+        "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3",
+        "-DcustomStyleConfiguration=" + styleConfiguration);
 
+    assertFilesPresent(this.basedir, "target/dependency-graph.png");
+  }
+
+  private void runTest(String goal, String... cliOptions) throws Exception {
+    File basedir = getBaseDir();
+    MavenExecution execution = this.mavenRuntime.forProject(basedir);
+    for (String cliOption : cliOptions) {
+      execution.withCliOption(cliOption);
+    }
+
+    MavenExecutionResult result = execution.execute("clean", "package", "depgraph:" + goal);
     result.assertErrorFreeLog();
-    assertFilesPresent(basedir, "target/dependency-graph.png");
+  }
+
+  private File getBaseDir() throws IOException {
+    return this.resources.getBasedir("depgraph-maven-plugin-test");
   }
 
   private static boolean isGraphvizInstalled() {
