@@ -1,0 +1,108 @@
+{
+  "default-node": {
+    "type": "box",
+    "style": "rounded",
+    "default-font": {
+      "size": 14,
+      "name": "Helvetica"
+    },
+    "group-id-font": {
+      "size": 10
+    },
+    "version-font": {
+      "size": 10
+    },
+    "scope-font": {
+      "size": 10
+    }
+  },
+  "default-edge": {
+    "font": {
+      "size": 10,
+      "name": "Helvetica"
+    }
+  },
+  "edge-scope-styles": {
+    "test": {
+      "color": "#808080"
+    }
+  },
+  "edge-resolution-styles": {
+    "omitted-for-duplicate": {
+      "style": "dashed"
+    },
+    "omitted-for-conflict": {
+      "style": "dashed",
+      "color": "red",
+      "font": {
+        "color": "red"
+      }
+    }
+  },
+  "node-styles": {
+    "com.github.ferstl*,,": {
+      "type": "box",
+      "color": "#001a4d",
+      "style": "rounded,filled",
+      "fill-color": "#b3ccff",
+      "group-id-font": {
+        "size": 10
+      },
+      "version-font": {
+        "size": 10
+      },
+      "scope-font": {
+        "size": 10
+      }
+    },
+    ",,,pom": {
+      "type": "box",
+      "color": "#001a4d",
+      "style": "rounded,filled",
+      "fill-color": "#e6eeff",
+      "group-id-font": {
+        "size": 10
+      },
+      "version-font": {
+        "size": 10
+      },
+      "scope-font": {
+        "size": 10
+      }
+    },
+    ",,compile": {
+      "type": "box",
+      "color": "#262626",
+      "style": "rounded,filled",
+      "fill-color": "#f2f2f2",
+      "group-id-font": {
+        "size": 10
+      },
+      "version-font": {
+        "size": 10
+      },
+      "scope-font": {
+        "size": 10
+      }
+    },
+    ",,test": {
+      "type": "box",
+      "color": "#808080",
+      "group-id-font": {
+        "color": "#a6a6a6",
+        "size": 10
+      },
+      "artifact-id-font": {
+        "color": "#a6a6a6"
+      },
+      "version-font": {
+        "color": "#a6a6a6",
+        "size": 10
+      },
+      "scope-font": {
+        "color": "#a6a6a6",
+        "size": 10
+      }
+    }
+  }
+}
