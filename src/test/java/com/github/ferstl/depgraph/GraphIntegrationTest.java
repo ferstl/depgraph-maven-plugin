@@ -66,7 +66,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void documentationSimpleGraph() throws Exception {
-    // Skip if graviz is not installed
+    // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
 
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
@@ -88,7 +88,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void documentationWithVersions() throws Exception {
-    // Skip if graviz is not installed
+    // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
 
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
@@ -111,7 +111,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void documentationWithGroupIds() throws Exception {
-    // Skip if graviz is not installed
+    // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
 
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
@@ -134,7 +134,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void documentationWithDuplicatesAndConflicts() throws Exception {
-    // Skip if graviz is not installed
+    // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
 
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
@@ -159,7 +159,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void documentationAggregated() throws Exception {
-    // Skip if graviz is not installed
+    // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
 
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
@@ -176,7 +176,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void documentationAggregatedByGroupId() throws Exception {
-    // Skip if graviz is not installed
+    // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
 
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
@@ -191,7 +191,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void documentationCustomStyle() throws Exception {
-    // Skip if graviz is not installed
+    // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
 
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
