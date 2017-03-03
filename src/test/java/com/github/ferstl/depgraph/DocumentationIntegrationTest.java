@@ -16,9 +16,14 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
+import static java.nio.file.Files.copy;
+import static java.nio.file.Files.createDirectories;
 import static org.junit.Assume.assumeTrue;
 
 /**
@@ -33,6 +38,7 @@ public class DocumentationIntegrationTest {
 
   private final MavenRuntime mavenRuntime;
   private File basedir;
+  private Path imagePath;
 
   public DocumentationIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
     this.mavenRuntime = builder.build();
@@ -42,7 +48,9 @@ public class DocumentationIntegrationTest {
   public void before() throws IOException {
     // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
+
     this.basedir = getBaseDir();
+    this.imagePath = createDirectories(Paths.get("target", "collected-images"));
   }
 
   @Test
@@ -57,6 +65,8 @@ public class DocumentationIntegrationTest {
         // not wanted in the future
         "target/dependency-graph.png",
         "sub-parent/target/dependency-graph.png");
+
+    collectFile("sub-parent/module-3/target/dependency-graph.png", "simple-graph.png");
   }
 
   @Test
@@ -71,6 +81,8 @@ public class DocumentationIntegrationTest {
         // not wanted in the future
         "target/dependency-graph.png",
         "sub-parent/target/dependency-graph.png");
+
+    collectFile("sub-parent/module-3/target/dependency-graph.png", "with-versions.png");
   }
 
   @Test
@@ -85,6 +97,8 @@ public class DocumentationIntegrationTest {
         // not wanted in the future
         "target/dependency-graph.png",
         "sub-parent/target/dependency-graph.png");
+
+    collectFile("sub-parent/module-3/target/dependency-graph.png", "with-group-ids.png");
   }
 
   @Test
@@ -92,7 +106,7 @@ public class DocumentationIntegrationTest {
     runTest("graph",
         "-DshowVersions=true",
         "-DshowDuplicates=true",
-        "-DshowConflictes=true");
+        "-DshowConflicts=true");
 
     assertFilesPresent(
         this.basedir,
@@ -102,6 +116,8 @@ public class DocumentationIntegrationTest {
         // not wanted in the future
         "target/dependency-graph.png",
         "sub-parent/target/dependency-graph.png");
+
+    collectFile("sub-parent/module-3/target/dependency-graph.png", "duplicates-and-conflicts.png");
   }
 
   @Test
@@ -111,6 +127,8 @@ public class DocumentationIntegrationTest {
         "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3");
 
     assertFilesPresent(this.basedir, "target/dependency-graph.png");
+
+    collectFile("target/dependency-graph.png", "aggregated.png");
   }
 
   @Test
@@ -131,6 +149,8 @@ public class DocumentationIntegrationTest {
         "-DcustomStyleConfiguration=" + styleConfiguration);
 
     assertFilesPresent(this.basedir, "target/dependency-graph.png");
+
+    collectFile("target/dependency-graph.png", "by-group-id.png");
   }
 
   private void runTest(String goal, String... cliOptions) throws Exception {
@@ -147,6 +167,13 @@ public class DocumentationIntegrationTest {
 
   private File getBaseDir() throws IOException {
     return this.resources.getBasedir("depgraph-maven-plugin-test");
+  }
+
+  private void collectFile(String file, String renameTo) throws IOException {
+    Path imageFile = this.basedir.toPath().resolve(file);
+    Path targetFile = this.imagePath.resolve(renameTo);
+
+    copy(imageFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
   }
 
   private static boolean isGraphvizInstalled() {
