@@ -46,7 +46,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
-  public void documentationSimpleGraph() throws Exception {
+  public void simpleGraph() throws Exception {
     runTest("graph");
 
     assertFilesPresent(
@@ -60,7 +60,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
-  public void documentationWithVersions() throws Exception {
+  public void withVersions() throws Exception {
     runTest("graph", "-DshowVersions=true");
 
     assertFilesPresent(
@@ -74,7 +74,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
-  public void documentationWithGroupIds() throws Exception {
+  public void withGroupIds() throws Exception {
     runTest("graph", "-DshowGroupIds=true");
 
     assertFilesPresent(
@@ -88,7 +88,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
-  public void documentationWithDuplicatesAndConflicts() throws Exception {
+  public void withDuplicatesAndConflicts() throws Exception {
     runTest("graph",
         "-DshowVersions=true",
         "-DshowDuplicates=true",
@@ -105,7 +105,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
-  public void documentationAggregated() throws Exception {
+  public void aggregated() throws Exception {
     runTest("aggregate",
         "-DincludeParentProjects=true",
         "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3");
@@ -114,14 +114,14 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
-  public void documentationAggregatedByGroupId() throws Exception {
+  public void aggregatedByGroupId() throws Exception {
     runTest("aggregate-by-groupid");
 
     assertFilesPresent(this.basedir, "target/dependency-graph.png");
   }
 
   @Test
-  public void documentationCustomStyle() throws Exception {
+  public void customStyle() throws Exception {
     String styleConfiguration = this.basedir.toPath().resolve("custom-style.json").toAbsolutePath().toString();
     runTest(
         "aggregate",
