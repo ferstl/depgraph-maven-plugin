@@ -8,6 +8,7 @@ import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,11 +35,14 @@ public class DocumentationIntegrationTest {
     this.mavenRuntime = builder.build();
   }
 
-  @Test
-  public void documentationSimpleGraph() throws Exception {
+  @Before
+  public void before() {
     // Skip if graphviz is not installed
     assumeTrue(isGraphvizInstalled());
+  }
 
+  @Test
+  public void documentationSimpleGraph() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -58,9 +62,6 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationWithVersions() throws Exception {
-    // Skip if graphviz is not installed
-    assumeTrue(isGraphvizInstalled());
-
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -81,9 +82,6 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationWithGroupIds() throws Exception {
-    // Skip if graphviz is not installed
-    assumeTrue(isGraphvizInstalled());
-
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -104,9 +102,6 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationWithDuplicatesAndConflicts() throws Exception {
-    // Skip if graphviz is not installed
-    assumeTrue(isGraphvizInstalled());
-
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -129,9 +124,6 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationAggregated() throws Exception {
-    // Skip if graphviz is not installed
-    assumeTrue(isGraphvizInstalled());
-
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -146,9 +138,6 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationAggregatedByGroupId() throws Exception {
-    // Skip if graphviz is not installed
-    assumeTrue(isGraphvizInstalled());
-
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -161,9 +150,6 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationCustomStyle() throws Exception {
-    // Skip if graphviz is not installed
-    assumeTrue(isGraphvizInstalled());
-
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     String styleConfiguration = basedir.toPath().resolve("custom-style.json").toAbsolutePath().toString();
     MavenExecutionResult result = this.mavenRuntime
