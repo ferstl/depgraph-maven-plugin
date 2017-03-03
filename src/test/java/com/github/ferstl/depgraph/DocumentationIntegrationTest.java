@@ -47,7 +47,7 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationSimpleGraph() throws Exception {
-    runTest("graph", "-DcreateImage=true");
+    runTest("graph");
 
     assertFilesPresent(
         this.basedir,
@@ -61,7 +61,7 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationWithVersions() throws Exception {
-    runTest("graph", "-DcreateImage=true", "-DshowVersions=true");
+    runTest("graph", "-DshowVersions=true");
 
     assertFilesPresent(
         this.basedir,
@@ -75,7 +75,7 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationWithGroupIds() throws Exception {
-    runTest("graph", "-DcreateImage=true", "-DshowGroupIds=true");
+    runTest("graph", "-DshowGroupIds=true");
 
     assertFilesPresent(
         this.basedir,
@@ -90,7 +90,6 @@ public class DocumentationIntegrationTest {
   @Test
   public void documentationWithDuplicatesAndConflicts() throws Exception {
     runTest("graph",
-        "-DcreateImage=true",
         "-DshowVersions=true",
         "-DshowDuplicates=true",
         "-DshowConflictes=true");
@@ -108,7 +107,6 @@ public class DocumentationIntegrationTest {
   @Test
   public void documentationAggregated() throws Exception {
     runTest("aggregate",
-        "-DcreateImage=true",
         "-DincludeParentProjects=true",
         "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3");
 
@@ -117,7 +115,7 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void documentationAggregatedByGroupId() throws Exception {
-    runTest("aggregate-by-groupid", "-DcreateImage=true");
+    runTest("aggregate-by-groupid");
 
     assertFilesPresent(this.basedir, "target/dependency-graph.png");
   }
@@ -127,7 +125,6 @@ public class DocumentationIntegrationTest {
     String styleConfiguration = this.basedir.toPath().resolve("custom-style.json").toAbsolutePath().toString();
     runTest(
         "aggregate",
-        "-DcreateImage=true",
         "-DshowGroupIds=true",
         "-DincludeParentProjects=true",
         "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3",
@@ -139,6 +136,7 @@ public class DocumentationIntegrationTest {
   private void runTest(String goal, String... cliOptions) throws Exception {
     File basedir = getBaseDir();
     MavenExecution execution = this.mavenRuntime.forProject(basedir);
+    execution.withCliOption("-DcreateImage=true");
     for (String cliOption : cliOptions) {
       execution.withCliOption(cliOption);
     }
