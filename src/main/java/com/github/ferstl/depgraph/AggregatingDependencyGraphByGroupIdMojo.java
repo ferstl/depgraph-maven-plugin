@@ -20,15 +20,14 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
-import com.github.ferstl.depgraph.graph.DependencyNodeAttributeRenderer;
-import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
-import com.github.ferstl.depgraph.graph.GraphFactory;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeNameRenderers;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
-import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
+import com.github.ferstl.depgraph.dependency.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.GraphFactory;
+import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
+import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
+import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
  * Aggregates all dependencies of a multi-module by their group IDs.
@@ -44,18 +43,19 @@ import com.github.ferstl.depgraph.graph.style.resource.BuiltInStyleResource;
 public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregatingGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
 
-    DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
-    dotBuilder
-        .nodeStyle(styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(styleConfiguration.defaultEdgeAttributes())
-        .useNodeNameRenderer(this.mergeScopes ? NodeNameRenderers.GROUP_ID : NodeNameRenderers.GROUP_ID_WITH_SCOPE)
-        .useNodeAttributeRenderer(new DependencyNodeAttributeRenderer(true, false, false, styleConfiguration))
+    GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
+        .showGroupIds(true)
+        .showArtifactIds(false)
+        .showVersionsOnNodes(false)
+        .showVersionsOnEdges(false)
+        .configure(GraphBuilder.<DependencyNode>create())
+        .useNodeIdRenderer(this.mergeScopes ? NodeIdRenderers.GROUP_ID : NodeIdRenderers.GROUP_ID_WITH_SCOPE)
         .omitSelfReferences();
 
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
-    return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, true);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
+    return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, true);
   }
 
   @Override

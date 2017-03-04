@@ -21,16 +21,15 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.DependencyEdgeAttributeRenderer;
-import com.github.ferstl.depgraph.graph.DependencyNodeAttributeRenderer;
-import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
-import com.github.ferstl.depgraph.graph.GraphFactory;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeNameRenderers;
-import com.github.ferstl.depgraph.graph.NodeResolution;
-import com.github.ferstl.depgraph.graph.SimpleGraphFactory;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.GraphFactory;
+import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
+import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
+import com.github.ferstl.depgraph.dependency.NodeResolution;
+import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
+
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
 import static java.util.EnumSet.of;
@@ -86,39 +85,33 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   boolean showDuplicates;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = createDotBuilder(styleConfiguration);
-    GraphBuilderAdapter adapter = createGraphBuilderAdapter(targetFilter);
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+    GraphBuilder<DependencyNode> graphBuilder = createDotBuilder(graphStyleConfigurer);
+    MavenGraphAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
-    return new SimpleGraphFactory(adapter, globalFilter, dotBuilder);
+    return new SimpleGraphFactory(adapter, globalFilter, graphBuilder);
   }
 
-  DotBuilder<GraphNode> createDotBuilder(StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = new DotBuilder<GraphNode>()
-        .nodeStyle(styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(styleConfiguration.defaultEdgeAttributes())
-        .useNodeNameRenderer(NodeNameRenderers.VERSIONLESS_ID);
-
-    boolean fullGraph = requiresFullGraph();
-    if (fullGraph) {
-      dotBuilder.useEdgeAttributeRenderer(new DependencyEdgeAttributeRenderer(this.showVersions, styleConfiguration));
-    }
-
-    dotBuilder.useNodeAttributeRenderer(new DependencyNodeAttributeRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration));
-
-    return dotBuilder;
+  GraphBuilder<DependencyNode> createDotBuilder(GraphStyleConfigurer graphStyleConfigurer) {
+    return graphStyleConfigurer
+        .showGroupIds(this.showGroupIds)
+        .showArtifactIds(true)
+        .showVersionsOnNodes(this.showVersions)
+        .showVersionsOnEdges(this.showVersions && requiresFullGraph())
+        .configure(GraphBuilder.<DependencyNode>create())
+        .useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
   }
 
-  private GraphBuilderAdapter createGraphBuilderAdapter(ArtifactFilter targetFilter) {
-    GraphBuilderAdapter adapter;
+  private MavenGraphAdapter createGraphBuilderAdapter(ArtifactFilter targetFilter) {
+    MavenGraphAdapter adapter;
     if (requiresFullGraph()) {
       EnumSet<NodeResolution> resolutions = allOf(NodeResolution.class);
       resolutions = !this.showConflicts ? complementOf(of(NodeResolution.OMITTED_FOR_CONFLICT)) : resolutions;
       resolutions = !this.showDuplicates ? complementOf(of(NodeResolution.OMITTED_FOR_DUPLICATE)) : resolutions;
 
-      adapter = new GraphBuilderAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, resolutions);
+      adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, resolutions);
     } else {
-      adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
+      adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
     }
     return adapter;
   }

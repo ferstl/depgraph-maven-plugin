@@ -1,9 +1,9 @@
 # depgraph-maven-plugin
-*- A Maven plugin that generates dependency graphs*
+*- A Maven plugin that generates dependency graphs in DOT and GML*
 
 [![Build Status](https://travis-ci.org/ferstl/depgraph-maven-plugin.svg?branch=master)](https://travis-ci.org/ferstl/depgraph-maven-plugin) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/depgraph-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/depgraph-maven-plugin) [![Coverage Status](https://coveralls.io/repos/github/ferstl/depgraph-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/ferstl/depgraph-maven-plugin?branch=master) [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This Maven plugin generates dependency graphs on single modules or in an aggregated form on multi-module projects. The graphs are represented by `.dot` files. In case that [Graphviz](http://www.graphviz.org/) is installed on the machine where this plugin is run, the `.dot` file can be directly converted into all supported image files. The plugin does also allow you to apply various stylings on the dependency graphs.
+This Maven plugin generates dependency graphs on single modules or in an aggregated form on multi-module projects. The graphs are represented by `.dot` or `.gml` files which can be visiualized by [Graphviz](http://www.graphviz.org/) or the [yEd Graph Editor](https://www.yworks.com/products/yed). In case that [Graphviz](http://www.graphviz.org/) is installed on the machine where this plugin is run, generated `.dot` files can be directly rendered into all supported image files. The plugin does also allow you to apply various stylings on the dependency graphs.
 
 
 For more information take a look at the [plugin documentation](https://ferstl.github.io/depgraph-maven-plugin/plugin-info.html) and the [Wiki](https://github.com/ferstl/depgraph-maven-plugin/wiki).
@@ -87,11 +87,22 @@ The goal [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-mav
 
 ### Styling
 
-This maven plugin offers you a variety of styling options. These options are explained in detail on the [Styling Wiki page](https://github.com/ferstl/depgraph-maven-plugin/wiki/Styling). This is an example of the aggregated graph with some custom styles:
+This maven plugin offers you a variety of styling options for graphs in the DOT format. These options are explained in detail on the [Styling Wiki page](https://github.com/ferstl/depgraph-maven-plugin/wiki/Styling). This is an example of the aggregated graph with some custom styles:
 
 <img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/aggregated-styled.png" alt="Dependency graph with custom styles"/>
 
 It shows all dependencies with group ID `com.github.ferstl` with a blue background, all test dependencies with grey text and all other dependencies with grey background.
+
+### Visualizing using yEd
+
+The GML graph format (set the `graphFormat` property to `gml`) allows visualizing a dependency graph in the [yEd Graph Editor](https://www.yworks.com/products/yed).
+
+<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/yed.png" alt="GML dependency graph in yEd"/>
+
+Since the generated dependency graph does not store any layout information, you need to layout the graph in yEd:
+
+- Choose *Tools -> Fit Node To Label* and press *OK* in the upcoming dialog
+- Choose your layout algorithm in the *Layout* menu to layout the graph
 
 ## FAQ
 

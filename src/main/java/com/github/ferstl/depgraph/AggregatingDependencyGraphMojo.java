@@ -20,15 +20,13 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.AggregatingGraphFactory;
-import com.github.ferstl.depgraph.graph.DependencyEdgeAttributeRenderer;
-import com.github.ferstl.depgraph.graph.DependencyNodeAttributeRenderer;
-import com.github.ferstl.depgraph.graph.GraphBuilderAdapter;
-import com.github.ferstl.depgraph.graph.GraphFactory;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.NodeNameRenderers;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+import com.github.ferstl.depgraph.dependency.AggregatingGraphFactory;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.GraphFactory;
+import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
+import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
  * Aggregates all dependencies of a multi-module project into one single graph.
@@ -69,21 +67,21 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   private boolean includeParentProjects;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = new DotBuilder<>();
-    dotBuilder.useNodeAttributeRenderer(new DependencyNodeAttributeRenderer(this.showGroupIds, true, this.showVersions, styleConfiguration))
-        .nodeStyle(styleConfiguration.defaultNodeAttributes())
-        .edgeStyle(styleConfiguration.defaultEdgeAttributes());
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+    GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
+        .showGroupIds(this.showGroupIds)
+        .showArtifactIds(true)
+        .showVersionsOnNodes(this.showVersions)
+        // This graph won't show any conflicting dependencies. So don't show versions on edges
+        .showVersionsOnEdges(false)
+        .configure(GraphBuilder.<DependencyNode>create());
     if (this.mergeScopes) {
-      dotBuilder.useNodeNameRenderer(NodeNameRenderers.VERSIONLESS_ID);
+      graphBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
     } else {
-      dotBuilder.useNodeNameRenderer(NodeNameRenderers.VERSIONLESS_ID_WITH_SCOPE);
+      graphBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID_WITH_SCOPE);
     }
 
-    // This graph won't show any conflicting dependencies. So showVersions must always be false
-    dotBuilder.useEdgeAttributeRenderer(new DependencyEdgeAttributeRenderer(false, styleConfiguration));
-
-    GraphBuilderAdapter adapter = new GraphBuilderAdapter(this.dependencyGraphBuilder, targetFilter);
-    return new AggregatingGraphFactory(adapter, globalFilter, dotBuilder, this.includeParentProjects);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
+    return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, this.includeParentProjects);
   }
 }

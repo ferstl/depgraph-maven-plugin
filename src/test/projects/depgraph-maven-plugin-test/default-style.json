@@ -1,0 +1,36 @@
+{
+  "default-node": {
+    "type": "box",
+    "default-font": {
+      "size": 14,
+      "name": "Helvetica"
+    },
+    "group-id-font": {
+      "size": 10
+    },
+    "version-font": {
+      "size": 10
+    },
+    "scope-font": {
+      "size": 10
+    }
+  },
+  "default-edge": {
+    "font": {
+      "size": 10,
+      "name": "Helvetica"
+    }
+  },
+  "edge-resolution-styles": {
+    "omitted-for-duplicate": {
+      "style": "dashed"
+    },
+    "omitted-for-conflict": {
+      "style": "dashed",
+      "color": "red",
+      "font": {
+        "color": "red"
+      }
+    }
+  }
+}

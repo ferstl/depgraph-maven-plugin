@@ -21,11 +21,10 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.dependency.tree.DependencyNode;
-import com.github.ferstl.depgraph.dot.DotBuilder;
-import com.github.ferstl.depgraph.graph.GraphFactory;
-import com.github.ferstl.depgraph.graph.GraphNode;
-import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.GraphFactory;
+import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
  * Creates an example graph. This Mojo has the same capabilities as the {@code graph} Mojo. So it might be useful to
@@ -44,20 +43,20 @@ import com.github.ferstl.depgraph.graph.style.StyleConfiguration;
 public class ExampleGraphMojo extends DependencyGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, StyleConfiguration styleConfiguration) {
-    DotBuilder<GraphNode> dotBuilder = createDotBuilder(styleConfiguration);
-    return new ExampleGraphFactory(dotBuilder, globalFilter, targetFilter);
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+    GraphBuilder<DependencyNode> graphBuilder = createDotBuilder(graphStyleConfigurer);
+    return new ExampleGraphFactory(graphBuilder, globalFilter, targetFilter);
   }
 
 
   static class ExampleGraphFactory implements GraphFactory {
 
-    private final DotBuilder<GraphNode> dotBuilder;
+    private final GraphBuilder<DependencyNode> graphBuilder;
     private final ArtifactFilter globalFilter;
     private final ArtifactFilter targetFilter;
 
-    ExampleGraphFactory(DotBuilder<GraphNode> dotBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
-      this.dotBuilder = dotBuilder;
+    ExampleGraphFactory(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter) {
+      this.graphBuilder = graphBuilder;
       this.globalFilter = globalFilter;
       this.targetFilter = targetFilter;
     }
@@ -75,16 +74,16 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
       DefaultArtifact aG = new DefaultArtifact("com.example.sub", "artifact-g", "1.0.0", "test", "jar", "", null);
       DefaultArtifact aZ = new DefaultArtifact("com.example.sub", "artifact-zip", "1.0.0", "compile", "zip", "", null);
 
-      GraphNode nA = new GraphNode(aA);
-      GraphNode nB = new GraphNode(aB);
-      GraphNode nC = new GraphNode(aC);
-      GraphNode nCDup = new GraphNode(new DependencyNode(aC, DependencyNode.OMITTED_FOR_DUPLICATE, aC));
-      GraphNode nCConfl = new GraphNode(new DependencyNode(aCV1, DependencyNode.OMITTED_FOR_CONFLICT, aCV1));
-      GraphNode nD = new GraphNode(aD);
-      GraphNode nE = new GraphNode(aE);
-      GraphNode nF = new GraphNode(aF);
-      GraphNode nG = new GraphNode(aG);
-      GraphNode nZ = new GraphNode(aZ);
+      DependencyNode nA = new DependencyNode(aA);
+      DependencyNode nB = new DependencyNode(aB);
+      DependencyNode nC = new DependencyNode(aC);
+      DependencyNode nCDup = new DependencyNode(new org.apache.maven.shared.dependency.tree.DependencyNode(aC, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE, aC));
+      DependencyNode nCConfl = new DependencyNode(new org.apache.maven.shared.dependency.tree.DependencyNode(aCV1, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT, aCV1));
+      DependencyNode nD = new DependencyNode(aD);
+      DependencyNode nE = new DependencyNode(aE);
+      DependencyNode nF = new DependencyNode(aF);
+      DependencyNode nG = new DependencyNode(aG);
+      DependencyNode nZ = new DependencyNode(aZ);
 
       addEdge(nA, nB);
       addEdge(nA, nD);
@@ -97,15 +96,15 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
       addEdge(nB, nG);
       addEdge(nB, nZ);
 
-      return this.dotBuilder.toString();
+      return this.graphBuilder.toString();
     }
 
-    private void addEdge(GraphNode from, GraphNode to) {
+    private void addEdge(DependencyNode from, DependencyNode to) {
       if (this.globalFilter.include(from.getArtifact())
           && this.globalFilter.include(to.getArtifact())
           && this.targetFilter.include(to.getArtifact())) {
 
-        this.dotBuilder.addEdge(from, to);
+        this.graphBuilder.addEdge(from, to);
       }
     }
 
