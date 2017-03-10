@@ -23,7 +23,9 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * JUnit tests for {@link GraphBuilder}.
@@ -196,6 +198,21 @@ public class GraphBuilderTest {
 
     // assert
     assertEquals("somethingCompletelyDifferent", effectiveNode);
+  }
+
+  @Test
+  public void isEmpty() {
+    // assert
+    assertTrue(this.graphBuilder.isEmpty());
+  }
+
+  @Test
+  public void isEmptyWithData() {
+    // arrange
+    this.graphBuilder.addEdge(this.fromNode, this.toNode);
+
+    // assert
+    assertFalse(this.graphBuilder.isEmpty());
   }
 
   enum TestNodeRenderer implements NodeRenderer<String> {

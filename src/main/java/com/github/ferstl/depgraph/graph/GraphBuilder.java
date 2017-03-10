@@ -90,6 +90,10 @@ public final class GraphBuilder<T> {
     return this;
   }
 
+  public boolean isEmpty() {
+    return this.nodeDefinitions.isEmpty();
+  }
+
   // no edge will be created in case one or both nodes are null.
   public GraphBuilder<T> addEdge(T from, T to) {
     if (from != null && to != null) {
