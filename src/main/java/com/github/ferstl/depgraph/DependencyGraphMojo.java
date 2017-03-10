@@ -87,7 +87,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
     GraphBuilder<DependencyNode> graphBuilder = createGraphBuilder(graphStyleConfigurer);
-    MavenGraphAdapter adapter = createGraphBuilderAdapter(targetFilter);
+    MavenGraphAdapter adapter = createMavenGraphAdapter(targetFilter);
 
     return new SimpleGraphFactory(adapter, globalFilter, graphBuilder);
   }
@@ -102,7 +102,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
         .useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
   }
 
-  private MavenGraphAdapter createGraphBuilderAdapter(ArtifactFilter targetFilter) {
+  private MavenGraphAdapter createMavenGraphAdapter(ArtifactFilter targetFilter) {
     MavenGraphAdapter adapter;
     if (requiresFullGraph()) {
       EnumSet<NodeResolution> resolutions = allOf(NodeResolution.class);
