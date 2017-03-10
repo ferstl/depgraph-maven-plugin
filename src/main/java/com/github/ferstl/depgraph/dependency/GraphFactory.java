@@ -23,6 +23,7 @@ public interface GraphFactory {
   /**
    * Creates a graph for the given {@link MavenProject}.
    *
+   * @param project The maven project to create the graph for.
    * @return The String representation of the created graph.
    * @throws DependencyGraphException In case that the graph cannot be created.
    */
