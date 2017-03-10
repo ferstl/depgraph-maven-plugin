@@ -1,11 +1,11 @@
 package com.github.ferstl.depgraph;
 
-import io.takari.maven.testing.TestResources;
-import io.takari.maven.testing.executor.MavenExecution;
-import io.takari.maven.testing.executor.MavenExecutionResult;
-import io.takari.maven.testing.executor.MavenRuntime;
-import io.takari.maven.testing.executor.MavenVersions;
-import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Locale;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
@@ -13,13 +13,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Locale;
+import io.takari.maven.testing.TestResources;
+import io.takari.maven.testing.executor.MavenExecution;
+import io.takari.maven.testing.executor.MavenExecutionResult;
+import io.takari.maven.testing.executor.MavenRuntime;
+import io.takari.maven.testing.executor.MavenVersions;
+import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 import static java.nio.file.Files.copy;
@@ -62,7 +61,6 @@ public class DocumentationIntegrationTest {
         "module-1/target/dependency-graph.png",
         "module-2/target/dependency-graph.png",
         "sub-parent/module-3/target/dependency-graph.png",
-        // not wanted in the future
         "target/dependency-graph.png",
         "sub-parent/target/dependency-graph.png");
 
@@ -78,7 +76,6 @@ public class DocumentationIntegrationTest {
         "module-1/target/dependency-graph.png",
         "module-2/target/dependency-graph.png",
         "sub-parent/module-3/target/dependency-graph.png",
-        // not wanted in the future
         "target/dependency-graph.png",
         "sub-parent/target/dependency-graph.png");
 
@@ -94,7 +91,6 @@ public class DocumentationIntegrationTest {
         "module-1/target/dependency-graph.png",
         "module-2/target/dependency-graph.png",
         "sub-parent/module-3/target/dependency-graph.png",
-        // not wanted in the future
         "target/dependency-graph.png",
         "sub-parent/target/dependency-graph.png");
 
@@ -113,7 +109,6 @@ public class DocumentationIntegrationTest {
         "module-1/target/dependency-graph.png",
         "module-2/target/dependency-graph.png",
         "sub-parent/module-3/target/dependency-graph.png",
-        // not wanted in the future
         "target/dependency-graph.png",
         "sub-parent/target/dependency-graph.png");
 
@@ -165,7 +160,6 @@ public class DocumentationIntegrationTest {
         "module-1/target/dependency-graph.gml",
         "module-2/target/dependency-graph.gml",
         "sub-parent/module-3/target/dependency-graph.gml",
-        // not wanted in the future
         "target/dependency-graph.gml",
         "sub-parent/target/dependency-graph.gml");
 

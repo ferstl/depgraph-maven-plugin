@@ -90,6 +90,32 @@ public final class GraphBuilder<T> {
     return this;
   }
 
+  public boolean isEmpty() {
+    return this.nodeDefinitions.isEmpty();
+  }
+
+  /**
+   * Adds a single node to the graph.
+   *
+   * @param node The node to add.
+   * @return This builder.
+   */
+  public GraphBuilder<T> addNode(T node) {
+    String nodeId = this.nodeIdRenderer.render(node);
+    String nodeName = this.nodeNameRenderer.render(node);
+    this.nodeDefinitions.put(nodeId, new Node<>(nodeId, nodeName, node));
+
+    return this;
+  }
+
+  /**
+   * Adds the two given nodes to the graph and creates an edge between them <strong>if they are not {@code null}</strong>.
+   * Nothing will be added to the graph if one or both nodes are {@code null}.
+   *
+   * @param from From node.
+   * @param to To node.
+   * @return This builder.
+   */
   // no edge will be created in case one or both nodes are null.
   public GraphBuilder<T> addEdge(T from, T to) {
     if (from != null && to != null) {
@@ -128,12 +154,6 @@ public final class GraphBuilder<T> {
     ImmutableSet<Edge> edgeSet = ImmutableSet.copyOf(this.edges);
 
     return this.graphFormatter.format(this.graphName, nodeList, edgeSet);
-  }
-
-  private void addNode(T node) {
-    String nodeId = this.nodeIdRenderer.render(node);
-    String nodeName = this.nodeNameRenderer.render(node);
-    this.nodeDefinitions.put(nodeId, new Node<>(nodeId, nodeName, node));
   }
 
   private void safelyAddEdge(T fromNode, T toNode) {

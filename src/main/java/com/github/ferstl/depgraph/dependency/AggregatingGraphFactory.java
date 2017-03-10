@@ -57,6 +57,12 @@ public class AggregatingGraphFactory implements GraphFactory {
       }
     }
 
+    // Add the project as single node if the graph is empty
+    Artifact artifact = parent.getArtifact();
+    if (this.graphBuilder.isEmpty() && this.globalFilter.include(artifact)) {
+      this.graphBuilder.addNode(new DependencyNode(artifact));
+    }
+
     return this.graphBuilder.toString();
   }
 

@@ -1,0 +1,9 @@
+digraph "parent" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:compile"[label=<<font point-size="14">com.github.ferstl</font>>]
+
+  // Edge Definitions:
+}

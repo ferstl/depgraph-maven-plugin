@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
@@ -38,6 +39,13 @@ public class SimpleGraphFactory implements GraphFactory {
   public String createGraph(MavenProject project) {
     this.graphBuilder.graphName(project.getArtifactId());
     this.mavenGraphAdapter.buildDependencyGraph(project, this.globalFilter, this.graphBuilder);
+
+    // Add the project as single node if the graph is empty
+    Artifact artifact = project.getArtifact();
+    if (this.graphBuilder.isEmpty() && this.globalFilter.include(artifact)) {
+      this.graphBuilder.addNode(new DependencyNode(artifact));
+    }
+
     return this.graphBuilder.toString();
   }
 
