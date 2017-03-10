@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph.graph;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -198,6 +199,20 @@ public class GraphBuilderTest {
 
     // assert
     assertEquals("somethingCompletelyDifferent", effectiveNode);
+  }
+
+  @Test
+  public void addNode() {
+    // arrange
+    this.graphBuilder.addNode(this.fromNode);
+
+    // act
+    this.graphBuilder.toString();
+
+    // assert
+    Node<?> fromNode = new Node<>(this.fromNode, "", "");
+    assertThat(this.formatter.nodes, contains(new Node[]{fromNode}));
+    assertThat(this.formatter.edges, Matchers.<Edge>empty());
   }
 
   @Test
