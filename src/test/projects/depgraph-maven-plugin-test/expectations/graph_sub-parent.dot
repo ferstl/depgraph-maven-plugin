@@ -1,0 +1,19 @@
+digraph "sub-parent" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:sub-parent:pom:"[label=<sub-parent>]
+  "com.github.ferstl:module-2:jar:"[label=<module-2>]
+  "com.github.ferstl:module-1:jar:"[label=<module-1>]
+  "com.google.guava:guava:jar:"[label=<guava>]
+  "commons-codec:commons-codec:jar:"[label=<commons-codec>]
+  "org.apache.commons:commons-lang3:jar:"[label=<commons-lang3>]
+
+  // Edge Definitions:
+  "com.github.ferstl:sub-parent:pom:" -> "com.github.ferstl:module-2:jar:"
+  "com.github.ferstl:module-2:jar:" -> "com.github.ferstl:module-1:jar:"
+  "com.github.ferstl:module-2:jar:" -> "com.google.guava:guava:jar:"
+  "com.github.ferstl:module-2:jar:" -> "commons-codec:commons-codec:jar:"
+  "com.github.ferstl:module-2:jar:" -> "org.apache.commons:commons-lang3:jar:"
+}
