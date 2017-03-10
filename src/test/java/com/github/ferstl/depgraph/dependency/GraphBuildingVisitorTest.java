@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
-import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.hasNodesAndEdges;
+import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEdges;
 import static java.util.EnumSet.allOf;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;

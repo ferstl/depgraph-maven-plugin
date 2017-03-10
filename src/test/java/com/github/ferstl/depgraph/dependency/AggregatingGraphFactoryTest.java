@@ -27,8 +27,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
-import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.emptyGraph;
-import static com.github.ferstl.depgraph.graph.DotBuilderMatcher.hasNodesAndEdges;
+import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.emptyGraph;
+import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEdges;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;

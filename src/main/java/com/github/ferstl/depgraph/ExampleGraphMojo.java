@@ -44,7 +44,7 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
-    GraphBuilder<DependencyNode> graphBuilder = createDotBuilder(graphStyleConfigurer);
+    GraphBuilder<DependencyNode> graphBuilder = createGraphBuilder(graphStyleConfigurer);
     return new ExampleGraphFactory(graphBuilder, globalFilter, targetFilter);
   }
 

@@ -25,7 +25,7 @@ import com.github.ferstl.depgraph.dependency.DependencyNode;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 
-public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<GraphBuilder<DependencyNode>> {
+public final class GraphBuilderMatcher extends TypeSafeDiagnosingMatcher<GraphBuilder<DependencyNode>> {
 
   private static final String[] EMPTY_ARRAY = new String[0];
   private static final String NODE_PATTERN = "\\s*\"[\\w\\p{Punct}]+\"(\\[.+\\])?\\s*";
@@ -38,22 +38,22 @@ public final class DotBuilderMatcher extends TypeSafeDiagnosingMatcher<GraphBuil
   private List<String> edges;
 
 
-  private DotBuilderMatcher(String[] expectedNodes, String[] expectedEdges) {
+  private GraphBuilderMatcher(String[] expectedNodes, String[] expectedEdges) {
     this.expectedNodes = expectedNodes;
     this.expectedEdges = expectedEdges;
   }
 
 
-  public static DotBuilderMatcher hasNodesAndEdges(String[] nodes, String[] edges) {
-    return new DotBuilderMatcher(nodes, edges);
+  public static GraphBuilderMatcher hasNodesAndEdges(String[] nodes, String[] edges) {
+    return new GraphBuilderMatcher(nodes, edges);
   }
 
-  public static DotBuilderMatcher hasNodes(String... nodes) {
-    return new DotBuilderMatcher(nodes, EMPTY_ARRAY);
+  public static GraphBuilderMatcher hasNodes(String... nodes) {
+    return new GraphBuilderMatcher(nodes, EMPTY_ARRAY);
   }
 
-  public static DotBuilderMatcher emptyGraph() {
-    return new DotBuilderMatcher(EMPTY_ARRAY, EMPTY_ARRAY);
+  public static GraphBuilderMatcher emptyGraph() {
+    return new GraphBuilderMatcher(EMPTY_ARRAY, EMPTY_ARRAY);
   }
 
 

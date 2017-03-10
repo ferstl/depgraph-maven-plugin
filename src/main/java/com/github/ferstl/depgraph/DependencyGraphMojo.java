@@ -86,13 +86,13 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
-    GraphBuilder<DependencyNode> graphBuilder = createDotBuilder(graphStyleConfigurer);
+    GraphBuilder<DependencyNode> graphBuilder = createGraphBuilder(graphStyleConfigurer);
     MavenGraphAdapter adapter = createGraphBuilderAdapter(targetFilter);
 
     return new SimpleGraphFactory(adapter, globalFilter, graphBuilder);
   }
 
-  GraphBuilder<DependencyNode> createDotBuilder(GraphStyleConfigurer graphStyleConfigurer) {
+  GraphBuilder<DependencyNode> createGraphBuilder(GraphStyleConfigurer graphStyleConfigurer) {
     return graphStyleConfigurer
         .showGroupIds(this.showGroupIds)
         .showArtifactIds(true)
