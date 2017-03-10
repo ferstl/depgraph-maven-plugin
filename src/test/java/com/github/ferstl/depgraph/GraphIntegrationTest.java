@@ -94,6 +94,19 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void aggregateWithoutDependencies() throws Exception {
+    File basedir = this.resources.getBasedir("empty");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=gml")
+        .execute("clean", "package", "depgraph:aggregate");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.gml");
+    assertFileContents(basedir, "expectations/aggregate-without-dependencies.gml", "target/dependency-graph.gml");
+  }
+
+  @Test
   public void graphInGml() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
