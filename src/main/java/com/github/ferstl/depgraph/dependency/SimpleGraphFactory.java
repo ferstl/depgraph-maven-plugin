@@ -20,7 +20,7 @@ import org.apache.maven.project.MavenProject;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
- * A graph factory that creates a graph from a non multi-module project.
+ * A graph factory that creates a graph from a single-module project.
  */
 public class SimpleGraphFactory implements GraphFactory {
 
