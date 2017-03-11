@@ -47,11 +47,12 @@ public final class GraphBuilder<T> {
   }
 
   public GraphBuilder() {
+    DotAttributeBuilder graphAttributeBuilder = new DotAttributeBuilder();
     DotAttributeBuilder nodeAttributeBuilder = new DotAttributeBuilder().shape("box").fontName("Helvetica");
     DotAttributeBuilder edgeAttributeBuilder = new DotAttributeBuilder().fontName("Helvetica").fontSize(10);
 
     this.graphName = "G";
-    this.graphFormatter = new DotGraphFormatter(nodeAttributeBuilder, edgeAttributeBuilder);
+    this.graphFormatter = new DotGraphFormatter(graphAttributeBuilder, nodeAttributeBuilder, edgeAttributeBuilder);
     this.nodeIdRenderer = createDefaultNodeIdRenderer();
     this.nodeNameRenderer = createDefaultNodeNameRenderer();
     this.edgeRenderer = createDefaultEdgeRenderer();

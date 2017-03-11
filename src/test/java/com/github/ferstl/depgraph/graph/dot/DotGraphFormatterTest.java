@@ -1,9 +1,9 @@
 package com.github.ferstl.depgraph.graph.dot;
 
-import com.github.ferstl.depgraph.graph.Edge;
-import com.github.ferstl.depgraph.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
+import com.github.ferstl.depgraph.graph.Edge;
+import com.github.ferstl.depgraph.graph.Node;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -14,9 +14,10 @@ public class DotGraphFormatterTest {
 
   @Before
   public void before() {
+    DotAttributeBuilder graphAttributeBuilder = new DotAttributeBuilder();
     DotAttributeBuilder nodeAttributeBuilder = new DotAttributeBuilder().shape("box").fontName("Helvetica");
     DotAttributeBuilder edgeAttributeBuilder = new DotAttributeBuilder().fontName("Helvetica").fontSize(10);
-    this.formatter = new DotGraphFormatter(nodeAttributeBuilder, edgeAttributeBuilder);
+    this.formatter = new DotGraphFormatter(graphAttributeBuilder, nodeAttributeBuilder, edgeAttributeBuilder);
   }
 
   @Test
