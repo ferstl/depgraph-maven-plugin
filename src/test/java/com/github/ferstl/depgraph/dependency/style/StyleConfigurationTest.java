@@ -66,6 +66,7 @@ public class StyleConfigurationTest {
   public void loadWithOverride() {
     StyleConfiguration config = StyleConfiguration.load(this.testStyle, this.testOverride);
 
+    assertEquals("[rankdir=\"LR\"]", config.graphAttributes().toString());
     assertEquals("[shape=\"ellipse\",color=\"black\",fontname=\"Courier\",fontsize=\"14\",fontcolor=\"green\"]", config.defaultNodeAttributes().toString());
     assertEquals("[style=\"dashed\",color=\"blue\"]", config.defaultEdgeAttributes().toString());
     assertEquals("[style=\"dotted\",color=\"blue\"]", config.edgeAttributes(NodeResolution.INCLUDED, "test").toString());
