@@ -83,7 +83,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void exampleInDot() throws Exception {
-    File basedir = this.resources.getBasedir("empty");
+    File basedir = this.resources.getBasedir("no-dependencies");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .execute("clean", "package", "depgraph:example");
@@ -95,7 +95,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void aggregateWithoutDependencies() throws Exception {
-    File basedir = this.resources.getBasedir("empty");
+    File basedir = this.resources.getBasedir("no-dependencies");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DgraphFormat=gml")
