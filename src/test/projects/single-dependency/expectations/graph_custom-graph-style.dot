@@ -1,0 +1,12 @@
+digraph "single-dependency" {
+  graph [rankdir="LR"]
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:single-dependency:jar:"[label=<single-dependency>]
+  "com.google.guava:guava:jar:"[label=<guava>]
+
+  // Edge Definitions:
+  "com.github.ferstl:single-dependency:jar:" -> "com.google.guava:guava:jar:"
+}
