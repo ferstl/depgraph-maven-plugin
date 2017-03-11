@@ -101,7 +101,6 @@ public class GraphIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DcustomStyleConfiguration=" + styleConfiguration)
-        .withCliOption("-DcreateImage=true")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
