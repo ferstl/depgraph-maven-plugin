@@ -89,6 +89,10 @@ public class DotAttributeBuilder {
     return this;
   }
 
+  public boolean isEmpty() {
+    return this.attributes.isEmpty();
+  }
+
   @Override
   public String toString() {
     if (this.attributes.isEmpty()) {
