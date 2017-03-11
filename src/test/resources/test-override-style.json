@@ -1,13 +1,16 @@
 {
+  "graph": {
+    "rankdir": "LR"
+  },
   "default-node": {
     "type": "ellipse"
   },
   "default-edge": {
     "style": "dashed"
   },
-  "edge-scope-styles" : {
-    "test" : {
-      "color" : "blue"
+  "edge-scope-styles": {
+    "test": {
+      "color": "blue"
     }
   },
   "edge-resolution-styles": {

@@ -83,7 +83,7 @@ public class GraphIntegrationTest {
 
   @Test
   public void exampleInDot() throws Exception {
-    File basedir = this.resources.getBasedir("empty");
+    File basedir = this.resources.getBasedir("no-dependencies");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .execute("clean", "package", "depgraph:example");
@@ -94,8 +94,24 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void customGraphStyle() throws Exception {
+    File basedir = this.resources.getBasedir("single-dependency");
+    String styleConfiguration = basedir.toPath().resolve("graph-style.json").toAbsolutePath().toString();
+
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DcustomStyleConfiguration=" + styleConfiguration)
+        .withCliOption("-DcreateImage=true")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/graph_custom-graph-style.dot", "target/dependency-graph.dot");
+  }
+
+  @Test
   public void aggregateWithoutDependencies() throws Exception {
-    File basedir = this.resources.getBasedir("empty");
+    File basedir = this.resources.getBasedir("no-dependencies");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DgraphFormat=gml")

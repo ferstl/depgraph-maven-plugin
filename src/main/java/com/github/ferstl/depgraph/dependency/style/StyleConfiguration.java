@@ -37,6 +37,7 @@ import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 
 public class StyleConfiguration {
 
+  private final Graph graph = new Graph();
   private AbstractNode defaultNode = new Box();
   private final Edge defaultEdge = new Edge();
   private final Map<StyleKey, AbstractNode> nodeStyles = new LinkedHashMap<>();
@@ -81,6 +82,10 @@ public class StyleConfiguration {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public DotAttributeBuilder graphAttributes() {
+    return this.graph.createAttributes();
   }
 
   public DotAttributeBuilder defaultNodeAttributes() {
@@ -129,6 +134,7 @@ public class StyleConfiguration {
   }
 
   private void merge(StyleConfiguration other) {
+    this.graph.merge(other.graph);
     // We have to deal with subclasses here. Hence the double merge.
     this.defaultNode.merge(other.defaultNode);
     other.defaultNode.merge(this.defaultNode);

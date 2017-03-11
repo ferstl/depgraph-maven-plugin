@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.ferstl</groupId>
-  <artifactId>empty</artifactId>
+  <artifactId>no-dependencies</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <build>

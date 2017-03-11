@@ -47,7 +47,7 @@ public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
     DotDependencyEdgeRenderer edgeRenderer = new DotDependencyEdgeRenderer(this.showVersionOnEdges, this.styleConfiguration);
 
     return graphBuilder
-        .graphFormatter(new DotGraphFormatter(this.styleConfiguration.defaultNodeAttributes(), this.styleConfiguration.defaultEdgeAttributes()))
+        .graphFormatter(new DotGraphFormatter(this.styleConfiguration.graphAttributes(), this.styleConfiguration.defaultNodeAttributes(), this.styleConfiguration.defaultEdgeAttributes()))
         .useNodeNameRenderer(nodeNameRenderer)
         .useEdgeRenderer(edgeRenderer);
   }

@@ -18,6 +18,8 @@ package com.github.ferstl.depgraph.graph.dot;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * JUnit tests for {@link DotAttributeBuilder}.
@@ -92,6 +94,11 @@ public class DotAttributeBuilderTest {
   }
 
   @Test
+  public void rankdir() {
+    assertEquals("[rankdir=\"LR\"]", new DotAttributeBuilder().rankdir("LR").toString());
+  }
+
+  @Test
   public void addAttribute() {
     assertEquals("[someAttribute=\"someValue\"]", new DotAttributeBuilder().addAttribute("someAttribute", "someValue").toString());
   }
@@ -114,6 +121,16 @@ public class DotAttributeBuilderTest {
   @Test
   public void escaping() {
     assertEquals("[label=\"some\\nLabel\"]", new DotAttributeBuilder().label("some\nLabel").toString());
+  }
+
+  @Test
+  public void isEmptyWithData() {
+    assertFalse(new DotAttributeBuilder().label("some label").isEmpty());
+  }
+
+  @Test
+  public void isEmptyWithoutData() {
+    assertTrue(new DotAttributeBuilder().isEmpty());
   }
 
 }
