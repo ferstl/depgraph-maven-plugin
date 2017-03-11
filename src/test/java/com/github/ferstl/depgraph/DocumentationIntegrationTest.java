@@ -131,6 +131,8 @@ public class DocumentationIntegrationTest {
     runTest("aggregate-by-groupid");
 
     assertFilesPresent(this.basedir, "target/dependency-graph.png");
+
+    collectFile("target/dependency-graph.png", "by-group-id.png");
   }
 
   @Test
@@ -145,7 +147,7 @@ public class DocumentationIntegrationTest {
 
     assertFilesPresent(this.basedir, "target/dependency-graph.png");
 
-    collectFile("target/dependency-graph.png", "by-group-id.png");
+    collectFile("target/dependency-graph.png", "aggregated-styled.png");
   }
 
   @Test
