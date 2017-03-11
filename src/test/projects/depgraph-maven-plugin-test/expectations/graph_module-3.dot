@@ -12,8 +12,7 @@ digraph "module-3" {
   "com.mysema.querydsl:querydsl-core:jar:"[label=<querydsl-core>]
   "com.google.code.findbugs:jsr305:jar:"[label=<jsr305>]
   "com.mysema.commons:mysema-commons-lang:jar:"[label=<mysema-commons-lang>]
-  "cglib:cglib:jar:"[label=<cglib>]
-  "asm:asm:jar:"[label=<asm>]
+  "com.infradna.tool:bridge-method-annotation:jar:"[label=<bridge-method-annotation>]
 
   // Edge Definitions:
   "com.github.ferstl:module-3:jar:" -> "com.github.ferstl:module-1:jar:"
@@ -24,6 +23,5 @@ digraph "module-3" {
   "com.github.ferstl:module-3:jar:" -> "com.mysema.querydsl:querydsl-core:jar:"
   "com.mysema.querydsl:querydsl-core:jar:" -> "com.google.code.findbugs:jsr305:jar:"
   "com.mysema.querydsl:querydsl-core:jar:" -> "com.mysema.commons:mysema-commons-lang:jar:"
-  "com.mysema.querydsl:querydsl-core:jar:" -> "cglib:cglib:jar:"
-  "cglib:cglib:jar:" -> "asm:asm:jar:"
+  "com.mysema.querydsl:querydsl-core:jar:" -> "com.infradna.tool:bridge-method-annotation:jar:"
 }

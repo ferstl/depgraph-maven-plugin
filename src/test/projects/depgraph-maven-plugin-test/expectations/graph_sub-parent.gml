@@ -24,14 +24,14 @@ node [
 id "com.google.guava:guava:jar:"
 label "com.google.guava
 guava
-16.0.1"
+21.0"
 ]
 
 node [
 id "commons-codec:commons-codec:jar:"
 label "commons-codec
 commons-codec
-1.6"
+1.10"
 ]
 
 node [

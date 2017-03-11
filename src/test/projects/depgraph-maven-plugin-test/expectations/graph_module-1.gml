@@ -10,7 +10,7 @@ node [
 id "commons-codec:commons-codec:jar:"
 label "commons-codec
 commons-codec
-1.6"
+1.10"
 ]
 
 node [
@@ -24,7 +24,7 @@ node [
 id "junit:junit:jar:"
 label "junit
 junit
-4.11"
+4.12"
 ]
 
 node [

@@ -17,7 +17,7 @@ node [
 id "commons-codec:commons-codec:jar:"
 label "commons-codec
 commons-codec
-1.6"
+1.10"
 ]
 
 node [
@@ -38,14 +38,14 @@ node [
 id "com.google.guava:guava:jar:"
 label "com.google.guava
 guava
-16.0.1"
+21.0"
 ]
 
 node [
 id "com.mysema.querydsl:querydsl-core:jar:"
 label "com.mysema.querydsl
 querydsl-core
-3.3.0"
+3.7.4"
 ]
 
 node [
@@ -63,17 +63,10 @@ mysema-commons-lang
 ]
 
 node [
-id "cglib:cglib:jar:"
-label "cglib
-cglib
-2.2.2"
-]
-
-node [
-id "asm:asm:jar:"
-label "asm
-asm
-3.3.1"
+id "com.infradna.tool:bridge-method-annotation:jar:"
+label "com.infradna.tool
+bridge-method-annotation
+1.13"
 ]
 
 edge [
@@ -118,12 +111,7 @@ target "com.mysema.commons:mysema-commons-lang:jar:"
 
 edge [
 source "com.mysema.querydsl:querydsl-core:jar:"
-target "cglib:cglib:jar:"
-]
-
-edge [
-source "cglib:cglib:jar:"
-target "asm:asm:jar:"
+target "com.infradna.tool:bridge-method-annotation:jar:"
 ]
 
 ]
