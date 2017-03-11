@@ -92,6 +92,11 @@ public class DotAttributeBuilderTest {
   }
 
   @Test
+  public void rankdir() {
+    assertEquals("[rankdir=\"LR\"]", new DotAttributeBuilder().rankdir("LR").toString());
+  }
+
+  @Test
   public void addAttribute() {
     assertEquals("[someAttribute=\"someValue\"]", new DotAttributeBuilder().addAttribute("someAttribute", "someValue").toString());
   }

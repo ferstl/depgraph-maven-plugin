@@ -78,6 +78,10 @@ public class DotAttributeBuilder {
     return addAttribute("shape", shape);
   }
 
+  public DotAttributeBuilder rankdir(String rankdir) {
+    return addAttribute("rankdir", rankdir);
+  }
+
   public DotAttributeBuilder addAttribute(String key, String value) {
     if (value != null) {
       this.attributes.put(key, escape(value));
