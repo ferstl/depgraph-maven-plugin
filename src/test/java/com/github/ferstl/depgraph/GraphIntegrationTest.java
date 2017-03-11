@@ -132,6 +132,7 @@ public class GraphIntegrationTest {
         .withCliOption("-DshowConflicts=true")
         .execute("clean", "package", "depgraph:graph");
 
+    result.assertErrorFreeLog();
     assertFilesPresent(
         basedir,
         "module-1/target/dependency-graph.gml",
