@@ -122,6 +122,32 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void targetIncludes() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=gml")
+        .withCliOption("-DtargetIncludes=*:guava")
+        .withCliOption("-DshowDuplicates=true")
+        .withCliOption("-DshowConflicts=true")
+        .execute("clean", "package", "depgraph:graph");
+
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.gml",
+        "module-2/target/dependency-graph.gml",
+        "sub-parent/module-3/target/dependency-graph.gml",
+        "target/dependency-graph.gml",
+        "sub-parent/target/dependency-graph.gml");
+
+    assertFileContents(basedir, "expectations/graph_target-includes_parent.gml", "target/dependency-graph.gml");
+    assertFileContents(basedir, "expectations/graph_target-includes_module-1.gml", "module-1/target/dependency-graph.gml");
+    assertFileContents(basedir, "expectations/graph_target-includes_module-2.gml", "module-2/target/dependency-graph.gml");
+    assertFileContents(basedir, "expectations/graph_target-includes_sub-parent.gml", "sub-parent/target/dependency-graph.gml");
+    assertFileContents(basedir, "expectations/graph_target-includes_module-3.gml", "sub-parent/module-3/target/dependency-graph.gml");
+  }
+
+  @Test
   public void graphInGml() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
