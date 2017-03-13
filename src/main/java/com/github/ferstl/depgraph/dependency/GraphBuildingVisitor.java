@@ -33,14 +33,14 @@ import static java.util.EnumSet.allOf;
 class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
 
   private final GraphBuilder<DependencyNode> graphBuilder;
-  private final Deque<DependencyNode> stack;
+  private final Deque<DependencyNode> nodeStack;
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
   GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.graphBuilder = graphBuilder;
-    this.stack = new ArrayDeque<>();
+    this.nodeStack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
     this.targetFilter = targetFilter;
     this.includedResolutions = includedResolutions;
@@ -71,7 +71,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   private boolean internalVisit(DependencyNode node) {
-    DependencyNode currentParent = this.stack.peek();
+    DependencyNode currentParent = this.nodeStack.peek();
 
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
       if (currentParent != null && this.includedResolutions.contains(node.getResolution())) {
@@ -80,7 +80,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
         this.graphBuilder.addEdge(currentParent, node);
       }
 
-      this.stack.push(node);
+      this.nodeStack.push(node);
 
       return true;
     }
@@ -109,7 +109,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
   private boolean internalEndVisit(DependencyNode node) {
     if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
-      this.stack.pop();
+      this.nodeStack.pop();
     }
 
     return true;
