@@ -89,7 +89,7 @@
     <maven-site-plugin.version>3.4</maven-site-plugin.version>
     <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-    <jacoco-mavan-plugin.version>0.7.7.201606060606</jacoco-mavan-plugin.version>
+    <jacoco-mavan-plugin.version>0.7.9</jacoco-mavan-plugin.version>
     <takari-lifecycle-plugin.version>1.12.3</takari-lifecycle-plugin.version>
 
     <!-- Other settings. -->
