@@ -33,7 +33,7 @@ class Edge {
   }
 
   private Font getFont() {
-    return this.font != null ? this.font : new Font();
+    return this.font;
   }
 
   void merge(Edge other) {

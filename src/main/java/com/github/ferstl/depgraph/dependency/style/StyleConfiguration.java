@@ -63,12 +63,11 @@ public class StyleConfiguration {
         .addKeySerializer(NodeResolution.class, new NodeResolutionSerializer())
         .addDeserializer(NodeResolution.class, new NodeResolutionDeserializer());
 
-    ObjectMapper mapper = new ObjectMapper()
+    return new ObjectMapper()
         .registerModule(module)
         .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
         .setSerializationInclusion(Include.NON_EMPTY)
         .setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-    return mapper;
   }
 
   private static StyleConfiguration readConfig(ObjectReader reader, StyleResource config) {
