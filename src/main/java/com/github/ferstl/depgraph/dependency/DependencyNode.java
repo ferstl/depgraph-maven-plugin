@@ -112,7 +112,7 @@ public final class DependencyNode {
       return Collections2.transform(this.graphNode.getChildren(), GraphNode2Adapter.INSTANCE);
     } else {
       // impossible case
-      return null;
+      throw new IllegalStateException("Tree node and graph node are null");
     }
   }
 
