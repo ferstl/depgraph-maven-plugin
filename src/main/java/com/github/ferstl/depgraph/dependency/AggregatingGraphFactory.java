@@ -90,13 +90,13 @@ public class AggregatingGraphFactory implements GraphFactory {
   }
 
   private boolean isPartOfGraph(MavenProject project) {
-    boolean result = this.globalFilter.include(project.getArtifact());
+    boolean isIncluded = this.globalFilter.include(project.getArtifact());
     // Project is not filtered and is a parent project
-    if (result && project.getModules().size() > 0) {
-      result = result && this.includeParentProjects;
+    if (isIncluded && project.getModules().size() > 0) {
+      return this.includeParentProjects;
     }
 
-    return result;
+    return isIncluded;
   }
 
   private DependencyNode filterProject(MavenProject project) {
