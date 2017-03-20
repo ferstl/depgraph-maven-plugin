@@ -101,7 +101,7 @@ public class DotAttributeBuilder {
 
     StringBuilder sb = new StringBuilder("[");
     for (Entry<String, String> attribute : this.attributes.entrySet()) {
-      sb.append(attribute.getKey() + "=" + attribute.getValue()).append(",");
+      sb.append(attribute.getKey()).append("=").append(attribute.getValue()).append(",");
     }
 
     return sb.delete(sb.length() - 1, sb.length())
