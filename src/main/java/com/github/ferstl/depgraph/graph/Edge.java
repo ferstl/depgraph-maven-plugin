@@ -42,7 +42,8 @@ public final class Edge {
     return Objects.hash(this.fromNodeId, this.toNodeId, this.name);
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return this.fromNodeId + " -> " + this.toNodeId + " (" + this.name + ")";
   }
 }
