@@ -167,7 +167,7 @@ public final class GraphBuilder<T> {
     }
   }
 
-  static <T> EdgeRenderer<T> createDefaultEdgeRenderer() {
+  private static <T> EdgeRenderer<T> createDefaultEdgeRenderer() {
     return new EdgeRenderer<T>() {
 
       @Override
@@ -178,7 +178,7 @@ public final class GraphBuilder<T> {
     };
   }
 
-  static <T> NodeRenderer<T> createDefaultNodeIdRenderer() {
+  private static <T> NodeRenderer<T> createDefaultNodeIdRenderer() {
     return new NodeRenderer<T>() {
 
       @Override
@@ -188,7 +188,7 @@ public final class GraphBuilder<T> {
     };
   }
 
-  static <T> NodeRenderer<T> createDefaultNodeNameRenderer() {
+  private static <T> NodeRenderer<T> createDefaultNodeNameRenderer() {
     return new NodeRenderer<T>() {
 
       @Override
