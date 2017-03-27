@@ -38,7 +38,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
-  private final boolean onTargetPath = true;
+  private final boolean onTargetPath = false;
 
   GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.graphBuilder = graphBuilder;
@@ -91,7 +91,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   public boolean internalVisit2(DependencyNode node) {
-    if (!this.globalFilter.include(node.getArtifact())) {
+    if (!this.globalFilter.include(node.getArtifact()) || !this.includedResolutions.contains(node.getResolution())) {
       return false;
     }
 
@@ -101,7 +101,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
   private boolean internalEndVisit2(DependencyNode node) {
     Artifact artifact = node.getArtifact();
-    if (!this.globalFilter.include(artifact)) {
+    if (!this.globalFilter.include(artifact) || !this.includedResolutions.contains(node.getResolution())) {
       return false;
     }
 
