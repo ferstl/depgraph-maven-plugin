@@ -38,6 +38,8 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
+  private final boolean onTargetPath = true;
+
   GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.graphBuilder = graphBuilder;
     this.nodeStack = new ArrayDeque<>();
@@ -52,22 +54,22 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
   @Override
   public boolean visit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalVisit(new DependencyNode(node));
+    return internalVisit2(new DependencyNode(node));
   }
 
   @Override
   public boolean endVisit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalEndVisit(new DependencyNode(node));
+    return internalEndVisit2(new DependencyNode(node));
   }
 
   @Override
   public boolean visit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalVisit(new DependencyNode(node));
+    return internalVisit2(new DependencyNode(node));
   }
 
   @Override
   public boolean endVisit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalEndVisit(new DependencyNode(node));
+    return internalEndVisit2(new DependencyNode(node));
   }
 
   private boolean internalVisit(DependencyNode node) {
@@ -86,6 +88,35 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
     }
 
     return false;
+  }
+
+  public boolean internalVisit2(DependencyNode node) {
+    if (!this.globalFilter.include(node.getArtifact())) {
+      return false;
+    }
+
+    this.nodeStack.push(node);
+    return true;
+  }
+
+  private boolean internalEndVisit2(DependencyNode node) {
+    Artifact artifact = node.getArtifact();
+    if (!this.globalFilter.include(artifact)) {
+      return false;
+    }
+
+    DependencyNode currentParent = this.nodeStack.peek();
+    if (artifact.equals(currentParent.getArtifact())) {
+      this.nodeStack.pop();
+      currentParent = this.nodeStack.peek();
+    }
+
+    if (currentParent != null) {
+      mergeWithExisting(node);
+      this.graphBuilder.addEdge(currentParent, node);
+    }
+
+    return true;
   }
 
   private void mergeWithExisting(DependencyNode node) {
