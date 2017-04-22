@@ -5,13 +5,13 @@ import org.junit.Test;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
 import static org.junit.Assert.assertEquals;
 
-public class SimpleDependencyNodeNameRendererTest {
+public class GmlDependencyNodeNameRendererTest {
 
   @Test
   public void renderNothing() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    SimpleDependencyNodeNameRenderer renderer = new SimpleDependencyNodeNameRenderer(false, false, false);
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, false, false);
 
     // act
     String result = renderer.render(node);
@@ -24,7 +24,7 @@ public class SimpleDependencyNodeNameRendererTest {
   public void renderGroupId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    SimpleDependencyNodeNameRenderer renderer = new SimpleDependencyNodeNameRenderer(true, false, false);
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, false, false);
 
     // act
     String result = renderer.render(node);
@@ -37,7 +37,7 @@ public class SimpleDependencyNodeNameRendererTest {
   public void renderArtifactId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    SimpleDependencyNodeNameRenderer renderer = new SimpleDependencyNodeNameRenderer(false, true, false);
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, false);
 
     // act
     String result = renderer.render(node);
@@ -50,7 +50,7 @@ public class SimpleDependencyNodeNameRendererTest {
   public void renderVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    SimpleDependencyNodeNameRenderer renderer = new SimpleDependencyNodeNameRenderer(false, false, true);
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, false, true);
 
     // act
     String result = renderer.render(node);
@@ -63,7 +63,7 @@ public class SimpleDependencyNodeNameRendererTest {
   public void renderGroupIdArtifactIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    SimpleDependencyNodeNameRenderer renderer = new SimpleDependencyNodeNameRenderer(true, true, true);
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, true, true);
 
     // act
     String result = renderer.render(node);
@@ -80,7 +80,7 @@ public class SimpleDependencyNodeNameRendererTest {
   public void renderGroupIdArtifactId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    SimpleDependencyNodeNameRenderer renderer = new SimpleDependencyNodeNameRenderer(true, true, false);
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, true, false);
 
     // act
     String result = renderer.render(node);
@@ -96,7 +96,7 @@ public class SimpleDependencyNodeNameRendererTest {
   public void renderGroupIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    SimpleDependencyNodeNameRenderer renderer = new SimpleDependencyNodeNameRenderer(true, false, true);
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, false, true);
 
     // act
     String result = renderer.render(node);
@@ -112,7 +112,7 @@ public class SimpleDependencyNodeNameRendererTest {
   public void renderArtifactIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    SimpleDependencyNodeNameRenderer renderer = new SimpleDependencyNodeNameRenderer(false, true, true);
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, true);
 
     // act
     String result = renderer.render(node);

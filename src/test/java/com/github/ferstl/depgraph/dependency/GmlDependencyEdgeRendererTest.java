@@ -6,12 +6,12 @@ import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDep
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNodeWithConflict;
 import static org.junit.Assert.assertEquals;
 
-public class SimpleDependencyEdgeRendererTest {
+public class GmlDependencyEdgeRendererTest {
 
   @Test
   public void renderWithoutVersion() {
     // arrange
-    SimpleDependencyEdgeRenderer renderer = new SimpleDependencyEdgeRenderer(false);
+    GmlDependencyEdgeRenderer renderer = new GmlDependencyEdgeRenderer(false);
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
     DependencyNode to = createDependencyNode("group2", "artifact2", "version2");
 
@@ -25,7 +25,7 @@ public class SimpleDependencyEdgeRendererTest {
   @Test
   public void renderWithNonConflictingVersion() {
     // arrange
-    SimpleDependencyEdgeRenderer renderer = new SimpleDependencyEdgeRenderer(true);
+    GmlDependencyEdgeRenderer renderer = new GmlDependencyEdgeRenderer(true);
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
     DependencyNode to = createDependencyNode("group2", "artifact2", "version2");
 
@@ -39,7 +39,7 @@ public class SimpleDependencyEdgeRendererTest {
   @Test
   public void renderWithConflictingVersion() {
     // arrange
-    SimpleDependencyEdgeRenderer renderer = new SimpleDependencyEdgeRenderer(true);
+    GmlDependencyEdgeRenderer renderer = new GmlDependencyEdgeRenderer(true);
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
     DependencyNode to = createDependencyNodeWithConflict("group2", "artifact2", "version2");
 

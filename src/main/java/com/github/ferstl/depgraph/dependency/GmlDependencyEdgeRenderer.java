@@ -4,11 +4,11 @@ import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
 import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviateVersion;
 
-public class SimpleDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
+public class GmlDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
 
   private final boolean renderVersion;
 
-  public SimpleDependencyEdgeRenderer(boolean renderVersion) {
+  public GmlDependencyEdgeRenderer(boolean renderVersion) {
     this.renderVersion = renderVersion;
   }
 
