@@ -41,6 +41,7 @@ target "com.google.guava:guava:jar:"
 graphics
 [
 style "dotted"
+targetArrow "standard"
 ]
 ]
 

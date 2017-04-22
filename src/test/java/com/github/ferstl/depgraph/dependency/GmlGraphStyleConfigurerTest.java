@@ -32,6 +32,7 @@ public class GmlGraphStyleConfigurerTest extends AbstractGraphStyleConfigurerTes
     String edgeName = "\ngraphics\n"
         + "[\n"
         + "style \"dashed\"\n"
+        + "targetArrow \"standard\"\n"
         + "fill \"#FF0000\"\n"
         + "]";
 

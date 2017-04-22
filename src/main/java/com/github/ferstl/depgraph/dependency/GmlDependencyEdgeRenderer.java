@@ -35,7 +35,8 @@ public class GmlDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
     builder.append("\n")
         .append("graphics\n")
         .append("[\n")
-        .append("style \"").append(edgeStyle).append("\"");
+        .append("style \"").append(edgeStyle).append("\"").append("\n")
+        .append("targetArrow \"").append("standard").append("\"");
 
     if (!color.isEmpty()) {
       builder.append("\n")
