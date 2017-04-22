@@ -17,7 +17,7 @@ import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions("3.3.9")
+@MavenVersions({"3.3.9", "3.5.0"})
 public class GraphIntegrationTest {
 
   @Rule

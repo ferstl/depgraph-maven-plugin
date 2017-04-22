@@ -29,7 +29,7 @@ import static org.junit.Assume.assumeTrue;
  * Integration test that creates the images for this plugin's README.MD documentation.
  */
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions("3.3.9")
+@MavenVersions({"3.3.9", "3.5.0"})
 public class DocumentationIntegrationTest {
 
   @Rule
