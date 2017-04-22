@@ -155,6 +155,7 @@ public class DocumentationIntegrationTest {
     runTest("graph",
         "-DgraphFormat=gml",
         "-DshowVersions=true",
+        "-DshowDuplicates=true",
         "-DshowConflicts=true");
 
     assertFilesPresent(
