@@ -30,8 +30,8 @@ public class DotGraphStyleConfigurerTest extends AbstractGraphStyleConfigurerTes
   }
 
   @Override
-  protected String getEdgeNameForConflictingVersion(String conflictingVersion) {
-    return "[label=\"" + conflictingVersion + "\"]";
+  protected String getEdgeNameForConflictingVersion(String conflictingVersion, boolean showVersion) {
+    return showVersion ? "[label=\"" + conflictingVersion + "\"]" : "";
   }
 
   @Override

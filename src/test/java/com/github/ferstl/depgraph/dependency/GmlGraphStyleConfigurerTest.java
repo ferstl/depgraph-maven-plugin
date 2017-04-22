@@ -28,8 +28,18 @@ public class GmlGraphStyleConfigurerTest extends AbstractGraphStyleConfigurerTes
   }
 
   @Override
-  protected String getEdgeNameForConflictingVersion(String conflictingVersion) {
-    return "label \"" + conflictingVersion + "\"";
+  protected String getEdgeNameForConflictingVersion(String conflictingVersion, boolean showVersion) {
+    String edgeName = "\ngraphics\n"
+        + "[\n"
+        + "style \"dashed\"\n"
+        + "fill \"#FF0000\"\n"
+        + "]";
+
+    if (showVersion) {
+      edgeName = "label \"" + conflictingVersion + "\"" + edgeName;
+    }
+
+    return edgeName;
   }
 
   @Override

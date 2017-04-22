@@ -47,6 +47,11 @@ public class GmlDependencyEdgeRendererTest {
     String result = renderer.render(from, to);
 
     // assert
-    assertEquals("label \"version2\"", result);
+    assertEquals("label \"version2\"\n"
+        + "graphics\n"
+        + "[\n"
+        + "style \"dashed\"\n"
+        + "fill \"#FF0000\"\n"
+        + "]", result);
   }
 }
