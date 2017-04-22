@@ -17,7 +17,7 @@ public class SimpleDependencyEdgeRenderer implements EdgeRenderer<DependencyNode
     NodeResolution resolution = to.getResolution();
 
     if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersion) {
-      return abbreviateVersion(to.getArtifact().getVersion());
+      return "label \"" + abbreviateVersion(to.getArtifact().getVersion()) + "\"";
     }
 
     return "";

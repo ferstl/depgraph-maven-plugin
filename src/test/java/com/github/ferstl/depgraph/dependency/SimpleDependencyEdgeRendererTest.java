@@ -47,6 +47,6 @@ public class SimpleDependencyEdgeRendererTest {
     String result = renderer.render(from, to);
 
     // assert
-    assertEquals("version2", result);
+    assertEquals("label \"version2\"", result);
   }
 }

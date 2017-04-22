@@ -30,7 +30,7 @@ public class SimpleDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    assertEquals("groupId", result);
+    assertEquals("label \"groupId\"", result);
   }
 
   @Test
@@ -43,7 +43,7 @@ public class SimpleDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    assertEquals("artifactId", result);
+    assertEquals("label \"artifactId\"", result);
   }
 
   @Test
@@ -56,7 +56,7 @@ public class SimpleDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    assertEquals("version", result);
+    assertEquals("label \"version\"", result);
   }
 
   @Test
@@ -69,9 +69,9 @@ public class SimpleDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    String expected = "groupId\n"
+    String expected = "label \"groupId\n"
         + "artifactId\n"
-        + "version";
+        + "version\"";
 
     assertEquals(expected, result);
   }
@@ -86,8 +86,8 @@ public class SimpleDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    String expected = "groupId\n"
-        + "artifactId";
+    String expected = "label \"groupId\n"
+        + "artifactId\"";
 
     assertEquals(expected, result);
   }
@@ -102,8 +102,8 @@ public class SimpleDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    String expected = "groupId\n"
-        + "version";
+    String expected = "label \"groupId\n"
+        + "version\"";
 
     assertEquals(expected, result);
   }
@@ -118,8 +118,8 @@ public class SimpleDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    String expected = "artifactId\n"
-        + "version";
+    String expected = "label \"artifactId\n"
+        + "version\"";
 
     assertEquals(expected, result);
   }

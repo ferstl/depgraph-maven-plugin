@@ -19,9 +19,15 @@ public class SimpleDependencyNodeNameRenderer implements NodeRenderer<Dependency
 
   @Override
   public String render(DependencyNode node) {
-    return NEWLINE_JOINER.join(
+    String content = NEWLINE_JOINER.join(
         this.showGroupId ? node.getArtifact().getGroupId() : null,
         this.showArtifactId ? node.getArtifact().getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null);
+
+    if (content.isEmpty()) {
+      return "";
+    }
+
+    return "label \"" + content + "\"";
   }
 }

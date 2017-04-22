@@ -1,9 +1,9 @@
 package com.github.ferstl.depgraph.graph.gml;
 
-import com.github.ferstl.depgraph.graph.Edge;
-import com.github.ferstl.depgraph.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
+import com.github.ferstl.depgraph.graph.Edge;
+import com.github.ferstl.depgraph.graph.Node;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -20,11 +20,11 @@ public class GmlGraphFormatterTest {
   @Test
   public void format() {
     // arrange
-    Node<?> node1 = new Node<>("id1", "name1", new Object());
+    Node<?> node1 = new Node<>("id1", "label \"name1\"", new Object());
     Node<?> node2 = new Node<>("id2", "", new Object());
-    Node<?> node3 = new Node<>("id3", "name3", new Object());
+    Node<?> node3 = new Node<>("id3", "label \"name3\"", new Object());
 
-    Edge edge1 = new Edge("id1", "id2", "edge1");
+    Edge edge1 = new Edge("id1", "id2", "label \"edge1\"");
     Edge edge2 = new Edge("id1", "id2", "");
 
     // act
