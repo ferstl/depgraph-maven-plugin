@@ -1,12 +1,12 @@
 package com.github.ferstl.depgraph.dependency;
 
+import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.Test;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import com.github.ferstl.depgraph.graph.Node;
 import com.github.ferstl.depgraph.graph.TestFormatter;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
 
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNodeWithConflict;
@@ -121,7 +121,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
         new Node<>(this.fromId, getNodeNameForVersionOnly("version1"), this.from),
         new Node<>(this.toId, getNodeNameForVersionOnly("version2-alpha"), this.to)));
 
-    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForNonConflictingVersion("version2"))));
+    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2", false))));
   }
 
   @Test
@@ -165,7 +165,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
         new Node<>(this.fromId, getEmptyNodeName(), this.from),
         new Node<>(this.toId, getEmptyNodeName(), this.toWithConflict)));
 
-    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2"))));
+    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2", true))));
   }
 
   @Test
@@ -190,7 +190,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
         new Node<>(this.fromId, getNodeNameForAllAttributes("group1", "artifact1", "version1"), this.from),
         new Node<>(this.toId, getNodeNameForAllAttributes("group2", "artifact2", "version2-alpha"), this.to)));
 
-    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2"))));
+    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2", true))));
   }
 
   @Test
@@ -223,7 +223,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
 
   protected abstract String getEdgeNameForNonConflictingVersion(String version);
 
-  protected abstract String getEdgeNameForConflictingVersion(String conflictingVersion);
+  protected abstract String getEdgeNameForConflictingVersion(String conflictingVersion, boolean showVersion);
 
   protected abstract String getNodeNameForAllAttributes(String groupId, String artifactId, String version);
 

@@ -9,17 +9,17 @@ public class GmlGraphStyleConfigurerTest extends AbstractGraphStyleConfigurerTes
 
   @Override
   protected String getNodeNameForGroupIdOnly(String groupId) {
-    return groupId;
+    return "label \"" + groupId + "\"";
   }
 
   @Override
   protected String getNodeNameForArtifactIdOnly(String artifactId) {
-    return artifactId;
+    return "label \"" + artifactId + "\"";
   }
 
   @Override
   protected String getNodeNameForVersionOnly(String version) {
-    return version;
+    return "label \"" + version + "\"";
   }
 
   @Override
@@ -28,13 +28,28 @@ public class GmlGraphStyleConfigurerTest extends AbstractGraphStyleConfigurerTes
   }
 
   @Override
-  protected String getEdgeNameForConflictingVersion(String conflictingVersion) {
-    return conflictingVersion;
+  protected String getEdgeNameForConflictingVersion(String conflictingVersion, boolean showVersion) {
+    String edgeName = "\ngraphics\n"
+        + "[\n"
+        + "style \"dashed\"\n"
+        + "targetArrow \"standard\"\n"
+        + "fill \"#FF0000\"\n"
+        + "]\n"
+        + "LabelGraphics\n"
+        + "[\n"
+        + "color \"#FF0000\"\n"
+        + "]";
+
+    if (showVersion) {
+      edgeName = "label \"" + conflictingVersion + "\"" + edgeName;
+    }
+
+    return edgeName;
   }
 
   @Override
   protected String getNodeNameForAllAttributes(String groupId, String artifactId, String version) {
-    return groupId + "\n" + artifactId + "\n" + version;
+    return "label \"" + groupId + "\n" + artifactId + "\n" + version + "\"";
   }
 
   @Override

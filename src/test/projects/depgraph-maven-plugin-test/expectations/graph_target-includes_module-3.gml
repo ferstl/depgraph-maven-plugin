@@ -37,6 +37,12 @@ target "com.mysema.querydsl:querydsl-core:jar:"
 edge [
 source "com.mysema.querydsl:querydsl-core:jar:"
 target "com.google.guava:guava:jar:"
+
+graphics
+[
+style "dotted"
+targetArrow "standard"
+]
 ]
 
 ]
