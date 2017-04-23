@@ -53,6 +53,10 @@ public class GmlDependencyEdgeRendererTest {
         + "style \"dashed\"\n"
         + "targetArrow \"standard\"\n"
         + "fill \"#FF0000\"\n"
+        + "]\n"
+        + "LabelGraphics\n"
+        + "[\n"
+        + "color \"#FF0000\"\n"
         + "]", result);
   }
 }

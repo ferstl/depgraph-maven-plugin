@@ -34,6 +34,10 @@ public class GmlGraphStyleConfigurerTest extends AbstractGraphStyleConfigurerTes
         + "style \"dashed\"\n"
         + "targetArrow \"standard\"\n"
         + "fill \"#FF0000\"\n"
+        + "]\n"
+        + "LabelGraphics\n"
+        + "[\n"
+        + "color \"#FF0000\"\n"
         + "]";
 
     if (showVersion) {
