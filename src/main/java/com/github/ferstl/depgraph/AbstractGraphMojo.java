@@ -332,7 +332,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private Path createGraphFilePath(GraphFormat graphFormat) {
     Path outputFilePath;
     String fileName;
-    if (StringUtils.isBlank(this.outputFile)) {
+    if (StringUtils.isNotBlank(this.outputFile)) {
       getLog().warn("The 'outputFile' parameter has been deprecated. Use 'outputDirectory' and 'outputFileName' instead.");
 
       outputFilePath = Paths.get(this.outputFile);
