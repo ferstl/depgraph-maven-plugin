@@ -174,4 +174,18 @@ public class GraphIntegrationTest {
     assertFileContents(basedir, "expectations/graph_module-3.gml", "sub-parent/module-3/target/dependency-graph.gml");
   }
 
+  @Test
+  public void deprecatedOuptuFileParameter() throws Exception {
+    File basedir = this.resources.getBasedir("single-dependency");
+
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DoutputFile=" + basedir.toPath().toAbsolutePath().toString() + "/target/my-graph")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    result.assertLogText("The 'outputFile' parameter has been deprecated");
+    assertFilesPresent(basedir, "target/my-graph.dot");
+  }
+
 }
