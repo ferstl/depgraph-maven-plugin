@@ -188,4 +188,18 @@ public class GraphIntegrationTest {
     assertFilesPresent(basedir, "target/my-graph.dot");
   }
 
+  @Test
+  public void useArtifactIdInFileName() throws Exception {
+    File basedir = this.resources.getBasedir("single-dependency");
+
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DuseArtifactIdInFileName=true")
+        .withCliOption("-DoutputFileName=not-relevant")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/single-dependency.dot");
+  }
+
 }
