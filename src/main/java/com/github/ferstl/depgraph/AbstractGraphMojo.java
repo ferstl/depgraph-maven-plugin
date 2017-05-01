@@ -149,6 +149,17 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Parameter(property = "outputFileName", defaultValue = OUTPUT_FILE_NAME)
   private String outputFileName;
 
+  /**
+   * Indicates whether the project's artifact ID should be used as file name for the generated graph files.
+   * <ul>
+   * <li>This flag does not have an effect when the (deprecated) {@code outputFile} parameter is used.</li>
+   * <li>When set to {@code true}, the content of the {@code outputFileName} parameter is ignored.</li>
+   * </ul>
+   *
+   * @since 2.2.0
+   */
+  @Parameter(property = "useArtifactIdInFileName", defaultValue = "false")
+  private boolean useArtifactIdInFileName;
 
   /**
    * Only relevant when {@code graphFormat=dot}: If set to {@code true} and Graphviz is installed on the system where
@@ -195,6 +206,12 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    */
   @Parameter(property = "printStyleConfiguration", defaultValue = "false")
   private boolean printStyleConfiguration;
+
+  /**
+   * The project's artifact ID.
+   */
+  @Parameter(defaultValue = "${project.artifactId}", readonly = true)
+  private String artifactId;
 
   /**
    * Local maven repository required by the {@link DependencyTreeBuilder}.
@@ -339,7 +356,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
       fileName = outputFilePath.getFileName().toString();
       fileName = addFileExtensionIfNeeded(graphFormat, fileName);
     } else {
-      fileName = addFileExtensionIfNeeded(graphFormat, this.outputFileName);
+      fileName = this.useArtifactIdInFileName ? this.artifactId : this.outputFileName;
+      fileName = addFileExtensionIfNeeded(graphFormat, fileName);
       outputFilePath = this.outputDirectory.toPath().resolve(fileName);
     }
 
