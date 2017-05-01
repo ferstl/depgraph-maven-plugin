@@ -126,9 +126,29 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * added if not specified.
    *
    * @since 1.0.0
+   * @deprecated Deprecated since 2.2.0. Use {@code outputDirectory} and {@code outputFileName} instead.
    */
-  @Parameter(property = "outputFile", defaultValue = "${project.build.directory}/" + OUTPUT_FILE_NAME)
+  @Parameter(property = "outputFile")
+  @Deprecated
   private String outputFile;
+
+  /**
+   * Output directory to write the dependency graph to.
+   *
+   * @since 2.2.0
+   */
+  @Parameter(property = "outputDirectory", defaultValue = "${project.build.directory}")
+  private File outputDirectory;
+
+  /**
+   * The name of the dependency graph file. A file extension matching the configured {@code graphFormat} will be
+   * added if not specified.
+   *
+   * @since 2.2.0
+   */
+  @Parameter(property = "outputFileName", defaultValue = OUTPUT_FILE_NAME)
+  private String outputFileName;
+
 
   /**
    * Only relevant when {@code graphFormat=dot}: If set to {@code true} and Graphviz is installed on the system where
@@ -310,15 +330,30 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   }
 
   private Path createGraphFilePath(GraphFormat graphFormat) {
-    Path outputFilePath = Paths.get(this.outputFile);
+    Path outputFilePath;
+    String fileName;
+    if (StringUtils.isBlank(this.outputFile)) {
+      getLog().warn("The 'outputFile' parameter has been deprecated. Use 'outputDirectory' and 'outputFileName' instead.");
+
+      outputFilePath = Paths.get(this.outputFile);
+      fileName = outputFilePath.getFileName().toString();
+      fileName = addFileExtensionIfNeeded(graphFormat, fileName);
+    } else {
+      fileName = addFileExtensionIfNeeded(graphFormat, this.outputFileName);
+      outputFilePath = this.outputDirectory.toPath().resolve(fileName);
+    }
+
+    outputFilePath = outputFilePath.resolveSibling(fileName);
+    return outputFilePath;
+  }
+
+  private String addFileExtensionIfNeeded(GraphFormat graphFormat, String fileName) {
     String fileExtension = graphFormat.getFileExtension();
-    String fileName = outputFilePath.getFileName().toString();
 
     if (!fileName.endsWith(fileExtension)) {
       fileName += fileExtension;
-      outputFilePath = outputFilePath.resolveSibling(fileName);
     }
-    return outputFilePath;
+    return fileName;
   }
 
   private void writeGraphFile(String graph, Path graphFilePath) throws IOException {
