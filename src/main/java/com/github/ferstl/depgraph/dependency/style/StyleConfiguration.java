@@ -21,6 +21,7 @@ import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.apache.maven.artifact.Artifact;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -32,7 +33,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.style.resource.StyleResource;
 import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
-
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 
 public class StyleConfiguration {
@@ -42,6 +42,8 @@ public class StyleConfiguration {
   private final Edge defaultEdge = new Edge();
   private final Map<StyleKey, AbstractNode> nodeStyles = new LinkedHashMap<>();
   private final Map<String, Edge> edgeScopeStyles = new LinkedHashMap<>();
+  private final Map<StyleKey, Edge> edgeNodeStylesFrom = new LinkedHashMap<>();
+  private final Map<StyleKey, Edge> edgeNodeStylesTo = new LinkedHashMap<>();
   private final Map<NodeResolution, Edge> edgeResolutionStyles = new LinkedHashMap<>();
 
 
@@ -95,12 +97,35 @@ public class StyleConfiguration {
     return this.defaultEdge.createAttributes();
   }
 
-  public DotAttributeBuilder edgeAttributes(NodeResolution resolution, String targetScope) {
+  public DotAttributeBuilder edgeAttributes(NodeResolution resolution, String targetScope, Artifact from, Artifact to) {
     Edge edge = this.edgeResolutionStyles.get(resolution);
 
     // Scope style win over INCLUDED node resolution
     if (resolution == INCLUDED && this.edgeScopeStyles.containsKey(targetScope)) {
       edge = this.edgeScopeStyles.get(targetScope);
+    }
+
+    // Specific edge style-from win over node resolution
+    if (from != null) {
+      StyleKey artifactKeyFrom = StyleKey.create(from.getGroupId(), from.getArtifactId(), from.getScope(), from.getType(), from.getVersion());
+      for (Entry<StyleKey, Edge> entry : this.edgeNodeStylesFrom.entrySet()) {
+        StyleKey styleKey = entry.getKey();
+        if (styleKey.matches(artifactKeyFrom)) {
+          edge = entry.getValue();
+          break;
+        }
+      }
+    }
+    // Specific edge style-from to over node resolution
+    if (to != null) {
+      StyleKey artifactKeyTo = StyleKey.create(to.getGroupId(), to.getArtifactId(), to.getScope(), to.getType(), to.getVersion());
+      for (Entry<StyleKey, Edge> entry : this.edgeNodeStylesTo.entrySet()) {
+        StyleKey styleKey = entry.getKey();
+        if (styleKey.matches(artifactKeyTo)) {
+          edge = entry.getValue();
+          break;
+        }
+      }
     }
 
     return edge != null ? edge.createAttributes() : new DotAttributeBuilder();
@@ -175,6 +200,28 @@ public class StyleConfiguration {
         this.edgeScopeStyles.get(scope).merge(edge);
       } else {
         this.edgeScopeStyles.put(scope, edge);
+      }
+    }
+
+    for (Entry<StyleKey, Edge> entry : other.edgeNodeStylesFrom.entrySet()) {
+      StyleKey styleKey = entry.getKey();
+      Edge edge = entry.getValue();
+
+      if (this.edgeNodeStylesFrom.containsKey(styleKey)) {
+        this.edgeNodeStylesFrom.get(styleKey).merge(edge);
+      } else {
+        this.edgeNodeStylesFrom.put(styleKey, edge);
+      }
+    }
+
+    for (Entry<StyleKey, Edge> entry : other.edgeNodeStylesTo.entrySet()) {
+      StyleKey styleKey = entry.getKey();
+      Edge edge = entry.getValue();
+
+      if (this.edgeNodeStylesTo.containsKey(styleKey)) {
+        this.edgeNodeStylesTo.get(styleKey).merge(edge);
+      } else {
+        this.edgeNodeStylesTo.put(styleKey, edge);
       }
     }
   }
