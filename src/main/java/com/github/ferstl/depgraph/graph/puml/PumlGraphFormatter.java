@@ -53,7 +53,7 @@ public class PumlGraphFormatter implements GraphFormatter {
 
             puml.append(nodeInfo.getComponent())
                     .append(" \"")
-                    .append(escape(nodeInfo.getLabel()))
+                    .append(nodeInfo.getLabel())
                     .append("\" as ")
                     .append(escape(node.getNodeId()));
 
