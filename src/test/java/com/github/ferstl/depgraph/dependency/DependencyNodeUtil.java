@@ -13,7 +13,11 @@ public final class DependencyNodeUtil {
   }
 
   public static DependencyNode createDependencyNodeWithConflict(String groupId, String artifactId, String effectiveVersion) {
-    Artifact artifact = createArtifact(groupId, artifactId, effectiveVersion);
+    return createDependencyNodeWithConflict(groupId, artifactId, effectiveVersion, "compile");
+  }
+
+  public static DependencyNode createDependencyNodeWithConflict(String groupId, String artifactId, String effectiveVersion, String scope) {
+    Artifact artifact = createArtifact(groupId, artifactId, effectiveVersion, scope);
     Artifact conflictingArtifact = mock(Artifact.class);
     when(conflictingArtifact.getVersion()).thenReturn(effectiveVersion + "-alpha");
 
@@ -25,12 +29,20 @@ public final class DependencyNodeUtil {
     return new DependencyNode(createArtifact(groupId, artifactId, version));
   }
 
+  public static DependencyNode createDependencyNode(String groupId, String artifactId, String version, String scope) {
+    return new DependencyNode(createArtifact(groupId, artifactId, version, scope));
+  }
+
   private static Artifact createArtifact(String groupId, String artifactId, String version) {
+    return createArtifact(groupId, artifactId, version, "compile");
+  }
+
+  private static Artifact createArtifact(String groupId, String artifactId, String version, String scope) {
     Artifact artifact = mock(Artifact.class);
     when(artifact.getGroupId()).thenReturn(groupId);
     when(artifact.getArtifactId()).thenReturn(artifactId);
     when(artifact.getVersion()).thenReturn(version);
-    when(artifact.getScope()).thenReturn("compile");
+    when(artifact.getScope()).thenReturn(scope);
     return artifact;
   }
 }

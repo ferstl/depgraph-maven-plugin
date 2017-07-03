@@ -27,6 +27,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import com.github.ferstl.depgraph.dependency.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
@@ -46,11 +48,6 @@ import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
-import com.github.ferstl.depgraph.dependency.DependencyGraphException;
-import com.github.ferstl.depgraph.dependency.DotGraphStyleConfigurer;
-import com.github.ferstl.depgraph.dependency.GmlGraphStyleConfigurer;
-import com.github.ferstl.depgraph.dependency.GraphFactory;
-import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.dependency.style.resource.ClasspathStyleResource;
@@ -299,6 +296,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
         return new DotGraphStyleConfigurer(styleConfiguration);
       case GML:
         return new GmlGraphStyleConfigurer();
+      case PUML:
+        return new PumlGraphStyleConfigurer();
       default:
         throw new IllegalArgumentException("Unsupported output format: " + graphFormat);
     }
