@@ -36,8 +36,12 @@ public final class StyleKey {
     }
 
     String[] expanded = new String[NUM_ELEMENTS];
+    for (int i = 0; i < expanded.length; i++) {
+      expanded[i] = "";
+    }
+
     for (int i = 0; i < parts.length; i++) {
-      expanded[i] = StringUtils.defaultIfEmpty(parts[i], null);
+      expanded[i] = StringUtils.defaultIfEmpty(parts[i], "");
     }
 
     this.groupId = expanded[0];
@@ -57,11 +61,11 @@ public final class StyleKey {
   }
 
   public boolean matches(StyleKey other) {
-    return (this.groupId == null || wildcardMatch(this.groupId, other.groupId))
-        && (this.artifactId == null || wildcardMatch(this.artifactId, other.artifactId))
-        && (this.scope == null || match(this.scope, other.scope))
-        && (this.type == null || match(this.type, other.type))
-        && (this.version == null || wildcardMatch(this.version, other.version));
+    return (wildcardMatch(this.groupId, other.groupId))
+        && (wildcardMatch(this.artifactId, other.artifactId))
+        && (match(this.scope, other.scope))
+        && (match(this.type, other.type))
+        && (wildcardMatch(this.version, other.version));
 
   }
 
@@ -91,7 +95,7 @@ public final class StyleKey {
 
   @Override
   public String toString() {
-    return Joiner.on(",").useForNull("").join(this.groupId, this.artifactId, this.scope, this.type, this.version);
+    return Joiner.on(",").join(this.groupId, this.artifactId, this.scope, this.type, this.version);
   }
 
   private static boolean wildcardMatch(String value1, String value2) {
@@ -103,7 +107,7 @@ public final class StyleKey {
   }
 
   private static boolean match(String value1, String value2) {
-    return StringUtils.equals(value1, value2);
+    return value1.isEmpty() || value1.equals(value2);
   }
 
 }

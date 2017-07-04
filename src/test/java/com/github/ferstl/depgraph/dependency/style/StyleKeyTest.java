@@ -86,6 +86,13 @@ public class StyleKeyTest {
   }
 
   @Test
+  public void createWithNullValues() {
+    StyleKey key = StyleKey.create(null, null, null, null, null);
+
+    assertEquals(",,,,", key.toString());
+  }
+
+  @Test
   public void equalsAndHashCode() {
     StyleKey groupIdEqual = StyleKey.fromString("group.id");
     StyleKey groupIdDifferent = StyleKey.fromString("group.id2");
