@@ -1,92 +1,86 @@
 package com.github.ferstl.depgraph.dependency;
 
+import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
-
-/**
- * @author gushakov
- */
 public class PumlEdgeInfo {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private String begin;
+  private String begin;
+  private String end;
+  private String color;
+  private String label;
 
-    private String end;
+  PumlEdgeInfo() {
+  }
 
-    private String color;
+  @JsonCreator
+  public PumlEdgeInfo(@JsonProperty("begin") String begin, @JsonProperty("end") String end,
+      @JsonProperty("color") String color, @JsonProperty("label") String label) {
+    this.begin = begin;
+    this.end = end;
+    this.color = color;
+    this.label = label;
+  }
 
-    private String label;
+  public static ObjectMapper getObjectMapper() {
+    return OBJECT_MAPPER;
+  }
 
-    PumlEdgeInfo(){}
+  public String getBegin() {
+    return this.begin;
+  }
 
-    @JsonCreator
-    public PumlEdgeInfo(@JsonProperty("begin") String begin, @JsonProperty("end") String end,
-                        @JsonProperty("color") String color, @JsonProperty("label") String label) {
-        this.begin = begin;
-        this.end = end;
-        this.color = color;
-        this.label = label;
+  public String getEnd() {
+    return this.end;
+  }
+
+  public String getColor() {
+    return this.color;
+  }
+
+  public String getLabel() {
+    return this.label;
+  }
+
+  PumlEdgeInfo withBegin(String begin) {
+    this.begin = begin;
+    return this;
+  }
+
+  PumlEdgeInfo withEnd(String end) {
+    this.end = end;
+    return this;
+  }
+
+  PumlEdgeInfo withColor(String color) {
+    this.color = color;
+    return this;
+  }
+
+  PumlEdgeInfo withLabel(String label) {
+    this.label = label;
+    return this;
+  }
+
+  public static PumlEdgeInfo parse(String serialized) {
+    try {
+      return OBJECT_MAPPER.readValue(serialized, PumlEdgeInfo.class);
+    } catch (IOException e) {
+      throw new RuntimeException("Cannot parse edge info from: " + serialized, e);
     }
+  }
 
-    public static ObjectMapper getObjectMapper() {
-        return objectMapper;
+  @Override
+  public String toString() {
+    try {
+      return OBJECT_MAPPER.writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException("Cannot serialize edge info. ", e);
     }
-
-    public String getBegin() {
-        return begin;
-    }
-
-    public String getEnd() {
-        return end;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    PumlEdgeInfo withBegin(String begin){
-        this.begin = begin;
-        return this;
-    }
-
-    PumlEdgeInfo withEnd(String end){
-        this.end = end;
-        return this;
-    }
-
-    PumlEdgeInfo withColor(String color){
-        this.color = color;
-        return this;
-    }
-
-    PumlEdgeInfo withLabel(String label){
-        this.label = label;
-        return this;
-    }
-
-    public static PumlEdgeInfo parse(String serialized){
-        try {
-            return objectMapper.readValue(serialized, PumlEdgeInfo.class);
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot parse edge info from: " + serialized, e);
-        }
-    }
-
-    @Override
-    public String toString() {
-        try {
-            return objectMapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Cannot serialize edge info. ", e);
-        }
-    }
+  }
 }
