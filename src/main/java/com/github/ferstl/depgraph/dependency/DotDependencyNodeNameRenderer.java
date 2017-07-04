@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 - 2016 by Stefan Ferstl <st.ferstl@gmail.com>
+ * Copyright (c) 2014 - 2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,11 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import java.util.Set;
+import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
-import org.apache.maven.artifact.Artifact;
-
-import java.util.Set;
 
 import static com.google.common.collect.Iterables.getFirst;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 - 2016 by Stefan Ferstl <st.ferstl@gmail.com>
+ * Copyright (c) 2014 - 2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.style.resource.StyleResource;
 import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
+
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 
 public class StyleConfiguration {
