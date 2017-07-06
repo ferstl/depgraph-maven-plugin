@@ -23,11 +23,11 @@ public final class StyleKey {
 
   private static final int NUM_ELEMENTS = 5;
 
-  String groupId;
-  String artifactId;
-  String scope;
-  String type;
-  String version;
+  private final String groupId;
+  private final String artifactId;
+  private final String scope;
+  private final String type;
+  private final String version;
 
 
   private StyleKey(String[] parts) {
