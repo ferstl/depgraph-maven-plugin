@@ -19,6 +19,9 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import com.google.common.base.Joiner;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
+import static org.apache.commons.lang3.StringUtils.startsWith;
+
 public final class StyleKey {
 
   private static final int NUM_ELEMENTS = 5;
@@ -41,7 +44,7 @@ public final class StyleKey {
     }
 
     for (int i = 0; i < parts.length; i++) {
-      expanded[i] = StringUtils.defaultIfEmpty(parts[i], "");
+      expanded[i] = defaultIfEmpty(parts[i], "");
     }
 
     this.groupId = expanded[0];
@@ -100,7 +103,7 @@ public final class StyleKey {
 
   private static boolean wildcardMatch(String value1, String value2) {
     if (StringUtils.endsWith(value1, "*")) {
-      return StringUtils.startsWith(value2, value1.substring(0, value1.length() - 1));
+      return startsWith(value2, value1.substring(0, value1.length() - 1));
     }
 
     return match(value1, value2);
