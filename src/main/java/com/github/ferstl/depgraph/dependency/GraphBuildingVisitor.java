@@ -90,13 +90,13 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
     return false;
   }
 
-  public boolean internalVisit2(DependencyNode node) {
-    if (!this.globalFilter.include(node.getArtifact()) || !this.includedResolutions.contains(node.getResolution())) {
-      return false;
+  private boolean internalVisit2(DependencyNode node) {
+    if (this.globalFilter.include(node.getArtifact()) && this.includedResolutions.contains(node.getResolution())) {
+      this.nodeStack.push(node);
+      return true;
     }
 
-    this.nodeStack.push(node);
-    return true;
+    return false;
   }
 
   private boolean internalEndVisit2(DependencyNode node) {
