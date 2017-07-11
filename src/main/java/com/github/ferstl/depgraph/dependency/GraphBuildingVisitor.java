@@ -100,20 +100,19 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   private boolean internalEndVisit2(DependencyNode node) {
-    Artifact artifact = node.getArtifact();
-    if (!this.globalFilter.include(artifact) || !this.includedResolutions.contains(node.getResolution())) {
-      return false;
+    if (this.globalFilter.include(node.getArtifact()) && this.includedResolutions.contains(node.getResolution())) {
+      this.nodeStack.pop();
+      DependencyNode currentParent = this.nodeStack.peek();
+
+      if (currentParent != null) {
+        mergeWithExisting(node);
+        this.graphBuilder.addEdge(currentParent, node);
+      }
+
+      return true;
     }
 
-    this.nodeStack.pop();
-    DependencyNode currentParent = this.nodeStack.peek();
-
-    if (currentParent != null) {
-      mergeWithExisting(node);
-      this.graphBuilder.addEdge(currentParent, node);
-    }
-
-    return true;
+    return false;
   }
 
   private void mergeWithExisting(DependencyNode node) {
