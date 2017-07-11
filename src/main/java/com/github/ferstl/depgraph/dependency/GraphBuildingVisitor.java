@@ -105,11 +105,8 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
       return false;
     }
 
+    this.nodeStack.pop();
     DependencyNode currentParent = this.nodeStack.peek();
-    if (artifact.equals(currentParent.getArtifact())) {
-      this.nodeStack.pop();
-      currentParent = this.nodeStack.peek();
-    }
 
     if (currentParent != null) {
       mergeWithExisting(node);
