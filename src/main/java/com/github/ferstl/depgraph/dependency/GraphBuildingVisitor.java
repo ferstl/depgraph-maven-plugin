@@ -91,7 +91,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   private boolean internalVisit2(DependencyNode node) {
-    if (this.globalFilter.include(node.getArtifact()) && this.includedResolutions.contains(node.getResolution())) {
+    if (isIncluded(node)) {
       this.nodeStack.push(node);
       return true;
     }
@@ -100,7 +100,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   private boolean internalEndVisit2(DependencyNode node) {
-    if (this.globalFilter.include(node.getArtifact()) && this.includedResolutions.contains(node.getResolution())) {
+    if (isIncluded(node)) {
       this.nodeStack.pop();
       DependencyNode currentParent = this.nodeStack.peek();
 
@@ -113,6 +113,10 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
     }
 
     return false;
+  }
+
+  private boolean isIncluded(DependencyNode node) {
+    return this.globalFilter.include(node.getArtifact()) && this.includedResolutions.contains(node.getResolution());
   }
 
   private void mergeWithExisting(DependencyNode node) {
