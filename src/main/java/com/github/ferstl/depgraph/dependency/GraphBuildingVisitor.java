@@ -22,6 +22,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
+import static java.lang.Math.max;
 import static java.util.EnumSet.allOf;
 
 
@@ -38,7 +39,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
-  private final boolean onTargetPath = false;
+  private int targetDepth = 0;
 
   GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.graphBuilder = graphBuilder;
@@ -93,6 +94,11 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private boolean internalVisit2(DependencyNode node) {
     if (isIncluded(node)) {
       this.nodeStack.push(node);
+
+      if (this.targetFilter.include(node.getArtifact())) {
+        this.targetDepth = max(this.targetDepth, this.nodeStack.size());
+      }
+
       return true;
     }
 
@@ -104,9 +110,12 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
       this.nodeStack.pop();
       DependencyNode currentParent = this.nodeStack.peek();
 
-      if (currentParent != null) {
+      if (currentParent != null && this.nodeStack.size() < this.targetDepth) {
+        this.targetDepth = this.nodeStack.size();
         mergeWithExisting(node);
         this.graphBuilder.addEdge(currentParent, node);
+      } else if (this.nodeStack.isEmpty()) {
+        this.targetDepth = 0;
       }
 
       return true;
