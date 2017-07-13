@@ -1,12 +1,5 @@
 graph [
 node [
-id "com.github.ferstl:sub-parent:pom:"
-label "com.github.ferstl
-sub-parent
-1.0.0-SNAPSHOT"
-]
-
-node [
 id "com.github.ferstl:module-2:jar:"
 label "com.github.ferstl
 module-2
@@ -41,9 +34,11 @@ commons-lang3
 3.0"
 ]
 
-edge [
-source "com.github.ferstl:sub-parent:pom:"
-target "com.github.ferstl:module-2:jar:"
+node [
+id "com.github.ferstl:sub-parent:pom:"
+label "com.github.ferstl
+sub-parent
+1.0.0-SNAPSHOT"
 ]
 
 edge [
@@ -64,6 +59,11 @@ target "commons-codec:commons-codec:jar:"
 edge [
 source "com.github.ferstl:module-2:jar:"
 target "org.apache.commons:commons-lang3:jar:"
+]
+
+edge [
+source "com.github.ferstl:sub-parent:pom:"
+target "com.github.ferstl:module-2:jar:"
 ]
 
 ]

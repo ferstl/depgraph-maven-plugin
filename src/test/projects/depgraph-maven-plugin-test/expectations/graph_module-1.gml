@@ -45,13 +45,13 @@ target "org.apache.commons:commons-lang3:jar:"
 ]
 
 edge [
-source "com.github.ferstl:module-1:jar:"
-target "junit:junit:jar:"
+source "junit:junit:jar:"
+target "org.hamcrest:hamcrest-core:jar:"
 ]
 
 edge [
-source "junit:junit:jar:"
-target "org.hamcrest:hamcrest-core:jar:"
+source "com.github.ferstl:module-1:jar:"
+target "junit:junit:jar:"
 ]
 
 ]

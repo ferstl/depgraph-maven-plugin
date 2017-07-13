@@ -18,9 +18,9 @@ digraph "module-3" {
   "com.github.ferstl:compile" -> "com.google.guava:compile"
   "com.github.ferstl:compile" -> "commons-codec:compile"[style="dotted"]
   "com.github.ferstl:compile" -> "org.apache.commons:compile"[style="dashed",color="red",fontcolor="red"]
-  "com.github.ferstl:compile" -> "com.mysema.querydsl:compile"
   "com.mysema.querydsl:compile" -> "com.google.guava:compile"[style="dotted"]
   "com.mysema.querydsl:compile" -> "com.google.code.findbugs:compile"
   "com.mysema.querydsl:compile" -> "com.mysema.commons:compile"
   "com.mysema.querydsl:compile" -> "com.infradna.tool:compile"
+  "com.github.ferstl:compile" -> "com.mysema.querydsl:compile"
 }

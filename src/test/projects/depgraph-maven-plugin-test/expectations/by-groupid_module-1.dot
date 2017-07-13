@@ -12,6 +12,6 @@ digraph "module-1" {
   // Edge Definitions:
   "com.github.ferstl:compile" -> "commons-codec:compile"
   "com.github.ferstl:compile" -> "org.apache.commons:compile"
-  "com.github.ferstl:compile" -> "junit:test"
   "junit:test" -> "org.hamcrest:test"
+  "com.github.ferstl:compile" -> "junit:test"
 }

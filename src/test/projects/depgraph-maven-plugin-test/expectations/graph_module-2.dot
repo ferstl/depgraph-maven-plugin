@@ -16,6 +16,6 @@ digraph "module-2" {
   "com.github.ferstl:module-2:jar:" -> "com.google.guava:guava:jar:"
   "com.github.ferstl:module-2:jar:" -> "commons-codec:commons-codec:jar:"
   "com.github.ferstl:module-2:jar:" -> "org.apache.commons:commons-lang3:jar:"
-  "com.github.ferstl:module-2:jar:" -> "junit:junit:jar:"
   "junit:junit:jar:" -> "org.hamcrest:hamcrest-core:jar:"
+  "com.github.ferstl:module-2:jar:" -> "junit:junit:jar:"
 }
