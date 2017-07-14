@@ -190,7 +190,7 @@ public class GraphIntegrationTest {
   }
 
   @Test
-  public void deprecatedOuptuFileParameter() throws Exception {
+  public void deprecatedOutpuFileParameter() throws Exception {
     File basedir = this.resources.getBasedir("single-dependency");
 
     MavenExecutionResult result = this.mavenRuntime
