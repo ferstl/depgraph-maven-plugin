@@ -110,12 +110,14 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
       this.nodeStack.pop();
       DependencyNode currentParent = this.nodeStack.peek();
 
-      if (currentParent != null && this.nodeStack.size() < this.targetDepth) {
+
+      if (currentParent == null) {
+        // We are at the root element of the graph.
+        this.targetDepth = 0;
+      } else if (this.nodeStack.size() < this.targetDepth) {
         this.targetDepth = this.nodeStack.size();
         mergeWithExisting(node);
         this.graphBuilder.addEdge(currentParent, node);
-      } else if (this.nodeStack.isEmpty()) {
-        this.targetDepth = 0;
       }
 
       return true;
