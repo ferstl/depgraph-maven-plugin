@@ -22,7 +22,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
-import static java.lang.Math.max;
 import static java.util.EnumSet.allOf;
 
 
@@ -84,7 +83,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
     this.nodeStack.push(node);
 
     if (this.targetFilter.include(node.getArtifact())) {
-      this.cutOffDepth = max(this.cutOffDepth, this.nodeStack.size());
+      this.cutOffDepth = this.nodeStack.size();
     }
 
     return true;
