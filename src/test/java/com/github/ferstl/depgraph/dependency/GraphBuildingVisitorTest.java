@@ -104,13 +104,12 @@ public class GraphBuildingVisitorTest {
 
     // Don't process any further children of child2
     assertFalse(this.visitor.visit(child2));
-
-    assertTrue(this.visitor.endVisit(child2));
+    assertFalse(this.visitor.endVisit(child2));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]"},
+            "\"groupId:child1:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]"},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\""}));
   }
@@ -134,8 +133,7 @@ public class GraphBuildingVisitorTest {
 
     assertTrue(this.visitor.visit(parent));
 
-    // Don't process any further children of child2
-    assertFalse(this.visitor.visit(child1));
+    assertTrue(this.visitor.visit(child1));
     assertTrue(this.visitor.endVisit(child1));
 
     assertTrue(this.visitor.visit(child2));
@@ -144,11 +142,11 @@ public class GraphBuildingVisitorTest {
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
+            "\"groupId:child2:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\""}));
   }
-
+  
   @Test
   public void defaultArtifactFilter() {
     this.visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter);
