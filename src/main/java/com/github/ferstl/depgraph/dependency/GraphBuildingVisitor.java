@@ -95,38 +95,38 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   private boolean internalVisit2(DependencyNode node) {
-    if (isIncluded(node)) {
-      this.nodeStack.push(node);
-
-      if (this.targetFilter.include(node.getArtifact())) {
-        this.cutOffDepth = max(this.cutOffDepth, this.nodeStack.size());
-      }
-
-      return true;
+    if (!isIncluded(node)) {
+      return false;
     }
 
-    return false;
+    this.nodeStack.push(node);
+
+    if (this.targetFilter.include(node.getArtifact())) {
+      this.cutOffDepth = max(this.cutOffDepth, this.nodeStack.size());
+    }
+
+    return true;
   }
 
+
   private boolean internalEndVisit2(DependencyNode node) {
-    if (isIncluded(node)) {
-      this.nodeStack.pop();
-      DependencyNode currentParent = this.nodeStack.peek();
+    if (!isIncluded(node)) {
+      return false;
+    }
 
+    this.nodeStack.pop();
 
-      if (currentParent == null) {
-        // We are at the root element of the graph.
-        this.cutOffDepth = 0;
-      } else if (this.nodeStack.size() < this.cutOffDepth) {
-        this.cutOffDepth = this.nodeStack.size();
+    DependencyNode currentParent = this.nodeStack.peek();
+    if (this.nodeStack.size() < this.cutOffDepth) {
+      this.cutOffDepth = this.nodeStack.size();
+
+      if (currentParent != null) {
         mergeWithExisting(node);
         this.graphBuilder.addEdge(currentParent, node);
       }
-
-      return true;
     }
 
-    return false;
+    return true;
   }
 
   private boolean isIncluded(DependencyNode node) {
