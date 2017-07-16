@@ -58,43 +58,25 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
   @Override
   public boolean visit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalVisit2(new DependencyNode(node));
+    return internalVisit(new DependencyNode(node));
   }
 
   @Override
   public boolean endVisit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalEndVisit2(new DependencyNode(node));
+    return internalEndVisit(new DependencyNode(node));
   }
 
   @Override
   public boolean visit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalVisit2(new DependencyNode(node));
+    return internalVisit(new DependencyNode(node));
   }
 
   @Override
   public boolean endVisit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalEndVisit2(new DependencyNode(node));
+    return internalEndVisit(new DependencyNode(node));
   }
 
   private boolean internalVisit(DependencyNode node) {
-    DependencyNode currentParent = this.nodeStack.peek();
-
-    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
-      if (currentParent != null && this.includedResolutions.contains(node.getResolution())) {
-        mergeWithExisting(node);
-
-        this.graphBuilder.addEdge(currentParent, node);
-      }
-
-      this.nodeStack.push(node);
-
-      return true;
-    }
-
-    return false;
-  }
-
-  private boolean internalVisit2(DependencyNode node) {
     if (!isIncluded(node)) {
       return false;
     }
@@ -109,7 +91,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
 
-  private boolean internalEndVisit2(DependencyNode node) {
+  private boolean internalEndVisit(DependencyNode node) {
     if (!isIncluded(node)) {
       return false;
     }
@@ -136,28 +118,6 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private void mergeWithExisting(DependencyNode node) {
     DependencyNode effectiveNode = this.graphBuilder.getEffectiveNode(node);
     node.merge(effectiveNode);
-  }
-
-  private boolean leadsToTargetDependency(DependencyNode node) {
-    if (this.targetFilter.include(node.getArtifact())) {
-      return true;
-    }
-
-    for (DependencyNode c : node.getChildren()) {
-      if (leadsToTargetDependency(c)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  private boolean internalEndVisit(DependencyNode node) {
-    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
-      this.nodeStack.pop();
-    }
-
-    return true;
   }
 
   private enum DoNothingArtifactFilter implements ArtifactFilter {
