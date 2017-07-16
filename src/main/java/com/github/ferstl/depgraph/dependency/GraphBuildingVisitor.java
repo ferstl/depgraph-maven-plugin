@@ -39,7 +39,10 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
-  private int targetDepth = 0;
+  /**
+   * Max depth of the graph. Nodes deeper than this depth will be cut off from the graph.
+   */
+  private int cutOffDepth = 0;
 
   GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.graphBuilder = graphBuilder;
@@ -96,7 +99,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
       this.nodeStack.push(node);
 
       if (this.targetFilter.include(node.getArtifact())) {
-        this.targetDepth = max(this.targetDepth, this.nodeStack.size());
+        this.cutOffDepth = max(this.cutOffDepth, this.nodeStack.size());
       }
 
       return true;
@@ -113,9 +116,9 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
       if (currentParent == null) {
         // We are at the root element of the graph.
-        this.targetDepth = 0;
-      } else if (this.nodeStack.size() < this.targetDepth) {
-        this.targetDepth = this.nodeStack.size();
+        this.cutOffDepth = 0;
+      } else if (this.nodeStack.size() < this.cutOffDepth) {
+        this.cutOffDepth = this.nodeStack.size();
         mergeWithExisting(node);
         this.graphBuilder.addEdge(currentParent, node);
       }
