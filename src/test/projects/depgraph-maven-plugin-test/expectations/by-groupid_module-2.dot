@@ -16,6 +16,6 @@ digraph "module-2" {
   "com.github.ferstl:compile" -> "com.google.guava:compile"
   "com.github.ferstl:compile" -> "commons-codec:compile"
   "com.github.ferstl:compile" -> "org.apache.commons:compile"
-  "com.github.ferstl:compile" -> "junit:test"
   "junit:test" -> "org.hamcrest:test"
+  "com.github.ferstl:compile" -> "junit:test"
 }

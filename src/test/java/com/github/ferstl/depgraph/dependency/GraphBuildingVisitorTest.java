@@ -104,13 +104,12 @@ public class GraphBuildingVisitorTest {
 
     // Don't process any further children of child2
     assertFalse(this.visitor.visit(child2));
-
-    assertTrue(this.visitor.endVisit(child2));
+    assertFalse(this.visitor.endVisit(child2));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]"},
+            "\"groupId:child1:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]"},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\""}));
   }
@@ -134,8 +133,7 @@ public class GraphBuildingVisitorTest {
 
     assertTrue(this.visitor.visit(parent));
 
-    // Don't process any further children of child2
-    assertFalse(this.visitor.visit(child1));
+    assertTrue(this.visitor.visit(child1));
     assertTrue(this.visitor.endVisit(child1));
 
     assertTrue(this.visitor.visit(child2));
@@ -144,10 +142,65 @@ public class GraphBuildingVisitorTest {
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
+            "\"groupId:child2:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\""}));
   }
+
+  /**
+   * .
+   * <pre>
+   * parent
+   * - child1
+   *   - child4 (target dependency)
+   * - child2
+   * - child3 (target dependency)
+   *   - child4 (target dependency)
+   * </pre>
+   */
+  @Test
+  public void multiTargetDepNode() {
+    org.apache.maven.shared.dependency.graph.DependencyNode child4 = createGraphNode("child4");
+    org.apache.maven.shared.dependency.graph.DependencyNode child1 = createGraphNode("child1", child4);
+    org.apache.maven.shared.dependency.graph.DependencyNode child2 = createGraphNode("child2");
+    org.apache.maven.shared.dependency.graph.DependencyNode child3 = createGraphNode("child3", child4);
+    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child1, child2, child3);
+
+    when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(false);
+    when(this.targetFilter.include(child3.getArtifact())).thenReturn(true);
+    when(this.targetFilter.include(child4.getArtifact())).thenReturn(true);
+
+    assertTrue(this.visitor.visit(parent));
+
+    assertTrue(this.visitor.visit(child1));
+    assertTrue(this.visitor.visit(child4));
+    assertTrue(this.visitor.endVisit(child4));
+    assertTrue(this.visitor.endVisit(child1));
+
+    assertTrue(this.visitor.visit(child2));
+    assertTrue(this.visitor.endVisit(child2));
+
+    assertTrue(this.visitor.visit(child3));
+    assertTrue(this.visitor.visit(child4));
+    assertTrue(this.visitor.endVisit(child4));
+    assertTrue(this.visitor.endVisit(child3));
+
+    assertThat(this.graphBuilder, hasNodesAndEdges(
+        new String[]{
+            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
+            "\"groupId:child1:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]",
+            "\"groupId:child3:jar:version:compile\"[label=\"groupId:child3:jar:version:compile\"]",
+            "\"groupId:child4:jar:version:compile\"[label=\"groupId:child4:jar:version:compile\"]"},
+        new String[]{
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\"",
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child3:jar:version:compile\"",
+            "\"groupId:child1:jar:version:compile\" -> \"groupId:child4:jar:version:compile\"",
+            "\"groupId:child3:jar:version:compile\" -> \"groupId:child4:jar:version:compile\""
+
+
+        }));
+  }
+
 
   @Test
   public void defaultArtifactFilter() {

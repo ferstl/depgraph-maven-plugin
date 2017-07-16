@@ -1,10 +1,5 @@
 graph [
 node [
-id "com.github.ferstl:module-3:jar:"
-label "module-3"
-]
-
-node [
 id "com.github.ferstl:module-2:jar:"
 label "module-2"
 ]
@@ -15,13 +10,13 @@ label "guava"
 ]
 
 node [
-id "com.mysema.querydsl:querydsl-core:jar:"
-label "querydsl-core"
+id "com.github.ferstl:module-3:jar:"
+label "module-3"
 ]
 
-edge [
-source "com.github.ferstl:module-3:jar:"
-target "com.github.ferstl:module-2:jar:"
+node [
+id "com.mysema.querydsl:querydsl-core:jar:"
+label "querydsl-core"
 ]
 
 edge [
@@ -31,7 +26,7 @@ target "com.google.guava:guava:jar:"
 
 edge [
 source "com.github.ferstl:module-3:jar:"
-target "com.mysema.querydsl:querydsl-core:jar:"
+target "com.github.ferstl:module-2:jar:"
 ]
 
 edge [
@@ -43,6 +38,11 @@ graphics
 style "dotted"
 targetArrow "standard"
 ]
+]
+
+edge [
+source "com.github.ferstl:module-3:jar:"
+target "com.mysema.querydsl:querydsl-core:jar:"
 ]
 
 ]

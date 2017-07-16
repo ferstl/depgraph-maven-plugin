@@ -15,12 +15,9 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.maven.artifact.Artifact;
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -105,16 +102,6 @@ public final class DependencyNode {
     return this.treeNode.getRelatedArtifact().getVersion();
   }
 
-  public Collection<DependencyNode> getChildren() {
-    if (this.treeNode != null) {
-      return Collections2.transform(this.treeNode.getChildren(), TreeNode2Adapter.INSTANCE);
-    } else if (this.graphNode != null) {
-      return Collections2.transform(this.graphNode.getChildren(), GraphNode2Adapter.INSTANCE);
-    } else {
-      // impossible case
-      throw new IllegalStateException("Tree node and graph node are null");
-    }
-  }
 
   @Override
   public String toString() {
@@ -131,24 +118,6 @@ public final class DependencyNode {
         return NodeResolution.OMITTED_FOR_CYCLE;
       default:
         return NodeResolution.INCLUDED;
-    }
-  }
-
-  private enum TreeNode2Adapter implements Function<org.apache.maven.shared.dependency.tree.DependencyNode, DependencyNode> {
-    INSTANCE;
-
-    @Override
-    public DependencyNode apply(org.apache.maven.shared.dependency.tree.DependencyNode tn) {
-      return new DependencyNode(tn);
-    }
-  }
-
-  private enum GraphNode2Adapter implements Function<org.apache.maven.shared.dependency.graph.DependencyNode, DependencyNode> {
-    INSTANCE;
-
-    @Override
-    public DependencyNode apply(org.apache.maven.shared.dependency.graph.DependencyNode tn) {
-      return new DependencyNode(tn);
     }
   }
 }

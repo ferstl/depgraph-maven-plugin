@@ -12,6 +12,6 @@ digraph "module-1" {
   // Edge Definitions:
   "com.github.ferstl:module-1:jar:" -> "commons-codec:commons-codec:jar:"
   "com.github.ferstl:module-1:jar:" -> "org.apache.commons:commons-lang3:jar:"
-  "com.github.ferstl:module-1:jar:" -> "junit:junit:jar:"
   "junit:junit:jar:" -> "org.hamcrest:hamcrest-core:jar:"
+  "com.github.ferstl:module-1:jar:" -> "junit:junit:jar:"
 }

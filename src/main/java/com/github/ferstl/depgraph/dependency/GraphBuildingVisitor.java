@@ -38,6 +38,11 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
+  /**
+   * Max depth of the graph. Nodes deeper than this depth will be cut off from the graph.
+   */
+  private int cutOffDepth = 0;
+
   GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.graphBuilder = graphBuilder;
     this.nodeStack = new ArrayDeque<>();
@@ -71,48 +76,47 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   private boolean internalVisit(DependencyNode node) {
-    DependencyNode currentParent = this.nodeStack.peek();
-
-    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
-      if (currentParent != null && this.includedResolutions.contains(node.getResolution())) {
-        mergeWithExisting(node);
-
-        this.graphBuilder.addEdge(currentParent, node);
-      }
-
-      this.nodeStack.push(node);
-
-      return true;
+    if (!isIncluded(node)) {
+      return false;
     }
 
-    return false;
+    this.nodeStack.push(node);
+
+    if (this.targetFilter.include(node.getArtifact())) {
+      this.cutOffDepth = this.nodeStack.size();
+    }
+
+    return true;
+  }
+
+
+  private boolean internalEndVisit(DependencyNode node) {
+    if (!isIncluded(node)) {
+      return false;
+    }
+
+    this.nodeStack.pop();
+
+    DependencyNode currentParent = this.nodeStack.peek();
+    if (this.nodeStack.size() < this.cutOffDepth) {
+      this.cutOffDepth = this.nodeStack.size();
+
+      if (currentParent != null) {
+        mergeWithExisting(node);
+        this.graphBuilder.addEdge(currentParent, node);
+      }
+    }
+
+    return true;
+  }
+
+  private boolean isIncluded(DependencyNode node) {
+    return this.globalFilter.include(node.getArtifact()) && this.includedResolutions.contains(node.getResolution());
   }
 
   private void mergeWithExisting(DependencyNode node) {
     DependencyNode effectiveNode = this.graphBuilder.getEffectiveNode(node);
     node.merge(effectiveNode);
-  }
-
-  private boolean leadsToTargetDependency(DependencyNode node) {
-    if (this.targetFilter.include(node.getArtifact())) {
-      return true;
-    }
-
-    for (DependencyNode c : node.getChildren()) {
-      if (leadsToTargetDependency(c)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  private boolean internalEndVisit(DependencyNode node) {
-    if (this.globalFilter.include(node.getArtifact()) && leadsToTargetDependency(node)) {
-      this.nodeStack.pop();
-    }
-
-    return true;
   }
 
   private enum DoNothingArtifactFilter implements ArtifactFilter {

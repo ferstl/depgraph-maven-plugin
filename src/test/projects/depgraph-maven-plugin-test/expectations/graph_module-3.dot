@@ -3,10 +3,10 @@ digraph "module-3" {
   edge [fontsize="10",fontname="Helvetica"]
 
   // Node Definitions:
-  "com.github.ferstl:module-3:jar:"[label=<module-3>]
   "com.github.ferstl:module-1:jar:"[label=<module-1>]
   "commons-codec:commons-codec:jar:"[label=<commons-codec>]
   "org.apache.commons:commons-lang3:jar:"[label=<commons-lang3>]
+  "com.github.ferstl:module-3:jar:"[label=<module-3>]
   "com.github.ferstl:module-2:jar:"[label=<module-2>]
   "com.google.guava:guava:jar:"[label=<guava>]
   "com.mysema.querydsl:querydsl-core:jar:"[label=<querydsl-core>]
@@ -15,13 +15,13 @@ digraph "module-3" {
   "com.infradna.tool:bridge-method-annotation:jar:"[label=<bridge-method-annotation>]
 
   // Edge Definitions:
-  "com.github.ferstl:module-3:jar:" -> "com.github.ferstl:module-1:jar:"
   "com.github.ferstl:module-1:jar:" -> "commons-codec:commons-codec:jar:"
   "com.github.ferstl:module-1:jar:" -> "org.apache.commons:commons-lang3:jar:"
-  "com.github.ferstl:module-3:jar:" -> "com.github.ferstl:module-2:jar:"
+  "com.github.ferstl:module-3:jar:" -> "com.github.ferstl:module-1:jar:"
   "com.github.ferstl:module-2:jar:" -> "com.google.guava:guava:jar:"
-  "com.github.ferstl:module-3:jar:" -> "com.mysema.querydsl:querydsl-core:jar:"
+  "com.github.ferstl:module-3:jar:" -> "com.github.ferstl:module-2:jar:"
   "com.mysema.querydsl:querydsl-core:jar:" -> "com.google.code.findbugs:jsr305:jar:"
   "com.mysema.querydsl:querydsl-core:jar:" -> "com.mysema.commons:mysema-commons-lang:jar:"
   "com.mysema.querydsl:querydsl-core:jar:" -> "com.infradna.tool:bridge-method-annotation:jar:"
+  "com.github.ferstl:module-3:jar:" -> "com.mysema.querydsl:querydsl-core:jar:"
 }
