@@ -25,11 +25,11 @@ import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
-import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
+import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_ID;
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
 import static java.util.EnumSet.of;
@@ -98,8 +98,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
         .showArtifactIds(true)
         .showVersionsOnNodes(this.showVersions)
         .showVersionsOnEdges(this.showVersions && requiresFullGraph())
-        .configure(GraphBuilder.<DependencyNode>create())
-        .useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
+        .configure(GraphBuilder.<DependencyNode>create(VERSIONLESS_ID));
   }
 
   private MavenGraphAdapter createMavenGraphAdapter(ArtifactFilter targetFilter) {

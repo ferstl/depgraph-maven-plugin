@@ -53,11 +53,10 @@ public abstract class AbstractGraphStyleConfigurerTest {
   @Test
   public void showGroupIds() {
     // arrange
-    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>();
+    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>(VERSIONLESS_ID);
     this.graphStyleConfigurer
         .showGroupIds(true)
         .configure(graphBuilder)
-        .useNodeIdRenderer(VERSIONLESS_ID)
         .graphFormatter(this.formatter);
 
 
@@ -76,11 +75,10 @@ public abstract class AbstractGraphStyleConfigurerTest {
   @Test
   public void showArtifactIds() {
     // arrange
-    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>();
+    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>(VERSIONLESS_ID);
     this.graphStyleConfigurer
         .showArtifactIds(true)
         .configure(graphBuilder)
-        .useNodeIdRenderer(VERSIONLESS_ID)
         .graphFormatter(this.formatter);
 
     // act
@@ -98,11 +96,10 @@ public abstract class AbstractGraphStyleConfigurerTest {
   @Test
   public void showVersionsOnNodes() {
     // arrange
-    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>();
+    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>(VERSIONLESS_ID);
     this.graphStyleConfigurer
         .showVersionsOnNodes(true)
         .configure(graphBuilder)
-        .useNodeIdRenderer(VERSIONLESS_ID)
         .graphFormatter(this.formatter);
 
     // act
@@ -120,11 +117,10 @@ public abstract class AbstractGraphStyleConfigurerTest {
   @Test
   public void showVersionsOnNodesWithConflict() {
     // arrange
-    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>();
+    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>(VERSIONLESS_ID);
     this.graphStyleConfigurer
         .showVersionsOnNodes(true)
         .configure(graphBuilder)
-        .useNodeIdRenderer(VERSIONLESS_ID)
         .graphFormatter(this.formatter);
 
     // act
@@ -142,11 +138,10 @@ public abstract class AbstractGraphStyleConfigurerTest {
   @Test
   public void showVersionsOnEdgesWithoutConflict() {
     // arrange
-    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>();
+    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>(VERSIONLESS_ID);
     this.graphStyleConfigurer
         .showVersionsOnEdges(true)
         .configure(graphBuilder)
-        .useNodeIdRenderer(VERSIONLESS_ID)
         .graphFormatter(this.formatter);
 
     // act
@@ -164,11 +159,10 @@ public abstract class AbstractGraphStyleConfigurerTest {
   @Test
   public void showVersionsOnEdgesWithConflict() {
     // arrange
-    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>();
+    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>(VERSIONLESS_ID);
     this.graphStyleConfigurer
         .showVersionsOnEdges(true)
         .configure(graphBuilder)
-        .useNodeIdRenderer(VERSIONLESS_ID)
         .graphFormatter(this.formatter);
 
     // act
@@ -186,14 +180,13 @@ public abstract class AbstractGraphStyleConfigurerTest {
   @Test
   public void showAll() {
     // arrange
-    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>();
+    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>(VERSIONLESS_ID);
     this.graphStyleConfigurer
         .showGroupIds(true)
         .showArtifactIds(true)
         .showVersionsOnNodes(true)
         .showVersionsOnEdges(true)
         .configure(graphBuilder)
-        .useNodeIdRenderer(VERSIONLESS_ID)
         .graphFormatter(this.formatter);
 
     // act
@@ -211,9 +204,8 @@ public abstract class AbstractGraphStyleConfigurerTest {
   @Test
   public void showNothing() {
     // arrange
-    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>();
+    GraphBuilder<DependencyNode> graphBuilder = new GraphBuilder<>(VERSIONLESS_ID);
     this.graphStyleConfigurer.configure(graphBuilder)
-        .useNodeIdRenderer(VERSIONLESS_ID)
         .graphFormatter(this.formatter);
 
     // act

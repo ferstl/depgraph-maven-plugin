@@ -23,6 +23,7 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
+import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEdges;
@@ -44,7 +45,7 @@ public class GraphBuildingVisitorTest {
 
   @Before
   public void before() {
-    this.graphBuilder = new GraphBuilder<>();
+    this.graphBuilder = new GraphBuilder<>(ToStringNodeIdRenderer.INSTANCE);
 
     this.globalFilter = mock(ArtifactFilter.class);
     when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);

@@ -27,6 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentMatchers;
+import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static java.util.EnumSet.allOf;
@@ -61,7 +62,7 @@ public class MavenGraphAdapterTest {
     this.mavenProject = new MavenProject();
     this.globalFilter = mock(ArtifactFilter.class);
     this.targetFilter = mock(ArtifactFilter.class);
-    this.graphBuilder = new GraphBuilder<>();
+    this.graphBuilder = new GraphBuilder<>(ToStringNodeIdRenderer.INSTANCE);
 
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
     when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(mock(org.apache.maven.shared.dependency.graph.DependencyNode.class));

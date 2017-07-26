@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Matchers;
+import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.emptyGraph;
@@ -68,7 +69,7 @@ public class AggregatingGraphFactoryTest {
 
     this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter);
 
-    this.graphBuilder = new GraphBuilder<>();
+    this.graphBuilder = new GraphBuilder<>(ToStringNodeIdRenderer.INSTANCE);
   }
 
   /**

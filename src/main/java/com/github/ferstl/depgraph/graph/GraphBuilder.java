@@ -33,41 +33,37 @@ import com.google.common.collect.ImmutableSet;
  */
 public final class GraphBuilder<T> {
 
-  private String graphName;
-  private GraphFormatter graphFormatter;
-  private NodeRenderer<? super T> nodeIdRenderer;
-  private NodeRenderer<? super T> nodeNameRenderer;
-  private EdgeRenderer<? super T> edgeRenderer;
-  private boolean omitSelfReferences;
+  private final NodeRenderer<? super T> nodeIdRenderer;
   private final Map<String, Node<T>> nodeDefinitions;
   private final Set<Edge> edges;
 
-  public static <T> GraphBuilder<T> create() {
-    return new GraphBuilder<>();
+  private String graphName;
+  private GraphFormatter graphFormatter;
+  private NodeRenderer<? super T> nodeNameRenderer;
+  private EdgeRenderer<? super T> edgeRenderer;
+  private boolean omitSelfReferences;
+
+  public static <T> GraphBuilder<T> create(NodeRenderer nodeIdRenderer) {
+    return new GraphBuilder<>(nodeIdRenderer);
   }
 
-  public GraphBuilder() {
+  public GraphBuilder(NodeRenderer nodeIdRenderer) {
+    this.nodeIdRenderer = nodeIdRenderer;
+    this.nodeDefinitions = new LinkedHashMap<>();
+    this.edges = new LinkedHashSet<>();
+
     DotAttributeBuilder graphAttributeBuilder = new DotAttributeBuilder();
     DotAttributeBuilder nodeAttributeBuilder = new DotAttributeBuilder().shape("box").fontName("Helvetica");
     DotAttributeBuilder edgeAttributeBuilder = new DotAttributeBuilder().fontName("Helvetica").fontSize(10);
 
     this.graphName = "G";
     this.graphFormatter = new DotGraphFormatter(graphAttributeBuilder, nodeAttributeBuilder, edgeAttributeBuilder);
-    this.nodeIdRenderer = createDefaultNodeIdRenderer();
     this.nodeNameRenderer = createDefaultNodeNameRenderer();
     this.edgeRenderer = createDefaultEdgeRenderer();
-
-    this.nodeDefinitions = new LinkedHashMap<>();
-    this.edges = new LinkedHashSet<>();
   }
 
   public GraphBuilder<T> graphName(String name) {
     this.graphName = name;
-    return this;
-  }
-
-  public GraphBuilder<T> useNodeIdRenderer(NodeRenderer<? super T> nodeIdRenderer) {
-    this.nodeIdRenderer = nodeIdRenderer;
     return this;
   }
 
@@ -175,16 +171,6 @@ public final class GraphBuilder<T> {
         return "";
       }
 
-    };
-  }
-
-  private static <T> NodeRenderer<T> createDefaultNodeIdRenderer() {
-    return new NodeRenderer<T>() {
-
-      @Override
-      public String render(T node) {
-        return node.toString();
-      }
     };
   }
 

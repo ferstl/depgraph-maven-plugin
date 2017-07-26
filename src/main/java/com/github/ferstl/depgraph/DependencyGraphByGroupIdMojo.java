@@ -24,12 +24,12 @@ import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
-import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
+import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.GROUP_ID_WITH_SCOPE;
 import static java.util.EnumSet.allOf;
 
 /**
@@ -51,8 +51,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
         .showArtifactIds(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
-        .configure(GraphBuilder.<DependencyNode>create())
-        .useNodeIdRenderer(NodeIdRenderers.GROUP_ID_WITH_SCOPE)
+        .configure(GraphBuilder.<DependencyNode>create(GROUP_ID_WITH_SCOPE))
         .omitSelfReferences();
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, allOf(NodeResolution.class));

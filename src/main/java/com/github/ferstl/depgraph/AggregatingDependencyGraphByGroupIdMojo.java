@@ -25,9 +25,11 @@ import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
-import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
+
+import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.GROUP_ID;
+import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.GROUP_ID_WITH_SCOPE;
 
 /**
  * Aggregates all dependencies of a multi-module by their group IDs.
@@ -50,8 +52,7 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
         .showArtifactIds(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
-        .configure(GraphBuilder.<DependencyNode>create())
-        .useNodeIdRenderer(this.mergeScopes ? NodeIdRenderers.GROUP_ID : NodeIdRenderers.GROUP_ID_WITH_SCOPE)
+        .configure(GraphBuilder.<DependencyNode>create(this.mergeScopes ? GROUP_ID : GROUP_ID_WITH_SCOPE))
         .omitSelfReferences();
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);

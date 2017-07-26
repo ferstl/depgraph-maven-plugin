@@ -18,6 +18,7 @@ package com.github.ferstl.depgraph.graph;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.contains;
@@ -41,7 +42,7 @@ public class GraphBuilderTest {
   @Before
   public void before() {
     this.formatter = new TestFormatter();
-    this.graphBuilder = GraphBuilder.create();
+    this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
     this.graphBuilder.graphFormatter(this.formatter);
 
     this.fromNode = "from";
@@ -121,23 +122,6 @@ public class GraphBuilderTest {
     Node<?> fromNode = new Node<>("from", "", "");
     assertEquals(this.formatter.nodes, singletonList(fromNode));
     assertThat(this.formatter.edges, empty());
-  }
-
-
-  @Test
-  public void customNodeIdRenderer() {
-    // arrange
-    this.graphBuilder.useNodeIdRenderer(TestNodeRenderer.INSTANCE)
-        .addEdge(this.fromNode, this.toNode);
-
-    // act
-    this.graphBuilder.toString();
-
-    // assert
-    Node<?> fromNode = new Node<>(this.fromNode + "-custom", "", "");
-    Node<?> toNode = new Node<>(this.toNode + "-custom", "", "");
-    assertThat(this.formatter.nodes, containsInAnyOrder(fromNode, toNode));
-    assertThat(this.formatter.edges, contains(new Edge(this.fromNode + "-custom", this.toNode + "-custom", "")));
   }
 
 

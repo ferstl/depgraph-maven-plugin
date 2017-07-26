@@ -25,8 +25,10 @@ import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
-import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
+
+import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_ID;
+import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_ID_WITH_SCOPE;
 
 /**
  * Aggregates all dependencies of a multi-module project into one single graph.
@@ -74,12 +76,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .showVersionsOnNodes(this.showVersions)
         // This graph won't show any conflicting dependencies. So don't show versions on edges
         .showVersionsOnEdges(false)
-        .configure(GraphBuilder.<DependencyNode>create());
-    if (this.mergeScopes) {
-      graphBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID);
-    } else {
-      graphBuilder.useNodeIdRenderer(NodeIdRenderers.VERSIONLESS_ID_WITH_SCOPE);
-    }
+        .configure(GraphBuilder.<DependencyNode>create(this.mergeScopes ? VERSIONLESS_ID : VERSIONLESS_ID_WITH_SCOPE));
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, this.includeParentProjects);
