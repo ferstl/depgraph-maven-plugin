@@ -24,7 +24,6 @@ import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Matchers;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
@@ -65,7 +64,7 @@ public class AggregatingGraphFactoryTest {
 
     org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode = mock(org.apache.maven.shared.dependency.graph.DependencyNode.class);
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
-    when(this.dependencyGraphBuilder.buildDependencyGraph(Matchers.<MavenProject>any(), Matchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
+    when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
 
     this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter);
 
