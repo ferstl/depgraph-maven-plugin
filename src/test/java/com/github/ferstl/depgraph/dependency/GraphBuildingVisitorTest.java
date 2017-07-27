@@ -45,7 +45,7 @@ public class GraphBuildingVisitorTest {
 
   @Before
   public void before() {
-    this.graphBuilder = new GraphBuilder<>(ToStringNodeIdRenderer.INSTANCE);
+    this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 
     this.globalFilter = mock(ArtifactFilter.class);
     when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);

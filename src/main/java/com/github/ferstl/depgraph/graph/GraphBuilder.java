@@ -44,10 +44,10 @@ public final class GraphBuilder<T> {
   private boolean omitSelfReferences;
 
   public static <T> GraphBuilder<T> create(NodeRenderer<? super T> nodeIdRenderer) {
-    return new GraphBuilder<>(nodeIdRenderer);
+    return GraphBuilder.create(nodeIdRenderer);
   }
 
-  public GraphBuilder(NodeRenderer<? super T> nodeIdRenderer) {
+  private GraphBuilder(NodeRenderer<? super T> nodeIdRenderer) {
     this.nodeIdRenderer = nodeIdRenderer;
     this.nodeDefinitions = new LinkedHashMap<>();
     this.edges = new LinkedHashSet<>();

@@ -62,7 +62,7 @@ public class MavenGraphAdapterTest {
     this.mavenProject = new MavenProject();
     this.globalFilter = mock(ArtifactFilter.class);
     this.targetFilter = mock(ArtifactFilter.class);
-    this.graphBuilder = new GraphBuilder<>(ToStringNodeIdRenderer.INSTANCE);
+    this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
     when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(mock(org.apache.maven.shared.dependency.graph.DependencyNode.class));

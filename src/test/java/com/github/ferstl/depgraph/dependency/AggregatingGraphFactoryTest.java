@@ -69,7 +69,7 @@ public class AggregatingGraphFactoryTest {
 
     this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter);
 
-    this.graphBuilder = new GraphBuilder<>(ToStringNodeIdRenderer.INSTANCE);
+    this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
   }
 
   /**
