@@ -44,7 +44,7 @@ public final class GraphBuilder<T> {
   private boolean omitSelfReferences;
 
   public static <T> GraphBuilder<T> create(NodeRenderer<? super T> nodeIdRenderer) {
-    return GraphBuilder.create(nodeIdRenderer);
+    return new GraphBuilder<>(nodeIdRenderer);
   }
 
   private GraphBuilder(NodeRenderer<? super T> nodeIdRenderer) {
