@@ -76,7 +76,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .showVersionsOnNodes(this.showVersions)
         // This graph won't show any conflicting dependencies. So don't show versions on edges
         .showVersionsOnEdges(false)
-        .configure(GraphBuilder.<DependencyNode>create(this.mergeScopes ? VERSIONLESS_ID : VERSIONLESS_ID_WITH_SCOPE));
+        .configure(GraphBuilder.create(this.mergeScopes ? VERSIONLESS_ID : VERSIONLESS_ID_WITH_SCOPE));
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, this.includeParentProjects);

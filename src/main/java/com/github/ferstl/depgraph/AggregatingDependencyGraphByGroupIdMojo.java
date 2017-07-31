@@ -52,7 +52,7 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
         .showArtifactIds(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
-        .configure(GraphBuilder.<DependencyNode>create(this.mergeScopes ? GROUP_ID : GROUP_ID_WITH_SCOPE))
+        .configure(GraphBuilder.create(this.mergeScopes ? GROUP_ID : GROUP_ID_WITH_SCOPE))
         .omitSelfReferences();
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);

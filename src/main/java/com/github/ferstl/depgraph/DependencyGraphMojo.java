@@ -98,7 +98,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
         .showArtifactIds(true)
         .showVersionsOnNodes(this.showVersions)
         .showVersionsOnEdges(this.showVersions && requiresFullGraph())
-        .configure(GraphBuilder.<DependencyNode>create(VERSIONLESS_ID));
+        .configure(GraphBuilder.create(VERSIONLESS_ID));
   }
 
   private MavenGraphAdapter createMavenGraphAdapter(ArtifactFilter targetFilter) {
