@@ -42,7 +42,6 @@ import static java.util.EnumSet.of;
     aggregator = false,
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.TEST,
-    requiresDirectInvocation = false,
     threadSafe = true)
 public class DependencyGraphMojo extends AbstractGraphMojo {
 

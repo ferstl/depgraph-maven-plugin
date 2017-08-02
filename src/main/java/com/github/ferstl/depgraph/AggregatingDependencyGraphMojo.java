@@ -39,7 +39,6 @@ import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_
     defaultPhase = LifecyclePhase.NONE,
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.TEST,
-    requiresDirectInvocation = false,
     threadSafe = true)
 public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo {
 

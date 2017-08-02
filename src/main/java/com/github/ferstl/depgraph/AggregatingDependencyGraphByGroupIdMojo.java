@@ -40,7 +40,6 @@ import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.GROUP_ID_WIT
     defaultPhase = LifecyclePhase.NONE,
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.TEST,
-    requiresDirectInvocation = false,
     threadSafe = true)
 public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregatingGraphMojo {
 

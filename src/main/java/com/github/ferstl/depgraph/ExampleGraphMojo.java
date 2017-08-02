@@ -38,7 +38,6 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
     requiresProject = true,
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.NONE,
-    requiresDirectInvocation = false,
     threadSafe = true)
 public class ExampleGraphMojo extends DependencyGraphMojo {
 

@@ -40,7 +40,6 @@ import static java.util.EnumSet.allOf;
     aggregator = false,
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.TEST,
-    requiresDirectInvocation = false,
     threadSafe = true)
 public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
