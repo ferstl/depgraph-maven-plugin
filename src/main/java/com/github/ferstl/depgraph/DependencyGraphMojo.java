@@ -28,7 +28,6 @@ import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-
 import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_ID;
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
@@ -102,12 +101,14 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   }
 
   private MavenGraphAdapter createMavenGraphAdapter(ArtifactFilter targetFilter) {
+    boolean jsonFormat = GraphFormat.forName(this.graphFormat) == GraphFormat.JSON;
     MavenGraphAdapter adapter;
-    if (requiresFullGraph()) {
+    if (requiresFullGraph() || jsonFormat) {
       EnumSet<NodeResolution> resolutions = allOf(NodeResolution.class);
-      resolutions = !this.showConflicts ? complementOf(of(NodeResolution.OMITTED_FOR_CONFLICT)) : resolutions;
-      resolutions = !this.showDuplicates ? complementOf(of(NodeResolution.OMITTED_FOR_DUPLICATE)) : resolutions;
-
+      if (!jsonFormat) {
+        resolutions = !this.showConflicts ? complementOf(of(NodeResolution.OMITTED_FOR_CONFLICT)) : resolutions;
+        resolutions = !this.showDuplicates ? complementOf(of(NodeResolution.OMITTED_FOR_DUPLICATE)) : resolutions;
+      }
       adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, resolutions);
     } else {
       adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);

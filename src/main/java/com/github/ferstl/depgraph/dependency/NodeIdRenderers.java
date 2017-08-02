@@ -63,6 +63,19 @@ public enum NodeIdRenderers implements NodeRenderer<DependencyNode> {
           artifact.getScope());
     }
 
+  },
+  
+  ID {
+    @Override
+    public String render(DependencyNode node) {
+      Artifact artifact = node.getArtifact();
+      return COLON_JOINER.join(
+          artifact.getGroupId(),
+          artifact.getArtifactId(),
+          artifact.getVersion(),
+          artifact.getType(),
+          artifact.getClassifier());
+    }
   };
 
   private static final Joiner COLON_JOINER = Joiner.on(":").useForNull("");
