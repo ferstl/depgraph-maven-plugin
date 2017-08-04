@@ -19,38 +19,38 @@ public class DependencyNodeIdRenderer implements NodeRenderer<DependencyNode> {
 
   public static DependencyNodeIdRenderer groupId() {
     return new DependencyNodeIdRenderer()
-        .withGroupId();
+        .withGroupId(true);
   }
 
   public static DependencyNodeIdRenderer versionlessId() {
     return new DependencyNodeIdRenderer()
-        .withGroupId()
-        .withArtifactId()
-        .withClassifier();
+        .withGroupId(true)
+        .withArtifactId(true)
+        .withClassifier(true);
   }
 
-  public DependencyNodeIdRenderer withGroupId() {
-    this.withGroupId = true;
+  public DependencyNodeIdRenderer withType(boolean withType) {
+    this.withType = withType;
     return this;
   }
 
-  public DependencyNodeIdRenderer withArtifactId() {
-    this.withArtifactId = true;
+  public DependencyNodeIdRenderer withScope(boolean withScope) {
+    this.withScope = withScope;
     return this;
   }
 
-  public DependencyNodeIdRenderer withType() {
-    this.withType = true;
+  private DependencyNodeIdRenderer withGroupId(boolean withGroupId) {
+    this.withGroupId = withGroupId;
     return this;
   }
 
-  public DependencyNodeIdRenderer withClassifier() {
-    this.withClassifier = true;
+  private DependencyNodeIdRenderer withArtifactId(boolean withArtifactId) {
+    this.withArtifactId = withArtifactId;
     return this;
   }
 
-  public DependencyNodeIdRenderer withScope() {
-    this.withScope = true;
+  private DependencyNodeIdRenderer withClassifier(boolean withClassifier) {
+    this.withClassifier = withClassifier;
     return this;
   }
 
