@@ -4,17 +4,14 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.junit.Test;
 
-import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.GROUP_ID;
-import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_ID;
-import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_ID_WITH_SCOPE;
 import static org.junit.Assert.assertEquals;
 
-public class NodeIdRenderersTest {
+public class DependencyNodeIdRendererTest {
 
   @Test
   public void groupId() {
     // act
-    String result = GROUP_ID.render(createDependencyNode());
+    String result = DependencyNodeIdRenderer.groupId().render(createDependencyNode());
 
     // assert
     assertEquals("groupId", result);
@@ -23,19 +20,19 @@ public class NodeIdRenderersTest {
   @Test
   public void versionLessId() {
     // act
-    String result = VERSIONLESS_ID.render(createDependencyNode());
+    String result = DependencyNodeIdRenderer.versionlessId().render(createDependencyNode());
 
     // assert
-    assertEquals("groupId:artifactId:type:classifier", result);
+    assertEquals("groupId:artifactId:classifier", result);
   }
 
   @Test
   public void versionLessIdWithScope() {
     // act
-    String result = VERSIONLESS_ID_WITH_SCOPE.render(createDependencyNode());
+    String result = DependencyNodeIdRenderer.versionlessId().withScope(true).render(createDependencyNode());
 
     // assert
-    assertEquals("groupId:artifactId:type:classifier:compile", result);
+    assertEquals("groupId:artifactId:classifier:compile", result);
   }
 
 
