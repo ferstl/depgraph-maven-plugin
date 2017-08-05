@@ -32,7 +32,7 @@ import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.3.9", "3.5.0"})
+@MavenVersions({"3.5.0"})
 public class GraphIntegrationTest {
 
   @Rule
@@ -121,6 +121,20 @@ public class GraphIntegrationTest {
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");
     assertFileContents(basedir, "expectations/graph_custom-graph-style.dot", "target/dependency-graph.dot");
+  }
+
+  @Test
+  public void graphMergeTypes() throws Exception {
+    File basedir = this.resources.getBasedir("single-dependency");
+
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DmergeTypes=true")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/graph_without-types.dot", "target/dependency-graph.dot");
   }
 
   @Test
