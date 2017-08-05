@@ -4,6 +4,8 @@ import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
 
+import static com.google.common.base.Strings.emptyToNull;
+
 public class DependencyNodeIdRenderer implements NodeRenderer<DependencyNode> {
 
   private static final Joiner COLON_JOINER = Joiner.on(":").skipNulls();
@@ -62,7 +64,7 @@ public class DependencyNodeIdRenderer implements NodeRenderer<DependencyNode> {
         this.withGroupId ? artifact.getGroupId() : null,
         this.withArtifactId ? artifact.getArtifactId() : null,
         this.withType ? artifact.getType() : null,
-        this.withClassifier ? artifact.getClassifier() : null,
+        this.withClassifier ? emptyToNull(artifact.getClassifier()) : null,
         this.withScope ? artifact.getScope() : null);
   }
 }

@@ -47,6 +47,25 @@ public class DependencyNodeIdRendererTest {
   }
 
 
+  @Test
+  public void versionLessIdWithEmptyClassifier() {
+    // arrange
+    Artifact artifact = new DefaultArtifact(
+        "groupId",
+        "artifactId",
+        "1.0.0",
+        "compile",
+        "type",
+        "",
+        null);
+
+    // act
+    String result = DependencyNodeIdRenderer.versionlessId().withType(true).render(new DependencyNode(artifact));
+
+    // assert
+    assertEquals("groupId:artifactId:type", result);
+  }
+
   private static DependencyNode createDependencyNode() {
     Artifact artifact = new DefaultArtifact(
         "groupId",
