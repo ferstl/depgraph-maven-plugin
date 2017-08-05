@@ -27,6 +27,17 @@ public class DependencyNodeIdRendererTest {
   }
 
   @Test
+  public void versionLessIdWithType() {
+    // act
+    String result = DependencyNodeIdRenderer.versionlessId()
+        .withType(true)
+        .render(createDependencyNode());
+
+    // assert
+    assertEquals("groupId:artifactId:type:classifier", result);
+  }
+
+  @Test
   public void versionLessIdWithScope() {
     // act
     String result = DependencyNodeIdRenderer.versionlessId().withScope(true).render(createDependencyNode());
