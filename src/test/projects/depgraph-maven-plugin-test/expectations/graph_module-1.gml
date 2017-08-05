@@ -1,57 +1,57 @@
 graph [
 node [
-id "com.github.ferstl:module-1:jar:"
+id "com.github.ferstl:module-1:jar"
 label "com.github.ferstl
 module-1
 1.0.0-SNAPSHOT"
 ]
 
 node [
-id "commons-codec:commons-codec:jar:"
+id "commons-codec:commons-codec:jar"
 label "commons-codec
 commons-codec
 1.10"
 ]
 
 node [
-id "org.apache.commons:commons-lang3:jar:"
+id "org.apache.commons:commons-lang3:jar"
 label "org.apache.commons
 commons-lang3
 3.1"
 ]
 
 node [
-id "junit:junit:jar:"
+id "junit:junit:jar"
 label "junit
 junit
 4.12"
 ]
 
 node [
-id "org.hamcrest:hamcrest-core:jar:"
+id "org.hamcrest:hamcrest-core:jar"
 label "org.hamcrest
 hamcrest-core
 1.3"
 ]
 
 edge [
-source "com.github.ferstl:module-1:jar:"
-target "commons-codec:commons-codec:jar:"
+source "com.github.ferstl:module-1:jar"
+target "commons-codec:commons-codec:jar"
 ]
 
 edge [
-source "com.github.ferstl:module-1:jar:"
-target "org.apache.commons:commons-lang3:jar:"
+source "com.github.ferstl:module-1:jar"
+target "org.apache.commons:commons-lang3:jar"
 ]
 
 edge [
-source "junit:junit:jar:"
-target "org.hamcrest:hamcrest-core:jar:"
+source "junit:junit:jar"
+target "org.hamcrest:hamcrest-core:jar"
 ]
 
 edge [
-source "com.github.ferstl:module-1:jar:"
-target "junit:junit:jar:"
+source "com.github.ferstl:module-1:jar"
+target "junit:junit:jar"
 ]
 
 ]

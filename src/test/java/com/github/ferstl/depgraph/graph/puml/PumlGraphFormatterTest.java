@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.List;
 import org.junit.Test;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.DependencyNodeUtil;
-import com.github.ferstl.depgraph.dependency.NodeIdRenderers;
 import com.github.ferstl.depgraph.dependency.PumlDependencyEgdeRenderer;
 import com.github.ferstl.depgraph.dependency.PumlDependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.Edge;
@@ -36,7 +36,7 @@ public class PumlGraphFormatterTest {
 
   private final PumlGraphFormatter formatter = new PumlGraphFormatter();
 
-  private final NodeRenderer<DependencyNode> nodeIdRenderer = NodeIdRenderers.VERSIONLESS_ID;
+  private final NodeRenderer<DependencyNode> nodeIdRenderer = DependencyNodeIdRenderer.versionlessId().withType(true);
 
   private final PumlDependencyNodeNameRenderer nodeInfoRenderer = new PumlDependencyNodeNameRenderer(true, true, true);
 
@@ -79,19 +79,18 @@ public class PumlGraphFormatterTest {
         "  BackgroundColor<<runtime>> lightBlue\n" +
         "  BackgroundColor<<provided>> lightGray\n" +
         "}\n" +
-        "rectangle \"com.github.ferstl:depgraph-maven-plugin:2.2.1-SNAPSHOT\" as com_github_ferstl_depgraph_maven_plugin_\n" +
-        "rectangle \"com.fasterxml.jackson.core:jackson-databind:2.8.7\" as com_fasterxml_jackson_core_jackson_databind_\n" +
-        "rectangle \"com.google.guava:guava:21.0\" as com_google_guava_guava_\n" +
-        "rectangle \"org.apache.maven:maven-core:jar\" as org_apache_maven_maven_core_<<3.3.9>>\n" +
-        "rectangle \"com.google.inject:guice:4.0\" as com_google_inject_guice_<<provided>>\n" +
-        "rectangle \"com.google.guava:guava:16.0.1\" as com_google_guava_guava_<<provided>>\n" +
-        "rectangle \"junit:junit:4.12\" as junit_junit_<<test>>\n" +
-        "com_github_ferstl_depgraph_maven_plugin_ -[#000000]-> com_fasterxml_jackson_core_jackson_databind_\n" +
-        "com_github_ferstl_depgraph_maven_plugin_ -[#000000]-> com_google_guava_guava_\n" +
-        "com_github_ferstl_depgraph_maven_plugin_ -[#000000]-> org_apache_maven_maven_core_\n" +
-        "com_github_ferstl_depgraph_maven_plugin_ -[#000000]-> junit_junit_\n" +
-        "org_apache_maven_maven_core_ -[#000000]-> com_google_inject_guice_\n" +
-        "com_google_inject_guice_ .[#FF0000].> com_google_guava_guava_: 16.0.1\n" +
+        "rectangle \"com.github.ferstl:depgraph-maven-plugin:2.2.1-SNAPSHOT\" as com_github_ferstl_depgraph_maven_plugin\n" +
+        "rectangle \"com.fasterxml.jackson.core:jackson-databind:2.8.7\" as com_fasterxml_jackson_core_jackson_databind\n" +
+        "rectangle \"com.google.guava:guava:21.0\" as com_google_guava_guava\n" +
+        "rectangle \"org.apache.maven:maven-core:jar\" as org_apache_maven_maven_core<<3.3.9>>\n" +
+        "rectangle \"com.google.inject:guice:4.0\" as com_google_inject_guice<<provided>>\n" +
+        "rectangle \"com.google.guava:guava:16.0.1\" as com_google_guava_guava<<provided>>\n" +
+        "rectangle \"junit:junit:4.12\" as junit_junit<<test>>\n" +
+        "com_github_ferstl_depgraph_maven_plugin -[#000000]-> com_fasterxml_jackson_core_jackson_databind\n" +
+        "com_github_ferstl_depgraph_maven_plugin -[#000000]-> com_google_guava_guava\n" +
+        "com_github_ferstl_depgraph_maven_plugin -[#000000]-> org_apache_maven_maven_core\n" +
+        "com_github_ferstl_depgraph_maven_plugin -[#000000]-> junit_junit\n" + "org_apache_maven_maven_core -[#000000]-> com_google_inject_guice\n" +
+        "com_google_inject_guice .[#FF0000].> com_google_guava_guava: 16.0.1\n" +
         "@enduml", puml);
   }
 

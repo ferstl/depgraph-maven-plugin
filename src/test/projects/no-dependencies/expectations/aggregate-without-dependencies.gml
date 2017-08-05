@@ -1,6 +1,6 @@
 graph [
 node [
-id "com.github.ferstl:no-dependencies:jar::compile"
+id "com.github.ferstl:no-dependencies:jar:compile"
 label "no-dependencies"
 ]
 
