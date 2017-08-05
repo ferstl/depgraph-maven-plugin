@@ -208,13 +208,6 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Parameter(property = "printStyleConfiguration", defaultValue = "false")
   private boolean printStyleConfiguration;
 
-  /**
-   * Merge dependencies with multiple types into one graph node instead of having a node per type.
-   *
-   * @since 2.3.0
-   */
-  @Parameter(property = "mergeTypes", defaultValue = "false")
-  boolean mergeTypes;
 
   /**
    * The project's artifact ID.

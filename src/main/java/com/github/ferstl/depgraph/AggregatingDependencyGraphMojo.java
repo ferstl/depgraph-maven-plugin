@@ -65,6 +65,14 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   @Parameter(property = "includeParentProjects", defaultValue = "false")
   private boolean includeParentProjects;
 
+  /**
+   * Merge dependencies with multiple types into one graph node instead of having a node per type.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "mergeTypes", defaultValue = "false")
+  private boolean mergeTypes;
+
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
 

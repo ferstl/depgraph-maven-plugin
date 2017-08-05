@@ -83,6 +83,14 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "showDuplicates", defaultValue = "false")
   boolean showDuplicates;
 
+  /**
+   * Merge dependencies with multiple types into one graph node instead of having a node per type.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "mergeTypes", defaultValue = "false")
+  boolean mergeTypes;
+
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
     GraphBuilder<DependencyNode> graphBuilder = createGraphBuilder(graphStyleConfigurer);
