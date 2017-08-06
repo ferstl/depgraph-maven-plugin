@@ -145,7 +145,7 @@ public class DocumentationIntegrationTest {
   public void aggregatedJson() throws Exception {
     runTest("aggregate",
         "-DgraphFormat=json",
-        "-DincludeParentProjects=true");
+        "-Dincludes=com.github.ferstl:*");
 
     assertFilesPresent(this.basedir, "target/dependency-graph.json");
 
@@ -193,22 +193,6 @@ public class DocumentationIntegrationTest {
         "sub-parent/target/dependency-graph.gml");
 
     collectFile("sub-parent/module-3/target/dependency-graph.gml", "with-conflicts.gml");
-  }
-
-  @Test
-  public void jsonGraph() throws Exception {
-    runTest("graph",
-        "-DgraphFormat=json");
-
-    assertFilesPresent(
-        this.basedir,
-        "module-1/target/dependency-graph.json",
-        "module-2/target/dependency-graph.json",
-        "sub-parent/module-3/target/dependency-graph.json",
-        "target/dependency-graph.json",
-        "sub-parent/target/dependency-graph.json");
-
-    collectFile("sub-parent/module-3/target/dependency-graph.json", "dependency-graph.json");
   }
 
   private void runTest(String goal, String... cliOptions) throws Exception {
