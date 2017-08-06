@@ -1,0 +1,125 @@
+{ "artifacts":
+  [ { "id": 0
+    , "artifactId": "module-1"
+    , "groupId": "com.github.ferstl"
+    , "version": "1.0.0-SNAPSHOT"
+    }
+  , { "id": 1
+    , "artifactId": "commons-codec"
+    , "groupId": "commons-codec"
+    , "version": "1.10"
+    }
+  , { "id": 2
+    , "artifactId": "commons-lang3"
+    , "groupId": "org.apache.commons"
+    , "version": "3.1"
+    }
+  , { "id": 3
+    , "artifactId": "module-3"
+    , "groupId": "com.github.ferstl"
+    , "version": "1.0.0-SNAPSHOT"
+    }
+  , { "id": 4
+    , "artifactId": "module-2"
+    , "groupId": "com.github.ferstl"
+    , "version": "1.0.0-SNAPSHOT"
+    }
+  , { "id": 5
+    , "artifactId": "guava"
+    , "groupId": "com.google.guava"
+    , "version": "21.0"
+    }
+  , { "id": 6
+    , "artifactId": "commons-lang3"
+    , "groupId": "org.apache.commons"
+    , "version": "3.0"
+    }
+  , { "id": 7
+    , "artifactId": "querydsl-core"
+    , "groupId": "com.mysema.querydsl"
+    , "version": "3.7.4"
+    }
+  , { "id": 8
+    , "artifactId": "jsr305"
+    , "groupId": "com.google.code.findbugs"
+    , "version": "1.3.9"
+    }
+  , { "id": 9
+    , "artifactId": "mysema-commons-lang"
+    , "groupId": "com.mysema.commons"
+    , "version": "0.2.4"
+    }
+  , { "id": 10
+    , "artifactId": "bridge-method-annotation"
+    , "groupId": "com.infradna.tool"
+    , "version": "1.13"
+    }
+  ]
+, "dependencies":
+  [ { "from": 0
+    , "to": 1
+    , "resolution": "INCLUDED"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 0
+    , "to": 2
+    , "resolution": "INCLUDED"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 3
+    , "to": 0
+    , "resolution": "INCLUDED"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 4
+    , "to": 0
+    , "resolution": "OMITTED_FOR_DUPLICATE"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 4
+    , "to": 5
+    , "resolution": "INCLUDED"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 4
+    , "to": 1
+    , "resolution": "OMITTED_FOR_DUPLICATE"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 4
+    , "to": 6
+    , "resolution": "OMITTED_FOR_CONFLICT"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 3
+    , "to": 4
+    , "resolution": "INCLUDED"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 7
+    , "to": 5
+    , "resolution": "OMITTED_FOR_DUPLICATE"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 7
+    , "to": 8
+    , "resolution": "INCLUDED"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 7
+    , "to": 9
+    , "resolution": "INCLUDED"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 7
+    , "to": 10
+    , "resolution": "INCLUDED"
+    , "scopes": [ "compile" ]
+    }
+  , { "from": 3
+    , "to": 7
+    , "resolution": "INCLUDED"
+    , "scopes": [ "compile" ]
+    }
+  ]
+}

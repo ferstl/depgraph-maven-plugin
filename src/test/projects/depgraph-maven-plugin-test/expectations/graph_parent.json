@@ -1,0 +1,11 @@
+{ "artifacts":
+  [ { "id": 0
+    , "artifactId": "parent"
+    , "groupId": "com.github.ferstl"
+    , "version": "1.0.0-SNAPSHOT"
+    }
+  ]
+, "dependencies":
+  [ 
+  ]
+}

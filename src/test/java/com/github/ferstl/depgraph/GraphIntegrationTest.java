@@ -190,6 +190,30 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void graphInJson() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=json")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.json",
+        "module-2/target/dependency-graph.json",
+        "sub-parent/module-3/target/dependency-graph.json",
+        "target/dependency-graph.json",
+        "sub-parent/target/dependency-graph.json");
+
+    assertFileContents(basedir, "expectations/graph_parent.json", "target/dependency-graph.json");
+    assertFileContents(basedir, "expectations/graph_module-1.json", "module-1/target/dependency-graph.json");
+    assertFileContents(basedir, "expectations/graph_module-2.json", "module-2/target/dependency-graph.json");
+    assertFileContents(basedir, "expectations/graph_sub-parent.json", "sub-parent/target/dependency-graph.json");
+    assertFileContents(basedir, "expectations/graph_module-3.json", "sub-parent/module-3/target/dependency-graph.json");
+  }
+
+  @Test
   public void deprecatedOutpuFileParameter() throws Exception {
     File basedir = this.resources.getBasedir("single-dependency");
 
