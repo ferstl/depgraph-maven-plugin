@@ -51,6 +51,7 @@ import com.github.ferstl.depgraph.dependency.DotGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.GmlGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.JsonGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.PumlGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
@@ -120,7 +121,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * @since 2.1.0
    */
   @Parameter(property = "graphFormat", defaultValue = "dot")
-  private String graphFormat;
+  protected String graphFormat;
 
   /**
    * The path to the generated output file. A file extension matching the configured {@code graphFormat} will be
@@ -302,6 +303,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
         return new GmlGraphStyleConfigurer();
       case PUML:
         return new PumlGraphStyleConfigurer();
+      case JSON:
+        return new JsonGraphStyleConfigurer();
       default:
         throw new IllegalArgumentException("Unsupported output format: " + graphFormat);
     }
