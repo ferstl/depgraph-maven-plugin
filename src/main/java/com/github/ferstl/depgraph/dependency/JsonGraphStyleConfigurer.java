@@ -57,7 +57,7 @@ public class JsonGraphStyleConfigurer implements GraphStyleConfigurer {
     Map<Artifact, Integer> artifactToIdMap = new HashMap<>();
     return GraphBuilder.<DependencyNode>create(NodeIdRenderers.ID)
         .useNodeNameRenderer(new JsonDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes, artifactToIdMap))
-        .useEdgeRenderer(new JsonDependencyEdgeRenderer(artifactToIdMap))
+        .useEdgeRenderer(new JsonDependencyEdgeRenderer(this.showVersionOnEdges, artifactToIdMap))
         .graphFormatter(new JsonGraphFormatter());
   }
 }
