@@ -23,23 +23,32 @@ import com.github.ferstl.depgraph.graph.json.JsonGraphFormatter;
 
 public class JsonGraphStyleConfigurer implements GraphStyleConfigurer {
 
+  private boolean showGroupId;
+  private boolean showArtifactId;
+  private boolean showVersionsOnNodes;
+  private boolean showVersionOnEdges;
+
   @Override
   public GraphStyleConfigurer showGroupIds(boolean showGroupId) {
+    this.showGroupId = showGroupId;
     return this;
   }
 
   @Override
   public GraphStyleConfigurer showArtifactIds(boolean showArtifactId) {
+    this.showArtifactId = showArtifactId;
     return this;
   }
 
   @Override
   public GraphStyleConfigurer showVersionsOnNodes(boolean showVersionsOnNodes) {
+    this.showVersionsOnNodes = showVersionsOnNodes;
     return this;
   }
 
   @Override
   public GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges) {
+    this.showVersionOnEdges = showVersionOnEdges;
     return this;
   }
 
@@ -47,7 +56,7 @@ public class JsonGraphStyleConfigurer implements GraphStyleConfigurer {
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> notUsed) {
     Map<Artifact, Integer> artifactToIdMap = new HashMap<>();
     return GraphBuilder.<DependencyNode>create(NodeIdRenderers.ID)
-        .useNodeNameRenderer(new JsonDependencyNodeNameRenderer(artifactToIdMap))
+        .useNodeNameRenderer(new JsonDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes, artifactToIdMap))
         .useEdgeRenderer(new JsonDependencyEdgeRenderer(artifactToIdMap))
         .graphFormatter(new JsonGraphFormatter());
   }
