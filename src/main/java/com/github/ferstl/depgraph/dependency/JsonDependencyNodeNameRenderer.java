@@ -71,11 +71,6 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
       throw new IllegalStateException(e);
     }
 
-    return NEWLINE_JOINER.join(
-        "{ \"id\": " + nodeId,
-        "    , \"artifactId\": \"" + node.getArtifact().getArtifactId() + "\"",
-        "    , \"groupId\": \"" + node.getArtifact().getGroupId() + "\"",
-        "    , \"version\": \"" + node.getArtifact().getVersion() + "\"",
-        "    }");
+    return jsonStringWriter.toString();
   }
 }
