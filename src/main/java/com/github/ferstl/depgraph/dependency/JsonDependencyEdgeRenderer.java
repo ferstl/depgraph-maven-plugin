@@ -17,8 +17,6 @@ package com.github.ferstl.depgraph.dependency;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import org.apache.maven.artifact.Artifact;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,17 +62,7 @@ public class JsonDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> 
       throw new IllegalStateException(e);
     }
 
-    List<String> scopeStrings = new ArrayList<>();
-    for (String scope : to.getScopes()) {
-      scopeStrings.add("\"" + scope + "\"");
-    }
-
-    return NEWLINE_JOINER.join(
-        "{ \"from\": " + this.artifactToIdMap.get(from.getArtifact()),
-        "    , \"to\": " + this.artifactToIdMap.get(to.getArtifact()),
-        "    , \"resolution\": \"" + to.getResolution() + "\"",
-        "    , \"scopes\": [ " + COMMA_JOINER.join(scopeStrings) + " ]",
-        "    }");
+    return jsonStringWriter.toString();
   }
 
 }
