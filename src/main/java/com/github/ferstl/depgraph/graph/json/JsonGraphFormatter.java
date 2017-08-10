@@ -17,7 +17,9 @@ package com.github.ferstl.depgraph.graph.json;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
@@ -28,6 +30,12 @@ public class JsonGraphFormatter implements GraphFormatter {
   @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
     StringBuilder result = new StringBuilder();
+    Map<String, Integer> nodeIdMap = new HashMap<>(nodes.size());
+
+    int nodeId = 0;
+    for (Node<?> node : nodes) {
+      nodeIdMap.put(node.getNodeId(), nodeId++);
+    }
 
     // output artifacts
     result.append("{ \"artifacts\":\n");
