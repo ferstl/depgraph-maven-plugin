@@ -15,27 +15,57 @@
  */
 package com.github.ferstl.depgraph.graph.json;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
 import com.google.common.base.Joiner;
 
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
+
 public class JsonGraphFormatter implements GraphFormatter {
+
+  private final ObjectMapper objectMapper = new ObjectMapper().setVisibility(FIELD, ANY);
 
   @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
     StringBuilder result = new StringBuilder();
     Map<String, Integer> nodeIdMap = new HashMap<>(nodes.size());
+    JsonGraph jsonGraph = new JsonGraph();
 
-    int nodeId = 0;
+    int numericNodeId = 0;
     for (Node<?> node : nodes) {
-      nodeIdMap.put(node.getNodeId(), nodeId++);
+      String nodeId = node.getNodeId();
+      nodeIdMap.put(nodeId, numericNodeId++);
+
+      jsonGraph.addArtifact(new Artifact(nodeId, numericNodeId, node.getNodeName()));
     }
+
+    for (Edge edge : edges) {
+      String fromNodeId = edge.getFromNodeId();
+      String toNodeId = edge.getToNodeId();
+
+      jsonGraph.addDependency(new Dependency(fromNodeId, nodeIdMap.get(fromNodeId), toNodeId, nodeIdMap.get(toNodeId), edge.getName()));
+    }
+
+    ObjectWriter writer = this.objectMapper.writer();
+    StringWriter jsonWriter = new StringWriter();
+    try {
+      writer.writeValue(jsonWriter, jsonGraph);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    System.out.println(jsonWriter.toString());
 
     // output artifacts
     result.append("{ \"artifacts\":\n");
