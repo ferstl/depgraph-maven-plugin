@@ -8,11 +8,11 @@ class JsonGraph {
   private final List<Artifact> artifacts = new ArrayList<>();
   private final List<Dependency> dependencies = new ArrayList<>();
 
-  void addArtifact(Artifact artifact) {
-    this.artifacts.add(artifact);
+  void addArtifact(String nodeId, int numericNodeId, String nodeData) {
+    this.artifacts.add(new Artifact(nodeId, numericNodeId, nodeData));
   }
 
-  void addDependency(Dependency dependency) {
-    this.dependencies.add(dependency);
+  void addDependency(String fromNodeId, int fromNodeIdNumeric, String toNodeId, int toNodeIdNumeric, String data) {
+    this.dependencies.add(new Dependency(fromNodeId, fromNodeIdNumeric, toNodeId, toNodeIdNumeric, data));
   }
 }

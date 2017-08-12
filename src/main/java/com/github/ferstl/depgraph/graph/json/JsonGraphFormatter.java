@@ -47,14 +47,14 @@ public class JsonGraphFormatter implements GraphFormatter {
       String nodeId = node.getNodeId();
       nodeIdMap.put(nodeId, numericNodeId++);
 
-      jsonGraph.addArtifact(new Artifact(nodeId, numericNodeId, node.getNodeName()));
+      jsonGraph.addArtifact(nodeId, numericNodeId, node.getNodeName());
     }
 
     for (Edge edge : edges) {
       String fromNodeId = edge.getFromNodeId();
       String toNodeId = edge.getToNodeId();
 
-      jsonGraph.addDependency(new Dependency(fromNodeId, nodeIdMap.get(fromNodeId), toNodeId, nodeIdMap.get(toNodeId), edge.getName()));
+      jsonGraph.addDependency(fromNodeId, nodeIdMap.get(fromNodeId), toNodeId, nodeIdMap.get(toNodeId), edge.getName());
     }
 
     ObjectWriter writer = this.objectMapper.writer();
