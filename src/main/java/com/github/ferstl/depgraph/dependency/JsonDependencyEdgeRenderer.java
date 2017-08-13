@@ -18,10 +18,11 @@ package com.github.ferstl.depgraph.dependency;
 import java.io.IOException;
 import java.io.StringWriter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 
 public class JsonDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
 
@@ -31,21 +32,20 @@ public class JsonDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> 
   public JsonDependencyEdgeRenderer(boolean renderVersions) {
     this.renderVersions = renderVersions;
     this.objectMapper = new ObjectMapper()
-        .setSerializationInclusion(NON_EMPTY);
+        .setSerializationInclusion(NON_EMPTY)
+        .setVisibility(FIELD, ANY);
   }
 
   @Override
   public String render(DependencyNode from, DependencyNode to) {
     NodeResolution resolution = to.getResolution();
+    boolean showVersion = resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions;
 
-    ObjectNode jsonNode = this.objectMapper.createObjectNode();
-    if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions) {
-      jsonNode.put("version", to.getArtifact().getVersion());
-    }
+    DependencyData dependencyData = new DependencyData(showVersion ? to.getArtifact().getVersion() : null, resolution);
 
     StringWriter jsonStringWriter = new StringWriter();
     try {
-      this.objectMapper.writer().writeValue(jsonStringWriter, jsonNode);
+      this.objectMapper.writer().writeValue(jsonStringWriter, dependencyData);
     } catch (IOException e) {
       // should never happen with StringWriter
       throw new IllegalStateException(e);
@@ -54,4 +54,14 @@ public class JsonDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> 
     return jsonStringWriter.toString();
   }
 
+  private static class DependencyData {
+
+    private final String version;
+    private final NodeResolution resolution;
+
+    DependencyData(String version, NodeResolution resolution) {
+      this.version = version;
+      this.resolution = resolution;
+    }
+  }
 }
