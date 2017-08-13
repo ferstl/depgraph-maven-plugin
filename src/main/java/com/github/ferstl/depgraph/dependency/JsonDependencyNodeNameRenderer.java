@@ -59,7 +59,7 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
 
     StringWriter jsonStringWriter = new StringWriter();
     try {
-      this.objectMapper.writerWithDefaultPrettyPrinter().writeValue(jsonStringWriter, artifactData);
+      this.objectMapper.writer().writeValue(jsonStringWriter, artifactData);
     } catch (IOException e) {
       // should never happen with StringWriter
       throw new IllegalStateException(e);
