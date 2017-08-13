@@ -15,9 +15,6 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import com.github.ferstl.depgraph.graph.json.JsonGraphFormatter;
 
@@ -54,10 +51,9 @@ public class JsonGraphStyleConfigurer implements GraphStyleConfigurer {
 
   @Override
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> notUsed) {
-    Map<Artifact, Integer> artifactToIdMap = new HashMap<>();
     return GraphBuilder.<DependencyNode>create(NodeIdRenderers.ID)
-        .useNodeNameRenderer(new JsonDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes, artifactToIdMap))
-        .useEdgeRenderer(new JsonDependencyEdgeRenderer(this.showVersionOnEdges, artifactToIdMap))
+        .useNodeNameRenderer(new JsonDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes))
+        .useEdgeRenderer(new JsonDependencyEdgeRenderer(this.showVersionOnEdges))
         .graphFormatter(new JsonGraphFormatter());
   }
 }

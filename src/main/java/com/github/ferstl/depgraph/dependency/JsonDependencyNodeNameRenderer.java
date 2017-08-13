@@ -18,12 +18,9 @@ package com.github.ferstl.depgraph.dependency;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.maven.artifact.Artifact;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
-import com.google.common.base.Joiner;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
@@ -32,23 +29,15 @@ import static java.util.Collections.singleton;
 
 public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
-  private static final Joiner NEWLINE_JOINER = Joiner.on("\n").skipNulls();
-  private final AtomicInteger nextId = new AtomicInteger(0);
   private final boolean showGroupId;
   private final boolean showArtifactId;
   private final boolean showVersion;
   private final ObjectMapper objectMapper;
-  /**
-   * @deprecated ID mapping should be done in the formatter
-   */
-  @Deprecated
-  private final Map<Artifact, Integer> artifactToIdMap;
 
-  public JsonDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion, Map<Artifact, Integer> artifactToIdMap) {
+  public JsonDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showVersion = showVersion;
-    this.artifactToIdMap = artifactToIdMap;
 
     this.objectMapper = new ObjectMapper()
         .setSerializationInclusion(NON_EMPTY)
@@ -58,11 +47,6 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
   @Override
   public String render(DependencyNode node) {
     Artifact artifact = node.getArtifact();
-    if (!this.artifactToIdMap.containsKey(artifact)) {
-      this.artifactToIdMap.put(artifact, this.nextId.getAndIncrement());
-    }
-    Integer nodeId = this.artifactToIdMap.get(artifact);
-
     ArtifactData artifactData = new ArtifactData(
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
