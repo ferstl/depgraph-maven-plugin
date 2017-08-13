@@ -30,11 +30,14 @@ import com.github.ferstl.depgraph.graph.Node;
 import com.google.common.base.Joiner;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 
 public class JsonGraphFormatter implements GraphFormatter {
 
-  private final ObjectMapper objectMapper = new ObjectMapper().setVisibility(FIELD, ANY);
+  private final ObjectMapper objectMapper = new ObjectMapper()
+      .setSerializationInclusion(NON_EMPTY)
+      .setVisibility(FIELD, ANY);
 
   @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
@@ -57,7 +60,7 @@ public class JsonGraphFormatter implements GraphFormatter {
       jsonGraph.addDependency(fromNodeId, nodeIdMap.get(fromNodeId), toNodeId, nodeIdMap.get(toNodeId), edge.getName());
     }
 
-    ObjectWriter writer = this.objectMapper.writer();
+    ObjectWriter writer = this.objectMapper.writerWithDefaultPrettyPrinter();
     StringWriter jsonWriter = new StringWriter();
     try {
       writer.writeValue(jsonWriter, jsonGraph);
