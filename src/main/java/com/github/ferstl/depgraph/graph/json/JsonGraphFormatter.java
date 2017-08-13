@@ -65,7 +65,8 @@ public class JsonGraphFormatter implements GraphFormatter {
     try {
       writer.writeValue(jsonWriter, jsonGraph);
     } catch (IOException e) {
-      e.printStackTrace();
+      // should never happen with StringWriter
+      throw new IllegalStateException(e);
     }
 
     System.out.println(jsonWriter.toString());
