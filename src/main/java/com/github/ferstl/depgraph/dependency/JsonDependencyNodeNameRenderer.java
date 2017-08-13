@@ -18,6 +18,7 @@ package com.github.ferstl.depgraph.dependency;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.Collections;
 import org.apache.maven.artifact.Artifact;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
@@ -25,6 +26,7 @@ import com.github.ferstl.depgraph.graph.NodeRenderer;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.Collections.singleton;
 
 public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
@@ -51,7 +53,7 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
-        singleton(artifact.getClassifier()),
+        !isNullOrEmpty(artifact.getClassifier()) ? singleton(artifact.getClassifier()) : Collections.<String>emptyList(),
         node.getScopes(),
         singleton(artifact.getType()));
 
