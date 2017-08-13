@@ -2,18 +2,20 @@ package com.github.ferstl.depgraph.graph.json;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonRawValue;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 class JsonGraph {
 
   private final List<Artifact> artifacts = new ArrayList<>();
   private final List<Dependency> dependencies = new ArrayList<>();
 
-  void addArtifact(String nodeId, int numericNodeId, String nodeData) {
-    this.artifacts.add(new Artifact(nodeId, numericNodeId, nodeData));
+  void addArtifact(String nodeId, int numericNodeId, Map<?, ?> data) {
+    this.artifacts.add(new Artifact(nodeId, numericNodeId, data));
   }
 
-  void addDependency(String fromNodeId, int fromNodeIdNumeric, String toNodeId, int toNodeIdNumeric, String data) {
+  void addDependency(String fromNodeId, int fromNodeIdNumeric, String toNodeId, int toNodeIdNumeric, Map<?, ?> data) {
     this.dependencies.add(new Dependency(fromNodeId, fromNodeIdNumeric, toNodeId, toNodeIdNumeric, data));
   }
 
@@ -21,14 +23,18 @@ class JsonGraph {
 
     private final String id;
     private final int numericId;
+    @JsonIgnore
+    private final Map<?, ?> data;
 
-    @JsonRawValue
-    private final String data;
-
-    Artifact(String id, int numericId, String data) {
+    Artifact(String id, int numericId, Map<?, ?> data) {
       this.id = id;
       this.numericId = numericId;
       this.data = data;
+    }
+
+    @JsonAnyGetter
+    Map<?, ?> getData() {
+      return this.data;
     }
   }
 
@@ -38,16 +44,20 @@ class JsonGraph {
     private final String to;
     private final int numericFrom;
     private final int numericTo;
+    @JsonIgnore
+    private final Map<?, ?> data;
 
-    @JsonRawValue
-    private final String data;
-
-    Dependency(String from, int numericFrom, String to, int numericTo, String data) {
+    Dependency(String from, int numericFrom, String to, int numericTo, Map<?, ?> data) {
       this.from = from;
       this.to = to;
       this.numericFrom = numericFrom;
       this.numericTo = numericTo;
       this.data = data;
+    }
+
+    @JsonAnyGetter
+    Map<?, ?> getData() {
+      return this.data;
     }
 
   }

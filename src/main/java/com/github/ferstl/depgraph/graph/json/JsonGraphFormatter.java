@@ -45,17 +45,29 @@ public class JsonGraphFormatter implements GraphFormatter {
     for (Node<?> node : nodes) {
       String nodeId = node.getNodeId();
       nodeIdMap.put(nodeId, numericNodeId++);
-
-      jsonGraph.addArtifact(nodeId, numericNodeId, node.getNodeName());
+      jsonGraph.addArtifact(nodeId, numericNodeId, readJson(node.getNodeName()));
     }
 
     for (Edge edge : edges) {
       String fromNodeId = edge.getFromNodeId();
+      Integer fromNodeIdNumeric = nodeIdMap.get(fromNodeId);
       String toNodeId = edge.getToNodeId();
-
-      jsonGraph.addDependency(fromNodeId, nodeIdMap.get(fromNodeId), toNodeId, nodeIdMap.get(toNodeId), edge.getName());
+      Integer toNodeIdNumeric = nodeIdMap.get(toNodeId);
+      jsonGraph.addDependency(fromNodeId, fromNodeIdNumeric, toNodeId, toNodeIdNumeric, readJson(edge.getName()));
     }
 
+    return serialize(jsonGraph);
+  }
+
+  private Map<?, ?> readJson(String json) {
+    try {
+      return this.objectMapper.readValue(json, Map.class);
+    } catch (IOException e) {
+      throw new IllegalStateException("Unable to read JSON '" + json + "'", e);
+    }
+  }
+
+  private String serialize(JsonGraph jsonGraph) {
     ObjectWriter writer = this.objectMapper.writerWithDefaultPrettyPrinter();
     StringWriter jsonWriter = new StringWriter();
     try {
@@ -67,4 +79,5 @@ public class JsonGraphFormatter implements GraphFormatter {
 
     return jsonWriter.toString();
   }
+
 }
