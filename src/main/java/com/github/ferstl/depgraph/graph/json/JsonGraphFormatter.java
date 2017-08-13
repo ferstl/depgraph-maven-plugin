@@ -17,17 +17,14 @@ package com.github.ferstl.depgraph.graph.json;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
-import com.google.common.base.Joiner;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
@@ -41,7 +38,6 @@ public class JsonGraphFormatter implements GraphFormatter {
 
   @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
-    StringBuilder result = new StringBuilder();
     Map<String, Integer> nodeIdMap = new HashMap<>(nodes.size());
     JsonGraph jsonGraph = new JsonGraph();
 
@@ -69,29 +65,6 @@ public class JsonGraphFormatter implements GraphFormatter {
       throw new IllegalStateException(e);
     }
 
-    System.out.println(jsonWriter.toString());
-
-    // output artifacts
-    result.append("{ \"artifacts\":\n");
-    result.append("  [ ");
-    List<String> nodeStrings = new ArrayList<>();
-    for (Node<?> node : nodes) {
-      nodeStrings.add(node.getNodeName());
-    }
-    result.append(Joiner.on("\n  , ").join(nodeStrings));
-    result.append("\n  ]\n");
-
-    // output dependencies
-    result.append(", \"dependencies\":\n");
-    result.append("  [ ");
-    List<String> depenencyStrings = new ArrayList<>();
-    for (Edge edge : edges) {
-      depenencyStrings.add(edge.getName());
-    }
-    result.append(Joiner.on("\n  , ").join(depenencyStrings));
-    result.append("\n  ]\n");
-    result.append("}");
-
-    return result.toString();
+    return jsonWriter.toString();
   }
 }
