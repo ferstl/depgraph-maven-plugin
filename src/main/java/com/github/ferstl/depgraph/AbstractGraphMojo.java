@@ -62,6 +62,8 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
+import static com.github.ferstl.depgraph.GraphFormat.JSON;
+
 /**
  * Abstract mojo to create all possible kinds of graphs in the dot format. Graphs are created with instances of the
  * {@link GraphFactory} interface. This class defines an abstract method to create such factories. In case Graphviz is
@@ -120,7 +122,19 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    *
    * @since 2.1.0
    */
-  @Parameter(property = "graphFormat", defaultValue = "dot") String graphFormat;
+  @Parameter(property = "graphFormat", defaultValue = "dot")
+  private String graphFormat;
+
+  /**
+   * If set to {@code true} (which is the default) <strong>and</strong> the graph format is JSON, the graph will show
+   * any information that is possible.
+   * The idea behind this option is, that the consumer of the JSON data, for example a Javascript library, will do its
+   * own filtering of the data.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "showFullGraphForJson", defaultValue = "true")
+  private boolean showFullGraphForJson;
 
   /**
    * The path to the generated output file. A file extension matching the configured {@code graphFormat} will be
@@ -263,6 +277,16 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   protected Set<BuiltInStyleResource> getAdditionalStyleResources() {
     // We need to preserve the order of style configurations
     return new LinkedHashSet<>();
+  }
+
+  /**
+   * Indicates to subclasses that everything possible should be shown in the graph, no matter what was configured
+   * for the specific mojo.
+   *
+   * @return {@code true} if the full graph should be shown, {@code false} else.
+   */
+  protected boolean showFullGraph() {
+    return GraphFormat.forName(this.graphFormat) == JSON && this.showFullGraphForJson;
   }
 
   private ArtifactFilter createGlobalArtifactFilter() {
