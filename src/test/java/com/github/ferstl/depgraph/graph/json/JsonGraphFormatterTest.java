@@ -33,6 +33,7 @@ public class JsonGraphFormatterTest {
 
     // assert
     String expected = "{\n"
+        + "  \"graphName\" : \"graphName\",\n"
         + "  \"artifacts\" : [ {\n"
         + "    \"id\" : \"id1\",\n"
         + "    \"numericId\" : 1,\n"

@@ -1,4 +1,5 @@
 {
+  "graphName" : "module-3",
   "artifacts" : [ {
     "id" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
     "numericId" : 1,
@@ -145,3 +146,27 @@
     "resolution" : "OMITTED_FOR_DUPLICATE"
   }, {
     "from" : "com.mysema.querydsl:querydsl-core:3.7.4:jar:",
+    "to" : "com.google.code.findbugs:jsr305:1.3.9:jar:",
+    "numericFrom" : 7,
+    "numericTo" : 8,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.mysema.querydsl:querydsl-core:3.7.4:jar:",
+    "to" : "com.mysema.commons:mysema-commons-lang:0.2.4:jar:",
+    "numericFrom" : 7,
+    "numericTo" : 9,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.mysema.querydsl:querydsl-core:3.7.4:jar:",
+    "to" : "com.infradna.tool:bridge-method-annotation:1.13:jar:",
+    "numericFrom" : 7,
+    "numericTo" : 10,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:module-3:1.0.0-SNAPSHOT:jar:",
+    "to" : "com.mysema.querydsl:querydsl-core:3.7.4:jar:",
+    "numericFrom" : 3,
+    "numericTo" : 7,
+    "resolution" : "INCLUDED"
+  } ]
+}

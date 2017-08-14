@@ -1,4 +1,5 @@
 {
+  "graphName" : "module-1",
   "artifacts" : [ {
     "id" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
     "numericId" : 1,

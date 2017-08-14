@@ -8,8 +8,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 class JsonGraph {
 
+  private final String graphName;
   private final List<Artifact> artifacts = new ArrayList<>();
   private final List<Dependency> dependencies = new ArrayList<>();
+
+  JsonGraph(String graphName) {
+    this.graphName = graphName;
+  }
 
   void addArtifact(String nodeId, int numericNodeId, Map<?, ?> data) {
     this.artifacts.add(new Artifact(nodeId, numericNodeId, data));

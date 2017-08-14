@@ -39,7 +39,7 @@ public class JsonGraphFormatter implements GraphFormatter {
   @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
     Map<String, Integer> nodeIdMap = new HashMap<>(nodes.size());
-    JsonGraph jsonGraph = new JsonGraph();
+    JsonGraph jsonGraph = new JsonGraph(graphName);
 
     int numericNodeId = 0;
     for (Node<?> node : nodes) {

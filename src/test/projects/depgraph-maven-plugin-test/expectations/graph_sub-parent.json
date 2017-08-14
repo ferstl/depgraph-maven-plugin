@@ -1,4 +1,5 @@
 {
+  "graphName" : "sub-parent",
   "artifacts" : [ {
     "id" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
     "numericId" : 1,
@@ -85,3 +86,19 @@
     "from" : "com.github.ferstl:module-2:1.0.0-SNAPSHOT:jar:",
     "to" : "commons-codec:commons-codec:1.10:jar:",
     "numericFrom" : 3,
+    "numericTo" : 1,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:module-2:1.0.0-SNAPSHOT:jar:",
+    "to" : "org.apache.commons:commons-lang3:3.0:jar:",
+    "numericFrom" : 3,
+    "numericTo" : 5,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:sub-parent:1.0.0-SNAPSHOT:pom:",
+    "to" : "com.github.ferstl:module-2:1.0.0-SNAPSHOT:jar:",
+    "numericFrom" : 6,
+    "numericTo" : 3,
+    "resolution" : "INCLUDED"
+  } ]
+}
