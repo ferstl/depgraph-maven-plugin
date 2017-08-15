@@ -20,6 +20,8 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.ferstl.depgraph.graph.Edge;
@@ -68,7 +70,10 @@ public class JsonGraphFormatter implements GraphFormatter {
   }
 
   private String serialize(JsonGraph jsonGraph) {
-    ObjectWriter writer = this.objectMapper.writerWithDefaultPrettyPrinter();
+    DefaultPrettyPrinter prettyPrinter = new DefaultPrettyPrinter()
+        .withObjectIndenter(new DefaultIndenter("  ", "\n"));
+
+    ObjectWriter writer = this.objectMapper.writer(prettyPrinter);
     StringWriter jsonWriter = new StringWriter();
     try {
       writer.writeValue(jsonWriter, jsonGraph);

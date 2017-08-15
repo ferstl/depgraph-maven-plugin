@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
-import com.github.ferstl.depgraph.graph.gml.GmlGraphFormatter;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
