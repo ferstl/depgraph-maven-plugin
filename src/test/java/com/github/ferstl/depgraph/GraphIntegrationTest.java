@@ -124,6 +124,20 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void graphMergeTypes() throws Exception {
+    File basedir = this.resources.getBasedir("single-dependency");
+
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DmergeTypes=true")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/graph_without-types.dot", "target/dependency-graph.dot");
+  }
+
+  @Test
   public void aggregateWithoutDependencies() throws Exception {
     File basedir = this.resources.getBasedir("no-dependencies");
     MavenExecutionResult result = this.mavenRuntime

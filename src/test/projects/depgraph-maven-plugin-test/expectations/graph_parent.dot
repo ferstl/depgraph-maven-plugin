@@ -3,7 +3,7 @@ digraph "parent" {
   edge [fontsize="10",fontname="Helvetica"]
 
   // Node Definitions:
-  "com.github.ferstl:parent:pom:"[label=<parent>]
+  "com.github.ferstl:parent:pom"[label=<parent>]
 
   // Edge Definitions:
 }

@@ -50,8 +50,8 @@ public class JsonGraphStyleConfigurer implements GraphStyleConfigurer {
   }
 
   @Override
-  public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> notUsed) {
-    return GraphBuilder.<DependencyNode>create(NodeIdRenderers.ID)
+  public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
+    return graphBuilder
         .useNodeNameRenderer(new JsonDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes))
         .useEdgeRenderer(new JsonDependencyEdgeRenderer(this.showVersionOnEdges))
         .graphFormatter(new JsonGraphFormatter());

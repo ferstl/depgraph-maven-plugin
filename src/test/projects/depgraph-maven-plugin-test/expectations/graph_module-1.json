@@ -1,7 +1,7 @@
 {
   "graphName" : "module-1",
   "artifacts" : [ {
-    "id" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
+    "id" : "com.github.ferstl:module-1:jar",
     "numericId" : 1,
     "groupId" : "com.github.ferstl",
     "artifactId" : "module-1",
@@ -9,7 +9,7 @@
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
-    "id" : "commons-codec:commons-codec:1.10:jar:",
+    "id" : "commons-codec:commons-codec:jar",
     "numericId" : 2,
     "groupId" : "commons-codec",
     "artifactId" : "commons-codec",
@@ -17,7 +17,7 @@
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
-    "id" : "org.apache.commons:commons-lang3:3.1:jar:",
+    "id" : "org.apache.commons:commons-lang3:jar",
     "numericId" : 3,
     "groupId" : "org.apache.commons",
     "artifactId" : "commons-lang3",
@@ -25,7 +25,7 @@
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
-    "id" : "junit:junit:4.12:jar:",
+    "id" : "junit:junit:jar",
     "numericId" : 4,
     "groupId" : "junit",
     "artifactId" : "junit",
@@ -33,7 +33,7 @@
     "scopes" : [ "test" ],
     "types" : [ "jar" ]
   }, {
-    "id" : "org.hamcrest:hamcrest-core:1.3:jar:",
+    "id" : "org.hamcrest:hamcrest-core:jar",
     "numericId" : 5,
     "groupId" : "org.hamcrest",
     "artifactId" : "hamcrest-core",
@@ -42,26 +42,26 @@
     "types" : [ "jar" ]
   } ],
   "dependencies" : [ {
-    "from" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
-    "to" : "commons-codec:commons-codec:1.10:jar:",
+    "from" : "com.github.ferstl:module-1:jar",
+    "to" : "commons-codec:commons-codec:jar",
     "numericFrom" : 0,
     "numericTo" : 1,
     "resolution" : "INCLUDED"
   }, {
-    "from" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
-    "to" : "org.apache.commons:commons-lang3:3.1:jar:",
+    "from" : "com.github.ferstl:module-1:jar",
+    "to" : "org.apache.commons:commons-lang3:jar",
     "numericFrom" : 0,
     "numericTo" : 2,
     "resolution" : "INCLUDED"
   }, {
-    "from" : "junit:junit:4.12:jar:",
-    "to" : "org.hamcrest:hamcrest-core:1.3:jar:",
+    "from" : "junit:junit:jar",
+    "to" : "org.hamcrest:hamcrest-core:jar",
     "numericFrom" : 3,
     "numericTo" : 4,
     "resolution" : "INCLUDED"
   }, {
-    "from" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
-    "to" : "junit:junit:4.12:jar:",
+    "from" : "com.github.ferstl:module-1:jar",
+    "to" : "junit:junit:jar",
     "numericFrom" : 0,
     "numericTo" : 3,
     "resolution" : "INCLUDED"

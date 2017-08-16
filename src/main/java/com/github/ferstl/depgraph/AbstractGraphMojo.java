@@ -222,6 +222,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Parameter(property = "printStyleConfiguration", defaultValue = "false")
   private boolean printStyleConfiguration;
 
+
   /**
    * The project's artifact ID.
    */

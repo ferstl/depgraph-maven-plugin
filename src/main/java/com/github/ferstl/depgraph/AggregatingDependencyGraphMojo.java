@@ -22,13 +22,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dependency.AggregatingGraphFactory;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-
-import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_ID;
-import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.VERSIONLESS_ID_WITH_SCOPE;
 
 /**
  * Aggregates all dependencies of a multi-module project into one single graph.
@@ -67,9 +65,21 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   @Parameter(property = "includeParentProjects", defaultValue = "false")
   private boolean includeParentProjects;
 
+  /**
+   * Merge dependencies with multiple types into one graph node instead of having a node per type.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "mergeTypes", defaultValue = "false")
+  private boolean mergeTypes;
+
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
     handleOptionsForFullGraph();
+
+    DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer.versionlessId()
+        .withType(!this.mergeTypes)
+        .withScope(!this.mergeScopes);
 
     GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
         .showGroupIds(this.showGroupIds)
@@ -77,7 +87,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .showVersionsOnNodes(this.showVersions)
         // This graph won't show any conflicting dependencies. So don't show versions on edges
         .showVersionsOnEdges(false)
-        .configure(GraphBuilder.create(this.mergeScopes ? VERSIONLESS_ID : VERSIONLESS_ID_WITH_SCOPE));
+        .configure(GraphBuilder.create(nodeIdRenderer));
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, this.includeParentProjects);

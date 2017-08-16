@@ -1,7 +1,7 @@
 {
   "graphName" : "parent",
   "artifacts" : [ {
-    "id" : "com.github.ferstl:parent:1.0.0-SNAPSHOT:pom:",
+    "id" : "com.github.ferstl:parent:pom",
     "numericId" : 1,
     "groupId" : "com.github.ferstl",
     "artifactId" : "parent",

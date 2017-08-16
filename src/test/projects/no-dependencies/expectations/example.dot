@@ -3,24 +3,24 @@ digraph "G" {
   edge [fontsize="10",fontname="Helvetica"]
 
   // Node Definitions:
-  "com.example:artifact-a:jar:"[label=<artifact-a>]
-  "com.example:artifact-b:jar:"[label=<artifact-b>]
-  "com.example:artifact-d:jar:"[label=<artifact-d>]
-  "com.example.sub:artifact-g:jar:"[label=<artifact-g<font point-size="10"><br/>(test)</font>>]
-  "com.example:artifact-c:jar:"[label=<artifact-c>]
-  "com.example.sub:artifact-zip:zip:"[label=<artifact-zip>]
-  "com.example.sub:artifact-e:jar:"[label=<artifact-e<font point-size="10"><br/>(provided)</font>>]
-  "com.example.sub:artifact-f:jar:"[label=<artifact-f<font point-size="10"><br/>(runtime)</font>>]
+  "com.example:artifact-a:jar"[label=<artifact-a>]
+  "com.example:artifact-b:jar"[label=<artifact-b>]
+  "com.example:artifact-d:jar"[label=<artifact-d>]
+  "com.example.sub:artifact-g:jar"[label=<artifact-g<font point-size="10"><br/>(test)</font>>]
+  "com.example:artifact-c:jar"[label=<artifact-c>]
+  "com.example.sub:artifact-zip:zip"[label=<artifact-zip>]
+  "com.example.sub:artifact-e:jar"[label=<artifact-e<font point-size="10"><br/>(provided)</font>>]
+  "com.example.sub:artifact-f:jar"[label=<artifact-f<font point-size="10"><br/>(runtime)</font>>]
 
   // Edge Definitions:
-  "com.example:artifact-a:jar:" -> "com.example:artifact-b:jar:"
-  "com.example:artifact-a:jar:" -> "com.example:artifact-d:jar:"
-  "com.example.sub:artifact-g:jar:" -> "com.example:artifact-c:jar:"[style="dashed",color="red",fontcolor="red"]
-  "com.example:artifact-b:jar:" -> "com.example:artifact-c:jar:"
-  "com.example:artifact-b:jar:" -> "com.example:artifact-d:jar:"
-  "com.example.sub:artifact-zip:zip:" -> "com.example:artifact-c:jar:"[style="dotted"]
-  "com.example:artifact-d:jar:" -> "com.example.sub:artifact-e:jar:"
-  "com.example:artifact-d:jar:" -> "com.example.sub:artifact-f:jar:"
-  "com.example:artifact-b:jar:" -> "com.example.sub:artifact-g:jar:"
-  "com.example:artifact-b:jar:" -> "com.example.sub:artifact-zip:zip:"
+  "com.example:artifact-a:jar" -> "com.example:artifact-b:jar"
+  "com.example:artifact-a:jar" -> "com.example:artifact-d:jar"
+  "com.example.sub:artifact-g:jar" -> "com.example:artifact-c:jar"[style="dashed",color="red",fontcolor="red"]
+  "com.example:artifact-b:jar" -> "com.example:artifact-c:jar"
+  "com.example:artifact-b:jar" -> "com.example:artifact-d:jar"
+  "com.example.sub:artifact-zip:zip" -> "com.example:artifact-c:jar"[style="dotted"]
+  "com.example:artifact-d:jar" -> "com.example.sub:artifact-e:jar"
+  "com.example:artifact-d:jar" -> "com.example.sub:artifact-f:jar"
+  "com.example:artifact-b:jar" -> "com.example.sub:artifact-g:jar"
+  "com.example:artifact-b:jar" -> "com.example.sub:artifact-zip:zip"
 }

@@ -22,14 +22,12 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import com.github.ferstl.depgraph.dependency.AggregatingGraphFactory;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-
-import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.GROUP_ID;
-import static com.github.ferstl.depgraph.dependency.NodeIdRenderers.GROUP_ID_WITH_SCOPE;
 
 /**
  * Aggregates all dependencies of a multi-module by their group IDs.
@@ -46,12 +44,16 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
 
+    DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer
+        .groupId()
+        .withScope(!this.mergeScopes);
+
     GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
         .showGroupIds(true)
         .showArtifactIds(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
-        .configure(GraphBuilder.create(this.mergeScopes ? GROUP_ID : GROUP_ID_WITH_SCOPE))
+        .configure(GraphBuilder.create(nodeIdRenderer))
         .omitSelfReferences();
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);

@@ -3,15 +3,15 @@ digraph "module-1" {
   edge [fontsize="10",fontname="Helvetica"]
 
   // Node Definitions:
-  "com.github.ferstl:module-1:jar:"[label=<module-1>]
-  "commons-codec:commons-codec:jar:"[label=<commons-codec>]
-  "org.apache.commons:commons-lang3:jar:"[label=<commons-lang3>]
-  "junit:junit:jar:"[label=<junit<font point-size="10"><br/>(test)</font>>]
-  "org.hamcrest:hamcrest-core:jar:"[label=<hamcrest-core<font point-size="10"><br/>(test)</font>>]
+  "com.github.ferstl:module-1:jar"[label=<module-1>]
+  "commons-codec:commons-codec:jar"[label=<commons-codec>]
+  "org.apache.commons:commons-lang3:jar"[label=<commons-lang3>]
+  "junit:junit:jar"[label=<junit<font point-size="10"><br/>(test)</font>>]
+  "org.hamcrest:hamcrest-core:jar"[label=<hamcrest-core<font point-size="10"><br/>(test)</font>>]
 
   // Edge Definitions:
-  "com.github.ferstl:module-1:jar:" -> "commons-codec:commons-codec:jar:"
-  "com.github.ferstl:module-1:jar:" -> "org.apache.commons:commons-lang3:jar:"
-  "junit:junit:jar:" -> "org.hamcrest:hamcrest-core:jar:"
-  "com.github.ferstl:module-1:jar:" -> "junit:junit:jar:"
+  "com.github.ferstl:module-1:jar" -> "commons-codec:commons-codec:jar"
+  "com.github.ferstl:module-1:jar" -> "org.apache.commons:commons-lang3:jar"
+  "junit:junit:jar" -> "org.hamcrest:hamcrest-core:jar"
+  "com.github.ferstl:module-1:jar" -> "junit:junit:jar"
 }
