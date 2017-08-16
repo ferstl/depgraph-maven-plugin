@@ -15,41 +15,74 @@
  */
 package com.github.ferstl.depgraph.graph.json;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
-import com.google.common.base.Joiner;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 
 public class JsonGraphFormatter implements GraphFormatter {
 
+  private final ObjectMapper objectMapper = new ObjectMapper()
+      .setSerializationInclusion(NON_EMPTY)
+      .setVisibility(FIELD, ANY);
+
   @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
-    StringBuilder result = new StringBuilder();
+    Map<String, Integer> nodeIdMap = new HashMap<>(nodes.size());
+    JsonGraph jsonGraph = new JsonGraph(graphName);
 
-    // output artifacts
-    result.append("{ \"artifacts\":\n");
-    result.append("  [ ");
-    List<String> nodeStrings = new ArrayList<>();
+    int numericNodeId = 0;
     for (Node<?> node : nodes) {
-      nodeStrings.add(node.getNodeName());
+      String nodeId = node.getNodeId();
+      nodeIdMap.put(nodeId, numericNodeId++);
+      jsonGraph.addArtifact(nodeId, numericNodeId, readJson(node.getNodeName()));
     }
-    result.append(Joiner.on("\n  , ").join(nodeStrings));
-    result.append("\n  ]\n");
 
-    // output dependencies
-    result.append(", \"dependencies\":\n");
-    result.append("  [ ");
-    List<String> depenencyStrings = new ArrayList<>();
     for (Edge edge : edges) {
-      depenencyStrings.add(edge.getName());
+      String fromNodeId = edge.getFromNodeId();
+      Integer fromNodeIdNumeric = nodeIdMap.get(fromNodeId);
+      String toNodeId = edge.getToNodeId();
+      Integer toNodeIdNumeric = nodeIdMap.get(toNodeId);
+      jsonGraph.addDependency(fromNodeId, fromNodeIdNumeric, toNodeId, toNodeIdNumeric, readJson(edge.getName()));
     }
-    result.append(Joiner.on("\n  , ").join(depenencyStrings));
-    result.append("\n  ]\n");
-    result.append("}");
 
-    return result.toString();
+    return serialize(jsonGraph);
   }
+
+  private Map<?, ?> readJson(String json) {
+    try {
+      return this.objectMapper.readValue(json, Map.class);
+    } catch (IOException e) {
+      throw new IllegalStateException("Unable to read JSON '" + json + "'", e);
+    }
+  }
+
+  private String serialize(JsonGraph jsonGraph) {
+    DefaultPrettyPrinter prettyPrinter = new DefaultPrettyPrinter()
+        .withObjectIndenter(new DefaultIndenter("  ", "\n"));
+
+    ObjectWriter writer = this.objectMapper.writer(prettyPrinter);
+    StringWriter jsonWriter = new StringWriter();
+    try {
+      writer.writeValue(jsonWriter, jsonGraph);
+    } catch (IOException e) {
+      // should never happen with StringWriter
+      throw new IllegalStateException(e);
+    }
+
+    return jsonWriter.toString();
+  }
+
 }

@@ -1,75 +1,104 @@
-{ "artifacts":
-  [ { "id": 0
-    , "artifactId": "module-1"
-    , "groupId": "com.github.ferstl"
-    , "version": "1.0.0-SNAPSHOT"
-    }
-  , { "id": 1
-    , "artifactId": "commons-codec"
-    , "groupId": "commons-codec"
-    , "version": "1.10"
-    }
-  , { "id": 2
-    , "artifactId": "commons-lang3"
-    , "groupId": "org.apache.commons"
-    , "version": "3.1"
-    }
-  , { "id": 3
-    , "artifactId": "module-2"
-    , "groupId": "com.github.ferstl"
-    , "version": "1.0.0-SNAPSHOT"
-    }
-  , { "id": 4
-    , "artifactId": "guava"
-    , "groupId": "com.google.guava"
-    , "version": "21.0"
-    }
-  , { "id": 5
-    , "artifactId": "commons-lang3"
-    , "groupId": "org.apache.commons"
-    , "version": "3.0"
-    }
-  , { "id": 6
-    , "artifactId": "sub-parent"
-    , "groupId": "com.github.ferstl"
-    , "version": "1.0.0-SNAPSHOT"
-    }
-  ]
-, "dependencies":
-  [ { "from": 0
-    , "to": 1
-    , "resolution": "OMITTED_FOR_DUPLICATE"
-    , "scopes": [ "compile" ]
-    }
-  , { "from": 0
-    , "to": 2
-    , "resolution": "OMITTED_FOR_CONFLICT"
-    , "scopes": [ "compile" ]
-    }
-  , { "from": 3
-    , "to": 0
-    , "resolution": "INCLUDED"
-    , "scopes": [ "compile" ]
-    }
-  , { "from": 3
-    , "to": 4
-    , "resolution": "INCLUDED"
-    , "scopes": [ "compile" ]
-    }
-  , { "from": 3
-    , "to": 1
-    , "resolution": "INCLUDED"
-    , "scopes": [ "compile" ]
-    }
-  , { "from": 3
-    , "to": 5
-    , "resolution": "INCLUDED"
-    , "scopes": [ "compile" ]
-    }
-  , { "from": 6
-    , "to": 3
-    , "resolution": "INCLUDED"
-    , "scopes": [ "compile" ]
-    }
-  ]
+{
+  "graphName" : "sub-parent",
+  "artifacts" : [ {
+    "id" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
+    "numericId" : 1,
+    "groupId" : "com.github.ferstl",
+    "artifactId" : "module-1",
+    "version" : "1.0.0-SNAPSHOT",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "commons-codec:commons-codec:1.10:jar:",
+    "numericId" : 2,
+    "groupId" : "commons-codec",
+    "artifactId" : "commons-codec",
+    "version" : "1.10",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "org.apache.commons:commons-lang3:3.1:jar:",
+    "numericId" : 3,
+    "groupId" : "org.apache.commons",
+    "artifactId" : "commons-lang3",
+    "version" : "3.0",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "com.github.ferstl:module-2:1.0.0-SNAPSHOT:jar:",
+    "numericId" : 4,
+    "groupId" : "com.github.ferstl",
+    "artifactId" : "module-2",
+    "version" : "1.0.0-SNAPSHOT",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "com.google.guava:guava:21.0:jar:",
+    "numericId" : 5,
+    "groupId" : "com.google.guava",
+    "artifactId" : "guava",
+    "version" : "21.0",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "org.apache.commons:commons-lang3:3.0:jar:",
+    "numericId" : 6,
+    "groupId" : "org.apache.commons",
+    "artifactId" : "commons-lang3",
+    "version" : "3.0",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "com.github.ferstl:sub-parent:1.0.0-SNAPSHOT:pom:",
+    "numericId" : 7,
+    "groupId" : "com.github.ferstl",
+    "artifactId" : "sub-parent",
+    "version" : "1.0.0-SNAPSHOT",
+    "scopes" : [ "compile" ],
+    "types" : [ "pom" ]
+  } ],
+  "dependencies" : [ {
+    "from" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
+    "to" : "commons-codec:commons-codec:1.10:jar:",
+    "numericFrom" : 0,
+    "numericTo" : 1,
+    "resolution" : "OMITTED_FOR_DUPLICATE"
+  }, {
+    "from" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
+    "to" : "org.apache.commons:commons-lang3:3.1:jar:",
+    "numericFrom" : 0,
+    "numericTo" : 2,
+    "version" : "3.1",
+    "resolution" : "OMITTED_FOR_CONFLICT"
+  }, {
+    "from" : "com.github.ferstl:module-2:1.0.0-SNAPSHOT:jar:",
+    "to" : "com.github.ferstl:module-1:1.0.0-SNAPSHOT:jar:",
+    "numericFrom" : 3,
+    "numericTo" : 0,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:module-2:1.0.0-SNAPSHOT:jar:",
+    "to" : "com.google.guava:guava:21.0:jar:",
+    "numericFrom" : 3,
+    "numericTo" : 4,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:module-2:1.0.0-SNAPSHOT:jar:",
+    "to" : "commons-codec:commons-codec:1.10:jar:",
+    "numericFrom" : 3,
+    "numericTo" : 1,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:module-2:1.0.0-SNAPSHOT:jar:",
+    "to" : "org.apache.commons:commons-lang3:3.0:jar:",
+    "numericFrom" : 3,
+    "numericTo" : 5,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:sub-parent:1.0.0-SNAPSHOT:pom:",
+    "to" : "com.github.ferstl:module-2:1.0.0-SNAPSHOT:jar:",
+    "numericFrom" : 6,
+    "numericTo" : 3,
+    "resolution" : "INCLUDED"
+  } ]
 }

@@ -1,11 +1,12 @@
-{ "artifacts":
-  [ { "id": 0
-    , "artifactId": "parent"
-    , "groupId": "com.github.ferstl"
-    , "version": "1.0.0-SNAPSHOT"
-    }
-  ]
-, "dependencies":
-  [ 
-  ]
+{
+  "graphName" : "parent",
+  "artifacts" : [ {
+    "id" : "com.github.ferstl:parent:1.0.0-SNAPSHOT:pom:",
+    "numericId" : 1,
+    "groupId" : "com.github.ferstl",
+    "artifactId" : "parent",
+    "version" : "1.0.0-SNAPSHOT",
+    "scopes" : [ "compile" ],
+    "types" : [ "pom" ]
+  } ]
 }

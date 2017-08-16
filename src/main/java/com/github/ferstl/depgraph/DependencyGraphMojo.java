@@ -83,22 +83,10 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "showDuplicates", defaultValue = "false")
   boolean showDuplicates;
 
-  /**
-   * If set to {@code true} (which is the default) <strong>and</strong> the graph format is JSON, the graph will also
-   * contain duplicates and conflicts, i.e. it treats the {@link #showDuplicates} and {@link #showConflicts} as set to
-   * {@code true}.
-   * The idea behind this option is, that the consumer of the JSON data, for example a Javascript library, will do its
-   * own filtering of the data.
-   *
-   * @since 2.3.0
-   */
-  @Parameter(property = "showFullGraphForJson", defaultValue = "true")
-  boolean showFullGraphForJson;
-
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
-    handleOptionsForJsonGraph();
+    handleOptionsForFullGraph();
 
     GraphBuilder<DependencyNode> graphBuilder = createGraphBuilder(graphStyleConfigurer);
     MavenGraphAdapter adapter = createMavenGraphAdapter(targetFilter);
@@ -115,16 +103,16 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
         .configure(GraphBuilder.create(VERSIONLESS_ID));
   }
 
-  private void handleOptionsForJsonGraph() {
-    boolean jsonFormat = GraphFormat.forName(this.graphFormat) == GraphFormat.JSON;
-    if (this.showFullGraphForJson && jsonFormat) {
+  private void handleOptionsForFullGraph() {
+    if (showFullGraph()) {
+      this.showGroupIds = true;
+      this.showVersions = true;
       this.showDuplicates = true;
       this.showConflicts = true;
     }
   }
 
   private MavenGraphAdapter createMavenGraphAdapter(ArtifactFilter targetFilter) {
-    boolean jsonFormat = GraphFormat.forName(this.graphFormat) == GraphFormat.JSON;
     MavenGraphAdapter adapter;
     if (requiresFullGraph()) {
       EnumSet<NodeResolution> resolutions = allOf(NodeResolution.class);

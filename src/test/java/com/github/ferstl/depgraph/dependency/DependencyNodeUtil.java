@@ -58,6 +58,7 @@ public final class DependencyNodeUtil {
     when(artifact.getArtifactId()).thenReturn(artifactId);
     when(artifact.getVersion()).thenReturn(version);
     when(artifact.getScope()).thenReturn(scope);
+    when(artifact.getType()).thenReturn("jar");
     return artifact;
   }
 }

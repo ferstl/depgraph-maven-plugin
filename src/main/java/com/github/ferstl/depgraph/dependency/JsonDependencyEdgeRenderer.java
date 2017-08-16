@@ -15,36 +15,53 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import org.apache.maven.artifact.Artifact;
+import java.io.IOException;
+import java.io.StringWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
-import com.google.common.base.Joiner;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 
 public class JsonDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
 
-  private static final Joiner NEWLINE_JOINER = Joiner.on("\n").skipNulls();
-  private static final Joiner COMMA_JOINER = Joiner.on(",").skipNulls();
-  private final Map<Artifact, Integer> artifactToIdMap;
+  private final boolean renderVersions;
+  private final ObjectMapper objectMapper;
 
-  public JsonDependencyEdgeRenderer(Map<Artifact, Integer> artifactToIdMap) {
-    this.artifactToIdMap = artifactToIdMap;
+  public JsonDependencyEdgeRenderer(boolean renderVersions) {
+    this.renderVersions = renderVersions;
+    this.objectMapper = new ObjectMapper()
+        .setSerializationInclusion(NON_EMPTY)
+        .setVisibility(FIELD, ANY);
   }
 
   @Override
   public String render(DependencyNode from, DependencyNode to) {
-    List<String> scopeStrings = new ArrayList<>();
-    for (String scope : to.getScopes()) {
-      scopeStrings.add("\"" + scope + "\"");
+    NodeResolution resolution = to.getResolution();
+    boolean showVersion = resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions;
+
+    DependencyData dependencyData = new DependencyData(showVersion ? to.getArtifact().getVersion() : null, resolution);
+
+    StringWriter jsonStringWriter = new StringWriter();
+    try {
+      this.objectMapper.writer().writeValue(jsonStringWriter, dependencyData);
+    } catch (IOException e) {
+      // should never happen with StringWriter
+      throw new IllegalStateException(e);
     }
 
-    return NEWLINE_JOINER.join(
-        "{ \"from\": " + this.artifactToIdMap.get(from.getArtifact()),
-        "    , \"to\": " + this.artifactToIdMap.get(to.getArtifact()),
-        "    , \"resolution\": \"" + to.getResolution() + "\"",
-        "    , \"scopes\": [ " + COMMA_JOINER.join(scopeStrings) + " ]",
-        "    }");
+    return jsonStringWriter.toString();
   }
 
+  private static class DependencyData {
+
+    private final String version;
+    private final NodeResolution resolution;
+
+    DependencyData(String version, NodeResolution resolution) {
+      this.version = version;
+      this.resolution = resolution;
+    }
+  }
 }
