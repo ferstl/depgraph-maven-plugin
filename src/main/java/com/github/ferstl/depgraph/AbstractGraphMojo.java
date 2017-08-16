@@ -51,6 +51,7 @@ import com.github.ferstl.depgraph.dependency.DotGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.GmlGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.JsonGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.PumlGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
@@ -60,6 +61,8 @@ import com.github.ferstl.depgraph.dependency.style.resource.StyleResource;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
+
+import static com.github.ferstl.depgraph.GraphFormat.JSON;
 
 /**
  * Abstract mojo to create all possible kinds of graphs in the dot format. Graphs are created with instances of the
@@ -121,6 +124,17 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    */
   @Parameter(property = "graphFormat", defaultValue = "dot")
   private String graphFormat;
+
+  /**
+   * If set to {@code true} (which is the default) <strong>and</strong> the graph format is JSON, the graph will show
+   * any information that is possible.
+   * The idea behind this option is, that the consumer of the JSON data, for example a Javascript library, will do its
+   * own filtering of the data.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "showFullGraphForJson", defaultValue = "true")
+  private boolean showFullGraphForJson;
 
   /**
    * The path to the generated output file. A file extension matching the configured {@code graphFormat} will be
@@ -266,6 +280,16 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     return new LinkedHashSet<>();
   }
 
+  /**
+   * Indicates to subclasses that everything possible should be shown in the graph, no matter what was configured
+   * for the specific mojo.
+   *
+   * @return {@code true} if the full graph should be shown, {@code false} else.
+   */
+  protected boolean showFullGraph() {
+    return GraphFormat.forName(this.graphFormat) == JSON && this.showFullGraphForJson;
+  }
+
   private ArtifactFilter createGlobalArtifactFilter() {
     AndArtifactFilter filter = new AndArtifactFilter();
 
@@ -303,6 +327,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
         return new GmlGraphStyleConfigurer();
       case PUML:
         return new PumlGraphStyleConfigurer();
+      case JSON:
+        return new JsonGraphStyleConfigurer();
       default:
         throw new IllegalArgumentException("Unsupported output format: " + graphFormat);
     }

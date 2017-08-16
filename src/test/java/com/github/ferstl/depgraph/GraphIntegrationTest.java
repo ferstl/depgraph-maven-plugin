@@ -32,7 +32,7 @@ import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.5.0"})
+@MavenVersions({"3.3.9", "3.5.0"})
 public class GraphIntegrationTest {
 
   @Rule
@@ -201,6 +201,30 @@ public class GraphIntegrationTest {
     assertFileContents(basedir, "expectations/graph_module-2.gml", "module-2/target/dependency-graph.gml");
     assertFileContents(basedir, "expectations/graph_sub-parent.gml", "sub-parent/target/dependency-graph.gml");
     assertFileContents(basedir, "expectations/graph_module-3.gml", "sub-parent/module-3/target/dependency-graph.gml");
+  }
+
+  @Test
+  public void graphInJson() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=json")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.json",
+        "module-2/target/dependency-graph.json",
+        "sub-parent/module-3/target/dependency-graph.json",
+        "target/dependency-graph.json",
+        "sub-parent/target/dependency-graph.json");
+
+    assertFileContents(basedir, "expectations/graph_parent.json", "target/dependency-graph.json");
+    assertFileContents(basedir, "expectations/graph_module-1.json", "module-1/target/dependency-graph.json");
+    assertFileContents(basedir, "expectations/graph_module-2.json", "module-2/target/dependency-graph.json");
+    assertFileContents(basedir, "expectations/graph_sub-parent.json", "sub-parent/target/dependency-graph.json");
+    assertFileContents(basedir, "expectations/graph_module-3.json", "sub-parent/module-3/target/dependency-graph.json");
   }
 
   @Test

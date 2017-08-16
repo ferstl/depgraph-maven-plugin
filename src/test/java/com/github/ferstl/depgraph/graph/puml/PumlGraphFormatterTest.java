@@ -79,18 +79,19 @@ public class PumlGraphFormatterTest {
         "  BackgroundColor<<runtime>> lightBlue\n" +
         "  BackgroundColor<<provided>> lightGray\n" +
         "}\n" +
-        "rectangle \"com.github.ferstl:depgraph-maven-plugin:2.2.1-SNAPSHOT\" as com_github_ferstl_depgraph_maven_plugin\n" +
-        "rectangle \"com.fasterxml.jackson.core:jackson-databind:2.8.7\" as com_fasterxml_jackson_core_jackson_databind\n" +
-        "rectangle \"com.google.guava:guava:21.0\" as com_google_guava_guava\n" +
-        "rectangle \"org.apache.maven:maven-core:jar\" as org_apache_maven_maven_core<<3.3.9>>\n" +
-        "rectangle \"com.google.inject:guice:4.0\" as com_google_inject_guice<<provided>>\n" +
-        "rectangle \"com.google.guava:guava:16.0.1\" as com_google_guava_guava<<provided>>\n" +
-        "rectangle \"junit:junit:4.12\" as junit_junit<<test>>\n" +
-        "com_github_ferstl_depgraph_maven_plugin -[#000000]-> com_fasterxml_jackson_core_jackson_databind\n" +
-        "com_github_ferstl_depgraph_maven_plugin -[#000000]-> com_google_guava_guava\n" +
-        "com_github_ferstl_depgraph_maven_plugin -[#000000]-> org_apache_maven_maven_core\n" +
-        "com_github_ferstl_depgraph_maven_plugin -[#000000]-> junit_junit\n" + "org_apache_maven_maven_core -[#000000]-> com_google_inject_guice\n" +
-        "com_google_inject_guice .[#FF0000].> com_google_guava_guava: 16.0.1\n" +
+        "rectangle \"com.github.ferstl:depgraph-maven-plugin:2.2.1-SNAPSHOT\" as com_github_ferstl_depgraph_maven_plugin_jar\n" +
+        "rectangle \"com.fasterxml.jackson.core:jackson-databind:2.8.7\" as com_fasterxml_jackson_core_jackson_databind_jar\n" +
+        "rectangle \"com.google.guava:guava:21.0\" as com_google_guava_guava_jar\n" +
+        "rectangle \"org.apache.maven:maven-core:jar\" as org_apache_maven_maven_core_jar<<3.3.9>>\n" +
+        "rectangle \"com.google.inject:guice:4.0\" as com_google_inject_guice_jar<<provided>>\n" +
+        "rectangle \"com.google.guava:guava:16.0.1\" as com_google_guava_guava_jar<<provided>>\n" +
+        "rectangle \"junit:junit:4.12\" as junit_junit_jar<<test>>\n" +
+        "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> com_fasterxml_jackson_core_jackson_databind_jar\n" +
+        "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> com_google_guava_guava_jar\n" +
+        "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> org_apache_maven_maven_core_jar\n" +
+        "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> junit_junit_jar\n" +
+        "org_apache_maven_maven_core_jar -[#000000]-> com_google_inject_guice_jar\n" +
+        "com_google_inject_guice_jar .[#FF0000].> com_google_guava_guava_jar: 16.0.1\n" +
         "@enduml", puml);
   }
 

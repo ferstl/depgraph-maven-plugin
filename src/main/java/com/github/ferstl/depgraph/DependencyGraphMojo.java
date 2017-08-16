@@ -93,6 +93,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+    handleOptionsForFullGraph();
+
     GraphBuilder<DependencyNode> graphBuilder = createGraphBuilder(graphStyleConfigurer);
     MavenGraphAdapter adapter = createMavenGraphAdapter(targetFilter);
 
@@ -109,6 +111,15 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
         .showVersionsOnNodes(this.showVersions)
         .showVersionsOnEdges(this.showVersions && requiresFullGraph())
         .configure(GraphBuilder.create(nodeIdRenderer));
+  }
+
+  private void handleOptionsForFullGraph() {
+    if (showFullGraph()) {
+      this.showGroupIds = true;
+      this.showVersions = true;
+      this.showDuplicates = true;
+      this.showConflicts = true;
+    }
   }
 
   private MavenGraphAdapter createMavenGraphAdapter(ArtifactFilter targetFilter) {

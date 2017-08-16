@@ -142,6 +142,17 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  public void aggregatedJson() throws Exception {
+    runTest("aggregate",
+        "-DgraphFormat=json",
+        "-Dincludes=com.github.ferstl:*");
+
+    assertFilesPresent(this.basedir, "target/dependency-graph.json");
+
+    collectFile("target/dependency-graph.json", "aggregated.json");
+  }
+
+  @Test
   public void aggregatedByGroupId() throws Exception {
     runTest("aggregate-by-groupid");
 

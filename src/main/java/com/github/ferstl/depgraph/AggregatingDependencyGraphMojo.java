@@ -75,6 +75,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+    handleOptionsForFullGraph();
 
     DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer.versionlessId()
         .withType(!this.mergeTypes)
@@ -90,5 +91,12 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
     return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, this.includeParentProjects);
+  }
+
+  private void handleOptionsForFullGraph() {
+    if (showFullGraph()) {
+      this.showGroupIds = true;
+      this.showVersions = true;
+    }
   }
 }

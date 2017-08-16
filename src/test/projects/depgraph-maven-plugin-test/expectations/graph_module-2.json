@@ -1,0 +1,110 @@
+{
+  "graphName" : "module-2",
+  "artifacts" : [ {
+    "id" : "com.github.ferstl:module-1:jar",
+    "numericId" : 1,
+    "groupId" : "com.github.ferstl",
+    "artifactId" : "module-1",
+    "version" : "1.0.0-SNAPSHOT",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "commons-codec:commons-codec:jar",
+    "numericId" : 2,
+    "groupId" : "commons-codec",
+    "artifactId" : "commons-codec",
+    "version" : "1.10",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "org.apache.commons:commons-lang3:jar",
+    "numericId" : 3,
+    "groupId" : "org.apache.commons",
+    "artifactId" : "commons-lang3",
+    "version" : "3.0",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "com.github.ferstl:module-2:jar",
+    "numericId" : 4,
+    "groupId" : "com.github.ferstl",
+    "artifactId" : "module-2",
+    "version" : "1.0.0-SNAPSHOT",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "com.google.guava:guava:jar",
+    "numericId" : 5,
+    "groupId" : "com.google.guava",
+    "artifactId" : "guava",
+    "version" : "21.0",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "junit:junit:jar",
+    "numericId" : 6,
+    "groupId" : "junit",
+    "artifactId" : "junit",
+    "version" : "4.12",
+    "scopes" : [ "test" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "org.hamcrest:hamcrest-core:jar",
+    "numericId" : 7,
+    "groupId" : "org.hamcrest",
+    "artifactId" : "hamcrest-core",
+    "version" : "1.3",
+    "scopes" : [ "test" ],
+    "types" : [ "jar" ]
+  } ],
+  "dependencies" : [ {
+    "from" : "com.github.ferstl:module-1:jar",
+    "to" : "commons-codec:commons-codec:jar",
+    "numericFrom" : 0,
+    "numericTo" : 1,
+    "resolution" : "OMITTED_FOR_DUPLICATE"
+  }, {
+    "from" : "com.github.ferstl:module-1:jar",
+    "to" : "org.apache.commons:commons-lang3:jar",
+    "numericFrom" : 0,
+    "numericTo" : 2,
+    "version" : "3.1",
+    "resolution" : "OMITTED_FOR_CONFLICT"
+  }, {
+    "from" : "com.github.ferstl:module-2:jar",
+    "to" : "com.github.ferstl:module-1:jar",
+    "numericFrom" : 3,
+    "numericTo" : 0,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:module-2:jar",
+    "to" : "com.google.guava:guava:jar",
+    "numericFrom" : 3,
+    "numericTo" : 4,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:module-2:jar",
+    "to" : "commons-codec:commons-codec:jar",
+    "numericFrom" : 3,
+    "numericTo" : 1,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:module-2:jar",
+    "to" : "org.apache.commons:commons-lang3:jar",
+    "numericFrom" : 3,
+    "numericTo" : 2,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "junit:junit:jar",
+    "to" : "org.hamcrest:hamcrest-core:jar",
+    "numericFrom" : 5,
+    "numericTo" : 6,
+    "resolution" : "INCLUDED"
+  }, {
+    "from" : "com.github.ferstl:module-2:jar",
+    "to" : "junit:junit:jar",
+    "numericFrom" : 3,
+    "numericTo" : 5,
+    "resolution" : "INCLUDED"
+  } ]
+}

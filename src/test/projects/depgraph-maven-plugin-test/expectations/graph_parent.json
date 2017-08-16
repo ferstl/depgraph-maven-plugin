@@ -1,0 +1,12 @@
+{
+  "graphName" : "parent",
+  "artifacts" : [ {
+    "id" : "com.github.ferstl:parent:pom",
+    "numericId" : 1,
+    "groupId" : "com.github.ferstl",
+    "artifactId" : "parent",
+    "version" : "1.0.0-SNAPSHOT",
+    "scopes" : [ "compile" ],
+    "types" : [ "pom" ]
+  } ]
+}
