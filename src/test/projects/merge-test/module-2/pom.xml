@@ -19,9 +19,9 @@
     </dependency>
   </dependencies>
 
-  <!-- Create a test jar with classifier 'tests' -->
   <build>
     <plugins>
+      <!-- Create a test jar with classifier 'tests' -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -34,6 +34,28 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- Create artifacts without classifier and different types -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>create-bin-distro</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptorRefs>
+                <descriptorRef>bin</descriptorRef>
+              </descriptorRefs>
+              <appendAssemblyId>false</appendAssemblyId>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 
