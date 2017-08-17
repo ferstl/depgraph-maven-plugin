@@ -91,6 +91,14 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "mergeTypes", defaultValue = "false")
   boolean mergeTypes;
 
+  /**
+   * Merge dependencies with multiple classifiers into one graph node instead of having a node per classifier.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "mergeClassifiers", defaultValue = "false")
+  boolean mergeClassifiers;
+
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
     handleOptionsForFullGraph();
