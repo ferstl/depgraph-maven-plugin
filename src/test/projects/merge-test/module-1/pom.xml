@@ -10,6 +10,30 @@
   <artifactId>module-1</artifactId>
 
   <dependencies>
+    <!-- module-2 JAR -->
+    <dependency>
+      <groupId>com.github.ferstl</groupId>
+      <artifactId>module-2</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- module-2 ZIP -->
+    <dependency>
+      <groupId>com.github.ferstl</groupId>
+      <artifactId>module-2</artifactId>
+      <version>${project.version}</version>
+      <type>zip</type>
+    </dependency>
+
+    <!-- module-2 test JAR -->
+    <dependency>
+      <groupId>com.github.ferstl</groupId>
+      <artifactId>module-2</artifactId>
+      <version>${project.version}</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>
+
     <!-- JUnit as test dependency-->
     <dependency>
       <groupId>junit</groupId>
