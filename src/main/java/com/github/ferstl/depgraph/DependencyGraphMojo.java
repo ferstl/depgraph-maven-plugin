@@ -111,6 +111,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
   GraphBuilder<DependencyNode> createGraphBuilder(GraphStyleConfigurer graphStyleConfigurer) {
     DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer.versionlessId()
+        .withClassifier(!this.mergeClassifiers)
         .withType(!this.mergeTypes);
 
     return graphStyleConfigurer

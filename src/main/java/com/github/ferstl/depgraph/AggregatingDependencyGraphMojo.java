@@ -86,6 +86,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
     handleOptionsForFullGraph();
 
     DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer.versionlessId()
+        .withClassifier(!this.mergeClassifiers)
         .withType(!this.mergeTypes)
         .withScope(!this.mergeScopes);
 
