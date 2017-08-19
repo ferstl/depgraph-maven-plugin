@@ -1,0 +1,17 @@
+digraph "module-1" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:module-1:jar"[label=<module-1>]
+  "com.github.ferstl:module-2:jar"[label=<module-2<font point-size="10"><br/>(compile/test)</font>>]
+  "com.github.ferstl:module-2:zip"[label=<module-2>]
+  "junit:junit:jar"[label=<junit<font point-size="10"><br/>(test)</font>>]
+  "org.hamcrest:hamcrest-core:jar"[label=<hamcrest-core<font point-size="10"><br/>(test)</font>>]
+
+  // Edge Definitions:
+  "com.github.ferstl:module-1:jar" -> "com.github.ferstl:module-2:jar"
+  "com.github.ferstl:module-1:jar" -> "com.github.ferstl:module-2:zip"
+  "junit:junit:jar" -> "org.hamcrest:hamcrest-core:jar"
+  "com.github.ferstl:module-1:jar" -> "junit:junit:jar"
+}
