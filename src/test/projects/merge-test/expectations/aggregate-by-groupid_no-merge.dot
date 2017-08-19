@@ -1,0 +1,19 @@
+digraph "merge-test" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:compile"[label=<<font point-size="14">com.github.ferstl</font>>]
+  "com.github.ferstl:test"[label=<<font point-size="14">com.github.ferstl</font><font point-size="10"><br/>(test)</font>>]
+  "junit:test"[label=<<font point-size="14">junit</font><font point-size="10"><br/>(test)</font>>]
+  "org.hamcrest:test"[label=<<font point-size="14">org.hamcrest</font><font point-size="10"><br/>(test)</font>>]
+  "junit:compile"[label=<<font point-size="14">junit</font>>]
+  "org.hamcrest:compile"[label=<<font point-size="14">org.hamcrest</font>>]
+
+  // Edge Definitions:
+  "com.github.ferstl:compile" -> "com.github.ferstl:test"
+  "junit:test" -> "org.hamcrest:test"
+  "com.github.ferstl:compile" -> "junit:test"
+  "junit:compile" -> "org.hamcrest:compile"
+  "com.github.ferstl:compile" -> "junit:compile"
+}
