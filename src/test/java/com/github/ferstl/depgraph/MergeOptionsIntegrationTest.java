@@ -50,4 +50,18 @@ public class MergeOptionsIntegrationTest {
 
     assertFileContents(basedir, "expectations/graph-module-1_no-merge.dot", "module-1/target/dependency-graph.dot");
   }
+
+
+  @Test
+  public void aggregateNoMerge() throws Exception {
+    File basedir = this.resources.getBasedir("merge-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .execute("clean", "package", "depgraph:aggregate");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.dot");
+
+    assertFileContents(basedir, "expectations/aggregate_no-merge.dot", "target/dependency-graph.dot");
+  }
 }
