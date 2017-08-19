@@ -48,7 +48,7 @@ public class MergeOptionsIntegrationTest {
         "module-2/target/dependency-graph.dot",
         "target/dependency-graph.dot");
 
-    assertFileContents(basedir, "expectations/graph-module-1_no-merge.dot", "module-1/target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/graph_module-1_no-merge.dot", "module-1/target/dependency-graph.dot");
   }
 
   @Test
