@@ -90,4 +90,18 @@ public class MergeOptionsIntegrationTest {
 
     assertFileContents(basedir, "expectations/aggregate_mergeScopes.dot", "target/dependency-graph.dot");
   }
+
+  @Test
+  public void aggregateByGroupIdMergeScopes() throws Exception {
+    File basedir = this.resources.getBasedir("merge-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DmergeScopes=true")
+        .execute("clean", "package", "depgraph:aggregate-by-groupid");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.dot");
+
+    assertFileContents(basedir, "expectations/aggregate-by-groupid_mergeScopes.dot", "target/dependency-graph.dot");
+  }
 }
