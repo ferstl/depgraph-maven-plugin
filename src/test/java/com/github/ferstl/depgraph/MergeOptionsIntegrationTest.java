@@ -140,4 +140,23 @@ public class MergeOptionsIntegrationTest {
 
     assertFileContents(basedir, "expectations/graph_module-1_mergeTypes.dot", "module-1/target/dependency-graph.dot");
   }
+
+  @Test
+  public void graphMergeTypesAndClassifiers() throws Exception {
+    File basedir = this.resources.getBasedir("merge-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DmergeTypes=true")
+        .withCliOption("-DmergeClassifiers=true")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.dot",
+        "module-2/target/dependency-graph.dot",
+        "target/dependency-graph.dot");
+
+    assertFileContents(basedir, "expectations/graph_module-1_mergeTypes-mergeClassifiers.dot", "module-1/target/dependency-graph.dot");
+  }
 }
