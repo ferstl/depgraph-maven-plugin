@@ -27,8 +27,12 @@ public class DependencyNodeIdRenderer implements NodeRenderer<DependencyNode> {
   public static DependencyNodeIdRenderer versionlessId() {
     return new DependencyNodeIdRenderer()
         .withGroupId(true)
-        .withArtifactId(true)
-        .withClassifier(true);
+        .withArtifactId(true);
+  }
+
+  public DependencyNodeIdRenderer withClassifier(boolean withClassifier) {
+    this.withClassifier = withClassifier;
+    return this;
   }
 
   public DependencyNodeIdRenderer withType(boolean withType) {
@@ -48,11 +52,6 @@ public class DependencyNodeIdRenderer implements NodeRenderer<DependencyNode> {
 
   private DependencyNodeIdRenderer withArtifactId(boolean withArtifactId) {
     this.withArtifactId = withArtifactId;
-    return this;
-  }
-
-  private DependencyNodeIdRenderer withClassifier(boolean withClassifier) {
-    this.withClassifier = withClassifier;
     return this;
   }
 

@@ -1,0 +1,23 @@
+digraph "merge-test" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:module-1:jar:compile"[label=<module-1>]
+  "com.github.ferstl:module-2:jar:compile"[label=<module-2>]
+  "com.github.ferstl:module-2:zip:compile"[label=<module-2>]
+  "com.github.ferstl:module-2:jar:tests:test"[label=<module-2<font point-size="10"><br/>(test)</font>>]
+  "junit:junit:jar:test"[label=<junit<font point-size="10"><br/>(test)</font>>]
+  "org.hamcrest:hamcrest-core:jar:test"[label=<hamcrest-core<font point-size="10"><br/>(test)</font>>]
+  "junit:junit:jar:compile"[label=<junit>]
+  "org.hamcrest:hamcrest-core:jar:compile"[label=<hamcrest-core>]
+
+  // Edge Definitions:
+  "com.github.ferstl:module-1:jar:compile" -> "com.github.ferstl:module-2:jar:compile"
+  "com.github.ferstl:module-1:jar:compile" -> "com.github.ferstl:module-2:zip:compile"
+  "com.github.ferstl:module-1:jar:compile" -> "com.github.ferstl:module-2:jar:tests:test"
+  "junit:junit:jar:test" -> "org.hamcrest:hamcrest-core:jar:test"
+  "com.github.ferstl:module-1:jar:compile" -> "junit:junit:jar:test"
+  "junit:junit:jar:compile" -> "org.hamcrest:hamcrest-core:jar:compile"
+  "com.github.ferstl:module-2:jar:compile" -> "junit:junit:jar:compile"
+}

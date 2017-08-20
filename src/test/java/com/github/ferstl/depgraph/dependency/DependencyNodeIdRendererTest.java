@@ -23,7 +23,7 @@ public class DependencyNodeIdRendererTest {
     String result = DependencyNodeIdRenderer.versionlessId().render(createDependencyNode());
 
     // assert
-    assertEquals("groupId:artifactId:classifier", result);
+    assertEquals("groupId:artifactId", result);
   }
 
   @Test
@@ -34,7 +34,31 @@ public class DependencyNodeIdRendererTest {
         .render(createDependencyNode());
 
     // assert
-    assertEquals("groupId:artifactId:type:classifier", result);
+    assertEquals("groupId:artifactId:type", result);
+  }
+
+  @Test
+  public void versionLessIdWithClassifier() {
+    // act
+    String result = DependencyNodeIdRenderer.versionlessId()
+        .withClassifier(true)
+        .render(createDependencyNode());
+
+    // assert
+    assertEquals("groupId:artifactId:classifier", result);
+  }
+
+  @Test
+  public void versionLessIdFull() {
+    // act
+    String result = DependencyNodeIdRenderer.versionlessId()
+        .withType(true)
+        .withScope(true)
+        .withClassifier(true)
+        .render(createDependencyNode());
+
+    // assert
+    assertEquals("groupId:artifactId:type:classifier:compile", result);
   }
 
   @Test
@@ -43,7 +67,7 @@ public class DependencyNodeIdRendererTest {
     String result = DependencyNodeIdRenderer.versionlessId().withScope(true).render(createDependencyNode());
 
     // assert
-    assertEquals("groupId:artifactId:classifier:compile", result);
+    assertEquals("groupId:artifactId:compile", result);
   }
 
 

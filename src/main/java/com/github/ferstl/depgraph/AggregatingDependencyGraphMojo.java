@@ -73,11 +73,20 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   @Parameter(property = "mergeTypes", defaultValue = "false")
   private boolean mergeTypes;
 
+  /**
+   * Merge dependencies with multiple classifiers into one graph node instead of having a node per classifier.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "mergeClassifiers", defaultValue = "false")
+  boolean mergeClassifiers;
+
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
     handleOptionsForFullGraph();
 
     DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer.versionlessId()
+        .withClassifier(!this.mergeClassifiers)
         .withType(!this.mergeTypes)
         .withScope(!this.mergeScopes);
 
