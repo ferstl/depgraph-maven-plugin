@@ -84,6 +84,8 @@ public final class DependencyNode {
     }
 
     this.scopes.addAll(other.getScopes());
+    this.classifiers.addAll(other.getClassifiers());
+    this.types.addAll(other.getTypes());
   }
 
   public Artifact getArtifact() {
@@ -96,6 +98,14 @@ public final class DependencyNode {
 
   public Set<String> getScopes() {
     return ImmutableSet.copyOf(this.scopes);
+  }
+
+  public Set<String> getClassifiers() {
+    return ImmutableSet.copyOf(this.classifiers);
+  }
+
+  public Set<String> getTypes() {
+    return ImmutableSet.copyOf(this.types);
   }
 
   /**
