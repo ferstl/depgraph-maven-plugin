@@ -83,9 +83,9 @@ public final class DependencyNode {
       return;
     }
 
-    this.scopes.addAll(other.getScopes());
-    this.classifiers.addAll(other.getClassifiers());
-    this.types.addAll(other.getTypes());
+    this.scopes.addAll(other.scopes);
+    this.classifiers.addAll(other.classifiers);
+    this.types.addAll(other.types);
   }
 
   public Artifact getArtifact() {
