@@ -36,9 +36,9 @@ public final class DependencyNode {
   private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
   private final Artifact artifact;
   private final NodeResolution resolution;
-  private final TreeSet<String> scopes;
-  private final TreeSet<String> classifiers;
-  private final TreeSet<String> types;
+  private final Set<String> scopes;
+  private final Set<String> classifiers;
+  private final Set<String> types;
 
 
   public DependencyNode(Artifact artifact) {
