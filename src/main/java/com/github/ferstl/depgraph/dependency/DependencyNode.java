@@ -20,6 +20,8 @@ import java.util.TreeSet;
 import org.apache.maven.artifact.Artifact;
 import com.google.common.collect.ImmutableSet;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 /**
  * Representation of a dependency graph node. It adapts these Maven-specific classes:
  * <ul>
@@ -35,6 +37,8 @@ public final class DependencyNode {
   private final Artifact artifact;
   private final NodeResolution resolution;
   private final TreeSet<String> scopes;
+  private final TreeSet<String> classifiers;
+  private final TreeSet<String> types;
 
 
   public DependencyNode(Artifact artifact) {
@@ -62,9 +66,16 @@ public final class DependencyNode {
     }
 
     this.scopes = new TreeSet<>();
+    this.classifiers = new TreeSet<>();
+    this.types = new TreeSet<>();
     this.artifact = artifact;
     this.resolution = resolution;
     this.scopes.add(artifact.getScope());
+    this.types.add(artifact.getType());
+
+    if (isNullOrEmpty(artifact.getClassifier())) {
+      this.classifiers.add(artifact.getClassifier());
+    }
   }
 
   public void merge(DependencyNode other) {
