@@ -73,7 +73,7 @@ public final class DependencyNode {
     this.scopes.add(artifact.getScope());
     this.types.add(artifact.getType());
 
-    if (isNullOrEmpty(artifact.getClassifier())) {
+    if (!isNullOrEmpty(artifact.getClassifier())) {
       this.classifiers.add(artifact.getClassifier());
     }
   }
