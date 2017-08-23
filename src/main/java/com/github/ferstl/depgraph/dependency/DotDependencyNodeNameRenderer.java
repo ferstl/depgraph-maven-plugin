@@ -64,4 +64,12 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
     return "";
   }
 
+  private static String createTypeString(Set<String> types) {
+    if (types.size() > 1 || !types.contains("jar")) {
+      return SLASH_JOINER.join(types);
+    }
+
+    return "";
+  }
+
 }
