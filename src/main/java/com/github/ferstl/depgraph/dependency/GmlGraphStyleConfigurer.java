@@ -26,6 +26,8 @@ public class GmlGraphStyleConfigurer implements GraphStyleConfigurer {
   private boolean showArtifactId;
   private boolean showVersionsOnNodes;
   private boolean showVersionOnEdges;
+  private boolean showTypes;
+  private boolean showClassifiers;
 
   @Override
   public GraphStyleConfigurer showGroupIds(boolean showGroupId) {
@@ -36,6 +38,18 @@ public class GmlGraphStyleConfigurer implements GraphStyleConfigurer {
   @Override
   public GraphStyleConfigurer showArtifactIds(boolean showArtifactId) {
     this.showArtifactId = showArtifactId;
+    return this;
+  }
+
+  @Override
+  public GraphStyleConfigurer showTypes(boolean showTypes) {
+    this.showTypes = showTypes;
+    return this;
+  }
+
+  @Override
+  public GraphStyleConfigurer showClassifiers(boolean showClassifiers) {
+    this.showClassifiers = showClassifiers;
     return this;
   }
 

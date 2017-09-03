@@ -18,13 +18,12 @@ package com.github.ferstl.depgraph.dependency;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import com.github.ferstl.depgraph.graph.puml.PumlGraphFormatter;
 
-/**
- * @author gushakov
- */
 public class PumlGraphStyleConfigurer implements GraphStyleConfigurer {
 
   private boolean showGroupId;
   private boolean showArtifactId;
+  private boolean showTypes;
+  private boolean showClassifiers;
   private boolean showVersionsOnNodes;
   private boolean showVersionOnEdges;
 
@@ -37,6 +36,18 @@ public class PumlGraphStyleConfigurer implements GraphStyleConfigurer {
   @Override
   public GraphStyleConfigurer showArtifactIds(boolean showArtifactId) {
     this.showArtifactId = showArtifactId;
+    return this;
+  }
+
+  @Override
+  public GraphStyleConfigurer showTypes(boolean showTypes) {
+    this.showTypes = showTypes;
+    return this;
+  }
+
+  @Override
+  public GraphStyleConfigurer showClassifiers(boolean showClassifiers) {
+    this.showClassifiers = showClassifiers;
     return this;
   }
 

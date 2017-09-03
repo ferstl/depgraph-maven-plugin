@@ -26,6 +26,10 @@ public interface GraphStyleConfigurer {
 
   GraphStyleConfigurer showArtifactIds(boolean showArtifactId);
 
+  GraphStyleConfigurer showTypes(boolean showTypes);
+
+  GraphStyleConfigurer showClassifiers(boolean showClassifiers);
+
   GraphStyleConfigurer showVersionsOnNodes(boolean showVersionsOnNodes);
 
   GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges);

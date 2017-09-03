@@ -25,6 +25,8 @@ public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
   private final StyleConfiguration styleConfiguration;
   private boolean showGroupId;
   private boolean showArtifactId;
+  private boolean showTypes;
+  private boolean showClassifiers;
   private boolean showVersionsOnNodes;
   private boolean showVersionOnEdges;
 
@@ -41,6 +43,18 @@ public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
   @Override
   public GraphStyleConfigurer showArtifactIds(boolean showArtifactId) {
     this.showArtifactId = showArtifactId;
+    return this;
+  }
+
+  @Override
+  public GraphStyleConfigurer showTypes(boolean showTypes) {
+    this.showTypes = showTypes;
+    return this;
+  }
+
+  @Override
+  public GraphStyleConfigurer showClassifiers(boolean showClassifiers) {
+    this.showClassifiers = showClassifiers;
     return this;
   }
 
