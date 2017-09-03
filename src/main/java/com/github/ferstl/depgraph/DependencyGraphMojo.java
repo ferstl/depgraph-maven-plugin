@@ -64,6 +64,22 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   boolean showVersions;
 
   /**
+   * If set to {@code true}, the created graph will show type information an all artifacts.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "showTypes", defaultValue = "false")
+  boolean showTypes;
+
+  /**
+   * If set to {@code true}, the created graph will show classifier information an all artifacts.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "showClassifiers", defaultValue = "false")
+  boolean showClassifiers;
+
+  /**
    * If set to {@code true}, the graph will additionally contain conflicting dependencies. Note that the dependency
    * graph may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater
    * or equal 3.0!
@@ -117,6 +133,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     return graphStyleConfigurer
         .showGroupIds(this.showGroupIds)
         .showArtifactIds(true)
+        .showTypes(this.showTypes)
+        .showClassifiers(this.showClassifiers)
         .showVersionsOnNodes(this.showVersions)
         .showVersionsOnEdges(this.showVersions && requiresFullGraph())
         .configure(GraphBuilder.create(nodeIdRenderer));

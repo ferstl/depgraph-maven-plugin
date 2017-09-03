@@ -35,7 +35,7 @@ public class DotDependencyNodeNameRendererTest {
   public void renderNothing() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, false, false, this.styleConfiguration);
+    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, false, false, false, false, this.styleConfiguration);
 
     // act
     String result = renderer.render(node);
@@ -48,7 +48,7 @@ public class DotDependencyNodeNameRendererTest {
   public void renderGroupId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, false, false, this.styleConfiguration);
+    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, false, false, false, false, this.styleConfiguration);
 
     // act
     String result = renderer.render(node);
@@ -61,7 +61,7 @@ public class DotDependencyNodeNameRendererTest {
   public void renderArtifactId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, false, this.styleConfiguration);
+    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, false, false, false, this.styleConfiguration);
 
     // act
     String result = renderer.render(node);
@@ -74,7 +74,7 @@ public class DotDependencyNodeNameRendererTest {
   public void renderVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, false, true, this.styleConfiguration);
+    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, false, false, false, true, this.styleConfiguration);
 
     // act
     String result = renderer.render(node);
@@ -87,7 +87,7 @@ public class DotDependencyNodeNameRendererTest {
   public void renderGroupIdArtifactIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, true, true, this.styleConfiguration);
+    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, true, false, false, true, this.styleConfiguration);
 
     // act
     String result = renderer.render(node);
@@ -100,7 +100,7 @@ public class DotDependencyNodeNameRendererTest {
   public void renderGroupIdArtifactId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, true, false, this.styleConfiguration);
+    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, true, false, false, false, this.styleConfiguration);
 
     // act
     String result = renderer.render(node);
@@ -113,7 +113,7 @@ public class DotDependencyNodeNameRendererTest {
   public void renderGroupIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, false, true, this.styleConfiguration);
+    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, false, false, false, true, this.styleConfiguration);
 
     // act
     String result = renderer.render(node);
@@ -126,7 +126,7 @@ public class DotDependencyNodeNameRendererTest {
   public void renderArtifactIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, true, this.styleConfiguration);
+    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, false, false, true, this.styleConfiguration);
 
     // act
     String result = renderer.render(node);

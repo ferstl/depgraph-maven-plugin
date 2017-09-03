@@ -51,6 +51,8 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
     GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
         .showGroupIds(true)
         .showArtifactIds(false)
+        .showTypes(false)
+        .showClassifiers(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
         .configure(GraphBuilder.create(nodeIdRenderer))
