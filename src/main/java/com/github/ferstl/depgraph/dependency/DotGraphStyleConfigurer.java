@@ -20,54 +20,12 @@ import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import com.github.ferstl.depgraph.graph.dot.DotGraphFormatter;
 
-public class DotGraphStyleConfigurer implements GraphStyleConfigurer {
+public class DotGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
 
   private final StyleConfiguration styleConfiguration;
-  private boolean showGroupId;
-  private boolean showArtifactId;
-  private boolean showTypes;
-  private boolean showClassifiers;
-  private boolean showVersionsOnNodes;
-  private boolean showVersionOnEdges;
 
   public DotGraphStyleConfigurer(StyleConfiguration styleConfiguration) {
     this.styleConfiguration = styleConfiguration;
-  }
-
-  @Override
-  public GraphStyleConfigurer showGroupIds(boolean showGroupId) {
-    this.showGroupId = showGroupId;
-    return this;
-  }
-
-  @Override
-  public GraphStyleConfigurer showArtifactIds(boolean showArtifactId) {
-    this.showArtifactId = showArtifactId;
-    return this;
-  }
-
-  @Override
-  public GraphStyleConfigurer showTypes(boolean showTypes) {
-    this.showTypes = showTypes;
-    return this;
-  }
-
-  @Override
-  public GraphStyleConfigurer showClassifiers(boolean showClassifiers) {
-    this.showClassifiers = showClassifiers;
-    return this;
-  }
-
-  @Override
-  public GraphStyleConfigurer showVersionsOnNodes(boolean showVersionsOnNodes) {
-    this.showVersionsOnNodes = showVersionsOnNodes;
-    return this;
-  }
-
-  @Override
-  public GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges) {
-    this.showVersionOnEdges = showVersionOnEdges;
-    return this;
   }
 
   @Override
