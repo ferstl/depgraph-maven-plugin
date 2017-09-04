@@ -18,6 +18,7 @@ package com.github.ferstl.depgraph.dependency;
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
+import com.github.ferstl.depgraph.dependency.style.StyleKey;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
 
@@ -50,14 +51,17 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
 
+    String effectiveScope = getFirst(node.getScopes(), null);
+    StyleKey styleKey = StyleKey.create(artifact.getGroupId(), artifact.getArtifactId(), effectiveScope, artifact.getType(), node.getEffectiveVersion());
+
     return this.styleConfiguration.nodeAttributes(
+        styleKey,
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
         artifact.getType(),
-        scopes,
-        getFirst(node.getScopes(), null))
-        .toString();
+        scopes
+    ).toString();
   }
 
   private static String createScopeString(Set<String> scopes) {

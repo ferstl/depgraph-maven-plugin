@@ -132,8 +132,7 @@ public class StyleConfiguration {
     return edge != null ? edge.createAttributes() : new DotAttributeBuilder();
   }
 
-  public DotAttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String type, String scopes, String effectiveScope) {
-    StyleKey artifactKey = StyleKey.create(groupId, artifactId, effectiveScope, type, version);
+  public DotAttributeBuilder nodeAttributes(StyleKey artifactKey, String groupId, String artifactId, String version, String type, String scopes) {
     AbstractNode node = this.defaultNode;
 
     for (Entry<StyleKey, AbstractNode> entry : this.nodeStyles.entrySet()) {
