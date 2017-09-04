@@ -59,7 +59,7 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
-        artifact.getType(),
+        this.showTypes ? artifact.getType() : null,
         scopes
     ).toString();
   }
