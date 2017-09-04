@@ -50,6 +50,7 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
   public String render(DependencyNode node) {
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
+    String types = createTypeString(node.getTypes());
 
     String effectiveScope = getFirst(node.getScopes(), null);
     StyleKey styleKey = StyleKey.create(artifact.getGroupId(), artifact.getArtifactId(), effectiveScope, artifact.getType(), node.getEffectiveVersion());
@@ -59,7 +60,7 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
-        this.showTypes ? artifact.getType() : null,
+        this.showTypes ? types : null,
         scopes
     ).toString();
   }
