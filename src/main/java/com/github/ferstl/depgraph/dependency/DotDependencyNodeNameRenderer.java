@@ -51,6 +51,7 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
     String types = createTypeString(node.getTypes());
+    String classifiers = createClassifierString(node.getClassifiers());
 
     String effectiveScope = getFirst(node.getScopes(), null);
     StyleKey styleKey = StyleKey.create(artifact.getGroupId(), artifact.getArtifactId(), effectiveScope, artifact.getType(), node.getEffectiveVersion());
@@ -61,6 +62,7 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
         this.showTypes ? types : null,
+        this.showClassifiers ? classifiers : null,
         scopes
     ).toString();
   }
@@ -79,6 +81,10 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
     }
 
     return "";
+  }
+
+  private static String createClassifierString(Set<String> classifiers) {
+    return SLASH_JOINER.join(classifiers);
   }
 
 }
