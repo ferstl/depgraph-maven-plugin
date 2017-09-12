@@ -85,6 +85,7 @@ abstract class AbstractNode {
             .color(typeFont.color)
             .size(typeFont.size)
             .text(types)
+            .smartNewLine()
             .font()
             .name(scopeFont.name)
             .color(scopeFont.color)
