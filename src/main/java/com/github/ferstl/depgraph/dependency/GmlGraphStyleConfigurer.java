@@ -24,7 +24,7 @@ public class GmlGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
 
   @Override
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
-    NodeRenderer<DependencyNode> nodeNameRenderer = new GmlDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes);
+    NodeRenderer<DependencyNode> nodeNameRenderer = new GmlDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes);
     EdgeRenderer<DependencyNode> edgeRenderer = new GmlDependencyEdgeRenderer(this.showVersionOnEdges);
     return graphBuilder
         .useNodeNameRenderer(nodeNameRenderer)
