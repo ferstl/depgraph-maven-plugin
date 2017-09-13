@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
@@ -22,14 +23,19 @@ import com.google.common.base.Joiner;
 public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
   private static final Joiner COLON_JOINER = Joiner.on(":").skipNulls();
+  private static final Joiner SLASH_JOINER = Joiner.on("/").skipNulls();
 
   private final boolean showGroupId;
   private final boolean showArtifactId;
+  private final boolean showTypes;
+  private final boolean showClassifiers;
   private final boolean showVersion;
 
-  public PumlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion) {
+  public PumlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
+    this.showTypes = showTypes;
+    this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
   }
 
@@ -41,11 +47,25 @@ public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
     String name = COLON_JOINER.join(
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
+        this.showTypes ? createTypeString(node.getTypes()) : null,
+        this.showClassifiers ? createClassifierString(node.getClassifiers()) : null,
         this.showVersion ? node.getEffectiveVersion() : null);
 
     nodeInfo.withLabel(name)
         .withStereotype(node.getArtifact().getScope());
 
     return nodeInfo.toString();
+  }
+
+  private static String createTypeString(Set<String> types) {
+    if (types.size() > 1 || !types.contains("jar")) {
+      return SLASH_JOINER.join(types);
+    }
+
+    return "";
+  }
+
+  private static String createClassifierString(Set<String> classifiers) {
+    return SLASH_JOINER.join(classifiers);
   }
 }

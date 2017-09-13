@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 public class PumlDependencyNodeNameRendererTest {
 
 
-  private final PumlDependencyNodeNameRenderer renderer = new PumlDependencyNodeNameRenderer(true, true, true);
+  private final PumlDependencyNodeNameRenderer renderer = new PumlDependencyNodeNameRenderer(true, true,false, false,  true);
 
   @Test
   public void testRenderCompileNode() throws Exception {
