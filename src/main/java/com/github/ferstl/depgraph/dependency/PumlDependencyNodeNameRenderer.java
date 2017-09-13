@@ -17,8 +17,11 @@ package com.github.ferstl.depgraph.dependency;
 
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
+import com.google.common.base.Joiner;
 
 public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
+
+  private static final Joiner COLON_JOINER = Joiner.on(":").skipNulls();
 
   private final boolean showGroupId;
   private final boolean showArtifactId;
@@ -33,28 +36,14 @@ public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
   @Override
   public String render(DependencyNode node) {
     Artifact artifact = node.getArtifact();
-    StringBuilder name = new StringBuilder();
     PumlNodeInfo nodeInfo = new PumlNodeInfo().withComponent("rectangle");
 
-    if (this.showGroupId) {
-      name.append(artifact.getGroupId());
-    }
+    String name = COLON_JOINER.join(
+        this.showGroupId ? artifact.getGroupId() : null,
+        this.showArtifactId ? artifact.getArtifactId() : null,
+        this.showVersion ? artifact.getVersion() : null);
 
-    if (this.showArtifactId) {
-      if (this.showGroupId) {
-        name.append(":");
-      }
-      name.append(artifact.getArtifactId());
-    }
-
-    if (this.showVersion) {
-      if (this.showGroupId || this.showArtifactId) {
-        name.append(":");
-      }
-      name.append(artifact.getVersion());
-    }
-
-    nodeInfo.withLabel(name.toString())
+    nodeInfo.withLabel(name)
         .withStereotype(node.getArtifact().getScope());
 
     return nodeInfo.toString();
