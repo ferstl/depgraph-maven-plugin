@@ -84,7 +84,7 @@ public class PumlGraphFormatterTest {
         "rectangle \"com.google.guava:guava:21.0\" as com_google_guava_guava_jar\n" +
         "rectangle \"org.apache.maven:maven-core:jar\" as org_apache_maven_maven_core_jar<<3.3.9>>\n" +
         "rectangle \"com.google.inject:guice:4.0\" as com_google_inject_guice_jar<<provided>>\n" +
-        "rectangle \"com.google.guava:guava:16.0.1\" as com_google_guava_guava_jar<<provided>>\n" +
+        "rectangle \"com.google.guava:guava:16.0.1-alpha\" as com_google_guava_guava_jar<<provided>>\n" +
         "rectangle \"junit:junit:4.12\" as junit_junit_jar<<test>>\n" +
         "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> com_fasterxml_jackson_core_jackson_databind_jar\n" +
         "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> com_google_guava_guava_jar\n" +

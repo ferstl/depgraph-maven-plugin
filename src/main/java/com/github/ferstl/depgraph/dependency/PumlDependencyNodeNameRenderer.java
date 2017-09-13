@@ -41,7 +41,7 @@ public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
     String name = COLON_JOINER.join(
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
-        this.showVersion ? artifact.getVersion() : null);
+        this.showVersion ? node.getEffectiveVersion() : null);
 
     nodeInfo.withLabel(name)
         .withStereotype(node.getArtifact().getScope());
