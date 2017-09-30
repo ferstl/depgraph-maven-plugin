@@ -17,6 +17,8 @@ package com.github.ferstl.depgraph.dependency;
 
 import org.junit.Test;
 
+import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.addClassifiers;
+import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.addTypes;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
 import static org.junit.Assert.assertEquals;
 
@@ -136,6 +138,88 @@ public class GmlDependencyNodeNameRendererTest {
     String expected = "label \"artifactId\n"
         + "version\"";
 
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void renderTypes() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
+    addTypes(node, "jar", "zip");
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, true, false, false);
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    String expected = "label \"artifactId\n"
+        + "jar/zip\"";
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void renderJarTypeOnly() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
+    addTypes(node, "jar");
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, true, false, false);
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    String expected = "label \"artifactId\n\"";
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void renderClassifiers() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
+    addClassifiers(node, "classifier1", "classifier2");
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, false, true, false);
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    String expected = "label \"artifactId\n"
+        + "classifier1/classifier2\"";
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void renderEmptyClassifier() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
+    addClassifiers(node, "");
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, false, true, false);
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    String expected = "label \"artifactId\n\"";
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void renderAll() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version", "test");
+    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, true, true, true, true);
+    addClassifiers(node, "classifier1", "classifier2");
+    addTypes(node, "jar", "zip", "tar.gz");
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    String expected = "label \"groupId\n"
+        + "artifactId\n"
+        + "version\n"
+        + "jar/tar.gz/zip\n"
+        + "classifier1/classifier2\"";
     assertEquals(expected, result);
   }
 }
