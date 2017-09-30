@@ -32,7 +32,7 @@ public final class DependencyNodeUtil {
   }
 
   public static DependencyNode createDependencyNodeWithConflict(String groupId, String artifactId, String effectiveVersion, String scope) {
-    Artifact artifact = createArtifact(groupId, artifactId, effectiveVersion, scope);
+    Artifact artifact = createArtifact(groupId, artifactId, effectiveVersion, scope, "jar", "");
     Artifact conflictingArtifact = mock(Artifact.class);
     when(conflictingArtifact.getVersion()).thenReturn(effectiveVersion + "-alpha");
 
@@ -45,20 +45,37 @@ public final class DependencyNodeUtil {
   }
 
   public static DependencyNode createDependencyNode(String groupId, String artifactId, String version, String scope) {
-    return new DependencyNode(createArtifact(groupId, artifactId, version, scope));
+    return new DependencyNode(createArtifact(groupId, artifactId, version, scope, "jar", ""));
+  }
+
+  public static void addTypes(DependencyNode dependencyNode, String... types) {
+    for (String type : types) {
+      Artifact artifact = dependencyNode.getArtifact();
+      DependencyNode nodeWithClassifier = new DependencyNode(createArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), artifact.getScope(), type, artifact.getClassifier()));
+      dependencyNode.merge(nodeWithClassifier);
+    }
+  }
+
+  public static void addClassifiers(DependencyNode dependencyNode, String... classifiers) {
+    for (String classifier : classifiers) {
+      Artifact artifact = dependencyNode.getArtifact();
+      DependencyNode nodeWithClassifier = new DependencyNode(createArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), artifact.getScope(), "jar", classifier));
+      dependencyNode.merge(nodeWithClassifier);
+    }
   }
 
   private static Artifact createArtifact(String groupId, String artifactId, String version) {
-    return createArtifact(groupId, artifactId, version, "compile");
+    return createArtifact(groupId, artifactId, version, "compile", "jar", "");
   }
 
-  private static Artifact createArtifact(String groupId, String artifactId, String version, String scope) {
+  private static Artifact createArtifact(String groupId, String artifactId, String version, String scope, String type, String classifier) {
     Artifact artifact = mock(Artifact.class);
     when(artifact.getGroupId()).thenReturn(groupId);
     when(artifact.getArtifactId()).thenReturn(artifactId);
     when(artifact.getVersion()).thenReturn(version);
     when(artifact.getScope()).thenReturn(scope);
-    when(artifact.getType()).thenReturn("jar");
+    when(artifact.getType()).thenReturn(type);
+    when(artifact.getClassifier()).thenReturn(classifier);
     return artifact;
   }
 }
