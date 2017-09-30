@@ -148,7 +148,7 @@ public class DotDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    assertEquals("[label=<artifactId<br/>jar/zip>]", result);
+    assertEquals("[label=<artifactId<br/>.jar/.zip>]", result);
   }
 
   @Test
@@ -205,7 +205,7 @@ public class DotDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    assertEquals("[label=<groupId<br/>artifactId<br/>version<br/>jar/tar.gz/zip<br/>classifier1/classifier2<br/>(test)>]", result);
+    assertEquals("[label=<groupId<br/>artifactId<br/>version<br/>.jar/.tar.gz/.zip<br/>classifier1/classifier2<br/>(test)>]", result);
   }
 
 }

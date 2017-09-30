@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
@@ -56,7 +57,12 @@ public class GmlDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
 
   private static String createTypeString(Set<String> types) {
     if (types.size() > 1 || !types.contains("jar")) {
-      return SLASH_JOINER.join(types);
+      Set<String> typesToDisplay = new LinkedHashSet<>(types.size());
+      for (String type : types) {
+        typesToDisplay.add("." + type);
+      }
+
+      return SLASH_JOINER.join(typesToDisplay);
     }
 
     return "";

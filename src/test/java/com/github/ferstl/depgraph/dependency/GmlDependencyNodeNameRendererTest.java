@@ -153,7 +153,7 @@ public class GmlDependencyNodeNameRendererTest {
 
     // assert
     String expected = "label \"artifactId\n"
-        + "jar/zip\"";
+        + ".jar/.zip\"";
     assertEquals(expected, result);
   }
 
@@ -218,7 +218,7 @@ public class GmlDependencyNodeNameRendererTest {
     String expected = "label \"groupId\n"
         + "artifactId\n"
         + "version\n"
-        + "jar/tar.gz/zip\n"
+        + ".jar/.tar.gz/.zip\n"
         + "classifier1/classifier2\"";
     assertEquals(expected, result);
   }

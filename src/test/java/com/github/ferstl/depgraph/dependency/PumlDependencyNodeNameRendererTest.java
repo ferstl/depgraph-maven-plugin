@@ -151,7 +151,7 @@ public class PumlDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    String expected = "{\"component\":\"rectangle\",\"label\":\"artifactId:jar/zip\",\"stereotype\":\"compile\"}";
+    String expected = "{\"component\":\"rectangle\",\"label\":\"artifactId:.jar/.zip\",\"stereotype\":\"compile\"}";
     assertEquals(expected, result);
   }
 
@@ -212,7 +212,7 @@ public class PumlDependencyNodeNameRendererTest {
     String result = renderer.render(node);
 
     // assert
-    String expected = "{\"component\":\"rectangle\",\"label\":\"groupId:artifactId:jar/tar.gz/zip:classifier1/classifier2:version\",\"stereotype\":\"test\"}";
+    String expected = "{\"component\":\"rectangle\",\"label\":\"groupId:artifactId:.jar/.tar.gz/.zip:classifier1/classifier2:version\",\"stereotype\":\"test\"}";
     assertEquals(expected, result);
   }
 }
