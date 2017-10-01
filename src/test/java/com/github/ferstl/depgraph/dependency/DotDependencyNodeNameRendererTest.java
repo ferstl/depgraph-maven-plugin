@@ -16,15 +16,10 @@
 package com.github.ferstl.depgraph.dependency;
 
 import org.junit.Before;
-import org.junit.Test;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
+import com.github.ferstl.depgraph.graph.NodeRenderer;
 
-import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.addClassifiers;
-import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.addTypes;
-import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
-import static org.junit.Assert.assertEquals;
-
-public class DotDependencyNodeNameRendererTest {
+public class DotDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
   private StyleConfiguration styleConfiguration;
 
@@ -33,179 +28,74 @@ public class DotDependencyNodeNameRendererTest {
     this.styleConfiguration = new StyleConfiguration();
   }
 
-  @Test
-  public void renderNothing() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, false, false, false, false, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=\"\"]", result);
+  @Override
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
+    return new DotDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, this.styleConfiguration);
   }
 
-  @Test
-  public void renderGroupId() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, false, false, false, false, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<groupId>]", result);
+  @Override
+  protected String renderNothingResult() {
+    return "[label=\"\"]";
   }
 
-  @Test
-  public void renderArtifactId() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, false, false, false, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<artifactId>]", result);
+  @Override
+  protected String renderGroupIdResult() {
+    return "[label=<groupId>]";
   }
 
-  @Test
-  public void renderVersion() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, false, false, false, true, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<version>]", result);
+  @Override
+  protected String renderArtifactIdResult() {
+    return "[label=<artifactId>]";
   }
 
-  @Test
-  public void renderGroupIdArtifactIdVersion() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, true, false, false, true, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<groupId<br/>artifactId<br/>version>]", result);
+  @Override
+  protected String renderVersionResult() {
+    return "[label=<version>]";
   }
 
-  @Test
-  public void renderGroupIdArtifactId() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, true, false, false, false, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<groupId<br/>artifactId>]", result);
+  @Override
+  protected String renderGroupIdArtifactIdVersionResult() {
+    return "[label=<groupId<br/>artifactId<br/>version>]";
   }
 
-  @Test
-  public void renderGroupIdVersion() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, false, false, false, true, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<groupId<br/>version>]", result);
+  @Override
+  protected String renderGroupIdArtifactIdResult() {
+    return "[label=<groupId<br/>artifactId>]";
   }
 
-  @Test
-  public void renderArtifactIdVersion() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, false, false, true, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<artifactId<br/>version>]", result);
+  @Override
+  protected String renderGroupIdVersionResult() {
+    return "[label=<groupId<br/>version>]";
   }
 
-  @Test
-  public void renderTypes() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    addTypes(node, "jar", "zip");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, true, false, false, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<artifactId<br/>.jar/.zip>]", result);
+  @Override
+  protected String renderArtifactIdVersionResult() {
+    return "[label=<artifactId<br/>version>]";
   }
 
-  @Test
-  public void renderJarTypeOnly() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    addTypes(node, "jar");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, true, false, false, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<artifactId>]", result);
+  @Override
+  protected String renderTypesResult() {
+    return "[label=<artifactId<br/>.jar/.zip>]";
   }
 
-  @Test
-  public void renderClassifiers() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    addClassifiers(node, "classifier1", "classifier2");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, false, true, false, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<artifactId<br/>classifier1/classifier2>]", result);
+  @Override
+  protected String renderJarTypeOnlyResult() {
+    return "[label=<artifactId>]";
   }
 
-  @Test
-  public void renderEmptyClassifier() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    addClassifiers(node, "");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(false, true, false, true, false, this.styleConfiguration);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<artifactId>]", result);
+  @Override
+  protected String renderClassifiersResult() {
+    return "[label=<artifactId<br/>classifier1/classifier2>]";
   }
 
-  @Test
-  public void renderAll() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version", "test");
-    DotDependencyNodeNameRenderer renderer = new DotDependencyNodeNameRenderer(true, true, true, true, true, this.styleConfiguration);
-    addClassifiers(node, "classifier1", "classifier2");
-    addTypes(node, "jar", "zip", "tar.gz");
+  @Override
+  protected String renderEmptyClassifierResult() {
+    return "[label=<artifactId>]";
+  }
 
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("[label=<groupId<br/>artifactId<br/>version<br/>.jar/.tar.gz/.zip<br/>classifier1/classifier2<br/>(test)>]", result);
+  @Override
+  protected String renderAllResult() {
+    return "[label=<groupId<br/>artifactId<br/>version<br/>.jar/.tar.gz/.zip<br/>classifier1/classifier2<br/>(test)>]";
   }
 
 }
