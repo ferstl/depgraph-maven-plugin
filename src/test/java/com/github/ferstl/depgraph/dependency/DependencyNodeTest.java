@@ -86,6 +86,22 @@ public class DependencyNodeTest {
   }
 
   @Test
+  public void effectiveScope() {
+    // arrange
+    Artifact artifact1 = createArtifact();
+    artifact1.setScope("runtime");
+    Artifact artifact2 = createArtifact();
+    artifact2.setScope("provided");
+
+    // act
+    DependencyNode node = new DependencyNode(artifact1);
+    node.merge(new DependencyNode(artifact2));
+
+    // assert
+    assertEquals("provided", node.getEffectiveScope());
+  }
+
+  @Test
   public void nullArtifact() {
     this.expectedException.expect(NullPointerException.class);
     this.expectedException.expectMessage(not(emptyString()));

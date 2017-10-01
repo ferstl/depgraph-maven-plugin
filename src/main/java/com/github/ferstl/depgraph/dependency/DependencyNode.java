@@ -123,6 +123,21 @@ public final class DependencyNode {
     return this.treeNode.getRelatedArtifact().getVersion();
   }
 
+  /**
+   * Returns the <strong>effective</strong> scope of this node, i.e. the scope that is actually used. This is important
+   * if scopes are merged and a node may have more than one scope.
+   *
+   * @return The effective scope of this node.
+   */
+  public String getEffectiveScope() {
+    if (this.scopes.size() > 0) {
+      return this.scopes.iterator().next();
+    }
+
+    // should never happen
+    return null;
+  }
+
 
   @Override
   public String toString() {
