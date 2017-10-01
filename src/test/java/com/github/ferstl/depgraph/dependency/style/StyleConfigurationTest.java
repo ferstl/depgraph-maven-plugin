@@ -126,7 +126,7 @@ public class StyleConfigurationTest {
 
     String json = config.toJson();
     File configFile = this.tmp.newFile("config.json");
-    Files.write(json, configFile, UTF_8);
+    Files.asCharSink(configFile, UTF_8).write(json);
 
     StyleConfiguration reloadedConfig = StyleConfiguration.load(new FileSystemStyleResource(configFile.toPath()));
     assertEquals("[fontname=\"Courier\"]", reloadedConfig.edgeAttributes(NodeResolution.OMITTED_FOR_CONFLICT, SCOPE_PROVIDED, null, null).toString());
