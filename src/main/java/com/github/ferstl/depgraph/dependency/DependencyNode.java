@@ -32,7 +32,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
  */
 public final class DependencyNode {
 
-  private org.apache.maven.shared.dependency.graph.DependencyNode graphNode;
   private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
   private final Artifact artifact;
   private final NodeResolution resolution;
@@ -47,7 +46,6 @@ public final class DependencyNode {
 
   public DependencyNode(org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode) {
     this(dependencyNode.getArtifact());
-    this.graphNode = dependencyNode;
   }
 
   public DependencyNode(org.apache.maven.shared.dependency.tree.DependencyNode dependencyNode) {
