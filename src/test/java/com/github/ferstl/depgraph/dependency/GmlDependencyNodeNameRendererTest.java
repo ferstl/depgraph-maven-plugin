@@ -15,212 +15,89 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
-import org.junit.Test;
+import com.github.ferstl.depgraph.graph.NodeRenderer;
 
-import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.addClassifiers;
-import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.addTypes;
-import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
-import static org.junit.Assert.assertEquals;
+public class GmlDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
-public class GmlDependencyNodeNameRendererTest {
-
-  @Test
-  public void renderNothing() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, false, false, false,false);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("", result);
+  @Override
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
+    return new GmlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion);
   }
 
-  @Test
-  public void renderGroupId() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, false, false, false, false);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("label \"groupId\"", result);
+  @Override
+  protected String renderNothingResult() {
+    return "";
   }
 
-  @Test
-  public void renderArtifactId() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, false, false, false);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("label \"artifactId\"", result);
+  @Override
+  protected String renderGroupIdResult() {
+    return "label \"groupId\"";
   }
 
-  @Test
-  public void renderVersion() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, false, false, false, true);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    assertEquals("label \"version\"", result);
+  @Override
+  protected String renderArtifactIdResult() {
+    return "label \"artifactId\"";
   }
 
-  @Test
-  public void renderGroupIdArtifactIdVersion() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, true, false, false, true);
+  @Override
+  protected String renderVersionResult() {
+    return "label \"version\"";
+  }
 
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    String expected = "label \"groupId\n"
+  @Override
+  protected String renderGroupIdArtifactIdVersionResult() {
+    return "label \"groupId\n"
         + "artifactId\n"
         + "version\"";
-
-    assertEquals(expected, result);
   }
 
-  @Test
-  public void renderGroupIdArtifactId() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, true, false, false, false);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    String expected = "label \"groupId\n"
+  @Override
+  protected String renderGroupIdArtifactIdResult() {
+    return "label \"groupId\n"
         + "artifactId\"";
-
-    assertEquals(expected, result);
   }
 
-  @Test
-  public void renderGroupIdVersion() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, false, false, false, true);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    String expected = "label \"groupId\n"
+  @Override
+  protected String renderGroupIdVersionResult() {
+    return "label \"groupId\n"
         + "version\"";
-
-    assertEquals(expected, result);
   }
 
-  @Test
-  public void renderArtifactIdVersion() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, false, false, true);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    String expected = "label \"artifactId\n"
+  @Override
+  protected String renderArtifactIdVersionResult() {
+    return "label \"artifactId\n"
         + "version\"";
-
-    assertEquals(expected, result);
   }
 
-  @Test
-  public void renderTypes() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    addTypes(node, "jar", "zip");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, true, false, false);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    String expected = "label \"artifactId\n"
+  @Override
+  protected String renderTypesResult() {
+    return "label \"artifactId\n"
         + ".jar/.zip\"";
-    assertEquals(expected, result);
   }
 
-  @Test
-  public void renderJarTypeOnly() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    addTypes(node, "jar");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, true, false, false);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    String expected = "label \"artifactId\n\"";
-    assertEquals(expected, result);
+  @Override
+  protected String renderJarTypeOnlyResult() {
+    return renderEmptyClassifierResult();
   }
 
-  @Test
-  public void renderClassifiers() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    addClassifiers(node, "classifier1", "classifier2");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, false, true, false);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    String expected = "label \"artifactId\n"
+  @Override
+  protected String renderClassifiersResult() {
+    return "label \"artifactId\n"
         + "classifier1/classifier2\"";
-    assertEquals(expected, result);
   }
 
-  @Test
-  public void renderEmptyClassifier() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    addClassifiers(node, "");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(false, true, false, true, false);
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    String expected = "label \"artifactId\n\"";
-    assertEquals(expected, result);
+  @Override
+  protected String renderEmptyClassifierResult() {
+    return "label \"artifactId\n\"";
   }
 
-  @Test
-  public void renderAll() {
-    // arrange
-    DependencyNode node = createDependencyNode("groupId", "artifactId", "version", "test");
-    GmlDependencyNodeNameRenderer renderer = new GmlDependencyNodeNameRenderer(true, true, true, true, true);
-    addClassifiers(node, "classifier1", "classifier2");
-    addTypes(node, "jar", "zip", "tar.gz");
-
-    // act
-    String result = renderer.render(node);
-
-    // assert
-    String expected = "label \"groupId\n"
+  @Override
+  protected String renderAllResult() {
+    return "label \"groupId\n"
         + "artifactId\n"
         + "version\n"
         + ".jar/.tar.gz/.zip\n"
         + "classifier1/classifier2\n"
         + "(test)\"";
-    assertEquals(expected, result);
   }
 }
