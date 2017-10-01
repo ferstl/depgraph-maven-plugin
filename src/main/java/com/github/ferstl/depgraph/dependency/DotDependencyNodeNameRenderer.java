@@ -23,8 +23,6 @@ import com.github.ferstl.depgraph.dependency.style.StyleKey;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
 
-import static com.google.common.collect.Iterables.getFirst;
-
 
 public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
@@ -54,7 +52,7 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
     String types = createTypeString(node.getTypes());
     String classifiers = createClassifierString(node.getClassifiers());
 
-    String effectiveScope = getFirst(node.getScopes(), null);
+    String effectiveScope = node.getEffectiveScope();
     StyleKey styleKey = StyleKey.create(artifact.getGroupId(), artifact.getArtifactId(), effectiveScope, artifact.getType(), node.getEffectiveVersion());
 
     return this.styleConfiguration.nodeAttributes(

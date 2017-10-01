@@ -20,7 +20,6 @@ import com.github.ferstl.depgraph.graph.EdgeRenderer;
 import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
 
 import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviateVersion;
-import static com.google.common.collect.Iterables.getFirst;
 
 
 public class DotDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
@@ -37,7 +36,7 @@ public class DotDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
   public String render(DependencyNode from, DependencyNode to) {
     NodeResolution resolution = to.getResolution();
 
-    DotAttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution, getFirst(to.getScopes(), null), from.getArtifact(), to.getArtifact());
+    DotAttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution, to.getEffectiveScope(), from.getArtifact(), to.getArtifact());
     if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions) {
       builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }
