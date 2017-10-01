@@ -124,6 +124,8 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
     if (showFullGraph()) {
       this.showGroupIds = true;
       this.showVersions = true;
+      this.showTypes = true;
+      this.showClassifiers = true;
     }
   }
 }

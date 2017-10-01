@@ -146,6 +146,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
       this.showVersions = true;
       this.showDuplicates = true;
       this.showConflicts = true;
+      this.showClassifiers = true;
+      this.showTypes = true;
     }
   }
 
