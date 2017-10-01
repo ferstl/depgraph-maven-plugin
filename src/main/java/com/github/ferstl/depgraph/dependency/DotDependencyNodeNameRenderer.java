@@ -15,9 +15,11 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
+import com.github.ferstl.depgraph.dependency.style.StyleKey;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
 
@@ -30,12 +32,16 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
 
   private final boolean showGroupId;
   private final boolean showArtifactId;
+  private final boolean showTypes;
+  private final boolean showClassifiers;
   private final boolean showVersion;
   private final StyleConfiguration styleConfiguration;
 
-  public DotDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion, StyleConfiguration styleConfiguration) {
+  public DotDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, StyleConfiguration styleConfiguration) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
+    this.showTypes = showTypes;
+    this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
     this.styleConfiguration = styleConfiguration;
   }
@@ -45,15 +51,21 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
   public String render(DependencyNode node) {
     Artifact artifact = node.getArtifact();
     String scopes = createScopeString(node.getScopes());
+    String types = createTypeString(node.getTypes());
+    String classifiers = createClassifierString(node.getClassifiers());
+
+    String effectiveScope = getFirst(node.getScopes(), null);
+    StyleKey styleKey = StyleKey.create(artifact.getGroupId(), artifact.getArtifactId(), effectiveScope, artifact.getType(), node.getEffectiveVersion());
 
     return this.styleConfiguration.nodeAttributes(
+        styleKey,
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
-        artifact.getType(),
-        scopes,
-        getFirst(node.getScopes(), null))
-        .toString();
+        this.showTypes ? types : null,
+        this.showClassifiers ? classifiers : null,
+        scopes
+    ).toString();
   }
 
   private static String createScopeString(Set<String> scopes) {
@@ -62,6 +74,23 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
     }
 
     return "";
+  }
+
+  private static String createTypeString(Set<String> types) {
+    if (types.size() > 1 || !types.contains("jar")) {
+      Set<String> typesToDisplay = new LinkedHashSet<>(types.size());
+      for (String type : types) {
+        typesToDisplay.add("." + type);
+      }
+
+      return SLASH_JOINER.join(typesToDisplay);
+    }
+
+    return "";
+  }
+
+  private static String createClassifierString(Set<String> classifiers) {
+    return SLASH_JOINER.join(classifiers);
   }
 
 }

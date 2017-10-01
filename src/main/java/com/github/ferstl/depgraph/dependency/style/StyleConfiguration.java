@@ -132,8 +132,7 @@ public class StyleConfiguration {
     return edge != null ? edge.createAttributes() : new DotAttributeBuilder();
   }
 
-  public DotAttributeBuilder nodeAttributes(String groupId, String artifactId, String version, String type, String scopes, String effectiveScope) {
-    StyleKey artifactKey = StyleKey.create(groupId, artifactId, effectiveScope, type, version);
+  public DotAttributeBuilder nodeAttributes(StyleKey artifactKey, String groupId, String artifactId, String version, String types, String classifiers, String scopes) {
     AbstractNode node = this.defaultNode;
 
     for (Entry<StyleKey, AbstractNode> entry : this.nodeStyles.entrySet()) {
@@ -144,7 +143,7 @@ public class StyleConfiguration {
       }
     }
 
-    return node.createAttributes(groupId, artifactId, version, scopes, node != this.defaultNode);
+    return node.createAttributes(groupId, artifactId, version, types, scopes, classifiers, node != this.defaultNode);
   }
 
   public String toJson() {

@@ -15,48 +15,63 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
+import com.google.common.base.Joiner;
 
 public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
+  private static final Joiner COLON_JOINER = Joiner.on(":").skipNulls();
+  private static final Joiner SLASH_JOINER = Joiner.on("/").skipNulls();
+
   private final boolean showGroupId;
   private final boolean showArtifactId;
+  private final boolean showTypes;
+  private final boolean showClassifiers;
   private final boolean showVersion;
 
-  public PumlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion) {
+  public PumlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
+    this.showTypes = showTypes;
+    this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
   }
 
   @Override
   public String render(DependencyNode node) {
     Artifact artifact = node.getArtifact();
-    StringBuilder name = new StringBuilder();
     PumlNodeInfo nodeInfo = new PumlNodeInfo().withComponent("rectangle");
 
-    if (this.showGroupId) {
-      name.append(artifact.getGroupId());
-    }
+    String name = COLON_JOINER.join(
+        this.showGroupId ? artifact.getGroupId() : null,
+        this.showArtifactId ? artifact.getArtifactId() : null,
+        this.showTypes ? createTypeString(node.getTypes()) : null,
+        this.showClassifiers ? createClassifierString(node.getClassifiers()) : null,
+        this.showVersion ? node.getEffectiveVersion() : null);
 
-    if (this.showArtifactId) {
-      if (this.showGroupId) {
-        name.append(":");
-      }
-      name.append(artifact.getArtifactId());
-    }
-
-    if (this.showVersion) {
-      if (this.showGroupId || this.showArtifactId) {
-        name.append(":");
-      }
-      name.append(artifact.getVersion());
-    }
-
-    nodeInfo.withLabel(name.toString())
+    nodeInfo.withLabel(name)
         .withStereotype(node.getArtifact().getScope());
 
     return nodeInfo.toString();
+  }
+
+  private static String createTypeString(Set<String> types) {
+    if (types.size() > 1 || !types.contains("jar")) {
+      Set<String> typesToDisplay = new LinkedHashSet<>(types.size());
+      for (String type : types) {
+        typesToDisplay.add("." + type);
+      }
+
+      return SLASH_JOINER.join(typesToDisplay);
+    }
+
+    return "";
+  }
+
+  private static String createClassifierString(Set<String> classifiers) {
+    return SLASH_JOINER.join(classifiers);
   }
 }

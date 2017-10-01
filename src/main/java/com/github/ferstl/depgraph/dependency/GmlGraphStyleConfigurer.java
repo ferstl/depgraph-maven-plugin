@@ -20,40 +20,11 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.github.ferstl.depgraph.graph.gml.GmlGraphFormatter;
 
-public class GmlGraphStyleConfigurer implements GraphStyleConfigurer {
-
-  private boolean showGroupId;
-  private boolean showArtifactId;
-  private boolean showVersionsOnNodes;
-  private boolean showVersionOnEdges;
-
-  @Override
-  public GraphStyleConfigurer showGroupIds(boolean showGroupId) {
-    this.showGroupId = showGroupId;
-    return this;
-  }
-
-  @Override
-  public GraphStyleConfigurer showArtifactIds(boolean showArtifactId) {
-    this.showArtifactId = showArtifactId;
-    return this;
-  }
-
-  @Override
-  public GraphStyleConfigurer showVersionsOnNodes(boolean showVersionsOnNodes) {
-    this.showVersionsOnNodes = showVersionsOnNodes;
-    return this;
-  }
-
-  @Override
-  public GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges) {
-    this.showVersionOnEdges = showVersionOnEdges;
-    return this;
-  }
+public class GmlGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
 
   @Override
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
-    NodeRenderer<DependencyNode> nodeNameRenderer = new GmlDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showVersionsOnNodes);
+    NodeRenderer<DependencyNode> nodeNameRenderer = new GmlDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes);
     EdgeRenderer<DependencyNode> edgeRenderer = new GmlDependencyEdgeRenderer(this.showVersionOnEdges);
     return graphBuilder
         .useNodeNameRenderer(nodeNameRenderer)

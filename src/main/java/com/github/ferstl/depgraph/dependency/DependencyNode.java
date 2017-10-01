@@ -20,6 +20,8 @@ import java.util.TreeSet;
 import org.apache.maven.artifact.Artifact;
 import com.google.common.collect.ImmutableSet;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 /**
  * Representation of a dependency graph node. It adapts these Maven-specific classes:
  * <ul>
@@ -34,7 +36,9 @@ public final class DependencyNode {
   private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
   private final Artifact artifact;
   private final NodeResolution resolution;
-  private final TreeSet<String> scopes;
+  private final Set<String> scopes;
+  private final Set<String> classifiers;
+  private final Set<String> types;
 
 
   public DependencyNode(Artifact artifact) {
@@ -62,9 +66,16 @@ public final class DependencyNode {
     }
 
     this.scopes = new TreeSet<>();
+    this.classifiers = new TreeSet<>();
+    this.types = new TreeSet<>();
     this.artifact = artifact;
     this.resolution = resolution;
     this.scopes.add(artifact.getScope());
+    this.types.add(artifact.getType());
+
+    if (!isNullOrEmpty(artifact.getClassifier())) {
+      this.classifiers.add(artifact.getClassifier());
+    }
   }
 
   public void merge(DependencyNode other) {
@@ -72,7 +83,9 @@ public final class DependencyNode {
       return;
     }
 
-    this.scopes.addAll(other.getScopes());
+    this.scopes.addAll(other.scopes);
+    this.classifiers.addAll(other.classifiers);
+    this.types.addAll(other.types);
   }
 
   public Artifact getArtifact() {
@@ -85,6 +98,14 @@ public final class DependencyNode {
 
   public Set<String> getScopes() {
     return ImmutableSet.copyOf(this.scopes);
+  }
+
+  public Set<String> getClassifiers() {
+    return ImmutableSet.copyOf(this.classifiers);
+  }
+
+  public Set<String> getTypes() {
+    return ImmutableSet.copyOf(this.types);
   }
 
   /**

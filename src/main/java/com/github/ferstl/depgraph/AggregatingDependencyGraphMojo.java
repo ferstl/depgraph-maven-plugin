@@ -57,6 +57,22 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   boolean showVersions;
 
   /**
+   * If set to {@code true}, the created graph will show type information an all artifacts.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "showTypes", defaultValue = "false")
+  boolean showTypes;
+
+  /**
+   * If set to {@code true}, the created graph will show classifier information an all artifacts.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "showClassifiers", defaultValue = "false")
+  boolean showClassifiers;
+
+  /**
    * If set to {@code true}, all parent modules (&lt;packaging&gt;pom&lt;/packaging&gt) will be shown with a dotted
    * arrow pointing to their child modules.
    *
@@ -93,6 +109,8 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
     GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
         .showGroupIds(this.showGroupIds)
         .showArtifactIds(true)
+        .showTypes(this.showTypes)
+        .showClassifiers(this.showClassifiers)
         .showVersionsOnNodes(this.showVersions)
         // This graph won't show any conflicting dependencies. So don't show versions on edges
         .showVersionsOnEdges(false)
@@ -106,6 +124,8 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
     if (showFullGraph()) {
       this.showGroupIds = true;
       this.showVersions = true;
+      this.showTypes = true;
+      this.showClassifiers = true;
     }
   }
 }

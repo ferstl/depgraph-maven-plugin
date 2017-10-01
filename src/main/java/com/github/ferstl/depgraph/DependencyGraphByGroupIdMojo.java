@@ -49,6 +49,8 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
     GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
         .showGroupIds(true)
         .showArtifactIds(false)
+        .showTypes(false)
+        .showClassifiers(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
         .configure(GraphBuilder.<DependencyNode>create(DependencyNodeIdRenderer.groupId().withScope(true)))

@@ -26,19 +26,21 @@ import com.github.ferstl.depgraph.graph.NodeRenderer;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.util.Collections.singleton;
 
 public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
   private final boolean showGroupId;
   private final boolean showArtifactId;
+  private final boolean showTypes;
+  private final boolean showClassifiers;
   private final boolean showVersion;
   private final ObjectMapper objectMapper;
 
-  public JsonDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showVersion) {
+  public JsonDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
+    this.showTypes = showTypes;
+    this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
 
     this.objectMapper = new ObjectMapper()
@@ -53,9 +55,9 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
-        !isNullOrEmpty(artifact.getClassifier()) ? singleton(artifact.getClassifier()) : Collections.<String>emptyList(),
+        this.showClassifiers ? node.getClassifiers() : Collections.<String>emptyList(),
         node.getScopes(),
-        singleton(artifact.getType()));
+        this.showTypes ? node.getTypes() : Collections.<String>emptyList());
 
     StringWriter jsonStringWriter = new StringWriter();
     try {

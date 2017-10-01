@@ -34,6 +34,20 @@ import static org.junit.Assert.assertEquals;
 
 public class StyleConfigurationTest {
 
+  private static final String SCOPE_COMPILE = "compile";
+  private static final String SCOPE_PROVIDED = "provided";
+  private static final String SCOPE_TEST = "test";
+  private static final String GROUP_ID = "groupId";
+  private static final String ARTIFACT_ID = "artifactId";
+  private static final String VERSION = "1.0.0";
+  private static final String TYPE = "jar";
+  private static final String CLASSIFIER_DEFAULT = "";
+  private static final String CLASSIFIER_LINUX = "linux";
+
+  private static final StyleKey COMPILE_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_COMPILE, TYPE, VERSION);
+  private static final StyleKey TEST_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_TEST, TYPE, VERSION);
+  private static final StyleKey PROVIDED_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_PROVIDED, TYPE, VERSION);
+
   private ClasspathStyleResource testStyle;
   private StyleConfiguration emptyConfig;
   private ClasspathStyleResource testOverride;
@@ -55,11 +69,11 @@ public class StyleConfigurationTest {
 
     assertEquals("[shape=\"polygon\",color=\"black\",fontname=\"Courier\",fontsize=\"14\",fontcolor=\"green\",sides=\"8\"]", config.defaultNodeAttributes().toString());
     assertEquals("[style=\"dotted\",color=\"blue\"]", config.defaultEdgeAttributes().toString());
-    assertEquals("", config.edgeAttributes(NodeResolution.INCLUDED, "compile", null, null).toString());
-    assertEquals("[style=\"dotted\",color=\"gray\"]", config.edgeAttributes(NodeResolution.INCLUDED, "test", null, null).toString());
-    assertEquals("[style=\"dashed\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE, "compile", null, null).toString());
-    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>compile>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "compile", "compile").toString());
-    assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "test", "test").toString());
+    assertEquals("", config.edgeAttributes(NodeResolution.INCLUDED, SCOPE_COMPILE, null, null).toString());
+    assertEquals("[style=\"dotted\",color=\"gray\"]", config.edgeAttributes(NodeResolution.INCLUDED, SCOPE_TEST, null, null).toString());
+    assertEquals("[style=\"dashed\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE, SCOPE_COMPILE, null, null).toString());
+    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>compile>]", config.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_DEFAULT, SCOPE_COMPILE).toString());
+    assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_LINUX, SCOPE_TEST).toString());
   }
 
   @Test
@@ -69,12 +83,12 @@ public class StyleConfigurationTest {
     assertEquals("[rankdir=\"LR\"]", config.graphAttributes().toString());
     assertEquals("[shape=\"ellipse\",color=\"black\",fontname=\"Courier\",fontsize=\"14\",fontcolor=\"green\"]", config.defaultNodeAttributes().toString());
     assertEquals("[style=\"dashed\",color=\"blue\"]", config.defaultEdgeAttributes().toString());
-    assertEquals("[style=\"dotted\",color=\"blue\"]", config.edgeAttributes(NodeResolution.INCLUDED, "test", null, null).toString());
-    assertEquals("[style=\"dashed\",color=\"green\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE, "test", null, null).toString());
-    assertEquals("[fontname=\"Courier\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_CONFLICT, "provided", null, null).toString());
+    assertEquals("[style=\"dotted\",color=\"blue\"]", config.edgeAttributes(NodeResolution.INCLUDED, SCOPE_TEST, null, null).toString());
+    assertEquals("[style=\"dashed\",color=\"green\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE, SCOPE_TEST, null, null).toString());
+    assertEquals("[fontname=\"Courier\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_CONFLICT, StyleConfigurationTest.SCOPE_PROVIDED, null, null).toString());
 
-    assertEquals("[shape=\"box\",style=\"filled\",color=\"red\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>test>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "test", "test").toString());
-    assertEquals("[shape=\"box\",color=\"blue\",label=<groupId<br/>artifactId<br/>1.0.0<br/>provided>]", config.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "provided", "provided").toString());
+    assertEquals("[shape=\"box\",style=\"filled\",color=\"red\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_DEFAULT, SCOPE_TEST).toString());
+    assertEquals("[shape=\"box\",color=\"blue\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>provided>]", config.nodeAttributes(PROVIDED_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_LINUX, SCOPE_PROVIDED).toString());
   }
 
   @Test
@@ -93,15 +107,15 @@ public class StyleConfigurationTest {
 
   @Test
   public void nodeAttributesForEmptyConfiguration() {
-    DotAttributeBuilder attributes = this.emptyConfig.nodeAttributes("groupId", "artifactId", "1.0.0", "jar", "compile", "compile");
+    DotAttributeBuilder attributes = this.emptyConfig.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_LINUX, SCOPE_COMPILE);
 
-    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>compile>]", attributes.toString());
+    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>compile>]", attributes.toString());
   }
 
 
   @Test
   public void edgeAttributesForEmptyConfiguration() {
-    DotAttributeBuilder attributes = this.emptyConfig.edgeAttributes(NodeResolution.INCLUDED, "compile", null, null);
+    DotAttributeBuilder attributes = this.emptyConfig.edgeAttributes(NodeResolution.INCLUDED, SCOPE_COMPILE, null, null);
 
     assertEquals("", attributes.toString());
   }
@@ -115,6 +129,6 @@ public class StyleConfigurationTest {
     Files.write(json, configFile, UTF_8);
 
     StyleConfiguration reloadedConfig = StyleConfiguration.load(new FileSystemStyleResource(configFile.toPath()));
-    assertEquals("[fontname=\"Courier\"]", reloadedConfig.edgeAttributes(NodeResolution.OMITTED_FOR_CONFLICT, "provided", null, null).toString());
+    assertEquals("[fontname=\"Courier\"]", reloadedConfig.edgeAttributes(NodeResolution.OMITTED_FOR_CONFLICT, SCOPE_PROVIDED, null, null).toString());
   }
 }
