@@ -219,7 +219,8 @@ public class GmlDependencyNodeNameRendererTest {
         + "artifactId\n"
         + "version\n"
         + ".jar/.tar.gz/.zip\n"
-        + "classifier1/classifier2\"";
+        + "classifier1/classifier2\n"
+        + "(test)\"";
     assertEquals(expected, result);
   }
 }

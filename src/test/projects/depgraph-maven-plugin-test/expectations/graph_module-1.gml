@@ -24,14 +24,16 @@ node [
 id "junit:junit:jar"
 label "junit
 junit
-4.12"
+4.12
+(test)"
 ]
 
 node [
 id "org.hamcrest:hamcrest-core:jar"
 label "org.hamcrest
 hamcrest-core
-1.3"
+1.3
+(test)"
 ]
 
 edge [

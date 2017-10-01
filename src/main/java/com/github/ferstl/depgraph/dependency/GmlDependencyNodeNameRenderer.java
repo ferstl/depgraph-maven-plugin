@@ -46,7 +46,8 @@ public class GmlDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
         this.showArtifactId ? node.getArtifact().getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
         this.showTypes ? createTypeString(node.getTypes()) : null,
-        this.showClassifiers ? createClassifierString(node.getClassifiers()) : null);
+        this.showClassifiers ? createClassifierString(node.getClassifiers()) : null,
+        createScopeString(node.getScopes()));
 
     if (content.isEmpty()) {
       return "";
@@ -66,6 +67,14 @@ public class GmlDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
     }
 
     return "";
+  }
+
+  private static String createScopeString(Set<String> scopes) {
+    if (scopes.size() > 1 || !scopes.contains("compile")) {
+      return "(" + SLASH_JOINER.join(scopes) + ")";
+    }
+
+    return null;
   }
 
   private static String createClassifierString(Set<String> classifiers) {
