@@ -198,21 +198,25 @@ public final class GraphBuilder<T> {
 
   static class ReachabilityMap {
 
-    private final Map<String, Set<String>> parentPath = new HashMap<>();
+    private final Map<String, Set<String>> parentIndex = new HashMap<>();
 
     void registerEdge(String from, String to) {
-      Set<String> parents = safelyGetParentPath(to);
+      Set<String> parents = safelyGetParents(to);
       parents.add(from);
     }
 
     boolean isReachable(String target, String source) {
-      Set<String> parents = safelyGetParentPath(target);
+      return findParent(target, source);
+    }
+
+    private boolean findParent(String target, String source) {
+      Set<String> parents = safelyGetParents(target);
       if (parents.contains(source)) {
         return true;
       }
 
       for (String parent : parents) {
-        if (isReachable(parent, source)) {
+        if (findParent(parent, source)) {
           return true;
         }
       }
@@ -220,11 +224,11 @@ public final class GraphBuilder<T> {
       return false;
     }
 
-    private Set<String> safelyGetParentPath(String node) {
-      Set<String> parentPath = this.parentPath.get(node);
+    private Set<String> safelyGetParents(String node) {
+      Set<String> parentPath = this.parentIndex.get(node);
       if (parentPath == null) {
         parentPath = new HashSet<>();
-        this.parentPath.put(node, parentPath);
+        this.parentIndex.put(node, parentPath);
       }
 
       return parentPath;
