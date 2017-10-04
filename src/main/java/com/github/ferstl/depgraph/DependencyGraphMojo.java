@@ -160,7 +160,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
 
       adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, resolutions);
     } else {
-      adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
+      // there are no reachable paths to be omitted
+      adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter, false);
     }
     return adapter;
   }

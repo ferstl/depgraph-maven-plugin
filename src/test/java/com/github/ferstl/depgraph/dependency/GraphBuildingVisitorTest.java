@@ -205,7 +205,7 @@ public class GraphBuildingVisitorTest {
 
   @Test
   public void defaultArtifactFilter() {
-    this.visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter);
+    this.visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
 
     // Use other test (I know this is ugly...)
     parentAndChild();

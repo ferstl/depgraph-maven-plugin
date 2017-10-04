@@ -68,7 +68,7 @@ public class AggregatingGraphFactoryTest {
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
     when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
 
-    this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter);
+    this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter, false);
 
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 

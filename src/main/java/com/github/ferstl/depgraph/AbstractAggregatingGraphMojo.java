@@ -32,6 +32,15 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "mergeScopes", defaultValue = "false")
   boolean mergeScopes;
 
+  /**
+   * Omit all edges that are already reachable via a different path in the dependency graph. This will prefer dependencies
+   * of modules that are higher in the reactor build order and thus reflect the architecture of the application better.
+   *
+   * @since 2.2.1
+   */
+  @Parameter(property = "reduceEdges", defaultValue = "true")
+  boolean reduceEdges;
+
   @Component
   MavenSession mavenSession;
 
