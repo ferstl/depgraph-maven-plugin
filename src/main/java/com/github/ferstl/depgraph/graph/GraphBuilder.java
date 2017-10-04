@@ -206,17 +206,23 @@ public final class GraphBuilder<T> {
     }
 
     boolean isReachable(String target, String source) {
-      return findParent(target, source);
+      return findParent(target, source, new HashSet<String>());
     }
 
-    private boolean findParent(String target, String source) {
+    private boolean findParent(String target, String source, Set<String> alreadyVisited) {
+      if (alreadyVisited.contains(target)) {
+        return false;
+      }
+
+      alreadyVisited.add(target);
+
       Set<String> parents = safelyGetParents(target);
       if (parents.contains(source)) {
         return true;
       }
 
       for (String parent : parents) {
-        if (findParent(parent, source)) {
+        if (findParent(parent, source, alreadyVisited)) {
           return true;
         }
       }

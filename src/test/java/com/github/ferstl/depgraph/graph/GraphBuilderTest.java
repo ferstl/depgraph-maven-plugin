@@ -231,6 +231,20 @@ public class GraphBuilderTest {
     assertFalse(this.graphBuilder.isReachable("C", "B"));
   }
 
+  @Test
+  public void isReachableWithCycle() {
+    // arrange
+    this.graphBuilder.addEdge("A", "B");
+    this.graphBuilder.addEdge("B", "C");
+    this.graphBuilder.addEdge("C", "A");
+
+    // assert
+    assertFalse(this.graphBuilder.isReachable("B", "X"));
+
+    assertTrue(this.graphBuilder.isReachable("C", "A"));
+    assertTrue(this.graphBuilder.isReachable("B", "A"));
+  }
+
   enum TestNodeRenderer implements NodeRenderer<String> {
     INSTANCE;
 
