@@ -117,7 +117,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .configure(GraphBuilder.create(nodeIdRenderer));
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
-    return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, this.includeParentProjects);
+    return new AggregatingGraphFactory(adapter, createReactorOrderSubProjectSupplier(), globalFilter, graphBuilder, this.includeParentProjects);
   }
 
   private void handleOptionsForFullGraph() {

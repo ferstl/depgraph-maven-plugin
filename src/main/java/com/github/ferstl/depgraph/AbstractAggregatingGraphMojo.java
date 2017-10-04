@@ -15,7 +15,12 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.Collection;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+import com.github.ferstl.depgraph.dependency.SubProjectSupplier;
 
 public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
 
@@ -27,4 +32,16 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "mergeScopes", defaultValue = "false")
   boolean mergeScopes;
 
+  @Component
+  MavenSession mavenSession;
+
+  SubProjectSupplier createReactorOrderSubProjectSupplier() {
+    return new SubProjectSupplier() {
+
+      @Override
+      public Collection<MavenProject> getSubProjects(MavenProject parent) {
+        return AbstractAggregatingGraphMojo.this.mavenSession.getProjectDependencyGraph().getDownstreamProjects(parent, true);
+      }
+    };
+  }
 }
