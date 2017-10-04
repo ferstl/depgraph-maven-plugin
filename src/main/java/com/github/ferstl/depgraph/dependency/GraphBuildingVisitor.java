@@ -111,12 +111,11 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
         mergeWithExisting(node);
 
         // if omitReachablePaths is set, don't add an edge if there already is an existing path between the nodes.
-        if (this.omitReachablePaths && !this.graphBuilder.isReachable(node, currentParent)) {
+        if (!this.omitReachablePaths) {
           this.graphBuilder.addEdge(currentParent, node);
-        } else {
+        } else if (!this.graphBuilder.isReachable(node, currentParent)) {
           this.graphBuilder.addEdge(currentParent, node);
         }
-
       }
     }
 
