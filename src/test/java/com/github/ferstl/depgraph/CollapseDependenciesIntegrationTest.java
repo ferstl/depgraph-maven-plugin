@@ -34,7 +34,7 @@ public class CollapseDependenciesIntegrationTest {
   }
 
   @Test
-  public void collapse() throws Exception {
+  public void aggregate() throws Exception {
     File basedir = this.resources.getBasedir("collapse-dependencies-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
