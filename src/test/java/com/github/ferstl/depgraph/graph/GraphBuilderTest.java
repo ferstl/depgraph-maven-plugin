@@ -214,6 +214,23 @@ public class GraphBuilderTest {
     assertFalse(this.graphBuilder.isEmpty());
   }
 
+  @Test
+  public void isReachable() {
+    // arrange
+    this.graphBuilder.addEdge("A", "B");
+    this.graphBuilder.addEdge("B", "D");
+    this.graphBuilder.addEdge("D", "E");
+    this.graphBuilder.addEdge("A", "C");
+
+    // assert
+    assertTrue(this.graphBuilder.isReachable("E", "A"));
+    assertTrue(this.graphBuilder.isReachable("D", "A"));
+    assertTrue(this.graphBuilder.isReachable("C", "A"));
+    assertTrue(this.graphBuilder.isReachable("B", "A"));
+
+    assertFalse(this.graphBuilder.isReachable("C", "B"));
+  }
+
   enum TestNodeRenderer implements NodeRenderer<String> {
     INSTANCE;
 

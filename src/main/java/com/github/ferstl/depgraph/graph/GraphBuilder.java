@@ -15,6 +15,8 @@
  */
 package com.github.ferstl.depgraph.graph;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -36,6 +38,7 @@ public final class GraphBuilder<T> {
   private final NodeRenderer<? super T> nodeIdRenderer;
   private final Map<String, Node<T>> nodeDefinitions;
   private final Set<Edge> edges;
+  private final ReachabilityMap reachabilityMap;
 
   private String graphName;
   private GraphFormatter graphFormatter;
@@ -51,6 +54,7 @@ public final class GraphBuilder<T> {
     this.nodeIdRenderer = nodeIdRenderer;
     this.nodeDefinitions = new LinkedHashMap<>();
     this.edges = new LinkedHashSet<>();
+    this.reachabilityMap = new ReachabilityMap();
 
     DotAttributeBuilder graphAttributeBuilder = new DotAttributeBuilder();
     DotAttributeBuilder nodeAttributeBuilder = new DotAttributeBuilder().shape("box").fontName("Helvetica");
@@ -140,6 +144,13 @@ public final class GraphBuilder<T> {
     return node;
   }
 
+  public boolean isReachable(T target, T source) {
+    String targetId = this.nodeIdRenderer.render(target);
+    String sourceId = this.nodeIdRenderer.render(source);
+
+    return this.reachabilityMap.isReachable(targetId, sourceId);
+  }
+
   @Override
   public String toString() {
     // Work around some generics restrictions
@@ -160,6 +171,7 @@ public final class GraphBuilder<T> {
     if (!this.omitSelfReferences || !fromNodeId.equals(toNodeId)) {
       Edge edge = new Edge(fromNodeId, toNodeId, this.edgeRenderer.render(fromNode, toNode));
       this.edges.add(edge);
+      this.reachabilityMap.registerEdge(fromNodeId, toNodeId);
     }
   }
 
@@ -182,6 +194,42 @@ public final class GraphBuilder<T> {
         return "";
       }
     };
+  }
+
+  static class ReachabilityMap {
+
+    private final Map<String, Set<String>> parentPath = new HashMap<>();
+
+    void registerEdge(String from, String to) {
+      Set<String> parents = safelyGetParentPath(to);
+      parents.add(from);
+    }
+
+    boolean isReachable(String target, String source) {
+      Set<String> parents = safelyGetParentPath(target);
+      if (parents.contains(source)) {
+        return true;
+      }
+
+      for (String parent : parents) {
+        if (isReachable(parent, source)) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    private Set<String> safelyGetParentPath(String node) {
+      Set<String> parentPath = this.parentPath.get(node);
+      if (parentPath == null) {
+        parentPath = new HashSet<>();
+        this.parentPath.put(node, parentPath);
+      }
+
+      return parentPath;
+    }
+
   }
 
 }
