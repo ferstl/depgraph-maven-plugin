@@ -44,4 +44,15 @@ public class CollapseDependenciesIntegrationTest {
     result.assertErrorFreeLog();
   }
 
+  @Test
+  public void graph() throws Exception {
+    File basedir = this.resources.getBasedir("collapse-dependencies-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DcreateImage")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+  }
+
 }
