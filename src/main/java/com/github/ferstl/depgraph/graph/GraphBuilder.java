@@ -196,7 +196,10 @@ public final class GraphBuilder<T> {
     };
   }
 
-  static class ReachabilityMap {
+  /**
+   * A map that tracks which nodes are reachable from other nodes.
+   */
+  private static class ReachabilityMap {
 
     private final Map<String, Set<String>> parentIndex = new HashMap<>();
 
