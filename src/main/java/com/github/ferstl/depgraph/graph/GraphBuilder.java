@@ -198,6 +198,10 @@ public final class GraphBuilder<T> {
 
   /**
    * A map that tracks which nodes are reachable from other nodes.
+   * When a new edge 'A -> B' is added, the map registers node 'A' as a parent of node 'B'. To find out whether a node
+   * 'Y' is reachable from node 'X', we can recursively traverse the parents of node 'Y'. When node 'X' is found in this
+   * traversal, 'Y' is reachable via 'X'. When all nodes are traversed and 'X' is not found, 'Y' is not reachable via 'X'.
+   * To handle cycles in the graph, the node traversal keeps track of all already traversed nodes.
    */
   private static class ReachabilityMap {
 
@@ -209,10 +213,16 @@ public final class GraphBuilder<T> {
     }
 
     boolean isReachable(String target, String source) {
-      return findParent(target, source, new HashSet<String>());
+      return isReachableInternal(target, source, new HashSet<String>());
     }
 
-    private boolean findParent(String target, String source, Set<String> alreadyVisited) {
+    /**
+     * Recursively traverses the parents of {@code target} trying to find {@code source} by keeping track of already traversed
+     * nodes.
+     *
+     * @return {@code true} if {@code target} is reachable via {@code source}, {@code false} else.
+     */
+    private boolean isReachableInternal(String target, String source, Set<String> alreadyVisited) {
       if (alreadyVisited.contains(target)) {
         return false;
       }
@@ -225,7 +235,7 @@ public final class GraphBuilder<T> {
       }
 
       for (String parent : parents) {
-        if (findParent(parent, source, alreadyVisited)) {
+        if (isReachableInternal(parent, source, alreadyVisited)) {
           return true;
         }
       }
