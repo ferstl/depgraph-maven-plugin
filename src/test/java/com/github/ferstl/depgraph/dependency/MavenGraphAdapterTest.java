@@ -72,7 +72,7 @@ public class MavenGraphAdapterTest {
 
 
     this.artifactRepository = mock(ArtifactRepository.class);
-    this.graphAdapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter);
+    this.graphAdapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter, false);
     this.treeAdapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.targetFilter, allOf(NodeResolution.class));
   }
 

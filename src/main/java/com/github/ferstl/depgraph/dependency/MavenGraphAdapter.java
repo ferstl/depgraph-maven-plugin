@@ -36,11 +36,13 @@ public final class MavenGraphAdapter {
   private final DependencyTreeBuilder dependencyTreeBuilder;
   private final ArtifactRepository artifactRepository;
   private final ArtifactFilter targetFilter;
+  private final boolean omitReachablePaths;
   private final Set<NodeResolution> includedResolutions;
 
-  public MavenGraphAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter) {
+  public MavenGraphAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter, boolean omitReachablePaths) {
     this.dependencyGraphBuilder = builder;
     this.targetFilter = targetFilter;
+    this.omitReachablePaths = omitReachablePaths;
     this.includedResolutions = allOf(NodeResolution.class);
     this.dependencyTreeBuilder = null;
     this.artifactRepository = null;
@@ -50,12 +52,12 @@ public final class MavenGraphAdapter {
     this.dependencyTreeBuilder = builder;
     this.artifactRepository = artifactRepository;
     this.targetFilter = targetFilter;
+    this.omitReachablePaths = false;
     this.includedResolutions = includedResolutions;
     this.dependencyGraphBuilder = null;
   }
 
   public void buildDependencyGraph(MavenProject project, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) {
-
     if (this.dependencyGraphBuilder != null) {
       createGraph(project, globalFilter, graphBuilder);
     } else {
@@ -71,7 +73,7 @@ public final class MavenGraphAdapter {
       throw new DependencyGraphException(e);
     }
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, this.targetFilter);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, this.targetFilter, this.omitReachablePaths);
     root.accept(visitor);
   }
 

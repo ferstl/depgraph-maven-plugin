@@ -33,6 +33,7 @@ import static java.util.EnumSet.allOf;
 class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
 
   private final GraphBuilder<DependencyNode> graphBuilder;
+  private final boolean omitReachablePaths;
   private final Deque<DependencyNode> nodeStack;
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter targetFilter;
@@ -44,15 +45,20 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private int cutOffDepth = 0;
 
   GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
+    this(graphBuilder, globalFilter, targetFilter, includedResolutions, false);
+  }
+
+  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter targetFilter, boolean omitReachablePaths) {
+    this(graphBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter, allOf(NodeResolution.class), omitReachablePaths);
+  }
+
+  private GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
     this.graphBuilder = graphBuilder;
+    this.omitReachablePaths = omitReachablePaths;
     this.nodeStack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
     this.targetFilter = targetFilter;
     this.includedResolutions = includedResolutions;
-  }
-
-  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter targetFilter) {
-    this(graphBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter, allOf(NodeResolution.class));
   }
 
   @Override
@@ -103,7 +109,13 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
       if (currentParent != null) {
         mergeWithExisting(node);
-        this.graphBuilder.addEdge(currentParent, node);
+
+        // if omitReachablePaths is set, don't add an edge if there already is an existing path between the nodes.
+        if (!this.omitReachablePaths || !this.graphBuilder.isReachable(node, currentParent)) {
+          this.graphBuilder.addEdge(currentParent, node);
+        } else {
+          this.graphBuilder.addNode(node);
+        }
       }
     }
 

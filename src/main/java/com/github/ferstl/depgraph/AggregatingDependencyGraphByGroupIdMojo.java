@@ -58,8 +58,9 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
         .configure(GraphBuilder.create(nodeIdRenderer))
         .omitSelfReferences();
 
-    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter);
-    return new AggregatingGraphFactory(adapter, globalFilter, graphBuilder, true);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter, this.reduceEdges);
+
+    return new AggregatingGraphFactory(adapter, createReactorOrderSubProjectSupplier(), globalFilter, graphBuilder, true);
   }
 
   @Override

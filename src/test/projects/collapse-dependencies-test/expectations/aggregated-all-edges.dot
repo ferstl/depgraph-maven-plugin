@@ -1,0 +1,17 @@
+digraph "condense-test" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:module-b:jar:compile"[label=<module-b>]
+  "com.github.ferstl:module-d:jar:compile"[label=<module-d>]
+  "com.github.ferstl:module-c:jar:compile"[label=<module-c>]
+  "com.github.ferstl:module-a:jar:compile"[label=<module-a>]
+
+  // Edge Definitions:
+  "com.github.ferstl:module-b:jar:compile" -> "com.github.ferstl:module-d:jar:compile"
+  "com.github.ferstl:module-c:jar:compile" -> "com.github.ferstl:module-d:jar:compile"
+  "com.github.ferstl:module-a:jar:compile" -> "com.github.ferstl:module-b:jar:compile"
+  "com.github.ferstl:module-a:jar:compile" -> "com.github.ferstl:module-c:jar:compile"
+  "com.github.ferstl:module-a:jar:compile" -> "com.github.ferstl:module-d:jar:compile"
+}

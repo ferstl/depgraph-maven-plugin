@@ -16,6 +16,7 @@
 package com.github.ferstl.depgraph.dependency;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -54,6 +55,7 @@ public class AggregatingGraphFactoryTest {
   private DependencyGraphBuilder dependencyGraphBuilder;
   private MavenGraphAdapter adapter;
   private GraphBuilder<DependencyNode> graphBuilder;
+  private SubProjectSupplier collectedProjectSupplier;
 
   @Before
   public void before() throws Exception {
@@ -66,9 +68,17 @@ public class AggregatingGraphFactoryTest {
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
     when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
 
-    this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter);
+    this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter, false);
 
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
+
+    this.collectedProjectSupplier = new SubProjectSupplier() {
+
+      @Override
+      public Collection<MavenProject> getSubProjects(MavenProject parent) {
+        return parent.getCollectedProjects();
+      }
+    };
   }
 
   /**
@@ -82,7 +92,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void moduleTree() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.collectedProjectSupplier, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     createMavenProject("child1", parent);
@@ -111,7 +121,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void excludeParentProjects() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, false);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.collectedProjectSupplier, this.globalFilter, this.graphBuilder, false);
 
     MavenProject parent = createMavenProject("parent");
     MavenProject child1 = createMavenProject("child1", parent);
@@ -142,7 +152,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void nestedProjects() {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.collectedProjectSupplier, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     createMavenProject("child1-1", parent);
@@ -179,7 +189,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void stopAtParent() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.collectedProjectSupplier, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parentParent = createMavenProject("parentParent");
     MavenProject parent = createMavenProject("parent", parentParent);
@@ -209,7 +219,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void filteredParent() {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.collectedProjectSupplier, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     createMavenProject("child1-1", parent);
@@ -243,7 +253,7 @@ public class AggregatingGraphFactoryTest {
    */
   @Test
   public void excludedArtifact() throws Exception {
-    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.globalFilter, this.graphBuilder, true);
+    AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.collectedProjectSupplier, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
     MavenProject child1 = createMavenProject("child1", parent);

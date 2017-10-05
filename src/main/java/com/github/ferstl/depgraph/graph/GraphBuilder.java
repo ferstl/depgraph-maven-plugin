@@ -15,6 +15,8 @@
  */
 package com.github.ferstl.depgraph.graph;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -36,6 +38,7 @@ public final class GraphBuilder<T> {
   private final NodeRenderer<? super T> nodeIdRenderer;
   private final Map<String, Node<T>> nodeDefinitions;
   private final Set<Edge> edges;
+  private final ReachabilityMap reachabilityMap;
 
   private String graphName;
   private GraphFormatter graphFormatter;
@@ -51,6 +54,7 @@ public final class GraphBuilder<T> {
     this.nodeIdRenderer = nodeIdRenderer;
     this.nodeDefinitions = new LinkedHashMap<>();
     this.edges = new LinkedHashSet<>();
+    this.reachabilityMap = new ReachabilityMap();
 
     DotAttributeBuilder graphAttributeBuilder = new DotAttributeBuilder();
     DotAttributeBuilder nodeAttributeBuilder = new DotAttributeBuilder().shape("box").fontName("Helvetica");
@@ -140,6 +144,13 @@ public final class GraphBuilder<T> {
     return node;
   }
 
+  public boolean isReachable(T target, T source) {
+    String targetId = this.nodeIdRenderer.render(target);
+    String sourceId = this.nodeIdRenderer.render(source);
+
+    return this.reachabilityMap.isReachable(targetId, sourceId);
+  }
+
   @Override
   public String toString() {
     // Work around some generics restrictions
@@ -160,6 +171,7 @@ public final class GraphBuilder<T> {
     if (!this.omitSelfReferences || !fromNodeId.equals(toNodeId)) {
       Edge edge = new Edge(fromNodeId, toNodeId, this.edgeRenderer.render(fromNode, toNode));
       this.edges.add(edge);
+      this.reachabilityMap.registerEdge(fromNodeId, toNodeId);
     }
   }
 
@@ -182,6 +194,65 @@ public final class GraphBuilder<T> {
         return "";
       }
     };
+  }
+
+  /**
+   * A map that tracks which nodes are reachable from other nodes.
+   * When a new edge 'A -> B' is added, the map registers node 'A' as a parent of node 'B'. To find out whether a node
+   * 'Y' is reachable from node 'X', we can recursively traverse the parents of node 'Y'. When node 'X' is found in this
+   * traversal, 'Y' is reachable via 'X'. When all nodes are traversed and 'X' is not found, 'Y' is not reachable via 'X'.
+   * To handle cycles in the graph, the node traversal keeps track of all already traversed nodes.
+   */
+  private static class ReachabilityMap {
+
+    private final Map<String, Set<String>> parentIndex = new HashMap<>();
+
+    void registerEdge(String from, String to) {
+      Set<String> parents = safelyGetParents(to);
+      parents.add(from);
+    }
+
+    boolean isReachable(String target, String source) {
+      return isReachableInternal(target, source, new HashSet<String>());
+    }
+
+    /**
+     * Recursively traverses the parents of {@code target} trying to find {@code source} by keeping track of already traversed
+     * nodes.
+     *
+     * @return {@code true} if {@code target} is reachable via {@code source}, {@code false} else.
+     */
+    private boolean isReachableInternal(String target, String source, Set<String> alreadyVisited) {
+      if (alreadyVisited.contains(target)) {
+        return false;
+      }
+
+      alreadyVisited.add(target);
+
+      Set<String> parents = safelyGetParents(target);
+      if (parents.contains(source)) {
+        return true;
+      }
+
+      for (String parent : parents) {
+        if (isReachableInternal(parent, source, alreadyVisited)) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    private Set<String> safelyGetParents(String node) {
+      Set<String> parentPath = this.parentIndex.get(node);
+      if (parentPath == null) {
+        parentPath = new HashSet<>();
+        this.parentIndex.put(node, parentPath);
+      }
+
+      return parentPath;
+    }
+
   }
 
 }
