@@ -38,7 +38,6 @@ import static org.mockito.Mockito.when;
 public class GraphBuildingVisitorTest {
 
   private GraphBuilder<DependencyNode> graphBuilder;
-  private GraphBuildingVisitor visitor;
   private ArtifactFilter globalFilter;
   private ArtifactFilter targetFilter;
   private EnumSet<NodeResolution> includedResolutions;
@@ -55,7 +54,6 @@ public class GraphBuildingVisitorTest {
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     this.includedResolutions = allOf(NodeResolution.class);
-    this.visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
   }
 
   /**
@@ -70,10 +68,11 @@ public class GraphBuildingVisitorTest {
     org.apache.maven.shared.dependency.graph.DependencyNode child = createGraphNode("child");
     org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child);
 
-    assertTrue(this.visitor.visit(parent));
-    assertTrue(this.visitor.visit(child));
-    assertTrue(this.visitor.endVisit(child));
-    assertTrue(this.visitor.endVisit(parent));
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    assertTrue(visitor.visit(parent));
+    assertTrue(visitor.visit(child));
+    assertTrue(visitor.endVisit(child));
+    assertTrue(visitor.endVisit(parent));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
@@ -99,13 +98,14 @@ public class GraphBuildingVisitorTest {
 
     when(this.globalFilter.include(child2.getArtifact())).thenReturn(false);
 
-    assertTrue(this.visitor.visit(parent));
-    assertTrue(this.visitor.visit(child1));
-    assertTrue(this.visitor.endVisit(child1));
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    assertTrue(visitor.visit(parent));
+    assertTrue(visitor.visit(child1));
+    assertTrue(visitor.endVisit(child1));
 
     // Don't process any further children of child2
-    assertFalse(this.visitor.visit(child2));
-    assertFalse(this.visitor.endVisit(child2));
+    assertFalse(visitor.visit(child2));
+    assertFalse(visitor.endVisit(child2));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
@@ -132,13 +132,14 @@ public class GraphBuildingVisitorTest {
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(false);
     when(this.targetFilter.include(child2.getArtifact())).thenReturn(true);
 
-    assertTrue(this.visitor.visit(parent));
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    assertTrue(visitor.visit(parent));
 
-    assertTrue(this.visitor.visit(child1));
-    assertTrue(this.visitor.endVisit(child1));
+    assertTrue(visitor.visit(child1));
+    assertTrue(visitor.endVisit(child1));
 
-    assertTrue(this.visitor.visit(child2));
-    assertTrue(this.visitor.endVisit(child2));
+    assertTrue(visitor.visit(child2));
+    assertTrue(visitor.endVisit(child2));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
@@ -171,20 +172,21 @@ public class GraphBuildingVisitorTest {
     when(this.targetFilter.include(child3.getArtifact())).thenReturn(true);
     when(this.targetFilter.include(child4.getArtifact())).thenReturn(true);
 
-    assertTrue(this.visitor.visit(parent));
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    assertTrue(visitor.visit(parent));
 
-    assertTrue(this.visitor.visit(child1));
-    assertTrue(this.visitor.visit(child4));
-    assertTrue(this.visitor.endVisit(child4));
-    assertTrue(this.visitor.endVisit(child1));
+    assertTrue(visitor.visit(child1));
+    assertTrue(visitor.visit(child4));
+    assertTrue(visitor.endVisit(child4));
+    assertTrue(visitor.endVisit(child1));
 
-    assertTrue(this.visitor.visit(child2));
-    assertTrue(this.visitor.endVisit(child2));
+    assertTrue(visitor.visit(child2));
+    assertTrue(visitor.endVisit(child2));
 
-    assertTrue(this.visitor.visit(child3));
-    assertTrue(this.visitor.visit(child4));
-    assertTrue(this.visitor.endVisit(child4));
-    assertTrue(this.visitor.endVisit(child3));
+    assertTrue(visitor.visit(child3));
+    assertTrue(visitor.visit(child4));
+    assertTrue(visitor.endVisit(child4));
+    assertTrue(visitor.endVisit(child3));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
@@ -260,10 +262,21 @@ public class GraphBuildingVisitorTest {
 
   @Test
   public void defaultArtifactFilter() {
-    this.visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
+    org.apache.maven.shared.dependency.graph.DependencyNode child = createGraphNode("child");
+    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child);
 
-    // Use other test (I know this is ugly...)
-    parentAndChild();
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
+    assertTrue(visitor.visit(parent));
+    assertTrue(visitor.visit(child));
+    assertTrue(visitor.endVisit(child));
+    assertTrue(visitor.endVisit(parent));
+
+    assertThat(this.graphBuilder, hasNodesAndEdges(
+        new String[]{
+            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
+            "\"groupId:child:jar:version:compile\"[label=\"groupId:child:jar:version:compile\"]"},
+        new String[]{
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child:jar:version:compile\""}));
   }
 
   private static org.apache.maven.shared.dependency.graph.DependencyNode createGraphNode(String artifactId, org.apache.maven.shared.dependency.graph.DependencyNode... children) {
