@@ -68,7 +68,7 @@ public class GraphBuildingVisitorTest {
     org.apache.maven.shared.dependency.graph.DependencyNode child = createGraphNode("child");
     org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
     assertTrue(visitor.visit(parent));
     assertTrue(visitor.visit(child));
     assertTrue(visitor.endVisit(child));
@@ -132,7 +132,7 @@ public class GraphBuildingVisitorTest {
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(false);
     when(this.targetFilter.include(child2.getArtifact())).thenReturn(true);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
     assertTrue(visitor.visit(parent));
 
     assertTrue(visitor.visit(child1));
@@ -172,7 +172,7 @@ public class GraphBuildingVisitorTest {
     when(this.targetFilter.include(child3.getArtifact())).thenReturn(true);
     when(this.targetFilter.include(child4.getArtifact())).thenReturn(true);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
     assertTrue(visitor.visit(parent));
 
     assertTrue(visitor.visit(child1));
@@ -259,25 +259,6 @@ public class GraphBuildingVisitorTest {
     ));
   }
 
-
-  @Test
-  public void defaultArtifactFilter() {
-    org.apache.maven.shared.dependency.graph.DependencyNode child = createGraphNode("child");
-    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child);
-
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
-    assertTrue(visitor.visit(parent));
-    assertTrue(visitor.visit(child));
-    assertTrue(visitor.endVisit(child));
-    assertTrue(visitor.endVisit(parent));
-
-    assertThat(this.graphBuilder, hasNodesAndEdges(
-        new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child:jar:version:compile\"[label=\"groupId:child:jar:version:compile\"]"},
-        new String[]{
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child:jar:version:compile\""}));
-  }
 
   private static org.apache.maven.shared.dependency.graph.DependencyNode createGraphNode(String artifactId, org.apache.maven.shared.dependency.graph.DependencyNode... children) {
     org.apache.maven.shared.dependency.graph.DependencyNode node = mock(org.apache.maven.shared.dependency.graph.DependencyNode.class);
