@@ -3,14 +3,13 @@ digraph "merge-test" {
   edge [fontsize="10",fontname="Helvetica"]
 
   // Node Definitions:
-  "com.github.ferstl:module-1"[label=<module-1>]
-  "com.github.ferstl:module-2"[label=<module-2>]
-  "junit:junit"[label=<junit>]
+  "junit:junit"[label=<junit<font point-size="10"><br/>(compile/test)</font>>]
   "org.hamcrest:hamcrest-core"[label=<hamcrest-core<font point-size="10"><br/>(compile/test)</font>>]
+  "com.github.ferstl:module-2"[label=<module-2<font point-size="10"><br/>(compile/test)</font>>]
+  "com.github.ferstl:module-1"[label=<module-1>]
 
   // Edge Definitions:
-  "com.github.ferstl:module-1" -> "com.github.ferstl:module-2"
   "junit:junit" -> "org.hamcrest:hamcrest-core"
-  "com.github.ferstl:module-1" -> "junit:junit"
   "com.github.ferstl:module-2" -> "junit:junit"
+  "com.github.ferstl:module-1" -> "com.github.ferstl:module-2"
 }
