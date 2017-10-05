@@ -115,6 +115,8 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
           this.graphBuilder.addEdge(currentParent, node);
         } else if (!this.graphBuilder.isReachable(node, currentParent)) {
           this.graphBuilder.addEdge(currentParent, node);
+        } else {
+          this.graphBuilder.addNode(node);
         }
       }
     }
