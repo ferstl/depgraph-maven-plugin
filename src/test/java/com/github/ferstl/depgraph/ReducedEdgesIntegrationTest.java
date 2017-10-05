@@ -17,14 +17,14 @@ import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions({"3.5.0", "3.3.9"})
-public class CollapseDependenciesIntegrationTest {
+public class ReducedEdgesIntegrationTest {
 
   @Rule
   public final TestResources resources = new TestResources();
 
   private final MavenRuntime mavenRuntime;
 
-  public CollapseDependenciesIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
+  public ReducedEdgesIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
     this.mavenRuntime = builder.build();
   }
 
