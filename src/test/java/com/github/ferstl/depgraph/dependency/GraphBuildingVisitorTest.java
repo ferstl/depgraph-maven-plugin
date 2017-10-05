@@ -202,6 +202,61 @@ public class GraphBuildingVisitorTest {
         }));
   }
 
+  /**
+   * .
+   * <pre>
+   * node-a
+   *   - node-b
+   *   - node-c
+   *   - node-d (omitted)
+   * node-b
+   *   - node-d
+   * node-c
+   *   - node-d
+   * </pre>
+   */
+  @Test
+  public void omitReachablePaths() {
+    org.apache.maven.shared.dependency.graph.DependencyNode nodeD = createGraphNode("node-d");
+    org.apache.maven.shared.dependency.graph.DependencyNode nodeC = createGraphNode("node-c", nodeD);
+    org.apache.maven.shared.dependency.graph.DependencyNode nodeB = createGraphNode("node-b", nodeD);
+    org.apache.maven.shared.dependency.graph.DependencyNode nodeA = createGraphNode("node-a", nodeB, nodeC, nodeD);
+
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, true);
+
+    assertTrue(visitor.visit(nodeA));
+
+    assertTrue(visitor.visit(nodeB));
+    assertTrue(visitor.visit(nodeD));
+    assertTrue(visitor.endVisit(nodeD));
+    assertTrue(visitor.endVisit(nodeB));
+
+    assertTrue(visitor.visit(nodeC));
+    assertTrue(visitor.visit(nodeD));
+    assertTrue(visitor.endVisit(nodeD));
+    assertTrue(visitor.endVisit(nodeC));
+
+    assertTrue(visitor.visit(nodeD));
+    assertTrue(visitor.endVisit(nodeD));
+
+    assertTrue(visitor.endVisit(nodeA));
+
+    assertThat(this.graphBuilder, hasNodesAndEdges(
+        new String[]{
+            "\"groupId:node-b:jar:version:compile\"",
+            "\"groupId:node-d:jar:version:compile\"",
+            "\"groupId:node-a:jar:version:compile\"",
+            "\"groupId:node-c:jar:version:compile\""
+        },
+        new String[]{
+            "\"groupId:node-b:jar:version:compile\" -> \"groupId:node-d:jar:version:compile\"",
+            "\"groupId:node-a:jar:version:compile\" -> \"groupId:node-b:jar:version:compile\"",
+            "\"groupId:node-c:jar:version:compile\" -> \"groupId:node-d:jar:version:compile\"",
+            "\"groupId:node-a:jar:version:compile\" -> \"groupId:node-c:jar:version:compile\"",
+        }
+    ));
+  }
+
 
   @Test
   public void defaultArtifactFilter() {
