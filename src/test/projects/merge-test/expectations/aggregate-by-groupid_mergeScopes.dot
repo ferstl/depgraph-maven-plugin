@@ -3,8 +3,8 @@ digraph "merge-test" {
   edge [fontsize="10",fontname="Helvetica"]
 
   // Node Definitions:
-  "com.github.ferstl"[label=<<font point-size="14">com.github.ferstl</font><font point-size="10"><br/>(compile/test)</font>>]
-  "junit"[label=<<font point-size="14">junit</font><font point-size="10"><br/>(compile/test)</font>>]
+  "com.github.ferstl"[label=<<font point-size="14">com.github.ferstl</font>>]
+  "junit"[label=<<font point-size="14">junit</font><font point-size="10"><br/>(test)</font>>]
   "org.hamcrest"[label=<<font point-size="14">org.hamcrest</font><font point-size="10"><br/>(compile/test)</font>>]
 
   // Edge Definitions:
