@@ -119,7 +119,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private List<String> targetIncludes;
 
   /**
-   * Format of the graph, either &quot;dot&quot; (default) or &quot;gml&quot;.
+   * Format of the graph, either &quot;dot&quot; (default), &quot;gml&quot;, &quot;puml&quot;, &quot;json&quot; or &quot;text&quot;.
    *
    * @since 2.1.0
    */
