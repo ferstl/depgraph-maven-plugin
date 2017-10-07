@@ -16,7 +16,7 @@
 package com.github.ferstl.depgraph;
 
 public enum GraphFormat {
-  DOT, GML, PUML, JSON;
+  DOT, GML, PUML, JSON, TEXT;
 
   public static GraphFormat forName(String name) {
     try {

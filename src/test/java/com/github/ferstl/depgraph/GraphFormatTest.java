@@ -101,6 +101,24 @@ public class GraphFormatTest {
   }
 
   @Test
+  public void forNameText() {
+    // arrange
+    String name1 = "text";
+    String name2 = "Text";
+    String name3 = "TEXT";
+
+    // act
+    GraphFormat result1 = GraphFormat.forName(name1);
+    GraphFormat result2 = GraphFormat.forName(name2);
+    GraphFormat result3 = GraphFormat.forName(name3);
+
+    // assert
+    assertSame(GraphFormat.TEXT, result2);
+    assertSame(GraphFormat.TEXT, result1);
+    assertSame(GraphFormat.TEXT, result3);
+  }
+
+  @Test
   public void forNameWithUnknownFormat() {
     // arrange
     this.expectedException.expect(IllegalArgumentException.class);
