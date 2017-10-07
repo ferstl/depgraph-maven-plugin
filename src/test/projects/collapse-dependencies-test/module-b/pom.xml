@@ -16,6 +16,13 @@
       <artifactId>module-d</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <!-- Test dependency which must not be reduced -->
+    <dependency>
+      <groupId>com.github.ferstl</groupId>
+      <artifactId>module-test</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
 </project>
