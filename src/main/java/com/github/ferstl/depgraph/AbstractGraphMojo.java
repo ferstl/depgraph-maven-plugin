@@ -53,6 +53,7 @@ import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.JsonGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.PumlGraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.TextGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.dependency.style.resource.ClasspathStyleResource;
@@ -329,6 +330,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
         return new PumlGraphStyleConfigurer();
       case JSON:
         return new JsonGraphStyleConfigurer();
+      case TEXT:
+        return new TextGraphStyleConfigurer();
       default:
         throw new IllegalArgumentException("Unsupported output format: " + graphFormat);
     }
