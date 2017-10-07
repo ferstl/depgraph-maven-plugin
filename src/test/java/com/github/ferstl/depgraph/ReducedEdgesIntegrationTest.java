@@ -36,7 +36,7 @@ public class ReducedEdgesIntegrationTest {
 
   @Test
   public void aggregateWithReducedEdges() throws Exception {
-    File basedir = this.resources.getBasedir("collapse-dependencies-test");
+    File basedir = this.resources.getBasedir("reduced-edges-test");
     // Reduced edges are the default
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -51,7 +51,7 @@ public class ReducedEdgesIntegrationTest {
 
   @Test
   public void aggregateWithAllEdges() throws Exception {
-    File basedir = this.resources.getBasedir("collapse-dependencies-test");
+    File basedir = this.resources.getBasedir("reduced-edges-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DreduceEdges=false")

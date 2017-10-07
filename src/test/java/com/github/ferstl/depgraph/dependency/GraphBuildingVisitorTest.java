@@ -211,18 +211,23 @@ public class GraphBuildingVisitorTest {
    *   - node-b
    *   - node-c
    *   - node-d (omitted)
+   *   - node-test (not omitted test dependency)
    * node-b
    *   - node-d
+   *   - node-test
    * node-c
    *   - node-d
    * </pre>
    */
   @Test
   public void omitReachablePaths() {
+    org.apache.maven.shared.dependency.graph.DependencyNode nodeTest = createGraphNode("node-test");
+    nodeTest.getArtifact().setScope("test");
+
     org.apache.maven.shared.dependency.graph.DependencyNode nodeD = createGraphNode("node-d");
     org.apache.maven.shared.dependency.graph.DependencyNode nodeC = createGraphNode("node-c", nodeD);
-    org.apache.maven.shared.dependency.graph.DependencyNode nodeB = createGraphNode("node-b", nodeD);
-    org.apache.maven.shared.dependency.graph.DependencyNode nodeA = createGraphNode("node-a", nodeB, nodeC, nodeD);
+    org.apache.maven.shared.dependency.graph.DependencyNode nodeB = createGraphNode("node-b", nodeD, nodeTest);
+    org.apache.maven.shared.dependency.graph.DependencyNode nodeA = createGraphNode("node-a", nodeB, nodeC, nodeD, nodeTest);
 
     GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, true);
 
@@ -231,6 +236,8 @@ public class GraphBuildingVisitorTest {
     assertTrue(visitor.visit(nodeB));
     assertTrue(visitor.visit(nodeD));
     assertTrue(visitor.endVisit(nodeD));
+    assertTrue(visitor.visit(nodeTest));
+    assertTrue(visitor.endVisit(nodeTest));
     assertTrue(visitor.endVisit(nodeB));
 
     assertTrue(visitor.visit(nodeC));
@@ -241,20 +248,26 @@ public class GraphBuildingVisitorTest {
     assertTrue(visitor.visit(nodeD));
     assertTrue(visitor.endVisit(nodeD));
 
+    assertTrue(visitor.visit(nodeTest));
+    assertTrue(visitor.endVisit(nodeTest));
+
     assertTrue(visitor.endVisit(nodeA));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:node-b:jar:version:compile\"",
             "\"groupId:node-d:jar:version:compile\"",
+            "\"groupId:node-test:jar:version:test\"",
             "\"groupId:node-a:jar:version:compile\"",
             "\"groupId:node-c:jar:version:compile\""
         },
         new String[]{
             "\"groupId:node-b:jar:version:compile\" -> \"groupId:node-d:jar:version:compile\"",
+            "\"groupId:node-b:jar:version:compile\" -> \"groupId:node-test:jar:version:test\"",
             "\"groupId:node-a:jar:version:compile\" -> \"groupId:node-b:jar:version:compile\"",
             "\"groupId:node-c:jar:version:compile\" -> \"groupId:node-d:jar:version:compile\"",
             "\"groupId:node-a:jar:version:compile\" -> \"groupId:node-c:jar:version:compile\"",
+            "\"groupId:node-a:jar:version:compile\" -> \"groupId:node-test:jar:version:test\"",
         }
     ));
   }
