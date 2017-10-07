@@ -255,10 +255,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
     try {
       GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter, graphStyleConfigurer);
-      writeGraphFile(graphFactory.createGraph(this.project), graphFilePath);
+      String dependencyGraph = graphFactory.createGraph(this.project);
+      writeGraphFile(dependencyGraph, graphFilePath);
 
-      if (this.createImage && graphFormat == GraphFormat.DOT) {
+      if (graphFormat == GraphFormat.DOT && this.createImage) {
         createDotGraphImage(graphFilePath);
+      } else if (graphFormat == GraphFormat.TEXT) {
+        getLog().info("Dependency graph:\n" + dependencyGraph);
       }
 
     } catch (DependencyGraphException e) {
