@@ -65,6 +65,8 @@ public class TextGraphWriter {
       stringBuilder.append("\n");
       writeChildren(stringBuilder, childNode.getNodeId(), level + 1);
     }
+
+    edges.clear();
   }
 
   private void indent(StringBuilder stringBuilder, int level) {
