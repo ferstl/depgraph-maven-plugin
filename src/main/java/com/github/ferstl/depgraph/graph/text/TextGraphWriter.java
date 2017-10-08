@@ -41,7 +41,7 @@ public class TextGraphWriter {
     for (String root : this.roots) {
       Node<?> fromNode = this.nodesById.get(root);
       stringBuilder.append(fromNode.getNodeName()).append("\n");
-      writeChildren(stringBuilder, root, 0);
+      writeChildren(stringBuilder, root, -1);
     }
   }
 
@@ -63,8 +63,9 @@ public class TextGraphWriter {
 
   private void indent(StringBuilder stringBuilder, int level) {
     for (int i = 0; i < level; i++) {
-      stringBuilder.append("  ");
+      stringBuilder.append("|  ");
     }
+    stringBuilder.append("+- ");
   }
 
   private Collection<String> getImmediateChildren(String nodeId) {
