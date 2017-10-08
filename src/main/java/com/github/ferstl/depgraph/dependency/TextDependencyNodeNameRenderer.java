@@ -9,6 +9,6 @@ public class TextDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
 
   @Override
   public String render(DependencyNode node) {
-    return "";
+    return node.getArtifact().getArtifactId();
   }
 }
