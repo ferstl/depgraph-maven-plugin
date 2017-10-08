@@ -13,7 +13,7 @@ import com.github.ferstl.depgraph.graph.Node;
 public class TextGraphWriter {
 
   private final Map<String, Node<?>> nodesById;
-  private final Map<String, Collection<Edge>> relations;
+  private final Map<String, List<Edge>> relations;
   private final Collection<String> roots;
 
   public TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges) {
@@ -46,9 +46,15 @@ public class TextGraphWriter {
   }
 
   private void writeChildren(StringBuilder stringBuilder, String parent, int level) {
-    Collection<Edge> edges = this.relations.get(parent);
-    for (Edge edge : edges) {
-      indent(stringBuilder, level + 1);
+    List<Edge> edges = this.relations.get(parent);
+    for (int i = 0; i < edges.size(); i++) {
+      Edge edge = edges.get(i);
+      if (i != edges.size() - 1) {
+        indent(stringBuilder, level + 1);
+      } else {
+        indentEnd(stringBuilder, level + 1);
+      }
+
       Node<?> childNode = this.nodesById.get(edge.getToNodeId());
       stringBuilder.append(childNode.getNodeName());
 
@@ -68,15 +74,10 @@ public class TextGraphWriter {
     stringBuilder.append("+- ");
   }
 
-  private Collection<String> getImmediateChildren(String nodeId) {
-    Collection<Edge> edges = this.relations.get(nodeId);
-    List<String> immediateChildren = new ArrayList<>(edges.size());
-
-    for (Edge edge : edges) {
-      immediateChildren.add(edge.getToNodeId());
+  private void indentEnd(StringBuilder stringBuilder, int level) {
+    for (int i = 0; i < level; i++) {
+      stringBuilder.append("|  ");
     }
-
-    return immediateChildren;
+    stringBuilder.append("\\- ");
   }
-
 }
