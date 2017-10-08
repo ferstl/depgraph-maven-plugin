@@ -38,34 +38,26 @@ public class TextGraphWriter {
   }
 
   public void write(StringBuilder stringBuilder) {
-    writeInternal(stringBuilder, this.roots, 0, true);
+    for (String root : this.roots) {
+      Node<?> fromNode = this.nodesById.get(root);
+      stringBuilder.append(fromNode.getNodeName()).append("\n");
+      writeChildren(stringBuilder, root, 0);
+    }
   }
 
-  private void writeInternal(StringBuilder stringBuilder, Collection<String> nodeIds, int level, boolean writeParent) {
+  private void writeChildren(StringBuilder stringBuilder, String parent, int level) {
+    Collection<Edge> edges = this.relations.get(parent);
+    for (Edge edge : edges) {
+      indent(stringBuilder, level + 1);
+      Node<?> childNode = this.nodesById.get(edge.getToNodeId());
+      stringBuilder.append(childNode.getNodeName());
 
-    for (String nodeId : nodeIds) {
-
-      if (writeParent) {
-        Node<?> fromNode = this.nodesById.get(nodeId);
-        indent(stringBuilder, level);
-        stringBuilder.append(fromNode.getNodeName()).append("\n");
+      if (edge.getName() != null && !edge.getName().isEmpty()) {
+        stringBuilder.append(" (").append(edge.getName()).append(")");
       }
 
-      Collection<Edge> edges = this.relations.get(nodeId);
-      for (Edge edge : edges) {
-        indent(stringBuilder, level + 1);
-        Node<?> toNode = this.nodesById.get(edge.getToNodeId());
-        stringBuilder.append(toNode.getNodeName());
-
-        if (edge.getName() != null && !edge.getName().isEmpty()) {
-          stringBuilder.append(" (").append(edge.getName()).append(")");
-        }
-
-        stringBuilder.append("\n");
-        writeInternal(stringBuilder, getImmediateChildren(toNode.getNodeId()), level + 2, false);
-      }
-
-      writeInternal(stringBuilder, getImmediateChildren(nodeId), level + 1, false);
+      stringBuilder.append("\n");
+      writeChildren(stringBuilder, childNode.getNodeId(), level + 1);
     }
   }
 
