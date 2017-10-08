@@ -41,7 +41,7 @@ public class TextGraphWriter {
     for (String root : this.roots) {
       Node<?> fromNode = this.nodesById.get(root);
       stringBuilder.append(fromNode.getNodeName()).append("\n");
-      writeChildren(stringBuilder, root, -1);
+      writeChildren(stringBuilder, root, 0);
     }
   }
 
@@ -50,9 +50,9 @@ public class TextGraphWriter {
     for (int i = 0; i < edges.size(); i++) {
       Edge edge = edges.get(i);
       if (i != edges.size() - 1) {
-        indent(stringBuilder, level + 1);
+        indent(stringBuilder, level);
       } else {
-        indentEnd(stringBuilder, level + 1);
+        indentEnd(stringBuilder, level);
       }
 
       Node<?> childNode = this.nodesById.get(edge.getToNodeId());
