@@ -8,6 +8,10 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
 
   @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
-    return "";
+    TextGraphWriter writer = new TextGraphWriter(nodes, edges);
+    StringBuilder graphStringBuilder = new StringBuilder();
+    writer.write(graphStringBuilder);
+
+    return graphStringBuilder.toString();
   }
 }
