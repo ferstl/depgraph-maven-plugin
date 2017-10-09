@@ -2,7 +2,6 @@ package com.github.ferstl.depgraph.graph.text;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.junit.Ignore;
 import org.junit.Test;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
@@ -13,7 +12,6 @@ import static org.junit.Assert.assertEquals;
 public class TextGraphFormatterTest {
 
   @Test
-  @Ignore
   public void indentation() {
     // arrange + act
     String result = createTextGraph(

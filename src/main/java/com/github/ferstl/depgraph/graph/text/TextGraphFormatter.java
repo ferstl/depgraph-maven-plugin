@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
@@ -46,7 +47,10 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
         String root = rootIterator.next();
         Node<?> fromNode = this.nodesById.get(root);
         stringBuilder.append(fromNode.getNodeName()).append("\n");
-        writeChildren(stringBuilder, root, 0, !rootIterator.hasNext());
+
+        List<Boolean> lastParents = new ArrayList<>();
+        lastParents.add(!rootIterator.hasNext());
+        writeChildren(stringBuilder, root, lastParents);
       }
     }
 
@@ -69,13 +73,13 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
       }
     }
 
-    private void writeChildren(StringBuilder stringBuilder, String parent, int level, boolean lastParent) {
+    private void writeChildren(StringBuilder stringBuilder, String parent, List<Boolean> lastParents) {
       Collection<Edge> edges = this.relations.get(parent);
       Iterator<Edge> edgeIterator = edges.iterator();
 
       while (edgeIterator.hasNext()) {
         Edge edge = edgeIterator.next();
-        indent(stringBuilder, level, lastParent, !edgeIterator.hasNext());
+        indent(stringBuilder, lastParents, !edgeIterator.hasNext());
 
         Node<?> childNode = this.nodesById.get(edge.getToNodeId());
         stringBuilder.append(childNode.getNodeName());
@@ -83,24 +87,21 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
         if (edge.getName() != null && !edge.getName().isEmpty()) {
           stringBuilder.append(" (").append(edge.getName()).append(")");
         }
-
         stringBuilder.append("\n");
-        writeChildren(stringBuilder, childNode.getNodeId(), level + 1, !edgeIterator.hasNext());
+
+        lastParents.add(!edgeIterator.hasNext());
+        writeChildren(stringBuilder, childNode.getNodeId(), lastParents);
+        lastParents.remove(lastParents.size() - 1);
       }
 
       // Don't repeat already written edges
       edges.clear();
     }
 
-    private void indent(StringBuilder stringBuilder, int level, boolean lastParent, boolean lastElement) {
-      // Indent up to the previous level
-      for (int i = 0; i < level - 1; i++) {
-        stringBuilder.append(INDENTATION_FOR_PARENT);
-      }
-
-      // Indent the last level depending on whether the parent is the last element in the tree
-      if (level > 0) {
-        stringBuilder.append(lastParent ? INDENTATION_FOR_LAST_PARENT : INDENTATION_FOR_PARENT);
+    private void indent(StringBuilder stringBuilder, List<Boolean> lastParents, boolean lastElement) {
+      // Don't indent after the root element
+      for (int i = 1; i < lastParents.size(); i++) {
+        stringBuilder.append(lastParents.get(i) ? INDENTATION_FOR_LAST_PARENT : INDENTATION_FOR_PARENT);
       }
 
       // Use different element markers depending on whether the element is the last one in the sub tree.
