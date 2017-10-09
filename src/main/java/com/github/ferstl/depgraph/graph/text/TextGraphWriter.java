@@ -15,17 +15,31 @@ class TextGraphWriter {
   private final Map<String, Node<?>> nodesById;
   private final Map<String, Collection<Edge>> relations;
   private final Collection<String> roots;
+  private boolean alreadyUsed;
 
   TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges) {
     this.nodesById = new HashMap<>();
     this.relations = new LinkedHashMap<>();
     this.roots = new LinkedHashSet<>();
+    this.alreadyUsed = false;
 
     initializeGraphData(nodes);
     initializeRootElements(edges);
   }
 
   void write(StringBuilder stringBuilder) {
+    if (this.alreadyUsed) {
+      throw new IllegalStateException("This writer has already been used.");
+    }
+
+    try {
+      writeInternal(stringBuilder);
+    } finally {
+      this.alreadyUsed = true;
+    }
+  }
+
+  private void writeInternal(StringBuilder stringBuilder) {
     Iterator<String> rootIterator = this.roots.iterator();
     while (rootIterator.hasNext()) {
       String root = rootIterator.next();
