@@ -10,13 +10,13 @@ import java.util.Map;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
 
-public class TextGraphWriter {
+class TextGraphWriter {
 
   private final Map<String, Node<?>> nodesById;
   private final Map<String, List<Edge>> relations;
   private final Collection<String> roots;
 
-  public TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges) {
+  TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges) {
     this.nodesById = new HashMap<>();
     this.relations = new LinkedHashMap<>();
     this.roots = new LinkedHashSet<>();
@@ -37,7 +37,7 @@ public class TextGraphWriter {
     }
   }
 
-  public void write(StringBuilder stringBuilder) {
+  void write(StringBuilder stringBuilder) {
     for (String root : this.roots) {
       Node<?> fromNode = this.nodesById.get(root);
       stringBuilder.append(fromNode.getNodeName()).append("\n");
