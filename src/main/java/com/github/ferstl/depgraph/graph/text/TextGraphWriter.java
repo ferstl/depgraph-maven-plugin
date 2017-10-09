@@ -21,20 +21,8 @@ class TextGraphWriter {
     this.relations = new LinkedHashMap<>();
     this.roots = new LinkedHashSet<>();
 
-    for (Node<?> node : nodes) {
-      String nodeId = node.getNodeId();
-      this.nodesById.put(nodeId, node);
-      this.relations.put(nodeId, new ArrayList<Edge>());
-    }
-
-    this.roots.addAll(this.nodesById.keySet());
-    for (Edge edge : edges) {
-      this.relations.get(edge.getFromNodeId()).add(edge);
-
-      if (!edge.getFromNodeId().equals(edge.getToNodeId())) {
-        this.roots.remove(edge.getToNodeId());
-      }
-    }
+    initializeGraphData(nodes);
+    initializeRootElements(edges);
   }
 
   void write(StringBuilder stringBuilder) {
@@ -44,6 +32,25 @@ class TextGraphWriter {
       Node<?> fromNode = this.nodesById.get(root);
       stringBuilder.append(fromNode.getNodeName()).append("\n");
       writeChildren(stringBuilder, root, 0, !rootIterator.hasNext());
+    }
+  }
+
+  private void initializeGraphData(Collection<Node<?>> nodes) {
+    for (Node<?> node : nodes) {
+      String nodeId = node.getNodeId();
+      this.nodesById.put(nodeId, node);
+      this.relations.put(nodeId, new ArrayList<Edge>());
+    }
+  }
+
+  private void initializeRootElements(Collection<Edge> edges) {
+    this.roots.addAll(this.nodesById.keySet());
+    for (Edge edge : edges) {
+      this.relations.get(edge.getFromNodeId()).add(edge);
+
+      if (!edge.getFromNodeId().equals(edge.getToNodeId())) {
+        this.roots.remove(edge.getToNodeId());
+      }
     }
   }
 
@@ -66,6 +73,7 @@ class TextGraphWriter {
       writeChildren(stringBuilder, childNode.getNodeId(), level + 1, !edgeIterator.hasNext());
     }
 
+    // Don't repeat already written edges
     edges.clear();
   }
 
