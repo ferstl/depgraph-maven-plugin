@@ -2,6 +2,7 @@ package com.github.ferstl.depgraph.graph.text;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import org.junit.Ignore;
 import org.junit.Test;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
@@ -12,14 +13,53 @@ import static org.junit.Assert.assertEquals;
 public class TextGraphFormatterTest {
 
   @Test
+  @Ignore
+  public void indentation() {
+    // arrange + act
+    String result = createTextGraph(
+        edge("root", "child-1"),
+        edge("root", "child-2"),
+        edge("root", "child-3"),
+
+        edge("child-1", "child-1.1"),
+        edge("child-1.1", "child-1.1.1"),
+        edge("child-1.1.1", "child-1.1.1.1"),
+        edge("child-1.1.1.1", "child-1.1.1.1.1"),
+        edge("child-1.1.1", "child-1.1.1.2"),
+        edge("child-1.1", "child-1.1.2"),
+
+        edge("child-3", "child-3.1"),
+        edge("child-3", "child-3.2"),
+        edge("child-3", "child-3.3"),
+        edge("child-3.3", "child-3.3.1"));
+
+    // assert
+    String expected = "root\n"
+        + "+- child-1\n"
+        + "|  \\- child-1.1\n"
+        + "|     +- child-1.1.1\n"
+        + "|     |  +- child-1.1.1.1\n"
+        + "|     |  |  \\- child-1.1.1.1.1\n"
+        + "|     |  \\- child-1.1.1.2\n"
+        + "|     \\- child-1.1.2\n"
+        + "+- child-2\n"
+        + "\\- child-3\n"
+        + "   +- child-3.1\n"
+        + "   +- child-3.2\n"
+        + "   \\- child-3.3\n"
+        + "      \\- child-3.3.1\n";
+    assertEquals(expected, result);
+  }
+
+
+  @Test
   public void rootWithOneChild() {
     // arrange + act
     String result = createTextGraph(edge("parent", "child"));
 
     // assert
     String expected = "parent\n"
-        + "\\- child"
-        + "\n";
+        + "\\- child\n";
     assertEquals(expected, result);
   }
 
