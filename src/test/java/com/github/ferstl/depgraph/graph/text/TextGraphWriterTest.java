@@ -15,7 +15,7 @@ public class TextGraphWriterTest {
   @Test
   public void rootWithOneChild() {
     // arrange
-    TextGraphWriter writer = createTextGraphWriter(edge("A", "B"));
+    TextGraphFormatter.TextGraphWriter writer = createTextGraphWriter(edge("A", "B"));
 
     // act
     StringBuilder result = new StringBuilder();
@@ -36,7 +36,7 @@ public class TextGraphWriterTest {
   @Test
   public void test() {
     StringBuilder stringBuilder = new StringBuilder();
-    new TextGraphWriter(
+    new TextGraphFormatter.TextGraphWriter(
         Arrays.<Node<?>>asList(
             node("A"),
             node("B"),
@@ -55,14 +55,14 @@ public class TextGraphWriterTest {
     System.out.println(stringBuilder);
   }
 
-  private TextGraphWriter createTextGraphWriter(Edge... edges) {
+  private TextGraphFormatter.TextGraphWriter createTextGraphWriter(Edge... edges) {
     Set<Node<?>> nodes = new HashSet<>();
     for (Edge edge : edges) {
       nodes.add(node(edge.getFromNodeId()));
       nodes.add(node(edge.getToNodeId()));
     }
 
-    return new TextGraphWriter(nodes, asList(edges));
+    return new TextGraphFormatter.TextGraphWriter(nodes, asList(edges));
   }
 
   private Node<?> node(String id) {
