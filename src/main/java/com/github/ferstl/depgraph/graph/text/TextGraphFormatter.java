@@ -2,7 +2,6 @@ package com.github.ferstl.depgraph.graph.text;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -33,7 +32,7 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
     private final Collection<String> roots;
 
     TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges) {
-      this.nodesById = new HashMap<>();
+      this.nodesById = new LinkedHashMap<>();
       this.relations = new LinkedHashMap<>();
       this.roots = new LinkedHashSet<>();
 
