@@ -79,16 +79,13 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
 
       while (edgeIterator.hasNext()) {
         Edge edge = edgeIterator.next();
-        indent(stringBuilder, lastParents, !edgeIterator.hasNext());
-
         Node<?> childNode = this.nodesById.get(edge.getToNodeId());
-        stringBuilder.append(childNode.getNodeName());
 
-        if (edge.getName() != null && !edge.getName().isEmpty()) {
-          stringBuilder.append(" (").append(edge.getName()).append(")");
-        }
-        stringBuilder.append("\n");
+        // Write the current child node
+        indent(stringBuilder, lastParents, !edgeIterator.hasNext());
+        writeChildNode(stringBuilder, childNode.getNodeName(), edge.getName());
 
+        // Recursively write sub tree
         lastParents.add(!edgeIterator.hasNext());
         writeChildren(stringBuilder, childNode.getNodeId(), lastParents);
         lastParents.remove(lastParents.size() - 1);
@@ -110,6 +107,14 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
       } else {
         stringBuilder.append(ELEMENT_MARKER);
       }
+    }
+
+    private void writeChildNode(StringBuilder stringBuilder, String childNodeName, String edgeName) {
+      stringBuilder.append(childNodeName);
+      if (edgeName != null && !edgeName.isEmpty()) {
+        stringBuilder.append(" (").append(edgeName).append(")");
+      }
+      stringBuilder.append("\n");
     }
   }
 }
