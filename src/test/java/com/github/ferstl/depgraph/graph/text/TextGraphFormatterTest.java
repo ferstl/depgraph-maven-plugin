@@ -1,6 +1,6 @@
 package com.github.ferstl.depgraph.graph.text;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
 import com.github.ferstl.depgraph.graph.Edge;
@@ -14,22 +14,43 @@ public class TextGraphFormatterTest {
   @Test
   public void rootWithOneChild() {
     // arrange + act
-    String result = createTextGraph(edge("A", "B"));
+    String result = createTextGraph(edge("parent", "child"));
 
     // assert
-    String expected = "node-A\n"
-        + "\\- node-B"
+    String expected = "parent\n"
+        + "\\- child"
         + "\n";
     assertEquals(expected, result);
   }
 
   @Test
   public void multipleRoots() {
+    // arrange + act
+    String result = createTextGraph(
+        edge("root-1", "child-1.1"),
+        edge("root-1", "child-1.2"),
+        edge("child-1.2", "child-1.2.1"),
 
+        edge("root-2", "child-2.1"),
+        edge("root-2", "child-2.2"),
+
+        edge("root-3", "child-3.1"));
+
+    // assert
+    String expected = "root-1\n"
+        + "+- child-1.1\n"
+        + "\\- child-1.2\n"
+        + "   \\- child-1.2.1\n"
+        + "root-2\n"
+        + "+- child-2.1\n"
+        + "\\- child-2.2\n"
+        + "root-3\n"
+        + "\\- child-3.1\n";
+    assertEquals(expected, result);
   }
 
   private String createTextGraph(Edge... edges) {
-    Set<Node<?>> nodes = new HashSet<>();
+    Set<Node<?>> nodes = new LinkedHashSet<>();
     for (Edge edge : edges) {
       nodes.add(node(edge.getFromNodeId()));
       nodes.add(node(edge.getToNodeId()));
@@ -39,7 +60,7 @@ public class TextGraphFormatterTest {
   }
 
   private Node<?> node(String id) {
-    return new Node<>(id, "node-" + id, new Object());
+    return new Node<>(id, id, new Object());
   }
 
   private Edge edge(String from, String to) {
