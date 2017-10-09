@@ -41,19 +41,15 @@ public class TextGraphWriter {
     for (String root : this.roots) {
       Node<?> fromNode = this.nodesById.get(root);
       stringBuilder.append(fromNode.getNodeName()).append("\n");
-      writeChildren(stringBuilder, root, 0);
+      writeChildren(stringBuilder, root, 0, false);
     }
   }
 
-  private void writeChildren(StringBuilder stringBuilder, String parent, int level) {
+  private void writeChildren(StringBuilder stringBuilder, String parent, int level, boolean lastParent) {
     List<Edge> edges = this.relations.get(parent);
     for (int i = 0; i < edges.size(); i++) {
       Edge edge = edges.get(i);
-      if (i != edges.size() - 1) {
-        indent(stringBuilder, level);
-      } else {
-        indentEnd(stringBuilder, level);
-      }
+      indent(stringBuilder, level, lastParent, i == edges.size() - 1);
 
       Node<?> childNode = this.nodesById.get(edge.getToNodeId());
       stringBuilder.append(childNode.getNodeName());
@@ -63,23 +59,25 @@ public class TextGraphWriter {
       }
 
       stringBuilder.append("\n");
-      writeChildren(stringBuilder, childNode.getNodeId(), level + 1);
+      writeChildren(stringBuilder, childNode.getNodeId(), level + 1, i == edges.size() - 1);
     }
 
     edges.clear();
   }
 
-  private void indent(StringBuilder stringBuilder, int level) {
-    for (int i = 0; i < level; i++) {
+  private void indent(StringBuilder stringBuilder, int level, boolean lastParent, boolean lastElement) {
+    for (int i = 0; i < level - 1; i++) {
       stringBuilder.append("|  ");
     }
-    stringBuilder.append("+- ");
-  }
 
-  private void indentEnd(StringBuilder stringBuilder, int level) {
-    for (int i = 0; i < level; i++) {
-      stringBuilder.append("|  ");
+    if (level > 0) {
+      stringBuilder.append(lastParent ? "   " : "|  ");
     }
-    stringBuilder.append("\\- ");
+
+    if (lastElement) {
+      stringBuilder.append("\\- ");
+    } else {
+      stringBuilder.append("+- ");
+    }
   }
 }
