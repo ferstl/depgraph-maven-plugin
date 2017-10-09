@@ -1,11 +1,37 @@
 package com.github.ferstl.depgraph.graph.text;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.Test;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
 
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+
 public class TextGraphWriterTest {
+
+  @Test
+  public void rootWithOneChild() {
+    // arrange
+    TextGraphWriter writer = createTextGraphWriter(edge("A", "B"));
+
+    // act
+    StringBuilder result = new StringBuilder();
+    writer.write(result);
+
+    // assert
+    String expected = "node-A\n"
+        + "\\- node-B"
+        + "\n";
+    assertEquals(expected, result.toString());
+  }
+
+  @Test
+  public void multipleRoots() {
+
+  }
 
   @Test
   public void test() {
@@ -29,8 +55,22 @@ public class TextGraphWriterTest {
     System.out.println(stringBuilder);
   }
 
+  private TextGraphWriter createTextGraphWriter(Edge... edges) {
+    Set<Node<?>> nodes = new HashSet<>();
+    for (Edge edge : edges) {
+      nodes.add(node(edge.getFromNodeId()));
+      nodes.add(node(edge.getToNodeId()));
+    }
+
+    return new TextGraphWriter(nodes, asList(edges));
+  }
+
   private Node<?> node(String id) {
-    return new Node<>(id, "name-" + id, new Object());
+    return new Node<>(id, "node-" + id, new Object());
+  }
+
+  private Edge edge(String from, String to) {
+    return new Edge(from, to, "");
   }
 
   private Edge edge(String from, String to, String name) {
