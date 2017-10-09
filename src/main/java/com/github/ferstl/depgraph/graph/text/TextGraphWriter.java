@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
@@ -14,7 +13,7 @@ import com.github.ferstl.depgraph.graph.Node;
 class TextGraphWriter {
 
   private final Map<String, Node<?>> nodesById;
-  private final Map<String, List<Edge>> relations;
+  private final Map<String, Collection<Edge>> relations;
   private final Collection<String> roots;
 
   TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges) {
@@ -49,7 +48,7 @@ class TextGraphWriter {
   }
 
   private void writeChildren(StringBuilder stringBuilder, String parent, int level, boolean lastParent) {
-    List<Edge> edges = this.relations.get(parent);
+    Collection<Edge> edges = this.relations.get(parent);
     Iterator<Edge> edgeIterator = edges.iterator();
 
     while (edgeIterator.hasNext()) {
