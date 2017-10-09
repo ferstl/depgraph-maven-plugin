@@ -21,7 +21,7 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
     return graphStringBuilder.toString();
   }
 
-  static class TextGraphWriter {
+  private static class TextGraphWriter {
 
     private static final String INDENTATION_FOR_PARENT = "|  ";
     private static final String INDENTATION_FOR_LAST_PARENT = "   ";
@@ -32,31 +32,16 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
     private final Map<String, Collection<Edge>> relations;
     private final Collection<String> roots;
 
-    private boolean alreadyUsed;
-
     TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges) {
       this.nodesById = new HashMap<>();
       this.relations = new LinkedHashMap<>();
       this.roots = new LinkedHashSet<>();
-      this.alreadyUsed = false;
 
       initializeGraphData(nodes);
       initializeRootElements(edges);
     }
 
     void write(StringBuilder stringBuilder) {
-      if (this.alreadyUsed) {
-        throw new IllegalStateException("This writer has already been used.");
-      }
-
-      try {
-        writeInternal(stringBuilder);
-      } finally {
-        this.alreadyUsed = true;
-      }
-    }
-
-    private void writeInternal(StringBuilder stringBuilder) {
       Iterator<String> rootIterator = this.roots.iterator();
       while (rootIterator.hasNext()) {
         String root = rootIterator.next();
