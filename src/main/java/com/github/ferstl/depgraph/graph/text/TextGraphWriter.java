@@ -3,6 +3,7 @@ package com.github.ferstl.depgraph.graph.text;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -38,18 +39,22 @@ class TextGraphWriter {
   }
 
   void write(StringBuilder stringBuilder) {
-    for (String root : this.roots) {
+    Iterator<String> rootIterator = this.roots.iterator();
+    while (rootIterator.hasNext()) {
+      String root = rootIterator.next();
       Node<?> fromNode = this.nodesById.get(root);
       stringBuilder.append(fromNode.getNodeName()).append("\n");
-      writeChildren(stringBuilder, root, 0, false);
+      writeChildren(stringBuilder, root, 0, !rootIterator.hasNext());
     }
   }
 
   private void writeChildren(StringBuilder stringBuilder, String parent, int level, boolean lastParent) {
     List<Edge> edges = this.relations.get(parent);
-    for (int i = 0; i < edges.size(); i++) {
-      Edge edge = edges.get(i);
-      indent(stringBuilder, level, lastParent, i == edges.size() - 1);
+    Iterator<Edge> edgeIterator = edges.iterator();
+
+    while (edgeIterator.hasNext()) {
+      Edge edge = edgeIterator.next();
+      indent(stringBuilder, level, lastParent, !edgeIterator.hasNext());
 
       Node<?> childNode = this.nodesById.get(edge.getToNodeId());
       stringBuilder.append(childNode.getNodeName());
@@ -59,7 +64,7 @@ class TextGraphWriter {
       }
 
       stringBuilder.append("\n");
-      writeChildren(stringBuilder, childNode.getNodeId(), level + 1, i == edges.size() - 1);
+      writeChildren(stringBuilder, childNode.getNodeId(), level + 1, !edgeIterator.hasNext());
     }
 
     edges.clear();
