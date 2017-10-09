@@ -12,9 +12,15 @@ import com.github.ferstl.depgraph.graph.Node;
 
 class TextGraphWriter {
 
+  private static final String INDENTATION_FOR_PARENT = "|  ";
+  private static final String INDENTATION_FOR_LAST_PARENT = "   ";
+  private static final String ELEMENT_MARKER = "+- ";
+  private static final String LAST_ELEMENT_MARKER = "\\- ";
+
   private final Map<String, Node<?>> nodesById;
   private final Map<String, Collection<Edge>> relations;
   private final Collection<String> roots;
+
   private boolean alreadyUsed;
 
   TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges) {
@@ -92,18 +98,21 @@ class TextGraphWriter {
   }
 
   private void indent(StringBuilder stringBuilder, int level, boolean lastParent, boolean lastElement) {
+    // Indent up to the previous level
     for (int i = 0; i < level - 1; i++) {
-      stringBuilder.append("|  ");
+      stringBuilder.append(INDENTATION_FOR_PARENT);
     }
 
+    // Indent the last level depending on whether the parent is the last element in the tree
     if (level > 0) {
-      stringBuilder.append(lastParent ? "   " : "|  ");
+      stringBuilder.append(lastParent ? INDENTATION_FOR_LAST_PARENT : INDENTATION_FOR_PARENT);
     }
 
+    // Use different element markers depending on whether the element is the last one in the sub tree.
     if (lastElement) {
-      stringBuilder.append("\\- ");
+      stringBuilder.append(LAST_ELEMENT_MARKER);
     } else {
-      stringBuilder.append("+- ");
+      stringBuilder.append(ELEMENT_MARKER);
     }
   }
 }
