@@ -16,7 +16,16 @@
 package com.github.ferstl.depgraph;
 
 public enum GraphFormat {
-  DOT, GML, PUML, JSON;
+  DOT,
+  GML,
+  PUML,
+  JSON,
+  TEXT {
+    @Override
+    public String getFileExtension() {
+      return ".txt";
+    }
+  };
 
   public static GraphFormat forName(String name) {
     try {

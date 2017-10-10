@@ -82,7 +82,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   /**
    * If set to {@code true}, the graph will additionally contain conflicting dependencies. Note that the dependency
    * graph may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater
-   * or equal 3.0!
+   * or equal 3.0!<br/>
+   * Because of these possible inaccuracies the option {@link #showAllAttributesForJson} does not enable this flag.
    *
    * @since 1.0.0
    */
@@ -92,7 +93,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   /**
    * If set to {@code true}, the graph will additionally contain duplicate dependencies. Note that the dependency graph
    * may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater or
-   * equal 3.0!
+   * equal 3.0!<br/>
+   * Because of these possible inaccuracies the option {@link #showAllAttributesForJson} does not enable this flag.
    *
    * @since 1.0.0
    */
@@ -144,8 +146,6 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     if (showFullGraph()) {
       this.showGroupIds = true;
       this.showVersions = true;
-      this.showDuplicates = true;
-      this.showConflicts = true;
       this.showClassifiers = true;
       this.showTypes = true;
     }

@@ -34,5 +34,7 @@ public interface GraphStyleConfigurer {
 
   GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges);
 
+  GraphStyleConfigurer repeatTransitiveDependencies(boolean repeatTransitiveDependencies);
+
   GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder);
 }

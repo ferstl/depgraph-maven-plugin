@@ -53,6 +53,7 @@ import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.JsonGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.PumlGraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.TextGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.style.StyleConfiguration;
 import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.dependency.style.resource.ClasspathStyleResource;
@@ -118,7 +119,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private List<String> targetIncludes;
 
   /**
-   * Format of the graph, either &quot;dot&quot; (default) or &quot;gml&quot;.
+   * Format of the graph, either &quot;dot&quot; (default), &quot;gml&quot;, &quot;puml&quot;, &quot;json&quot; or &quot;text&quot;.
    *
    * @since 2.1.0
    */
@@ -126,15 +127,15 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private String graphFormat;
 
   /**
-   * If set to {@code true} (which is the default) <strong>and</strong> the graph format is JSON, the graph will show
+   * If set to {@code true} (which is the default) <strong>and</strong> the graph format is 'json', the graph will show
    * any information that is possible.
    * The idea behind this option is, that the consumer of the JSON data, for example a Javascript library, will do its
    * own filtering of the data.
    *
    * @since 2.3.0
    */
-  @Parameter(property = "showFullGraphForJson", defaultValue = "true")
-  private boolean showFullGraphForJson;
+  @Parameter(property = "showAllAttributesForJson", defaultValue = "true")
+  private boolean showAllAttributesForJson;
 
   /**
    * The path to the generated output file. A file extension matching the configured {@code graphFormat} will be
@@ -254,10 +255,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
     try {
       GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter, graphStyleConfigurer);
-      writeGraphFile(graphFactory.createGraph(this.project), graphFilePath);
+      String dependencyGraph = graphFactory.createGraph(this.project);
+      writeGraphFile(dependencyGraph, graphFilePath);
 
-      if (this.createImage && graphFormat == GraphFormat.DOT) {
+      if (graphFormat == GraphFormat.DOT && this.createImage) {
         createDotGraphImage(graphFilePath);
+      } else if (graphFormat == GraphFormat.TEXT) {
+        getLog().info("Dependency graph:\n" + dependencyGraph);
       }
 
     } catch (DependencyGraphException e) {
@@ -287,7 +291,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * @return {@code true} if the full graph should be shown, {@code false} else.
    */
   protected boolean showFullGraph() {
-    return GraphFormat.forName(this.graphFormat) == JSON && this.showFullGraphForJson;
+    return GraphFormat.forName(this.graphFormat) == JSON && this.showAllAttributesForJson;
   }
 
   private ArtifactFilter createGlobalArtifactFilter() {
@@ -329,6 +333,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
         return new PumlGraphStyleConfigurer();
       case JSON:
         return new JsonGraphStyleConfigurer();
+      case TEXT:
+        return new TextGraphStyleConfigurer();
       default:
         throw new IllegalArgumentException("Unsupported output format: " + graphFormat);
     }

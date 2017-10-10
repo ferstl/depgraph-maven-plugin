@@ -64,6 +64,61 @@ public class GraphFormatTest {
   }
 
   @Test
+  public void forNamePuml() {
+    // arrange
+    String name1 = "puml";
+    String name2 = "Puml";
+    String name3 = "PUML";
+
+    // act
+    GraphFormat result1 = GraphFormat.forName(name1);
+    GraphFormat result2 = GraphFormat.forName(name2);
+    GraphFormat result3 = GraphFormat.forName(name3);
+
+    // assert
+    assertSame(GraphFormat.PUML, result2);
+    assertSame(GraphFormat.PUML, result1);
+    assertSame(GraphFormat.PUML, result3);
+  }
+
+
+  @Test
+  public void forNameJson() {
+    // arrange
+    String name1 = "json";
+    String name2 = "Json";
+    String name3 = "JSON";
+
+    // act
+    GraphFormat result1 = GraphFormat.forName(name1);
+    GraphFormat result2 = GraphFormat.forName(name2);
+    GraphFormat result3 = GraphFormat.forName(name3);
+
+    // assert
+    assertSame(GraphFormat.JSON, result2);
+    assertSame(GraphFormat.JSON, result1);
+    assertSame(GraphFormat.JSON, result3);
+  }
+
+  @Test
+  public void forNameText() {
+    // arrange
+    String name1 = "text";
+    String name2 = "Text";
+    String name3 = "TEXT";
+
+    // act
+    GraphFormat result1 = GraphFormat.forName(name1);
+    GraphFormat result2 = GraphFormat.forName(name2);
+    GraphFormat result3 = GraphFormat.forName(name3);
+
+    // assert
+    assertSame(GraphFormat.TEXT, result2);
+    assertSame(GraphFormat.TEXT, result1);
+    assertSame(GraphFormat.TEXT, result3);
+  }
+
+  @Test
   public void forNameWithUnknownFormat() {
     // arrange
     this.expectedException.expect(IllegalArgumentException.class);
@@ -77,5 +132,8 @@ public class GraphFormatTest {
   public void getFileExtension() {
     assertEquals(".dot", GraphFormat.DOT.getFileExtension());
     assertEquals(".gml", GraphFormat.GML.getFileExtension());
+    assertEquals(".puml", GraphFormat.PUML.getFileExtension());
+    assertEquals(".json", GraphFormat.JSON.getFileExtension());
+    assertEquals(".txt", GraphFormat.TEXT.getFileExtension());
   }
 }

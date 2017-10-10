@@ -44,4 +44,10 @@ abstract class AbstractGraphStyleConfigurer implements GraphStyleConfigurer {
     this.showVersionOnEdges = showVersionOnEdges;
     return this;
   }
+
+  // Only relevant for the text graph. Don't do anything here.
+  @Override
+  public GraphStyleConfigurer repeatTransitiveDependencies(boolean repeatTransitiveDependencies) {
+    return this;
+  }
 }

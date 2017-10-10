@@ -41,6 +41,34 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "reduceEdges", defaultValue = "true")
   boolean reduceEdges;
 
+  /**
+   * If set to {@code true}, this option will repeat all transitive dependencies in the text graph.<br/>
+   * <strong>Example:</strong><br/>
+   * Suppose a dependency graph with one child node containing a transitive dependency and a second child node with a
+   * dependency to the first child node.</br>
+   * When this option is disabled, the graph will look like this:
+   * <pre>
+   *   root
+   *   +- child-1
+   *   |  \- child-1.1
+   *   +- child-2
+   *      \- child-1
+   * </pre>
+   * When this option is enabled, the graph will show the transitive dependencies of child-1 on child-2 as well:
+   * <pre>
+   *   root
+   *   +- child-1
+   *   |  \- child-1.1
+   *   +- child-2
+   *      \- child-1
+   *         \- child-1.1
+   * </pre>
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "repeatTransitiveDependenciesInTextGraph", defaultValue = "false")
+  boolean repeatTransitiveDependenciesInTextGraph;
+
   @Component
   MavenSession mavenSession;
 

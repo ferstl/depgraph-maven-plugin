@@ -153,6 +153,19 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  public void aggregatedText() throws Exception {
+    runTest("aggregate",
+        "-DgraphFormat=text",
+        "-DincludeParentProjects",
+        "-Dscope=compile",
+        "-DshowVersions");
+
+    assertFilesPresent(this.basedir, "target/dependency-graph.txt");
+
+    collectFile("target/dependency-graph.txt", "aggregated.txt");
+  }
+
+  @Test
   public void aggregatedByGroupId() throws Exception {
     runTest("aggregate-by-groupid");
 
