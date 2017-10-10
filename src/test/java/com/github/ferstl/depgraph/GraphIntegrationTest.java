@@ -209,6 +209,8 @@ public class GraphIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DgraphFormat=json")
+        .withCliOption("-DshowDuplicates")
+        .withCliOption("-DshowConflicts")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
