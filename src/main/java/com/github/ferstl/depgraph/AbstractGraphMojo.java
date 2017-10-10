@@ -47,7 +47,7 @@ import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
 import com.github.ferstl.depgraph.dependency.DependencyGraphException;
-import com.github.ferstl.depgraph.dependency.GmlGraphStyleConfigurer;
+import com.github.ferstl.depgraph.gml.GmlGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.JsonGraphStyleConfigurer;
