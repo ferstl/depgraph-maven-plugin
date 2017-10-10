@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.dependency.dot.style;
 
-/**
- * Utility class to abbreviate version strings.
- */
-public final class VersionAbbreviator {
+import java.io.IOException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.github.ferstl.depgraph.dependency.NodeResolution;
 
-  private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
-  private VersionAbbreviator() {
-    throw new AssertionError("Not instantiable");
+class NodeResolutionDeserializer extends JsonDeserializer<NodeResolution> {
+
+  @Override
+  public NodeResolution deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    String name = p.getText().replace('-', '_').toUpperCase();
+    return NodeResolution.valueOf(name);
   }
 
-  public static String abbreviateVersion(String version) {
-    if (version.endsWith(SNAPSHOT_SUFFIX)) {
-      return version.substring(0, version.length() - SNAPSHOT_SUFFIX.length()) + "-S.";
-    }
-
-    return version;
-  }
 }

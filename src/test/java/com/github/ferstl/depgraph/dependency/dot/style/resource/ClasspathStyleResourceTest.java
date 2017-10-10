@@ -13,24 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.dependency.dot.style.resource;
 
-/**
- * Utility class to abbreviate version strings.
- */
-public final class VersionAbbreviator {
+import org.junit.Test;
 
-  private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
+import static org.junit.Assert.assertEquals;
 
-  private VersionAbbreviator() {
-    throw new AssertionError("Not instantiable");
+public class ClasspathStyleResourceTest extends AbstractStyleResourceTest {
+
+  public ClasspathStyleResourceTest() {
+    super(
+        new ClasspathStyleResource("default-style.json", ClasspathStyleResourceTest.class.getClassLoader()),
+        new ClasspathStyleResource("does-not-exist", ClasspathStyleResourceTest.class.getClassLoader()));
   }
 
-  public static String abbreviateVersion(String version) {
-    if (version.endsWith(SNAPSHOT_SUFFIX)) {
-      return version.substring(0, version.length() - SNAPSHOT_SUFFIX.length()) + "-S.";
-    }
-
-    return version;
+  @Test
+  public void toStringTest() {
+    assertEquals("classpath:default-style.json", this.existingResource.toString());
   }
 }

@@ -13,24 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.dependency.dot.style.resource;
 
-/**
- * Utility class to abbreviate version strings.
- */
-public final class VersionAbbreviator {
+import java.io.IOException;
+import java.io.InputStream;
 
-  private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
+public interface StyleResource {
 
-  private VersionAbbreviator() {
-    throw new AssertionError("Not instantiable");
-  }
+  boolean exists();
 
-  public static String abbreviateVersion(String version) {
-    if (version.endsWith(SNAPSHOT_SUFFIX)) {
-      return version.substring(0, version.length() - SNAPSHOT_SUFFIX.length()) + "-S.";
-    }
-
-    return version;
-  }
+  InputStream openStream() throws IOException;
 }

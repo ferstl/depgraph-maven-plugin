@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.dependency.dot.style;
 
-/**
- * Utility class to abbreviate version strings.
- */
-public final class VersionAbbreviator {
+import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
 
-  private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
+class Polygon extends AbstractNode {
 
-  private VersionAbbreviator() {
-    throw new AssertionError("Not instantiable");
+  private int sides;
+
+  Polygon() {
+    super("polygon");
   }
 
-  public static String abbreviateVersion(String version) {
-    if (version.endsWith(SNAPSHOT_SUFFIX)) {
-      return version.substring(0, version.length() - SNAPSHOT_SUFFIX.length()) + "-S.";
-    }
-
-    return version;
+  @Override
+  DotAttributeBuilder createAttributes() {
+    return super.createAttributes().addAttribute("sides", this.sides > 0 ? Integer.toString(this.sides) : null);
   }
+
 }

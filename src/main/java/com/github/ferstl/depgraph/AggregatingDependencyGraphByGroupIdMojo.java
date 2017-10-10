@@ -26,7 +26,7 @@ import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
-import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
+import com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**

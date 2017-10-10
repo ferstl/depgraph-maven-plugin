@@ -17,8 +17,8 @@ package com.github.ferstl.depgraph.graph.puml;
 
 import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
-import com.github.ferstl.depgraph.dependency.PumlEdgeInfo;
-import com.github.ferstl.depgraph.dependency.PumlNodeInfo;
+import com.github.ferstl.depgraph.dependency.puml.PumlEdgeInfo;
+import com.github.ferstl.depgraph.dependency.puml.PumlNodeInfo;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
