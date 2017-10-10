@@ -64,7 +64,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
 import static com.github.ferstl.depgraph.GraphFormat.JSON;
-import static com.github.ferstl.depgraph.GraphFormat.TEXT;
 
 /**
  * Abstract mojo to create all possible kinds of graphs in the dot format. Graphs are created with instances of the
@@ -137,15 +136,6 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    */
   @Parameter(property = "showAllAttributesForJson", defaultValue = "true")
   private boolean showAllAttributesForJson;
-
-  /**
-   * If set to {@code true} (which is the default) <strong>and</strong> the graph format is 'text', the graph will show
-   * any information that is possible.
-   *
-   * @since 2.3.0
-   */
-  @Parameter(property = "showAllAttributesForText", defaultValue = "true")
-  private boolean showAllAttributesForText;
 
   /**
    * The path to the generated output file. A file extension matching the configured {@code graphFormat} will be
@@ -301,10 +291,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * @return {@code true} if the full graph should be shown, {@code false} else.
    */
   protected boolean showFullGraph() {
-    GraphFormat graphFormat = GraphFormat.forName(this.graphFormat);
-
-    return (graphFormat == JSON && this.showAllAttributesForJson)
-        || (graphFormat == TEXT && this.showAllAttributesForText);
+    return GraphFormat.forName(this.graphFormat) == JSON && this.showAllAttributesForJson;
   }
 
   private ArtifactFilter createGlobalArtifactFilter() {
