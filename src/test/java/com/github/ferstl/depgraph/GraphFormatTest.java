@@ -132,5 +132,8 @@ public class GraphFormatTest {
   public void getFileExtension() {
     assertEquals(".dot", GraphFormat.DOT.getFileExtension());
     assertEquals(".gml", GraphFormat.GML.getFileExtension());
+    assertEquals(".puml", GraphFormat.PUML.getFileExtension());
+    assertEquals(".json", GraphFormat.JSON.getFileExtension());
+    assertEquals(".txt", GraphFormat.TEXT.getFileExtension());
   }
 }
