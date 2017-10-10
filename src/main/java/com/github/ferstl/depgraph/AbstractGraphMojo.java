@@ -130,11 +130,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   /**
    * If set to {@code true} (which is the default) <strong>and</strong> the graph format is 'json', the graph will show
    * any information that is possible.
+   * The idea behind this option is, that the consumer of the JSON data, for example a Javascript library, will do its
+   * own filtering of the data.
    *
    * @since 2.3.0
    */
-  @Parameter(property = "showFullGraphForJson", defaultValue = "true")
-  private boolean showFullGraphForJson;
+  @Parameter(property = "showAllAttributesForJson", defaultValue = "true")
+  private boolean showAllAttributesForJson;
 
   /**
    * If set to {@code true} (which is the default) <strong>and</strong> the graph format is 'text', the graph will show
@@ -142,8 +144,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    *
    * @since 2.3.0
    */
-  @Parameter(property = "showFullGraphForText", defaultValue = "true")
-  private boolean showFullGraphForText;
+  @Parameter(property = "showAllAttributesForText", defaultValue = "true")
+  private boolean showAllAttributesForText;
 
   /**
    * The path to the generated output file. A file extension matching the configured {@code graphFormat} will be
@@ -301,8 +303,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   protected boolean showFullGraph() {
     GraphFormat graphFormat = GraphFormat.forName(this.graphFormat);
 
-    return (graphFormat == JSON && this.showFullGraphForJson)
-        || (graphFormat == TEXT && this.showFullGraphForText);
+    return (graphFormat == JSON && this.showAllAttributesForJson)
+        || (graphFormat == TEXT && this.showAllAttributesForText);
   }
 
   private ArtifactFilter createGlobalArtifactFilter() {
