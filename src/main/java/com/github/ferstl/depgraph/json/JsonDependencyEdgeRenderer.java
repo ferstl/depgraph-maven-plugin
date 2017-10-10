@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.json;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;

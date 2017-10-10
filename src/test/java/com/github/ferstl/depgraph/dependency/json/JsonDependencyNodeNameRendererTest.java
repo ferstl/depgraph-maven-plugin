@@ -1,6 +1,9 @@
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.dependency.json;
 
+import com.github.ferstl.depgraph.dependency.AbstractDependencyNodeNameRendererTest;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
+import com.github.ferstl.depgraph.json.JsonDependencyNodeNameRenderer;
 
 public class JsonDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
