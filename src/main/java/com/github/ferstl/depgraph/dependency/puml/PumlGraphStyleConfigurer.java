@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.gml;
+package com.github.ferstl.depgraph.dependency.puml;
 
 import com.github.ferstl.depgraph.dependency.AbstractGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
-import com.github.ferstl.depgraph.graph.EdgeRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-import com.github.ferstl.depgraph.graph.NodeRenderer;
-import com.github.ferstl.depgraph.graph.gml.GmlGraphFormatter;
+import com.github.ferstl.depgraph.graph.puml.PumlGraphFormatter;
 
-public class GmlGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
+public class PumlGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
 
   @Override
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
-    NodeRenderer<DependencyNode> nodeNameRenderer = new GmlDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes);
-    EdgeRenderer<DependencyNode> edgeRenderer = new GmlDependencyEdgeRenderer(this.showVersionOnEdges);
     return graphBuilder
-        .useNodeNameRenderer(nodeNameRenderer)
-        .useEdgeRenderer(edgeRenderer)
-        .graphFormatter(new GmlGraphFormatter());
+        .useNodeNameRenderer(new PumlDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes))
+        .useEdgeRenderer(new PumlDependencyEgdeRenderer())
+        .graphFormatter(new PumlGraphFormatter());
   }
+
 }

@@ -1,4 +1,4 @@
-package com.github.ferstl.depgraph.text;
+package com.github.ferstl.depgraph.dependency.text;
 
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dependency.DependencyNode;

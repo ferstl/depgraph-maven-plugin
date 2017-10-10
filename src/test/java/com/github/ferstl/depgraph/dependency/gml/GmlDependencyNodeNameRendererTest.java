@@ -17,7 +17,6 @@ package com.github.ferstl.depgraph.dependency.gml;
 
 import com.github.ferstl.depgraph.dependency.AbstractDependencyNodeNameRendererTest;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
-import com.github.ferstl.depgraph.gml.GmlDependencyNodeNameRenderer;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 
 public class GmlDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {

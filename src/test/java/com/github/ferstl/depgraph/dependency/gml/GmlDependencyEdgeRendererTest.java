@@ -17,7 +17,6 @@ package com.github.ferstl.depgraph.dependency.gml;
 
 import com.github.ferstl.depgraph.dependency.AbstractDependencyEdgeRendererTest;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
-import com.github.ferstl.depgraph.gml.GmlDependencyEdgeRenderer;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
 public class GmlDependencyEdgeRendererTest extends AbstractDependencyEdgeRendererTest {

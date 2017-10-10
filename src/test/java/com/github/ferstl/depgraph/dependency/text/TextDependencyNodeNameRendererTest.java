@@ -3,7 +3,6 @@ package com.github.ferstl.depgraph.dependency.text;
 import com.github.ferstl.depgraph.dependency.AbstractDependencyNodeNameRendererTest;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
-import com.github.ferstl.depgraph.text.TextDependencyNodeNameRenderer;
 
 public class TextDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 

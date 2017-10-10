@@ -1,4 +1,4 @@
-package com.github.ferstl.depgraph.text;
+package com.github.ferstl.depgraph.dependency.text;
 
 import com.github.ferstl.depgraph.dependency.AbstractGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.DependencyNode;

@@ -17,7 +17,6 @@ package com.github.ferstl.depgraph.dependency.gml;
 
 import com.github.ferstl.depgraph.dependency.AbstractGraphStyleConfigurerTest;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
-import com.github.ferstl.depgraph.gml.GmlGraphStyleConfigurer;
 
 public class GmlGraphStyleConfigurerTest extends AbstractGraphStyleConfigurerTest {
 

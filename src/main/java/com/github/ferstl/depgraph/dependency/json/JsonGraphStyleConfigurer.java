@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.puml;
+package com.github.ferstl.depgraph.dependency.json;
 
 import com.github.ferstl.depgraph.dependency.AbstractGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-import com.github.ferstl.depgraph.graph.puml.PumlGraphFormatter;
+import com.github.ferstl.depgraph.graph.json.JsonGraphFormatter;
 
-public class PumlGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
+public class JsonGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
 
   @Override
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
     return graphBuilder
-        .useNodeNameRenderer(new PumlDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes))
-        .useEdgeRenderer(new PumlDependencyEgdeRenderer())
-        .graphFormatter(new PumlGraphFormatter());
+        .useNodeNameRenderer(new JsonDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes))
+        .useEdgeRenderer(new JsonDependencyEdgeRenderer(this.showVersionOnEdges))
+        .graphFormatter(new JsonGraphFormatter());
   }
-
 }

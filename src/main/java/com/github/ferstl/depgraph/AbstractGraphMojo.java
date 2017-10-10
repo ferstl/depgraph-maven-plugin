@@ -55,10 +55,10 @@ import com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleReso
 import com.github.ferstl.depgraph.dependency.dot.style.resource.ClasspathStyleResource;
 import com.github.ferstl.depgraph.dependency.dot.style.resource.FileSystemStyleResource;
 import com.github.ferstl.depgraph.dependency.dot.style.resource.StyleResource;
-import com.github.ferstl.depgraph.gml.GmlGraphStyleConfigurer;
-import com.github.ferstl.depgraph.json.JsonGraphStyleConfigurer;
-import com.github.ferstl.depgraph.puml.PumlGraphStyleConfigurer;
-import com.github.ferstl.depgraph.text.TextGraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.gml.GmlGraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.json.JsonGraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.puml.PumlGraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.text.TextGraphStyleConfigurer;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;

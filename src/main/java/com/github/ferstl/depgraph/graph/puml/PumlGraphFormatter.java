@@ -17,11 +17,11 @@ package com.github.ferstl.depgraph.graph.puml;
 
 import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
+import com.github.ferstl.depgraph.dependency.puml.PumlEdgeInfo;
+import com.github.ferstl.depgraph.dependency.puml.PumlNodeInfo;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
-import com.github.ferstl.depgraph.puml.PumlEdgeInfo;
-import com.github.ferstl.depgraph.puml.PumlNodeInfo;
 
 /**
  * Graph formatter for <a href="PlantUML">http://plantuml.com/component-diagram</a> diagram.
