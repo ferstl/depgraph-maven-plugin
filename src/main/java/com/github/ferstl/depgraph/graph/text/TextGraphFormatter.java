@@ -12,9 +12,15 @@ import com.github.ferstl.depgraph.graph.Node;
 
 public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.GraphFormatter {
 
+  private final boolean repeatTransitiveDependencies;
+
+  public TextGraphFormatter(boolean repeatTransitiveDependencies) {
+    this.repeatTransitiveDependencies = repeatTransitiveDependencies;
+  }
+
   @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
-    TextGraphWriter writer = new TextGraphWriter(nodes, edges);
+    TextGraphWriter writer = new TextGraphWriter(nodes, edges, this.repeatTransitiveDependencies);
     StringBuilder graphStringBuilder = new StringBuilder();
     writer.write(graphStringBuilder);
 
@@ -31,8 +37,10 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
     private final Map<String, Node<?>> nodesById;
     private final Map<String, Collection<Edge>> relations;
     private final Collection<String> roots;
+    private final boolean repeatTransitiveDependencies;
 
-    TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges) {
+    TextGraphWriter(Collection<Node<?>> nodes, Collection<Edge> edges, boolean repeatTransitiveDependencies) {
+      this.repeatTransitiveDependencies = repeatTransitiveDependencies;
       this.nodesById = new LinkedHashMap<>();
       this.relations = new LinkedHashMap<>();
       this.roots = new LinkedHashSet<>();
@@ -91,8 +99,9 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
         lastParents.remove(lastParents.size() - 1);
       }
 
-      // Don't repeat already written edges
-      edges.clear();
+      if (!this.repeatTransitiveDependencies) {
+        edges.clear();
+      }
     }
 
     private void indent(StringBuilder stringBuilder, List<Boolean> lastParents, boolean lastElement) {

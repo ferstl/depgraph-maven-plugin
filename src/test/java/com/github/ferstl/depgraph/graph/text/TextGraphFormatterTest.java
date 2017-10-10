@@ -87,14 +87,56 @@ public class TextGraphFormatterTest {
     assertEquals(expected, result);
   }
 
+  @Test
+  public void unrepeatedTransitiveDependencies() {
+    // arrange + act
+    String result = createTextGraph(
+        edge("root", "child-1"),
+        edge("root", "child-2"),
+        edge("child-1", "child-1.1"),
+        edge("child-2", "child-1"));
+
+    // assert
+    String expected = "root\n"
+        + "+- child-1\n"
+        + "|  \\- child-1.1\n"
+        + "\\- child-2\n"
+        + "   \\- child-1\n";
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void repeatedTransitiveDependencies() {
+    // arrange + act
+    String result = createTextGraph(
+        true,
+        edge("root", "child-1"),
+        edge("root", "child-2"),
+        edge("child-1", "child-1.1"),
+        edge("child-2", "child-1"));
+
+    // assert
+    String expected = "root\n"
+        + "+- child-1\n"
+        + "|  \\- child-1.1\n"
+        + "\\- child-2\n"
+        + "   \\- child-1\n"
+        + "      \\- child-1.1\n";
+    assertEquals(expected, result);
+  }
+
   private String createTextGraph(Edge... edges) {
+    return createTextGraph(false, edges);
+  }
+
+  private String createTextGraph(boolean repeatTransitiveDependencies, Edge... edges) {
     Set<Node<?>> nodes = new LinkedHashSet<>();
     for (Edge edge : edges) {
       nodes.add(node(edge.getFromNodeId()));
       nodes.add(node(edge.getToNodeId()));
     }
 
-    return new TextGraphFormatter().format("", nodes, asList(edges));
+    return new TextGraphFormatter(repeatTransitiveDependencies).format("", nodes, asList(edges));
   }
 
   private Node<?> node(String id) {
