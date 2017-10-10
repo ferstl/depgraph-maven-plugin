@@ -62,6 +62,20 @@ public class TextGraphFormatterTest {
   }
 
   @Test
+  public void namedEdge() {
+    // arrange + act
+    String result = createTextGraph(
+        edge("root", "child-1", "description"),
+        edge("root", "child-2"));
+
+    // assert
+    String expected = "root\n"
+        + "+- child-1 (description)\n"
+        + "\\- child-2\n";
+    assertEquals(expected, result);
+  }
+
+  @Test
   public void multipleRoots() {
     // arrange + act
     String result = createTextGraph(
