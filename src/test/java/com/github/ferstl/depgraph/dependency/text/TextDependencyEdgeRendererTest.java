@@ -1,6 +1,9 @@
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.dependency.text;
 
+import com.github.ferstl.depgraph.dependency.AbstractDependencyEdgeRendererTest;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
+import com.github.ferstl.depgraph.text.TextDependencyEdgeRenderer;
 
 public class TextDependencyEdgeRendererTest extends AbstractDependencyEdgeRendererTest {
 

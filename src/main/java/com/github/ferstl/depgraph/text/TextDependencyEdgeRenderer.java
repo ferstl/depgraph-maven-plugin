@@ -1,5 +1,7 @@
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.text;
 
+import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
 public class TextDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
