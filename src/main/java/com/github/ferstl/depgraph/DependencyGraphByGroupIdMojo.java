@@ -27,7 +27,7 @@ import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
-import com.github.ferstl.depgraph.dependency.style.resource.BuiltInStyleResource;
+import com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static java.util.EnumSet.allOf;
