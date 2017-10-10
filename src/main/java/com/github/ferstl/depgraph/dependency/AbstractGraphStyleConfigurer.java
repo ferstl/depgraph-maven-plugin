@@ -1,13 +1,13 @@
 package com.github.ferstl.depgraph.dependency;
 
-abstract class AbstractGraphStyleConfigurer implements GraphStyleConfigurer {
+public abstract class AbstractGraphStyleConfigurer implements GraphStyleConfigurer {
 
-  boolean showGroupId;
-  boolean showArtifactId;
-  boolean showVersionsOnNodes;
-  boolean showTypes;
-  boolean showClassifiers;
-  boolean showVersionOnEdges;
+  protected boolean showGroupId;
+  protected boolean showArtifactId;
+  protected boolean showVersionsOnNodes;
+  protected boolean showTypes;
+  protected boolean showClassifiers;
+  protected boolean showVersionOnEdges;
 
   @Override
   public GraphStyleConfigurer showGroupIds(boolean showGroupId) {
