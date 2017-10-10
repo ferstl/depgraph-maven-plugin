@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.dependency.puml;
 
+import com.github.ferstl.depgraph.dependency.AbstractDependencyNodeNameRendererTest;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
+import com.github.ferstl.depgraph.puml.PumlDependencyNodeNameRenderer;
 
 public class PumlDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 

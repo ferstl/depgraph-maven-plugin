@@ -49,7 +49,6 @@ import org.codehaus.plexus.util.cli.Commandline;
 import com.github.ferstl.depgraph.dependency.DependencyGraphException;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
-import com.github.ferstl.depgraph.dependency.PumlGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.TextGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.dot.DotGraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.dot.style.StyleConfiguration;
@@ -59,6 +58,7 @@ import com.github.ferstl.depgraph.dependency.dot.style.resource.FileSystemStyleR
 import com.github.ferstl.depgraph.dependency.dot.style.resource.StyleResource;
 import com.github.ferstl.depgraph.gml.GmlGraphStyleConfigurer;
 import com.github.ferstl.depgraph.json.JsonGraphStyleConfigurer;
+import com.github.ferstl.depgraph.puml.PumlGraphStyleConfigurer;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;

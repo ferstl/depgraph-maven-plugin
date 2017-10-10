@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.depgraph.dependency;
+package com.github.ferstl.depgraph.dependency.puml;
 
 import org.junit.Test;
+import com.github.ferstl.depgraph.dependency.DependencyNode;
+import com.github.ferstl.depgraph.dependency.DependencyNodeUtil;
+import com.github.ferstl.depgraph.puml.PumlDependencyEgdeRenderer;
 
 import static org.junit.Assert.assertEquals;
 
