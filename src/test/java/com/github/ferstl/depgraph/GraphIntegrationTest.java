@@ -178,6 +178,31 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void transitiveIncludes() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=text")
+        .withCliOption("-DtransitiveIncludes=com.mysema.*:*")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.txt",
+        "module-2/target/dependency-graph.txt",
+        "sub-parent/module-3/target/dependency-graph.txt",
+        "target/dependency-graph.txt",
+        "sub-parent/target/dependency-graph.txt");
+
+    assertFileContents(basedir, "expectations/graph_transitive-includes_parent.txt", "target/dependency-graph.txt");
+    assertFileContents(basedir, "expectations/graph_transitive-includes_module-1.txt", "module-1/target/dependency-graph.txt");
+    assertFileContents(basedir, "expectations/graph_transitive-includes_module-2.txt", "module-2/target/dependency-graph.txt");
+    assertFileContents(basedir, "expectations/graph_transitive-includes_sub-parent.txt", "sub-parent/target/dependency-graph.txt");
+    assertFileContents(basedir, "expectations/graph_transitive-includes_module-3.txt", "sub-parent/module-3/target/dependency-graph.txt");
+  }
+
+  @Test
   public void graphInGml() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime

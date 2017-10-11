@@ -1,0 +1,6 @@
+module-2:compile
++- module-1:compile
++- guava:compile
++- commons-codec:compile
++- commons-lang3:compile
+\- junit:test
