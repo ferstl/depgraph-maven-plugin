@@ -203,6 +203,22 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void transitiveExcludes() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=text")
+        .withCliOption("-DshowGroupIds")
+        .withCliOption("-DtransitiveExcludes=com.google.*:*")
+        .execute("clean", "package", "depgraph:aggregate");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.txt");
+
+    assertFileContents(basedir, "expectations/aggregate_transitive-excludes.txt", "target/dependency-graph.txt");
+  }
+
+  @Test
   public void graphInGml() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
