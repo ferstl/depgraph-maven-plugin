@@ -219,6 +219,23 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void transitiveAndTargetFiltering() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=text")
+        .withCliOption("-DshowGroupIds")
+        .withCliOption("-DtargetIncludes=com.mysema.*:*")
+        .withCliOption("-DtransitiveExcludes=com.mysema.*:*")
+        .execute("clean", "package", "depgraph:aggregate");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.txt");
+
+    assertFileContents(basedir, "expectations/aggregate_transitive-and-target-filtering.txt", "target/dependency-graph.txt");
+  }
+
+  @Test
   public void graphInGml() throws Exception {
     File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
     MavenExecutionResult result = this.mavenRuntime
