@@ -50,7 +50,7 @@ public class MavenGraphAdapterTest {
   private MavenProject mavenProject;
   private GraphBuilder<DependencyNode> graphBuilder;
   private ArtifactFilter globalFilter;
-  private ArtifactFilter transitiveFilter;
+  private ArtifactFilter transitiveIncludeExcludeFilter;
   private ArtifactFilter targetFilter;
   private ArtifactRepository artifactRepository;
 
@@ -62,7 +62,7 @@ public class MavenGraphAdapterTest {
   public void before() throws Exception {
     this.mavenProject = new MavenProject();
     this.globalFilter = mock(ArtifactFilter.class);
-    this.transitiveFilter = mock(ArtifactFilter.class);
+    this.transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
     this.targetFilter = mock(ArtifactFilter.class);
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 
@@ -74,8 +74,8 @@ public class MavenGraphAdapterTest {
 
 
     this.artifactRepository = mock(ArtifactRepository.class);
-    this.graphAdapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.transitiveFilter, this.targetFilter, false);
-    this.treeAdapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.transitiveFilter, this.targetFilter, allOf(NodeResolution.class));
+    this.graphAdapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.transitiveIncludeExcludeFilter, this.targetFilter, false);
+    this.treeAdapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.transitiveIncludeExcludeFilter, this.targetFilter, allOf(NodeResolution.class));
   }
 
   @Test
