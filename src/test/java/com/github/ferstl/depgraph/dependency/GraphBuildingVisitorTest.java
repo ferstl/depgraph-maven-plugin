@@ -109,7 +109,7 @@ public class GraphBuildingVisitorTest {
 
     // Don't process any further children of child2
     assertFalse(visitor.visit(child2));
-    assertFalse(visitor.endVisit(child2));
+    assertTrue(visitor.endVisit(child2));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{

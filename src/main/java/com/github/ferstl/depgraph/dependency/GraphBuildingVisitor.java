@@ -100,7 +100,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
   private boolean internalEndVisit(DependencyNode node) {
     if (!isIncluded(node)) {
-      return false;
+      return true;
     }
 
     this.nodeStack.pop();
@@ -127,7 +127,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
   private boolean isIncluded(DependencyNode node) {
     Artifact artifact = node.getArtifact();
-    
+
     return this.globalFilter.include(artifact)
         && this.transitiveFilter.include(artifact)
         && this.includedResolutions.contains(node.getResolution());
