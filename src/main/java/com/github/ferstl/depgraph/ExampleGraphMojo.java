@@ -42,7 +42,7 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 public class ExampleGraphMojo extends DependencyGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
     GraphBuilder<DependencyNode> graphBuilder = createGraphBuilder(graphStyleConfigurer);
     return new ExampleGraphFactory(graphBuilder, globalFilter, targetFilter);
   }

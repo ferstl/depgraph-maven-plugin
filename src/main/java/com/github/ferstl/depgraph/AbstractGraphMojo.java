@@ -265,13 +265,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   public final void execute() throws MojoExecutionException, MojoFailureException {
     GraphFormat graphFormat = GraphFormat.forName(this.graphFormat);
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
-    ArtifactFilter transitiveFilter = createTransitiveArtifactFilter();
+    ArtifactFilter transitiveIncludeExcludeFilter = createTransitiveIncludeExcludeFilter();
     ArtifactFilter targetFilter = createTargetArtifactFilter();
     GraphStyleConfigurer graphStyleConfigurer = createGraphStyleConfigurer(graphFormat);
     Path graphFilePath = createGraphFilePath(graphFormat);
 
     try {
-      GraphFactory graphFactory = createGraphFactory(globalFilter, transitiveFilter, targetFilter, graphStyleConfigurer);
+      GraphFactory graphFactory = createGraphFactory(globalFilter, transitiveIncludeExcludeFilter, targetFilter, graphStyleConfigurer);
       String dependencyGraph = graphFactory.createGraph(this.project);
       writeGraphFile(dependencyGraph, graphFilePath);
 
@@ -288,7 +288,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer);
+  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer);
 
   /**
    * Override this method to configure additional style resources. It is recommendet to call
@@ -329,7 +329,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     return filter;
   }
 
-  private ArtifactFilter createTransitiveArtifactFilter() {
+  private ArtifactFilter createTransitiveIncludeExcludeFilter() {
     AndArtifactFilter filter = new AndArtifactFilter();
 
     if (!this.transitiveIncludes.isEmpty()) {
