@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
@@ -61,6 +62,8 @@ public class MavenGraphAdapterTest {
   @Before
   public void before() throws Exception {
     this.mavenProject = new MavenProject();
+    Artifact projectArtifact = mock(Artifact.class);
+    this.mavenProject.setArtifact(projectArtifact);
     this.globalFilter = mock(ArtifactFilter.class);
     this.transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
     this.targetFilter = mock(ArtifactFilter.class);

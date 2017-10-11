@@ -16,7 +16,6 @@
 package com.github.ferstl.depgraph.dependency;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -31,6 +30,7 @@ import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
+import static java.util.Collections.singletonList;
 import static java.util.EnumSet.allOf;
 
 /**
@@ -67,14 +67,15 @@ public final class MavenGraphAdapter {
   }
 
   public void buildDependencyGraph(MavenProject project, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) {
+    ArtifactFilter transitiveDependencyFilter = createTransitiveDependencyFilter(project);
     if (this.dependencyGraphBuilder != null) {
-      createGraph(project, globalFilter, graphBuilder);
+      createGraph(project, globalFilter, transitiveDependencyFilter, graphBuilder);
     } else {
-      createTree(project, globalFilter, graphBuilder);
+      createTree(project, globalFilter, transitiveDependencyFilter, graphBuilder);
     }
   }
 
-  private void createGraph(MavenProject project, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) throws DependencyGraphException {
+  private void createGraph(MavenProject project, ArtifactFilter globalFilter, ArtifactFilter transitiveDependencyFilter, GraphBuilder<DependencyNode> graphBuilder) throws DependencyGraphException {
     org.apache.maven.shared.dependency.graph.DependencyNode root;
     try {
       root = this.dependencyGraphBuilder.buildDependencyGraph(project, globalFilter);
@@ -82,11 +83,11 @@ public final class MavenGraphAdapter {
       throw new DependencyGraphException(e);
     }
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, this.targetFilter, this.omitReachablePaths);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, transitiveDependencyFilter, this.targetFilter, this.omitReachablePaths);
     root.accept(visitor);
   }
 
-  private void createTree(MavenProject project, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) throws DependencyGraphException {
+  private void createTree(MavenProject project, ArtifactFilter globalFilter, ArtifactFilter transitiveDependencyFilter, GraphBuilder<DependencyNode> graphBuilder) throws DependencyGraphException {
     org.apache.maven.shared.dependency.tree.DependencyNode root;
     try {
       root = this.dependencyTreeBuilder.buildDependencyTree(project, this.artifactRepository, globalFilter);
@@ -95,19 +96,21 @@ public final class MavenGraphAdapter {
     }
 
     // Due to MNG-3236, we need to filter the artifacts on our own.
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, globalFilter, this.targetFilter, this.includedResolutions);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, globalFilter, transitiveDependencyFilter, this.targetFilter, this.includedResolutions);
     root.accept(visitor);
   }
 
-  private ArtifactFilter createTransitiveDependencyFilter(Collection<Dependency> directDependencies) {
-    List<String> dependencyKeys = new ArrayList<>(directDependencies.size());
-    for (Dependency dependency : directDependencies) {
+  private ArtifactFilter createTransitiveDependencyFilter(MavenProject project) {
+    List<String> dependencyKeys = new ArrayList<>(project.getDependencies().size());
+    for (Dependency dependency : project.getDependencies()) {
       dependencyKeys.add(dependency.getManagementKey());
     }
 
+    // Matches direct dependencies or the configured transitive dependencies or the project itself
     OrArtifactFilter artifactFilter = new OrArtifactFilter();
     artifactFilter.add(this.transitiveIncludeExcludeFilter);
     artifactFilter.add(new StrictPatternIncludesArtifactFilter(dependencyKeys));
+    artifactFilter.add(new StrictPatternIncludesArtifactFilter(singletonList(project.getArtifact().toString())));
 
     return artifactFilter;
   }

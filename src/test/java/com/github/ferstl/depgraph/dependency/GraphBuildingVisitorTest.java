@@ -39,6 +39,7 @@ public class GraphBuildingVisitorTest {
 
   private GraphBuilder<DependencyNode> graphBuilder;
   private ArtifactFilter globalFilter;
+  private ArtifactFilter transitiveFilter;
   private ArtifactFilter targetFilter;
   private EnumSet<NodeResolution> includedResolutions;
 
@@ -48,6 +49,9 @@ public class GraphBuildingVisitorTest {
 
     this.globalFilter = mock(ArtifactFilter.class);
     when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
+
+    this.transitiveFilter = mock(ArtifactFilter.class);
+    when(this.transitiveFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     // this is the same as an empty list of target dependencies
     this.targetFilter = mock(ArtifactFilter.class);
@@ -68,7 +72,7 @@ public class GraphBuildingVisitorTest {
     org.apache.maven.shared.dependency.graph.DependencyNode child = createGraphNode("child");
     org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.transitiveFilter, this.targetFilter, false);
     assertTrue(visitor.visit(parent));
     assertTrue(visitor.visit(child));
     assertTrue(visitor.endVisit(child));
@@ -98,7 +102,7 @@ public class GraphBuildingVisitorTest {
 
     when(this.globalFilter.include(child2.getArtifact())).thenReturn(false);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.targetFilter, this.includedResolutions);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions);
     assertTrue(visitor.visit(parent));
     assertTrue(visitor.visit(child1));
     assertTrue(visitor.endVisit(child1));
@@ -132,7 +136,7 @@ public class GraphBuildingVisitorTest {
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(false);
     when(this.targetFilter.include(child2.getArtifact())).thenReturn(true);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.transitiveFilter, this.targetFilter, false);
     assertTrue(visitor.visit(parent));
 
     assertTrue(visitor.visit(child1));
@@ -172,7 +176,7 @@ public class GraphBuildingVisitorTest {
     when(this.targetFilter.include(child3.getArtifact())).thenReturn(true);
     when(this.targetFilter.include(child4.getArtifact())).thenReturn(true);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, false);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.transitiveFilter, this.targetFilter, false);
     assertTrue(visitor.visit(parent));
 
     assertTrue(visitor.visit(child1));
@@ -229,7 +233,7 @@ public class GraphBuildingVisitorTest {
     org.apache.maven.shared.dependency.graph.DependencyNode nodeB = createGraphNode("node-b", nodeD, nodeTest);
     org.apache.maven.shared.dependency.graph.DependencyNode nodeA = createGraphNode("node-a", nodeB, nodeC, nodeD, nodeTest);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.targetFilter, true);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.transitiveFilter, this.targetFilter, true);
 
     assertTrue(visitor.visit(nodeA));
 
