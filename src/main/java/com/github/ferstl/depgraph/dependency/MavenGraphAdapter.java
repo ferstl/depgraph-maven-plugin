@@ -15,9 +15,11 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import java.util.List;
 import java.util.Set;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
 import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
@@ -39,7 +41,7 @@ public final class MavenGraphAdapter {
   private final boolean omitReachablePaths;
   private final Set<NodeResolution> includedResolutions;
 
-  public MavenGraphAdapter(DependencyGraphBuilder builder, ArtifactFilter targetFilter, boolean omitReachablePaths) {
+  public MavenGraphAdapter(DependencyGraphBuilder builder, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, boolean omitReachablePaths) {
     this.dependencyGraphBuilder = builder;
     this.targetFilter = targetFilter;
     this.omitReachablePaths = omitReachablePaths;
@@ -48,7 +50,7 @@ public final class MavenGraphAdapter {
     this.artifactRepository = null;
   }
 
-  public MavenGraphAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
+  public MavenGraphAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.dependencyTreeBuilder = builder;
     this.artifactRepository = artifactRepository;
     this.targetFilter = targetFilter;
@@ -66,6 +68,11 @@ public final class MavenGraphAdapter {
   }
 
   private void createGraph(MavenProject project, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) throws DependencyGraphException {
+    List<Dependency> dependencies = project.getDependencies();
+    //
+
+    ArtifactFilter transitiveFilter = null;
+
     org.apache.maven.shared.dependency.graph.DependencyNode root;
     try {
       root = this.dependencyGraphBuilder.buildDependencyGraph(project, globalFilter);

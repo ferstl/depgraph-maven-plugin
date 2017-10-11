@@ -98,7 +98,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   boolean mergeClassifiers;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
     handleOptionsForFullGraph();
 
     DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer.versionlessId()
@@ -117,7 +117,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .repeatTransitiveDependencies(this.repeatTransitiveDependenciesInTextGraph)
         .configure(GraphBuilder.create(nodeIdRenderer));
 
-    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter, this.reduceEdges);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveFilter, targetFilter, this.reduceEdges);
     return new AggregatingGraphFactory(adapter, createReactorOrderSubProjectSupplier(), globalFilter, graphBuilder, this.includeParentProjects);
   }
 

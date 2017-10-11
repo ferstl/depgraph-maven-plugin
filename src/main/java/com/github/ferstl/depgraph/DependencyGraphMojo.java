@@ -118,11 +118,11 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   boolean mergeClassifiers;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
     handleOptionsForFullGraph();
 
     GraphBuilder<DependencyNode> graphBuilder = createGraphBuilder(graphStyleConfigurer);
-    MavenGraphAdapter adapter = createMavenGraphAdapter(targetFilter);
+    MavenGraphAdapter adapter = createMavenGraphAdapter(transitiveFilter, targetFilter);
 
     return new SimpleGraphFactory(adapter, globalFilter, graphBuilder);
   }
@@ -151,17 +151,17 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
     }
   }
 
-  private MavenGraphAdapter createMavenGraphAdapter(ArtifactFilter targetFilter) {
+  private MavenGraphAdapter createMavenGraphAdapter(ArtifactFilter transitiveFilter, ArtifactFilter targetFilter) {
     MavenGraphAdapter adapter;
     if (requiresFullGraph()) {
       EnumSet<NodeResolution> resolutions = allOf(NodeResolution.class);
       resolutions = !this.showConflicts ? complementOf(of(NodeResolution.OMITTED_FOR_CONFLICT)) : resolutions;
       resolutions = !this.showDuplicates ? complementOf(of(NodeResolution.OMITTED_FOR_DUPLICATE)) : resolutions;
 
-      adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, resolutions);
+      adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, transitiveFilter, targetFilter, resolutions);
     } else {
       // there are no reachable paths to be omitted
-      adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter, false);
+      adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveFilter, targetFilter, false);
     }
     return adapter;
   }
