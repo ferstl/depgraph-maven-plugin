@@ -110,6 +110,22 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private List<String> excludes;
 
   /**
+   * List of artifacts to be included if they are <strong>transitive</strong>.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "transitiveIncludes", defaultValue = "")
+  private List<String> transitiveIncludes;
+
+  /**
+   * List of artifacts to be excluded if they are <strong>transitive</strong>.
+   *
+   * @since
+   */
+  @Parameter(property = "transitiveExcludes", defaultValue = "")
+  private List<String> transitiveExcludes;
+
+  /**
    * List of artifacts, in the form of {@code groupId:artifactId:type:classifier}, to restrict the dependency graph
    * only to artifacts that depend on them.
    *
