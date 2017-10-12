@@ -51,6 +51,7 @@ import static org.mockito.Mockito.when;
 public class AggregatingGraphFactoryTest {
 
   private ArtifactFilter globalFilter;
+  private ArtifactFilter transitiveIncludeExcludeFilter;
   private ArtifactFilter targetFilter;
   private DependencyGraphBuilder dependencyGraphBuilder;
   private MavenGraphAdapter adapter;
@@ -60,15 +61,17 @@ public class AggregatingGraphFactoryTest {
   @Before
   public void before() throws Exception {
     this.globalFilter = mock(ArtifactFilter.class);
+    this.transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
     this.targetFilter = mock(ArtifactFilter.class);
     when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
+    when(this.transitiveIncludeExcludeFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode = mock(org.apache.maven.shared.dependency.graph.DependencyNode.class);
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
     when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
 
-    this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.targetFilter, false);
+    this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.transitiveIncludeExcludeFilter, this.targetFilter, false);
 
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 

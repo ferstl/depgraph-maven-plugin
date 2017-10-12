@@ -110,6 +110,22 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private List<String> excludes;
 
   /**
+   * List of artifacts to be included if they are <strong>transitive</strong>.
+   *
+   * @since 2.3.0
+   */
+  @Parameter(property = "transitiveIncludes", defaultValue = "")
+  private List<String> transitiveIncludes;
+
+  /**
+   * List of artifacts to be excluded if they are <strong>transitive</strong>.
+   *
+   * @since
+   */
+  @Parameter(property = "transitiveExcludes", defaultValue = "")
+  private List<String> transitiveExcludes;
+
+  /**
    * List of artifacts, in the form of {@code groupId:artifactId:type:classifier}, to restrict the dependency graph
    * only to artifacts that depend on them.
    *
@@ -249,12 +265,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   public final void execute() throws MojoExecutionException, MojoFailureException {
     GraphFormat graphFormat = GraphFormat.forName(this.graphFormat);
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
+    ArtifactFilter transitiveIncludeExcludeFilter = createTransitiveIncludeExcludeFilter();
     ArtifactFilter targetFilter = createTargetArtifactFilter();
     GraphStyleConfigurer graphStyleConfigurer = createGraphStyleConfigurer(graphFormat);
     Path graphFilePath = createGraphFilePath(graphFormat);
 
     try {
-      GraphFactory graphFactory = createGraphFactory(globalFilter, targetFilter, graphStyleConfigurer);
+      GraphFactory graphFactory = createGraphFactory(globalFilter, transitiveIncludeExcludeFilter, targetFilter, graphStyleConfigurer);
       String dependencyGraph = graphFactory.createGraph(this.project);
       writeGraphFile(dependencyGraph, graphFilePath);
 
@@ -271,7 +288,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer);
+  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer);
 
   /**
    * Override this method to configure additional style resources. It is recommendet to call
@@ -307,6 +324,20 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
     if (!this.excludes.isEmpty()) {
       filter.add(new StrictPatternExcludesArtifactFilter(this.excludes));
+    }
+
+    return filter;
+  }
+
+  private ArtifactFilter createTransitiveIncludeExcludeFilter() {
+    AndArtifactFilter filter = new AndArtifactFilter();
+
+    if (!this.transitiveIncludes.isEmpty()) {
+      filter.add(new StrictPatternIncludesArtifactFilter(this.transitiveIncludes));
+    }
+
+    if (!this.transitiveExcludes.isEmpty()) {
+      filter.add(new StrictPatternExcludesArtifactFilter(this.transitiveExcludes));
     }
 
     return filter;

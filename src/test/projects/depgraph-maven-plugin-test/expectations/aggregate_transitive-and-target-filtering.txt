@@ -1,0 +1,2 @@
+com.github.ferstl:module-3:compile
+\- com.mysema.querydsl:querydsl-core:compile

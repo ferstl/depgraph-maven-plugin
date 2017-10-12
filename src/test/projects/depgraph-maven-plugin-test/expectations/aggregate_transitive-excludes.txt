@@ -1,0 +1,13 @@
+com.github.ferstl:module-3:compile
++- com.github.ferstl:module-1:compile
+|  +- commons-codec:commons-codec:compile
+|  +- org.apache.commons:commons-lang3:compile
+|  \- junit:junit:test
+|     \- org.hamcrest:hamcrest-core:test
++- com.github.ferstl:module-2:compile
+|  +- com.github.ferstl:module-1:compile
+|  +- com.google.guava:guava:compile
+|  \- junit:junit:test
+\- com.mysema.querydsl:querydsl-core:compile
+   +- com.mysema.commons:mysema-commons-lang:compile
+   \- com.infradna.tool:bridge-method-annotation:compile

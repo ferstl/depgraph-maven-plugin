@@ -1,0 +1,4 @@
+module-1:compile
++- commons-codec:compile
++- commons-lang3:compile
+\- junit:test

@@ -44,7 +44,7 @@ import static java.util.EnumSet.allOf;
 public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
 
     GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
         .showGroupIds(true)
@@ -56,7 +56,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
         .configure(GraphBuilder.<DependencyNode>create(DependencyNodeIdRenderer.groupId().withScope(true)))
         .omitSelfReferences();
 
-    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, targetFilter, allOf(NodeResolution.class));
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, transitiveIncludeExcludeFilter, targetFilter, allOf(NodeResolution.class));
     return new SimpleGraphFactory(adapter, globalFilter, graphBuilder);
   }
 

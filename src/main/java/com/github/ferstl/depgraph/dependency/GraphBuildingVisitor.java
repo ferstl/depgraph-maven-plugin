@@ -36,6 +36,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private final boolean omitReachablePaths;
   private final Deque<DependencyNode> nodeStack;
   private final ArtifactFilter globalFilter;
+  private final ArtifactFilter transitiveFilter;
   private final ArtifactFilter targetFilter;
   private final Set<NodeResolution> includedResolutions;
 
@@ -44,19 +45,20 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
    */
   private int cutOffDepth = 0;
 
-  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
-    this(graphBuilder, globalFilter, targetFilter, includedResolutions, false);
+  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
+    this(graphBuilder, globalFilter, transitiveFilter, targetFilter, includedResolutions, false);
   }
 
-  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter targetFilter, boolean omitReachablePaths) {
-    this(graphBuilder, DoNothingArtifactFilter.INSTANCE, targetFilter, allOf(NodeResolution.class), omitReachablePaths);
+  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, boolean omitReachablePaths) {
+    this(graphBuilder, DoNothingArtifactFilter.INSTANCE, transitiveFilter, targetFilter, allOf(NodeResolution.class), omitReachablePaths);
   }
 
-  private GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
+  private GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
     this.graphBuilder = graphBuilder;
     this.omitReachablePaths = omitReachablePaths;
     this.nodeStack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
+    this.transitiveFilter = transitiveFilter;
     this.targetFilter = targetFilter;
     this.includedResolutions = includedResolutions;
   }
@@ -98,7 +100,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
   private boolean internalEndVisit(DependencyNode node) {
     if (!isIncluded(node)) {
-      return false;
+      return true;
     }
 
     this.nodeStack.pop();
@@ -124,7 +126,11 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   private boolean isIncluded(DependencyNode node) {
-    return this.globalFilter.include(node.getArtifact()) && this.includedResolutions.contains(node.getResolution());
+    Artifact artifact = node.getArtifact();
+
+    return this.globalFilter.include(artifact)
+        && this.transitiveFilter.include(artifact)
+        && this.includedResolutions.contains(node.getResolution());
   }
 
   private void mergeWithExisting(DependencyNode node) {

@@ -1,0 +1,5 @@
+module-3:compile
++- module-1:compile
++- module-2:compile
+\- querydsl-core:compile
+   \- mysema-commons-lang:compile

@@ -42,7 +42,7 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregatingGraphMojo {
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
 
     DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer
         .groupId()
@@ -59,7 +59,7 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
         .configure(GraphBuilder.create(nodeIdRenderer))
         .omitSelfReferences();
 
-    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, targetFilter, this.reduceEdges);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveIncludeExcludeFilter, targetFilter, this.reduceEdges);
 
     return new AggregatingGraphFactory(adapter, createReactorOrderSubProjectSupplier(), globalFilter, graphBuilder, true);
   }

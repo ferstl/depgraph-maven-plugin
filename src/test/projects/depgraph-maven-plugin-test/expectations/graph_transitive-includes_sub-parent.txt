@@ -1,0 +1,2 @@
+sub-parent:compile
+\- module-2:compile
