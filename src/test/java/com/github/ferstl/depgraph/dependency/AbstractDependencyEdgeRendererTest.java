@@ -53,7 +53,7 @@ public abstract class AbstractDependencyEdgeRendererTest {
   }
 
   @Test
-  public final void renderWithConflictingVersion() {
+  public final void renderWithConflictShowingVersion() {
     // arrange
     EdgeRenderer<DependencyNode> renderer = createEdgeRenderer(true);
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
@@ -63,7 +63,7 @@ public abstract class AbstractDependencyEdgeRendererTest {
     String result = renderer.render(from, to);
 
     // assert
-    assertEquals(renderWithConflictingVersionResult(), result);
+    assertEquals(renderWithConflictShowingVersionResult(), result);
   }
 
   protected abstract EdgeRenderer<DependencyNode> createEdgeRenderer(boolean renderVersion);
@@ -72,5 +72,5 @@ public abstract class AbstractDependencyEdgeRendererTest {
 
   protected abstract String renderWithNonConflictingVersionResult();
 
-  protected abstract String renderWithConflictingVersionResult();
+  protected abstract String renderWithConflictShowingVersionResult();
 }

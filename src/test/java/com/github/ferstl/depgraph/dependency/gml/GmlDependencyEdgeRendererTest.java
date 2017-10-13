@@ -37,7 +37,7 @@ public class GmlDependencyEdgeRendererTest extends AbstractDependencyEdgeRendere
   }
 
   @Override
-  protected String renderWithConflictingVersionResult() {
+  protected String renderWithConflictShowingVersionResult() {
     return "label \"version2\"\n"
         + "graphics\n"
         + "[\n"

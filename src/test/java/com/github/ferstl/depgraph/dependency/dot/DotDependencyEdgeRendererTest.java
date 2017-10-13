@@ -46,7 +46,7 @@ public class DotDependencyEdgeRendererTest extends AbstractDependencyEdgeRendere
   }
 
   @Override
-  protected String renderWithConflictingVersionResult() {
+  protected String renderWithConflictShowingVersionResult() {
     return "[label=\"version2\"]";
   }
 }
