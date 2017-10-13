@@ -15,40 +15,35 @@
  */
 package com.github.ferstl.depgraph.dependency.puml;
 
-import org.junit.Test;
+import com.github.ferstl.depgraph.dependency.AbstractDependencyEdgeRendererTest;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
-import com.github.ferstl.depgraph.dependency.DependencyNodeUtil;
+import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
-import static org.junit.Assert.assertEquals;
+public class PumlDependencyEgdeRendererTest extends AbstractDependencyEdgeRendererTest {
 
-public class PumlDependencyEgdeRendererTest {
-
-  private final PumlDependencyEgdeRenderer renderer = new PumlDependencyEgdeRenderer();
-
-  @Test
-  public void testRenderEdgeToIncludeDependency() throws Exception {
-    DependencyNode fromNode = DependencyNodeUtil.createDependencyNode("org.springframework",
-        "spring-context", "4.3.9-RELEASE");
-
-    DependencyNode toNode = DependencyNodeUtil.createDependencyNode("org.springframework",
-        "spring-core", "4.3.9-RELEASE");
-
-    String edgeInfo = this.renderer.render(fromNode, toNode);
-
-    assertEquals("{\"begin\":\"-[\",\"end\":\"]->\",\"color\":\"#000000\",\"label\":\"\"}", edgeInfo);
-
+  @Override
+  protected EdgeRenderer<DependencyNode> createEdgeRenderer(boolean renderVersion) {
+    return new PumlDependencyEgdeRenderer();
   }
 
-  @Test
-  public void testRenderEdgeToConflictingDependency() throws Exception {
-    DependencyNode fromNode = DependencyNodeUtil.createDependencyNode("org.springframework",
-        "spring-context", "4.3.9-RELEASE");
+  @Override
+  protected String renderWithoutVersionResult() {
+    return "{\"begin\":\"-[\",\"end\":\"]->\",\"color\":\"#000000\",\"label\":\"\"}";
+  }
 
-    DependencyNode toNode = DependencyNodeUtil.createDependencyNodeWithConflict("commons-logging",
-        "commons-logging", "1.1.3");
+  @Override
+  protected String renderWithNonConflictingVersionResult() {
+    return "{\"begin\":\"-[\",\"end\":\"]->\",\"color\":\"#000000\",\"label\":\"\"}";
+  }
 
-    String edgeInfo = this.renderer.render(fromNode, toNode);
+  @Override
+  protected String renderWithConflictShowingVersionResult() {
+    return "{\"begin\":\".[\",\"end\":\"].>\",\"color\":\"#FF0000\",\"label\":\"version2\"}";
+  }
 
-    assertEquals("{\"begin\":\".[\",\"end\":\"].>\",\"color\":\"#FF0000\",\"label\":\"1.1.3\"}", edgeInfo);
+  @Override
+  protected String renderWithConflictNotShowingVersionResult() {
+    // Version is always displayed
+    return "{\"begin\":\".[\",\"end\":\"].>\",\"color\":\"#FF0000\",\"label\":\"version2\"}";
   }
 }
