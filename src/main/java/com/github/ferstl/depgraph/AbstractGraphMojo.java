@@ -155,7 +155,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
   /**
    * The path to the generated output file. A file extension matching the configured {@code graphFormat} will be
-   * added if not specified.
+   * added if not specified.<br/>
+   * <strong>ATTENTION: THIS OPTION WILL BE REMOVED IN VERSION 3.1.0!</strong>
    *
    * @since 1.0.0
    * @deprecated Deprecated since 2.2.0. Use {@code outputDirectory} and {@code outputFileName} instead.
@@ -417,7 +418,11 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     Path outputFilePath;
     String fileName;
     if (StringUtils.isNotBlank(this.outputFile)) {
-      getLog().warn("The 'outputFile' parameter has been deprecated. Use 'outputDirectory' and 'outputFileName' instead.");
+      getLog().warn("************************************************************************");
+      getLog().warn("* WARNING:                                                             *");
+      getLog().warn("* The 'outputFile' parameter has been deprecated and will be removed   *");
+      getLog().warn("* in Version 3.1.0! Use 'outputDirectory' and 'outputFileName' instead.*");
+      getLog().warn("************************************************************************");
 
       outputFilePath = Paths.get(this.outputFile);
       fileName = outputFilePath.getFileName().toString();
