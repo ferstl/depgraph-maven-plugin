@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2014 - 2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.github.ferstl.depgraph.dependency;
 
 import org.junit.Test;
@@ -38,7 +53,7 @@ public abstract class AbstractDependencyEdgeRendererTest {
   }
 
   @Test
-  public final void renderWithConflictingVersion() {
+  public final void renderWithConflictShowingVersion() {
     // arrange
     EdgeRenderer<DependencyNode> renderer = createEdgeRenderer(true);
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
@@ -48,7 +63,21 @@ public abstract class AbstractDependencyEdgeRendererTest {
     String result = renderer.render(from, to);
 
     // assert
-    assertEquals(renderWithConflictingVersionResult(), result);
+    assertEquals(renderWithConflictShowingVersionResult(), result);
+  }
+
+  @Test
+  public final void renderWithConflictNotShowingVersion() {
+    // arrange
+    EdgeRenderer<DependencyNode> renderer = createEdgeRenderer(false);
+    DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
+    DependencyNode to = createDependencyNodeWithConflict("group2", "artifact2", "version2");
+
+    // act
+    String result = renderer.render(from, to);
+
+    // assert
+    assertEquals(renderWithConflictNotShowingVersionResult(), result);
   }
 
   protected abstract EdgeRenderer<DependencyNode> createEdgeRenderer(boolean renderVersion);
@@ -57,5 +86,7 @@ public abstract class AbstractDependencyEdgeRendererTest {
 
   protected abstract String renderWithNonConflictingVersionResult();
 
-  protected abstract String renderWithConflictingVersionResult();
+  protected abstract String renderWithConflictShowingVersionResult();
+
+  protected abstract String renderWithConflictNotShowingVersionResult();
 }

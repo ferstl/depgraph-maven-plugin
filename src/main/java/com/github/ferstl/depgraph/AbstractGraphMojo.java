@@ -112,7 +112,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   /**
    * List of artifacts to be included if they are <strong>transitive</strong>.
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "transitiveIncludes", defaultValue = "")
   private List<String> transitiveIncludes;
@@ -148,14 +148,15 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * The idea behind this option is, that the consumer of the JSON data, for example a Javascript library, will do its
    * own filtering of the data.
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "showAllAttributesForJson", defaultValue = "true")
   private boolean showAllAttributesForJson;
 
   /**
    * The path to the generated output file. A file extension matching the configured {@code graphFormat} will be
-   * added if not specified.
+   * added if not specified.<br/>
+   * <strong>ATTENTION: THIS OPTION WILL BE REMOVED IN VERSION 3.1.0!</strong>
    *
    * @since 1.0.0
    * @deprecated Deprecated since 2.2.0. Use {@code outputDirectory} and {@code outputFileName} instead.
@@ -417,7 +418,11 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     Path outputFilePath;
     String fileName;
     if (StringUtils.isNotBlank(this.outputFile)) {
-      getLog().warn("The 'outputFile' parameter has been deprecated. Use 'outputDirectory' and 'outputFileName' instead.");
+      getLog().warn("************************************************************************");
+      getLog().warn("* WARNING:                                                             *");
+      getLog().warn("* The 'outputFile' parameter has been deprecated and will be removed   *");
+      getLog().warn("* in Version 3.1.0! Use 'outputDirectory' and 'outputFileName' instead.*");
+      getLog().warn("************************************************************************");
 
       outputFilePath = Paths.get(this.outputFile);
       fileName = outputFilePath.getFileName().toString();
