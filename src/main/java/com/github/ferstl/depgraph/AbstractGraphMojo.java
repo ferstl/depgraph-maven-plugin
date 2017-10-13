@@ -112,7 +112,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   /**
    * List of artifacts to be included if they are <strong>transitive</strong>.
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "transitiveIncludes", defaultValue = "")
   private List<String> transitiveIncludes;
@@ -148,7 +148,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * The idea behind this option is, that the consumer of the JSON data, for example a Javascript library, will do its
    * own filtering of the data.
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "showAllAttributesForJson", defaultValue = "true")
   private boolean showAllAttributesForJson;

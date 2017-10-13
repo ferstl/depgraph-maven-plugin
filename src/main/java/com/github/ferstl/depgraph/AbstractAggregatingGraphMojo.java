@@ -36,7 +36,7 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
    * Omit all edges that are already reachable via a different path in the dependency graph. This will prefer dependencies
    * of modules that are higher in the reactor build order and thus reflect the architecture of the application better.
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "reduceEdges", defaultValue = "true")
   boolean reduceEdges;
@@ -64,7 +64,7 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
    *         \- child-1.1
    * </pre>
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "repeatTransitiveDependenciesInTextGraph", defaultValue = "false")
   boolean repeatTransitiveDependenciesInTextGraph;

@@ -59,7 +59,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   /**
    * If set to {@code true}, the created graph will show type information an all artifacts.
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "showTypes", defaultValue = "false")
   boolean showTypes;
@@ -67,7 +67,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   /**
    * If set to {@code true}, the created graph will show classifier information an all artifacts.
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "showClassifiers", defaultValue = "false")
   boolean showClassifiers;
@@ -84,7 +84,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   /**
    * Merge dependencies with multiple types into one graph node instead of having a node per type.
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "mergeTypes", defaultValue = "false")
   private boolean mergeTypes;
@@ -92,7 +92,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   /**
    * Merge dependencies with multiple classifiers into one graph node instead of having a node per classifier.
    *
-   * @since 2.3.0
+   * @since 3.0.0
    */
   @Parameter(property = "mergeClassifiers", defaultValue = "false")
   boolean mergeClassifiers;
