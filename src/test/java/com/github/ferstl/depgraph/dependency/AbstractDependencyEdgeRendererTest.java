@@ -66,6 +66,20 @@ public abstract class AbstractDependencyEdgeRendererTest {
     assertEquals(renderWithConflictShowingVersionResult(), result);
   }
 
+  @Test
+  public final void renderWithConflictNotShowingVersion() {
+    // arrange
+    EdgeRenderer<DependencyNode> renderer = createEdgeRenderer(false);
+    DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
+    DependencyNode to = createDependencyNodeWithConflict("group2", "artifact2", "version2");
+
+    // act
+    String result = renderer.render(from, to);
+
+    // assert
+    assertEquals(renderWithConflictNotShowingVersionResult(), result);
+  }
+
   protected abstract EdgeRenderer<DependencyNode> createEdgeRenderer(boolean renderVersion);
 
   protected abstract String renderWithoutVersionResult();
@@ -73,4 +87,6 @@ public abstract class AbstractDependencyEdgeRendererTest {
   protected abstract String renderWithNonConflictingVersionResult();
 
   protected abstract String renderWithConflictShowingVersionResult();
+
+  protected abstract String renderWithConflictNotShowingVersionResult();
 }
