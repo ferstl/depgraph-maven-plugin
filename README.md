@@ -1,5 +1,5 @@
 # depgraph-maven-plugin
-*- A Maven plugin that generates dependency graphs in various formats (DOT, GML, JSON, Text, PlantUML)*
+*- A Maven plugin that generates dependency graphs in various formats (DOT, GML, PlantUML, JSON and Text)*
 
 [![Build Status](https://travis-ci.org/ferstl/depgraph-maven-plugin.svg?branch=master)](https://travis-ci.org/ferstl/depgraph-maven-plugin) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/depgraph-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/depgraph-maven-plugin) [![Coverage Status](https://coveralls.io/repos/github/ferstl/depgraph-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/ferstl/depgraph-maven-plugin?branch=master) [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -8,12 +8,12 @@ This Maven plugin generates dependency graphs on single modules or in an aggrega
   DOT files can be visualized with [Graphviz](http://www.graphviz.org/). When [Graphviz](http://www.graphviz.org/) is installed, the generated `.dot` files can be directly rendered into all supported image formats. 
 - `.gml` (Graph Markup Language)<br/>
   GML files can be visualized with the [yEd Graph Editor](https://www.yworks.com/products/yed) which allows further processing and layouting of the dependency graph.
+- `.puml` (PlantUML)<br/>
+  PlantUML files can be visualized by various tools like [planttext.com](https://www.planttext.com/) or in IntelliJ with the [PlantUML Plugin](https://plugins.jetbrains.com/plugin/7017-plantuml-integration).
 - `.json`<br/>
   This format is intended for Javascript libraries to visualize the dependency graph or for further processing.
 - `.txt`<br/>
   A more powerful alternative to `mvn dependency:tree`. The text graphs are printed to the console. 
-- `.puml` (PlantUML)<br/>
-  PlantUML files can be visualized in IntelliJ with the [PlantUML Plugin](https://plugins.jetbrains.com/plugin/7017-plantuml-integration)
 
 For more information take a look at the [Plugin Documentation](https://ferstl.github.io/depgraph-maven-plugin/plugin-info.html), the [Release Notes](https://github.com/ferstl/depgraph-maven-plugin/wiki/Release-Notes) and the [Wiki](https://github.com/ferstl/depgraph-maven-plugin/wiki).
 
@@ -116,9 +116,10 @@ Since the generated dependency graph does not store any layout information, you 
 
 #### PlantUML
 
-PlantUML graphs can be visualized with various tools, e.g. https://www.planttext.com/ or the [PlantUML Integration](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) for IntelliJ.
+PlantUML graphs can be visualized with various tools, e.g. [planttext.com](https://www.planttext.com/) or the [PlantUML Integration](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) for IntelliJ (requires [Graphviz](http://www.graphviz.org/) for rendering).
 
 ![PlantUML dependency graph](src/doc/puml.png)
+
 
 
 #### Text
