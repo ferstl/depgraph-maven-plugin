@@ -191,6 +191,17 @@ Generally, you should consequently exclude dependencies that don't give you usef
 
 -----
 
+Q: Help! This plugin has thousands of parameters. How do I know which ones to choose?
+
+A: Don't worry, there are only less than 40 parameters and the plugin provides good defaults for most of them. Start your dependency graph without setting any parameters and see if it fits your needs. If it doesn't, start customizing it:
+- Use `graphFormat` to get a graph in a different format than DOT.
+- Use `includes` and/or `excludes` for filtering.
+- Use the `show*` parameters to display more information in the graph, e.g. `showGroupIds`, `showVersions`, etc.
+
+That's basically it. If you get interested in further customizations or if you want to do a more detailed analysis of your dependencies, take a look at the other parameters.
+
+-----
+
 Q: Why can't I show duplicates and conflicts in the aggregated graph.
 
 A: This does not make sense because dependencies are resolved individually for each module in the reactor. As a result, the same dependency edge in the graph could once occur as conflict, once as duplicate and once as resolved dependency.
