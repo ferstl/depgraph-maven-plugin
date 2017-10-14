@@ -66,9 +66,9 @@ import com.google.common.collect.Iterables;
 import static com.github.ferstl.depgraph.GraphFormat.JSON;
 
 /**
- * Abstract mojo to create all possible kinds of graphs in the dot format. Graphs are created with instances of the
+ * Abstract mojo to create all possible kinds of graphs. Graphs are created with instances of the
  * {@link GraphFactory} interface. This class defines an abstract method to create such factories. In case Graphviz is
- * install on the system where this plugin is executed, it is also possible to run the dot program and create images
+ * installed on the system where this plugin is executed, it is also possible to run the dot program and create images
  * out of the generated dot files. Besides that, this class allows the configuration of several basic mojo parameters,
  * such as includes, excludes, etc.
  */
