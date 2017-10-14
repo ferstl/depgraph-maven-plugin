@@ -54,24 +54,24 @@ Each of the modules contains some dependencies in different scopes.
 
 A simple graph can be created by executing the [`depgraph:graph`](https://ferstl.github.io/depgraph-maven-plugin/graph-mojo.html) goal:
 
-<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/simple-graph.png" alt="Simple dependency graph"/>
+![Simple dependency graph](src/doc/simple-graph.png)
 
 The goal can be configured to show the versions and/or groupIds on the dependencies:
 
 **With versions**
 
-<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/with-versions.png" alt="Simple dependency graph with versions"/>
+![Simple dependency graph with versions](src/doc/with-versions.png)
 
 
 **With groupIds**
 
-<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/with-group-ids.png" alt="Simple dependency graph with groupIds"/>
+![Simple dependency graph with groupIds](src/doc/with-group-ids.png)
 
 ### Duplicates and Conflicts
 
 The [`depgraph:graph`](https://ferstl.github.io/depgraph-maven-plugin/graph-mojo.html) goal can be configured to show duplicate and/or conflicting versions. Duplicate versions are shown as dotted black arrows. Conflicting versions are shown as dashed red arrows:
 
-<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/duplicates-and-conflicts.png" alt="Dependency graph showing duplicates and conflicts"/>
+![Dependency graph showing duplicates and conflicts](src/doc/duplicates-and-conflicts.png)
 
 Duplicate dependencies do occur when more than one module defines the same dependency, which is not a problem. Maven's dependency resolution will just pick one dependency and omit all the duplicates. A conflict occurs when the same dependency occurs in different versions in the reactor. In this case Maven will choose the [nearest](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html) version and ommit the others. Occurrences of conflicting versions should be investigated and solved if possible.  
 
@@ -79,7 +79,7 @@ Duplicate dependencies do occur when more than one module defines the same depen
 
 The [`depgraph:by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/by-groupid-mojo.html) goal creates a dependency graph using the `groupId` of the dependencies:
 
-<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/by-group-id.png" alt="Dependency graph by groupId"/>
+![Dependency graph by groupId](src/doc/by-group-id.png)
 
 Such graphs give a higher-level overview of a project, i.e. they show better which "frameworks" used by a maven project.
 
@@ -88,7 +88,7 @@ Such graphs give a higher-level overview of a project, i.e. they show better whi
 
 The goals [`depgraph:aggregate`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-mojo.html) and [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) create aggregated dependency graphs on the root of a multi-module project. They show the **union** of all the modules' dependencies. Here is an example of an aggregated graph, which connects the parent project and its modules with dotted black arrows (the `sub-parent` and its `module-3` were excluded from the graph for clarity):
 
-<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/aggregated.png" alt="Aggregated dependency graph"/>
+![Aggregated dependency graph](src/doc/aggregated.png)
 
 
 The goal [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) does the same for the group IDs of all modules and their dependencies.
@@ -98,7 +98,7 @@ The goal [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-mav
 
 This maven plugin offers you a variety of styling options for graphs in the DOT format. These options are explained in detail on the [Styling Wiki page](https://github.com/ferstl/depgraph-maven-plugin/wiki/Styling). This is an example of the aggregated graph with some custom styles:
 
-<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/aggregated-styled.png" alt="Dependency graph with custom styles"/>
+![Dependency graph with custom styles](src/doc/aggregated-styled.png)
 
 It shows all dependencies with group ID `com.github.ferstl` with a blue background, all test dependencies with grey text and all other dependencies with grey background.
 
@@ -106,7 +106,7 @@ It shows all dependencies with group ID `com.github.ferstl` with a blue backgrou
 
 The GML graph format (set the `graphFormat` property to `gml`) allows visualizing a dependency graph in the [yEd Graph Editor](https://www.yworks.com/products/yed).
 
-<img src="https://raw.githubusercontent.com/ferstl/depgraph-maven-plugin/master/src/doc/yed.png" alt="GML dependency graph in yEd"/>
+![GML dependency graph in yEd](src/doc/yed.png)
 
 Since the generated dependency graph does not store any layout information, you need to layout the graph in yEd:
 
