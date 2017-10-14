@@ -102,7 +102,8 @@ This maven plugin offers you a variety of styling options for graphs in the DOT 
 
 It shows all dependencies with group ID `com.github.ferstl` with a blue background, all test dependencies with grey text and all other dependencies with grey background.
 
-### Visualizing using yEd
+### Other Graph Formats
+#### GML for yEd
 
 The GML graph format (set the `graphFormat` property to `gml`) allows visualizing a dependency graph in the [yEd Graph Editor](https://www.yworks.com/products/yed).
 
@@ -112,6 +113,13 @@ Since the generated dependency graph does not store any layout information, you 
 
 - Choose *Tools -> Fit Node To Label* and press *OK* in the upcoming dialog
 - Choose your layout algorithm in the *Layout* menu to layout the graph
+
+#### PUML
+
+PlantUML graphs can be visualized with various tools, e.g. https://www.planttext.com/ or the [PlantUML Integration](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) for IntelliJ.
+
+![PlantUML dependency graph](src/doc/puml.png)
+
 
 ## FAQ
 
