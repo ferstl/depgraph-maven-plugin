@@ -114,7 +114,7 @@ Since the generated dependency graph does not store any layout information, you 
 - Choose *Tools -> Fit Node To Label* and press *OK* in the upcoming dialog
 - Choose your layout algorithm in the *Layout* menu to layout the graph
 
-#### PUML
+#### PlantUML
 
 PlantUML graphs can be visualized with various tools, e.g. https://www.planttext.com/ or the [PlantUML Integration](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) for IntelliJ.
 
