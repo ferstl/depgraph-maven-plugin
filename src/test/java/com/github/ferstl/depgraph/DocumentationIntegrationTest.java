@@ -208,6 +208,21 @@ public class DocumentationIntegrationTest {
     collectFile("sub-parent/module-3/target/dependency-graph.gml", "with-conflicts.gml");
   }
 
+  @Test
+  public void simpleGraphInPuml() throws Exception {
+    runTest("graph", "-DgraphFormat=puml", "-DshowVersions=true");
+
+    assertFilesPresent(
+        this.basedir,
+        "module-1/target/dependency-graph.puml",
+        "module-2/target/dependency-graph.puml",
+        "sub-parent/module-3/target/dependency-graph.puml",
+        "target/dependency-graph.puml",
+        "sub-parent/target/dependency-graph.puml");
+
+    collectFile("sub-parent/module-3/target/dependency-graph.puml", "simple-graph.puml");
+  }
+
   private void runTest(String goal, String... cliOptions) throws Exception {
     File basedir = getBaseDir();
     MavenExecution execution = this.mavenRuntime.forProject(basedir);
