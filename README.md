@@ -147,6 +147,40 @@ parent:1.0.0-SNAPSHOT:compile
 
 For the aggregated graphs the option `-DrepeatTransitiveDependenciesInTextGraph` will show transitive dependencies on each node. Without this option (which is the default) transitive dependencies will only be shown the first time they occur.
 
+#### JSON
+
+JSON graphs are intended for Javascript libraries or for further processing. Using this format will automatically enable the options `showGroupIds`, `showVersions`, `showTypes` and `showClassifiers`. The idea behind enabling these options is that the consumer of the JSON data should do its own filtering. This behavior can be disabled by setting `showAllAttributesForJson` to `false`.
+
+````json
+{
+  "graphName" : "parent",
+  "artifacts" : [ {
+    "id" : "com.github.ferstl:module-2:jar:compile",
+    "numericId" : 1,
+    "groupId" : "com.github.ferstl",
+    "artifactId" : "module-2",
+    "version" : "1.0.0-SNAPSHOT",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "com.github.ferstl:module-1:jar:compile",
+    "numericId" : 2,
+    "groupId" : "com.github.ferstl",
+    "artifactId" : "module-1",
+    "version" : "1.0.0-SNAPSHOT",
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  } ],
+  "dependencies" : [ {
+    "from" : "com.github.ferstl:module-2:jar:compile",
+    "to" : "com.github.ferstl:module-1:jar:compile",
+    "numericFrom" : 0,
+    "numericTo" : 1,
+    "resolution" : "INCLUDED"
+  } ]
+}
+````
+
 ## FAQ
 
 Q: Help! The dependency graph of my 10 year old 100-module enterprise project looks like a ball of wool. I can't see anything!
