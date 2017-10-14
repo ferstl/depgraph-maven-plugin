@@ -145,7 +145,8 @@ public class DocumentationIntegrationTest {
   public void aggregatedJson() throws Exception {
     runTest("aggregate",
         "-DgraphFormat=json",
-        "-Dincludes=com.github.ferstl:*");
+        "-Dincludes=com.github.ferstl:*",
+        "-Dexcludes=*:module-3");
 
     assertFilesPresent(this.basedir, "target/dependency-graph.json");
 
