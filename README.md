@@ -121,6 +121,32 @@ PlantUML graphs can be visualized with various tools, e.g. https://www.planttext
 ![PlantUML dependency graph](src/doc/puml.png)
 
 
+#### Text
+
+Text graphs are a more powerful alternative for `mvn dependency:tree`. They are printed to the console for direct investigation.
+
+```
+parent:1.0.0-SNAPSHOT:compile
++- module-1:1.0.0-SNAPSHOT:compile
+|  +- commons-codec:1.10:compile
+|  \- commons-lang3:3.1:compile
++- module-2:1.0.0-SNAPSHOT:compile
+|  +- module-1:1.0.0-SNAPSHOT:compile
+|  \- guava:21.0:compile
+\- sub-parent:1.0.0-SNAPSHOT:compile
+   +- module-3:1.0.0-SNAPSHOT:compile
+   |  +- module-1:1.0.0-SNAPSHOT:compile
+   |  +- module-2:1.0.0-SNAPSHOT:compile
+   |  \- querydsl-core:3.7.4:compile
+   |     +- jsr305:1.3.9:compile
+   |     +- mysema-commons-lang:0.2.4:compile
+   |     \- bridge-method-annotation:1.13:compile
+   \- module-2:1.0.0-SNAPSHOT:compile
+
+```
+
+For the aggregated graphs the option `-DrepeatTransitiveDependenciesInTextGraph` will show transitive dependencies on each node. Without this option (which is the default) transitive dependencies will only be shown the first time they occur.
+
 ## FAQ
 
 Q: Help! The dependency graph of my 10 year old 100-module enterprise project looks like a ball of wool. I can't see anything!
