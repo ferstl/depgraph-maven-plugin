@@ -210,8 +210,12 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
-  public void simpleGraphInPuml() throws Exception {
-    runTest("graph", "-DgraphFormat=puml", "-DshowVersions=true");
+  public void pumlWithConflicts() throws Exception {
+    runTest("graph",
+        "-DgraphFormat=puml",
+        "-DshowVersions",
+        "-DshowDuplicates",
+        "-DshowConflicts");
 
     assertFilesPresent(
         this.basedir,
@@ -221,7 +225,7 @@ public class DocumentationIntegrationTest {
         "target/dependency-graph.puml",
         "sub-parent/target/dependency-graph.puml");
 
-    collectFile("sub-parent/module-3/target/dependency-graph.puml", "simple-graph.puml");
+    collectFile("sub-parent/module-3/target/dependency-graph.puml", "with-conflicts.puml");
   }
 
   private void runTest(String goal, String... cliOptions) throws Exception {
