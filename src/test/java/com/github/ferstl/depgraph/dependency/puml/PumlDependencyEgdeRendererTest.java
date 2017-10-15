@@ -23,7 +23,7 @@ public class PumlDependencyEgdeRendererTest extends AbstractDependencyEdgeRender
 
   @Override
   protected EdgeRenderer<DependencyNode> createEdgeRenderer(boolean renderVersion) {
-    return new PumlDependencyEgdeRenderer();
+    return new PumlDependencyEgdeRenderer(renderVersion);
   }
 
   @Override
@@ -43,7 +43,6 @@ public class PumlDependencyEgdeRendererTest extends AbstractDependencyEdgeRender
 
   @Override
   protected String renderWithConflictNotShowingVersionResult() {
-    // Version is always displayed
-    return "{\"begin\":\".[\",\"end\":\"].>\",\"color\":\"#FF0000\",\"label\":\"version2\"}";
+    return "{\"begin\":\".[\",\"end\":\"].>\",\"color\":\"#FF0000\",\"label\":\"\"}";
   }
 }

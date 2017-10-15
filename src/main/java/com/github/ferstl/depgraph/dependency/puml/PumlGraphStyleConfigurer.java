@@ -26,7 +26,7 @@ public class PumlGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
     return graphBuilder
         .useNodeNameRenderer(new PumlDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes))
-        .useEdgeRenderer(new PumlDependencyEgdeRenderer())
+        .useEdgeRenderer(new PumlDependencyEgdeRenderer(this.showVersionOnEdges))
         .graphFormatter(new PumlGraphFormatter());
   }
 

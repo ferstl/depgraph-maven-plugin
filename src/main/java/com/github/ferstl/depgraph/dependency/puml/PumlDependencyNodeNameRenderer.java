@@ -24,7 +24,7 @@ import com.google.common.base.Joiner;
 
 public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
-  private static final Joiner COLON_JOINER = Joiner.on(":").skipNulls();
+  private static final Joiner NEWLINE_JOINER = Joiner.on("\\n").skipNulls();
   private static final Joiner SLASH_JOINER = Joiner.on("/").skipNulls();
 
   private final boolean showGroupId;
@@ -46,7 +46,7 @@ public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
     Artifact artifact = node.getArtifact();
     PumlNodeInfo nodeInfo = new PumlNodeInfo().withComponent("rectangle");
 
-    String name = COLON_JOINER.join(
+    String name = NEWLINE_JOINER.join(
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showTypes ? createTypeString(node.getTypes()) : null,

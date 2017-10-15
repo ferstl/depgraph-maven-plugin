@@ -19,6 +19,8 @@ import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
+import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviateVersion;
+
 /**
  * Renders an arc between two nodes in a PlantUML diagram. Arcs are styled and colored depending on the resolution of the target node.
  */
@@ -27,6 +29,12 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
   private static final String INCLUDE_COLOR = "#000000"; // black
   private static final String DUPLICATE_COLOR = "#D3D3D3"; // lightGray
   private static final String CONFLICT_COLOR = "#FF0000"; // red
+
+  private final boolean renderVersion;
+
+  public PumlDependencyEgdeRenderer(boolean renderVersion) {
+    this.renderVersion = renderVersion;
+  }
 
   @Override
   public String render(DependencyNode from, DependencyNode to) {
@@ -46,13 +54,13 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
         edgeInfo.withBegin(".[")
             .withColor(CONFLICT_COLOR)
             .withEnd("].>")
-            .withLabel(to.getArtifact().getVersion());
+            .withLabel(this.renderVersion ? abbreviateVersion(to.getArtifact().getVersion()) : "");
         break;
       case OMITTED_FOR_DUPLICATE:
         edgeInfo.withBegin(".[")
             .withColor(DUPLICATE_COLOR)
             .withEnd("].>")
-            .withLabel(to.getArtifact().getVersion());
+            .withLabel("");
         break;
       case OMITTED_FOR_CYCLE:
       default:

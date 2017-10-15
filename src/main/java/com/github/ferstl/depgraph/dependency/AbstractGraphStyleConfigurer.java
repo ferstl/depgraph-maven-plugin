@@ -25,37 +25,37 @@ public abstract class AbstractGraphStyleConfigurer implements GraphStyleConfigur
   protected boolean showVersionOnEdges;
 
   @Override
-  public GraphStyleConfigurer showGroupIds(boolean showGroupId) {
+  public final GraphStyleConfigurer showGroupIds(boolean showGroupId) {
     this.showGroupId = showGroupId;
     return this;
   }
 
   @Override
-  public GraphStyleConfigurer showArtifactIds(boolean showArtifactId) {
+  public final GraphStyleConfigurer showArtifactIds(boolean showArtifactId) {
     this.showArtifactId = showArtifactId;
     return this;
   }
 
   @Override
-  public GraphStyleConfigurer showTypes(boolean showTypes) {
+  public final GraphStyleConfigurer showTypes(boolean showTypes) {
     this.showTypes = showTypes;
     return this;
   }
 
   @Override
-  public GraphStyleConfigurer showClassifiers(boolean showClassifiers) {
+  public final GraphStyleConfigurer showClassifiers(boolean showClassifiers) {
     this.showClassifiers = showClassifiers;
     return this;
   }
 
   @Override
-  public GraphStyleConfigurer showVersionsOnNodes(boolean showVersionsOnNodes) {
+  public final GraphStyleConfigurer showVersionsOnNodes(boolean showVersionsOnNodes) {
     this.showVersionsOnNodes = showVersionsOnNodes;
     return this;
   }
 
   @Override
-  public GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges) {
+  public final GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges) {
     this.showVersionOnEdges = showVersionOnEdges;
     return this;
   }
