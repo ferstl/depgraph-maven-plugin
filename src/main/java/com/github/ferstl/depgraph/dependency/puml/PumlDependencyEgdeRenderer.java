@@ -19,6 +19,8 @@ import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
+import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviateVersion;
+
 /**
  * Renders an arc between two nodes in a PlantUML diagram. Arcs are styled and colored depending on the resolution of the target node.
  */
@@ -52,7 +54,7 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
         edgeInfo.withBegin(".[")
             .withColor(CONFLICT_COLOR)
             .withEnd("].>")
-            .withLabel(this.renderVersion ? to.getArtifact().getVersion() : "");
+            .withLabel(this.renderVersion ? abbreviateVersion(to.getArtifact().getVersion()) : "");
         break;
       case OMITTED_FOR_DUPLICATE:
         edgeInfo.withBegin(".[")
