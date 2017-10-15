@@ -28,6 +28,12 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
   private static final String DUPLICATE_COLOR = "#D3D3D3"; // lightGray
   private static final String CONFLICT_COLOR = "#FF0000"; // red
 
+  private final boolean renderVersion;
+
+  public PumlDependencyEgdeRenderer(boolean renderVersion) {
+    this.renderVersion = renderVersion;
+  }
+
   @Override
   public String render(DependencyNode from, DependencyNode to) {
     NodeResolution resolution = to.getResolution();
@@ -46,7 +52,7 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
         edgeInfo.withBegin(".[")
             .withColor(CONFLICT_COLOR)
             .withEnd("].>")
-            .withLabel(to.getArtifact().getVersion());
+            .withLabel(this.renderVersion ? to.getArtifact().getVersion() : "");
         break;
       case OMITTED_FOR_DUPLICATE:
         edgeInfo.withBegin(".[")

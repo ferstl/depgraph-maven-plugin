@@ -40,7 +40,7 @@ public class PumlGraphFormatterTest {
 
   private final PumlDependencyNodeNameRenderer nodeInfoRenderer = new PumlDependencyNodeNameRenderer(true, true, false, false, true);
 
-  private final PumlDependencyEgdeRenderer edgeInfoRenderer = new PumlDependencyEgdeRenderer();
+  private final PumlDependencyEgdeRenderer edgeInfoRenderer = new PumlDependencyEgdeRenderer(true);
 
   private final List<Tuple> dependencies = Arrays.asList(
       new Tuple("com.github.ferstl:depgraph-maven-plugin:2.2.1-SNAPSHOT:compile", false),
