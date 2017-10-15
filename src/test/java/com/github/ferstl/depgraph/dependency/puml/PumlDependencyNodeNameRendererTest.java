@@ -48,46 +48,46 @@ public class PumlDependencyNodeNameRendererTest extends AbstractDependencyNodeNa
 
   @Override
   protected String renderGroupIdArtifactIdVersionResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"groupId:artifactId:version\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"label\":\"groupId\\\\nartifactId\\\\nversion\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderGroupIdArtifactIdResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"groupId:artifactId\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"label\":\"groupId\\\\nartifactId\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderGroupIdVersionResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"groupId:version\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"label\":\"groupId\\\\nversion\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderArtifactIdVersionResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId:version\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\nversion\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderTypesResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId:.jar/.zip\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\n.jar/.zip\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderJarTypeOnlyResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId:\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\n\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderClassifiersResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId:classifier1/classifier2\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\nclassifier1/classifier2\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderEmptyClassifierResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId:\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\n\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderAllResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"groupId:artifactId:.jar/.tar.gz/.zip:classifier1/classifier2:version\",\"stereotype\":\"test\"}";
+    return "{\"component\":\"rectangle\",\"label\":\"groupId\\\\nartifactId\\\\n.jar/.tar.gz/.zip\\\\nclassifier1/classifier2\\\\nversion\",\"stereotype\":\"test\"}";
   }
 }

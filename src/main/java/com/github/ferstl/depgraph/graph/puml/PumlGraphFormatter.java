@@ -46,7 +46,8 @@ public class PumlGraphFormatter implements GraphFormatter {
   }
 
   private void skinParam(StringBuilder puml) {
-    puml.append("skinparam rectangle {\n")
+    puml.append("skinparam defaultTextAlignment center\n")
+        .append("skinparam rectangle {\n")
         .append("  BackgroundColor<<test>> lightGreen\n")
         .append("  BackgroundColor<<runtime>> lightBlue\n")
         .append("  BackgroundColor<<provided>> lightGray\n")
