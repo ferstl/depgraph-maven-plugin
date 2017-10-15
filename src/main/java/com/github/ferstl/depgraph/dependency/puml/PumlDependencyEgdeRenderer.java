@@ -52,7 +52,7 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
         edgeInfo.withBegin(".[")
             .withColor(DUPLICATE_COLOR)
             .withEnd("].>")
-            .withLabel(to.getArtifact().getVersion());
+            .withLabel("");
         break;
       case OMITTED_FOR_CYCLE:
       default:
