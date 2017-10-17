@@ -217,9 +217,9 @@ Such a graph is not useful whatsoever. Unless it is not possible to access all r
 
 -----
 
-Q: How do the `includes`/`excludes` parameters work?
+Q: How do the `includes`/`excludes` and the other filtering parameters work?
 
-A: Both parameters are a comma-separated list in the form of `groupId:artifactId:type:classifier`. Not all parts need to be specified and there is wildcard support.
+A: The filtering parameters are a comma-separated list in the form of `groupId:artifactId:type:classifier`. Not all parts need to be specified and there is wildcard support.
 Examples:
 
 - All spring-web\* dependencies: `org.springframework:spring-web*`
@@ -227,3 +227,5 @@ Examples:
 - The same test jar, but without explicit `type` part `com.mycompany:mylib::tests`
 
 A dependency will show up in the graph when it matches the `includes` list **and** doesn't match the `excludes` list.
+
+Take also a look at the [Filtering](https://github.com/ferstl/depgraph-maven-plugin/wiki/Filtering) documentation in the Wiki.
