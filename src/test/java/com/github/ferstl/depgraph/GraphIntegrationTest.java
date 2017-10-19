@@ -313,17 +313,17 @@ public class GraphIntegrationTest {
   }
 
   @Test
-  public void deprecatedOutpuFileParameter() throws Exception {
+  public void outputLocationParameters() throws Exception {
     File basedir = this.resources.getBasedir("single-dependency");
 
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DoutputFile=" + basedir.toPath().toAbsolutePath().toString() + "/target/my-graph")
+        .withCliOption("-DoutputDirectory=" + basedir.toPath().toAbsolutePath().toString() + "/target/custom-directory")
+        .withCliOption("-DoutputFileName=custom-graph")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
-    result.assertLogText("The 'outputFile' parameter has been deprecated");
-    assertFilesPresent(basedir, "target/my-graph.dot");
+    assertFilesPresent(basedir, "target/custom-directory/custom-graph.dot");
   }
 
   @Test
