@@ -41,10 +41,10 @@ public final class DependencyNodeUtil {
     return new DependencyNode(mavenDependencyNode);
   }
 
-  public static DependencyNode createDependencyNodeWithDuplicate(String groupId, String artifactId, String version, Artifact related) {
+  public static DependencyNode createDependencyNodeWithDuplicate(String groupId, String artifactId, String version) {
     Artifact artifact = createArtifact(groupId, artifactId, version, "compile", "jar", "");
 
-    org.apache.maven.shared.dependency.tree.DependencyNode mavenDependencyNode = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, OMITTED_FOR_DUPLICATE, related);
+    org.apache.maven.shared.dependency.tree.DependencyNode mavenDependencyNode = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, OMITTED_FOR_DUPLICATE, artifact);
     return new DependencyNode(mavenDependencyNode);
   }
 
