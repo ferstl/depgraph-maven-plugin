@@ -17,7 +17,6 @@ package com.github.ferstl.depgraph;
 
 import java.util.Collection;
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import com.github.ferstl.depgraph.dependency.SubProjectSupplier;
@@ -69,7 +68,7 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "repeatTransitiveDependenciesInTextGraph", defaultValue = "false")
   boolean repeatTransitiveDependenciesInTextGraph;
 
-  @Component
+  @Parameter(defaultValue = "${session}", readonly = true)
   MavenSession mavenSession;
 
   SubProjectSupplier createReactorOrderSubProjectSupplier() {
