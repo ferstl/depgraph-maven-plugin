@@ -54,4 +54,9 @@ public class DotDependencyEdgeRendererTest extends AbstractDependencyEdgeRendere
   protected String renderWithConflictNotShowingVersionResult() {
     return "";
   }
+
+  @Override
+  protected String renderWithDuplicateResult() {
+    return "";
+  }
 }
