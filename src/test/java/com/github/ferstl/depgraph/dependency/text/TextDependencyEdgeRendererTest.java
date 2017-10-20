@@ -45,4 +45,9 @@ public class TextDependencyEdgeRendererTest extends AbstractDependencyEdgeRender
   protected String renderWithConflictNotShowingVersionResult() {
     return "omitted for conflict";
   }
+
+  @Override
+  protected String renderWithDuplicateResult() {
+    return "omitted for duplicate";
+  }
 }

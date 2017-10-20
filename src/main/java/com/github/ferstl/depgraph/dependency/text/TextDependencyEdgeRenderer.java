@@ -16,7 +16,6 @@
 package com.github.ferstl.depgraph.dependency.text;
 
 import com.github.ferstl.depgraph.dependency.DependencyNode;
-import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
 public class TextDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
@@ -29,15 +28,20 @@ public class TextDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> 
 
   @Override
   public String render(DependencyNode from, DependencyNode to) {
-    if (to.getResolution() == NodeResolution.OMITTED_FOR_CONFLICT) {
-      String message = "omitted for conflict";
-      if (this.showVersions) {
-        message += ": " + to.getArtifact().getVersion();
-      }
+    switch (to.getResolution()) {
+      case OMITTED_FOR_CONFLICT:
+        String message = "omitted for conflict";
+        if (this.showVersions) {
+          message += ": " + to.getArtifact().getVersion();
+        }
 
-      return message;
+        return message;
+
+      case OMITTED_FOR_DUPLICATE:
+        return "omitted for duplicate";
+
+      default:
+        return "";
     }
-
-    return "";
   }
 }

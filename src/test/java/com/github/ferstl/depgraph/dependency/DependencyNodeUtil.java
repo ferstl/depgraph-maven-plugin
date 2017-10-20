@@ -18,6 +18,7 @@ package com.github.ferstl.depgraph.dependency;
 import org.apache.maven.artifact.Artifact;
 
 import static org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT;
+import static org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,6 +38,13 @@ public final class DependencyNodeUtil {
     when(conflictingArtifact.getVersion()).thenReturn(effectiveVersion + "-alpha");
 
     org.apache.maven.shared.dependency.tree.DependencyNode mavenDependencyNode = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, OMITTED_FOR_CONFLICT, conflictingArtifact);
+    return new DependencyNode(mavenDependencyNode);
+  }
+
+  public static DependencyNode createDependencyNodeWithDuplicate(String groupId, String artifactId, String version) {
+    Artifact artifact = createArtifact(groupId, artifactId, version, "compile", "jar", "");
+
+    org.apache.maven.shared.dependency.tree.DependencyNode mavenDependencyNode = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, OMITTED_FOR_DUPLICATE, artifact);
     return new DependencyNode(mavenDependencyNode);
   }
 

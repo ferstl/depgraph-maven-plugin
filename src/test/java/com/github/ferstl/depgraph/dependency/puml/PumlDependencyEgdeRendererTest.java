@@ -45,4 +45,9 @@ public class PumlDependencyEgdeRendererTest extends AbstractDependencyEdgeRender
   protected String renderWithConflictNotShowingVersionResult() {
     return "{\"begin\":\".[\",\"end\":\"].>\",\"color\":\"#FF0000\",\"label\":\"\"}";
   }
+
+  @Override
+  protected String renderWithDuplicateResult() {
+    return "{\"begin\":\".[\",\"end\":\"].>\",\"color\":\"#D3D3D3\",\"label\":\"\"}";
+  }
 }

@@ -20,6 +20,7 @@ import com.github.ferstl.depgraph.graph.EdgeRenderer;
 
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNodeWithConflict;
+import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNodeWithDuplicate;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractDependencyEdgeRendererTest {
@@ -80,6 +81,22 @@ public abstract class AbstractDependencyEdgeRendererTest {
     assertEquals(renderWithConflictNotShowingVersionResult(), result);
   }
 
+  @Test
+  public final void renderWithDuplicate() {
+    // arrange
+    EdgeRenderer<DependencyNode> edgeRenderer = createEdgeRenderer(false);
+
+    DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
+    DependencyNode to = createDependencyNode("group2", "artifact2", "version2");
+    DependencyNode duplicateTo = createDependencyNodeWithDuplicate("group2", "artifact2", "version2");
+
+    // act
+    String result = edgeRenderer.render(from, duplicateTo);
+
+    // assert
+    assertEquals(renderWithDuplicateResult(), result);
+  }
+
   protected abstract EdgeRenderer<DependencyNode> createEdgeRenderer(boolean renderVersion);
 
   protected abstract String renderWithoutVersionResult();
@@ -89,4 +106,6 @@ public abstract class AbstractDependencyEdgeRendererTest {
   protected abstract String renderWithConflictShowingVersionResult();
 
   protected abstract String renderWithConflictNotShowingVersionResult();
+
+  protected abstract String renderWithDuplicateResult();
 }

@@ -65,4 +65,14 @@ public class GmlDependencyEdgeRendererTest extends AbstractDependencyEdgeRendere
         + "color \"#FF0000\"\n"
         + "]";
   }
+
+  @Override
+  protected String renderWithDuplicateResult() {
+    return "\n"
+        + "graphics\n"
+        + "[\n"
+        + "style \"dotted\"\n"
+        + "targetArrow \"standard\"\n"
+        + "]";
+  }
 }
