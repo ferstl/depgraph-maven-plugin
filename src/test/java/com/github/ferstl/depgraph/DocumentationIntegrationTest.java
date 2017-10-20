@@ -84,7 +84,7 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void withVersions() throws Exception {
-    runTest("graph", "-DshowVersions=true");
+    runTest("graph", "-DshowVersions");
 
     assertFilesPresent(
         this.basedir,
@@ -99,7 +99,7 @@ public class DocumentationIntegrationTest {
 
   @Test
   public void withGroupIds() throws Exception {
-    runTest("graph", "-DshowGroupIds=true");
+    runTest("graph", "-DshowGroupIds");
 
     assertFilesPresent(
         this.basedir,
@@ -115,9 +115,9 @@ public class DocumentationIntegrationTest {
   @Test
   public void withDuplicatesAndConflicts() throws Exception {
     runTest("graph",
-        "-DshowVersions=true",
-        "-DshowDuplicates=true",
-        "-DshowConflicts=true");
+        "-DshowVersions",
+        "-DshowDuplicates",
+        "-DshowConflicts");
 
     assertFilesPresent(
         this.basedir,
@@ -133,7 +133,7 @@ public class DocumentationIntegrationTest {
   @Test
   public void aggregated() throws Exception {
     runTest("aggregate",
-        "-DincludeParentProjects=true",
+        "-DincludeParentProjects",
         "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3");
 
     assertFilesPresent(this.basedir, "target/dependency-graph.png");
@@ -180,8 +180,8 @@ public class DocumentationIntegrationTest {
     String styleConfiguration = this.basedir.toPath().resolve("custom-style.json").toAbsolutePath().toString();
     runTest(
         "aggregate",
-        "-DshowGroupIds=true",
-        "-DincludeParentProjects=true",
+        "-DshowGroupIds",
+        "-DincludeParentProjects",
         "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3",
         "-DcustomStyleConfiguration=" + styleConfiguration);
 
@@ -194,9 +194,9 @@ public class DocumentationIntegrationTest {
   public void gmlWithConflicts() throws Exception {
     runTest("graph",
         "-DgraphFormat=gml",
-        "-DshowVersions=true",
-        "-DshowDuplicates=true",
-        "-DshowConflicts=true");
+        "-DshowVersions",
+        "-DshowDuplicates",
+        "-DshowConflicts");
 
     assertFilesPresent(
         this.basedir,
@@ -231,7 +231,7 @@ public class DocumentationIntegrationTest {
   private void runTest(String goal, String... cliOptions) throws Exception {
     File basedir = getBaseDir();
     MavenExecution execution = this.mavenRuntime.forProject(basedir);
-    execution.withCliOption("-DcreateImage=true");
+    execution.withCliOption("-DcreateImage");
     for (String cliOption : cliOptions) {
       execution.withCliOption(cliOption);
     }

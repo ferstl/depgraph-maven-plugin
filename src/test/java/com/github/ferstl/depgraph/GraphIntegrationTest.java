@@ -129,7 +129,7 @@ public class GraphIntegrationTest {
 
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeTypes=true")
+        .withCliOption("-DmergeTypes")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
@@ -157,8 +157,8 @@ public class GraphIntegrationTest {
         .forProject(basedir)
         .withCliOption("-DgraphFormat=gml")
         .withCliOption("-DtargetIncludes=*:guava")
-        .withCliOption("-DshowDuplicates=true")
-        .withCliOption("-DshowConflicts=true")
+        .withCliOption("-DshowDuplicates")
+        .withCliOption("-DshowConflicts")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
@@ -241,8 +241,8 @@ public class GraphIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DgraphFormat=gml")
-        .withCliOption("-DshowGroupIds=true")
-        .withCliOption("-DshowVersions=true")
+        .withCliOption("-DshowGroupIds")
+        .withCliOption("-DshowVersions")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
@@ -332,7 +332,7 @@ public class GraphIntegrationTest {
 
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DuseArtifactIdInFileName=true")
+        .withCliOption("-DuseArtifactIdInFileName")
         .withCliOption("-DoutputFileName=not-relevant")
         .execute("clean", "package", "depgraph:graph");
 

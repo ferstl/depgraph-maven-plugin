@@ -97,7 +97,7 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeScopes=true")
+        .withCliOption("-DmergeScopes")
         .execute("clean", "package", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
@@ -111,7 +111,7 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeScopes=true")
+        .withCliOption("-DmergeScopes")
         .execute("clean", "package", "depgraph:aggregate-by-groupid");
 
     result.assertErrorFreeLog();
@@ -125,7 +125,7 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeClassifiers=true")
+        .withCliOption("-DmergeClassifiers")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
@@ -143,7 +143,7 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeTypes=true")
+        .withCliOption("-DmergeTypes")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
@@ -161,8 +161,8 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeTypes=true")
-        .withCliOption("-DmergeClassifiers=true")
+        .withCliOption("-DmergeTypes")
+        .withCliOption("-DmergeClassifiers")
         .execute("clean", "package", "depgraph:graph");
 
     result.assertErrorFreeLog();
@@ -180,7 +180,7 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeClassifiers=true")
+        .withCliOption("-DmergeClassifiers")
         .execute("clean", "package", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
@@ -194,7 +194,7 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeTypes=true")
+        .withCliOption("-DmergeTypes")
         .execute("clean", "package", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
@@ -208,8 +208,8 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeTypes=true")
-        .withCliOption("-DmergeClassifiers=true")
+        .withCliOption("-DmergeTypes")
+        .withCliOption("-DmergeClassifiers")
         .execute("clean", "package", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
@@ -223,9 +223,9 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-DmergeTypes=true")
-        .withCliOption("-DmergeClassifiers=true")
-        .withCliOption("-DmergeScopes=true")
+        .withCliOption("-DmergeTypes")
+        .withCliOption("-DmergeClassifiers")
+        .withCliOption("-DmergeScopes")
         .execute("clean", "package", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
