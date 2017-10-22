@@ -52,7 +52,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
         .showClassifiers(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
-        .configure(GraphBuilder.<DependencyNode>create(DependencyNodeIdRenderer.groupId().withScope(true)))
+        .configure(GraphBuilder.create(DependencyNodeIdRenderer.groupId().withScope(true)))
         .omitSelfReferences();
 
     MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, transitiveIncludeExcludeFilter, targetFilter, allOf(NodeResolution.class));
