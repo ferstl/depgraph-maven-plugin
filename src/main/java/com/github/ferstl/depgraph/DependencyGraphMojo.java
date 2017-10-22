@@ -39,7 +39,6 @@ import static java.util.EnumSet.of;
  */
 @Mojo(
     name = "graph",
-    aggregator = false,
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.TEST,
     threadSafe = true)

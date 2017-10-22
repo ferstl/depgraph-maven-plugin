@@ -35,7 +35,6 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 @Mojo(
     name = "example",
     aggregator = true,
-    requiresProject = true,
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.NONE,
     threadSafe = true)

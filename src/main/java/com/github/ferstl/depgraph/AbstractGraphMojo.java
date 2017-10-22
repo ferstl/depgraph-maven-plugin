@@ -98,7 +98,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    *
    * @since 1.0.0
    */
-  @Parameter(property = "includes", defaultValue = "")
+  @Parameter(property = "includes")
   private List<String> includes;
 
   /**
@@ -106,7 +106,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    *
    * @since 1.0.0
    */
-  @Parameter(property = "excludes", defaultValue = "")
+  @Parameter(property = "excludes")
   private List<String> excludes;
 
   /**
@@ -115,7 +115,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    *
    * @since 3.0.0
    */
-  @Parameter(property = "transitiveIncludes", defaultValue = "")
+  @Parameter(property = "transitiveIncludes")
   private List<String> transitiveIncludes;
 
   /**
@@ -124,7 +124,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    *
    * @since 3.0.0
    */
-  @Parameter(property = "transitiveExcludes", defaultValue = "")
+  @Parameter(property = "transitiveExcludes")
   private List<String> transitiveExcludes;
 
   /**
@@ -133,7 +133,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    *
    * @since 1.0.4
    */
-  @Parameter(property = "targetIncludes", defaultValue = "")
+  @Parameter(property = "targetIncludes")
   private List<String> targetIncludes;
 
   /**
@@ -218,7 +218,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    *
    * @since 2.0.0
    */
-  @Parameter(property = "customStyleConfiguration", defaultValue = "")
+  @Parameter(property = "customStyleConfiguration")
   private String customStyleConfiguration;
 
   /**

@@ -37,7 +37,6 @@ import static java.util.EnumSet.allOf;
  */
 @Mojo(
     name = "by-groupid",
-    aggregator = false,
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.TEST,
     threadSafe = true)
