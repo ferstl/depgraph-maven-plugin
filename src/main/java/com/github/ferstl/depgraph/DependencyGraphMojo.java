@@ -51,7 +51,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
    * @since 1.0.3
    */
   @Parameter(property = "showGroupIds", defaultValue = "false")
-  boolean showGroupIds;
+  private boolean showGroupIds;
 
   /**
    * If set to {@code true}, the created graph will show version information an all artifacts. Depending on the flags
@@ -61,7 +61,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
    * @since 1.0.0
    */
   @Parameter(property = "showVersions", defaultValue = "false")
-  boolean showVersions;
+  private boolean showVersions;
 
   /**
    * If set to {@code true}, the created graph will show type information an all artifacts.
@@ -69,7 +69,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
    * @since 3.0.0
    */
   @Parameter(property = "showTypes", defaultValue = "false")
-  boolean showTypes;
+  private boolean showTypes;
 
   /**
    * If set to {@code true}, the created graph will show classifier information an all artifacts.
@@ -77,7 +77,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
    * @since 3.0.0
    */
   @Parameter(property = "showClassifiers", defaultValue = "false")
-  boolean showClassifiers;
+  private boolean showClassifiers;
 
   /**
    * If set to {@code true}, the graph will additionally contain conflicting dependencies. Note that the dependency
@@ -88,7 +88,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
    * @since 1.0.0
    */
   @Parameter(property = "showConflicts", defaultValue = "false")
-  boolean showConflicts;
+  private boolean showConflicts;
 
   /**
    * If set to {@code true}, the graph will additionally contain duplicate dependencies. Note that the dependency graph
@@ -99,7 +99,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
    * @since 1.0.0
    */
   @Parameter(property = "showDuplicates", defaultValue = "false")
-  boolean showDuplicates;
+  private boolean showDuplicates;
 
   /**
    * Merge dependencies with multiple types into one graph node instead of having a node per type.
@@ -107,7 +107,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
    * @since 3.0.0
    */
   @Parameter(property = "mergeTypes", defaultValue = "false")
-  boolean mergeTypes;
+  private boolean mergeTypes;
 
   /**
    * Merge dependencies with multiple classifiers into one graph node instead of having a node per classifier.
@@ -115,7 +115,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
    * @since 3.0.0
    */
   @Parameter(property = "mergeClassifiers", defaultValue = "false")
-  boolean mergeClassifiers;
+  private boolean mergeClassifiers;
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {

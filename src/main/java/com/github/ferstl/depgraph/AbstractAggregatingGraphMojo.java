@@ -69,7 +69,7 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
   boolean repeatTransitiveDependenciesInTextGraph;
 
   @Parameter(defaultValue = "${session}", readonly = true)
-  MavenSession mavenSession;
+  private MavenSession mavenSession;
 
   SubProjectSupplier createReactorOrderSubProjectSupplier() {
     return new SubProjectSupplier() {

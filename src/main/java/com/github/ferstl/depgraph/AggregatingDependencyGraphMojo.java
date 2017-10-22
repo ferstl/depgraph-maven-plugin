@@ -46,7 +46,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
    * @since 1.0.3
    */
   @Parameter(property = "showGroupIds", defaultValue = "false")
-  boolean showGroupIds;
+  private boolean showGroupIds;
 
   /**
    * If set to {@code true} the artifact nodes will show version information.
@@ -54,7 +54,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
    * @since 1.0.0
    */
   @Parameter(property = "showVersions", defaultValue = "false")
-  boolean showVersions;
+  private boolean showVersions;
 
   /**
    * If set to {@code true}, the created graph will show type information an all artifacts.
@@ -62,7 +62,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
    * @since 3.0.0
    */
   @Parameter(property = "showTypes", defaultValue = "false")
-  boolean showTypes;
+  private boolean showTypes;
 
   /**
    * If set to {@code true}, the created graph will show classifier information an all artifacts.
@@ -70,7 +70,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
    * @since 3.0.0
    */
   @Parameter(property = "showClassifiers", defaultValue = "false")
-  boolean showClassifiers;
+  private boolean showClassifiers;
 
   /**
    * If set to {@code true}, all parent modules (&lt;packaging&gt;pom&lt;/packaging&gt) will be shown with a dotted
@@ -95,7 +95,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
    * @since 3.0.0
    */
   @Parameter(property = "mergeClassifiers", defaultValue = "false")
-  boolean mergeClassifiers;
+  private boolean mergeClassifiers;
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
