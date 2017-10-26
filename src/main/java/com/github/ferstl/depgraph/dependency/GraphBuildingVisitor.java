@@ -84,7 +84,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   private boolean internalVisit(DependencyNode node) {
-    if (!isIncluded(node)) {
+    if (isExcluded(node)) {
       return false;
     }
 
@@ -99,7 +99,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
 
   private boolean internalEndVisit(DependencyNode node) {
-    if (!isIncluded(node)) {
+    if (isExcluded(node)) {
       return true;
     }
 
@@ -125,12 +125,12 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
     return true;
   }
 
-  private boolean isIncluded(DependencyNode node) {
+  private boolean isExcluded(DependencyNode node) {
     Artifact artifact = node.getArtifact();
 
-    return this.globalFilter.include(artifact)
-        && this.transitiveFilter.include(artifact)
-        && this.includedResolutions.contains(node.getResolution());
+    return !this.globalFilter.include(artifact)
+        || !this.transitiveFilter.include(artifact)
+        || !this.includedResolutions.contains(node.getResolution());
   }
 
   private void mergeWithExisting(DependencyNode node) {
