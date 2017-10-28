@@ -47,9 +47,9 @@
               <goal>single</goal>
             </goals>
             <configuration>
-              <descriptorRefs>
-                <descriptorRef>bin</descriptorRef>
-              </descriptorRefs>
+              <descriptors>
+                <descriptor>src/main/assembly/bin-distro.xml</descriptor>
+              </descriptors>
               <appendAssemblyId>false</appendAssemblyId>
             </configuration>
           </execution>
