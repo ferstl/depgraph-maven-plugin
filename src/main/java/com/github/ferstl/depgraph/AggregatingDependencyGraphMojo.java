@@ -73,8 +73,8 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   private boolean showClassifiers;
 
   /**
-   * If set to {@code true}, all parent modules (&lt;packaging&gt;pom&lt;/packaging&gt) will be shown with a dotted
-   * arrow pointing to their child modules.
+   * If set to {@code true}, all parent modules (&lt;packaging&gt;pom&lt;/packaging&gt) will be shown as nodes with
+   * edges pointing to their child modules.
    *
    * @since 1.0.0
    */
