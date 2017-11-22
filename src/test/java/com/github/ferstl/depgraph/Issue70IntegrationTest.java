@@ -60,6 +60,7 @@ public class Issue70IntegrationTest {
     File basedir = this.resources.getBasedir("issue-70");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
+        .withCliOption("-B")
         .withCliOption("-DcreateImage")
         .withCliOption("-DincludeParentProjects")
         .execute("clean", "package", "depgraph:aggregate");

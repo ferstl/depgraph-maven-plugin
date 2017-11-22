@@ -8,27 +8,21 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>module-1</module>
-    <module>module-2</module>
-    <module>sub-parent</module>
+    <module>module-other-parent</module>
+    <module>submodule</module>
   </modules>
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>com.mysema.querydsl</groupId>
-        <artifactId>querydsl-core</artifactId>
-        <version>3.7.4</version>
-      </dependency>
       <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
         <version>1.10</version>
       </dependency>
       <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>21.0</version>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.1</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
