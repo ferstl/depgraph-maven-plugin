@@ -340,4 +340,18 @@ public class GraphIntegrationTest {
     assertFilesPresent(basedir, "target/single-dependency.dot");
   }
 
+  @Test
+  public void aggregateWithMultipleParents() throws Exception {
+    File basedir = this.resources.getBasedir("multiple-parents");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-B")
+        .withCliOption("-DincludeParentProjects")
+        .execute("clean", "package", "depgraph:aggregate");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.dot");
+
+    assertFileContents(basedir, "expectations/aggregate-multiple-parents.dot", "target/dependency-graph.dot");
+  }
 }
