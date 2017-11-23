@@ -345,7 +345,6 @@ public class GraphIntegrationTest {
     File basedir = this.resources.getBasedir("multiple-parents");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DincludeParentProjects")
         .execute("clean", "package", "depgraph:aggregate");
 
