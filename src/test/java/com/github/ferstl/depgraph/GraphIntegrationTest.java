@@ -346,7 +346,8 @@ public class GraphIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DincludeParentProjects")
-        .execute("clean", "package", "depgraph:aggregate");
+        // Somehow this test does not work on travis without fully qualifying the plugin.
+        .execute("clean", "package", "com.github.ferstl:depgraph-maven-plugin:aggregate");
 
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");
