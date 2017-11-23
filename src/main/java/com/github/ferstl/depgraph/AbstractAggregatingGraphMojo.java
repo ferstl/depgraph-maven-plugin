@@ -76,7 +76,7 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
 
       @Override
       public Collection<MavenProject> getSubProjects(MavenProject parent) {
-        return AbstractAggregatingGraphMojo.this.mavenSession.getProjectDependencyGraph().getDownstreamProjects(parent, true);
+        return AbstractAggregatingGraphMojo.this.mavenSession.getProjectDependencyGraph().getSortedProjects();
       }
     };
   }
