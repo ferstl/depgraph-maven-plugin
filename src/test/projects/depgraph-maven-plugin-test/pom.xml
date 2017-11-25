@@ -25,11 +25,6 @@
         <artifactId>commons-codec</artifactId>
         <version>1.10</version>
       </dependency>
-      <!--       <dependency> -->
-      <!--         <groupId>org.apache.commons</groupId> -->
-      <!--         <artifactId>commons-lang3</artifactId> -->
-      <!--         <version>3.1</version> -->
-      <!--       </dependency> -->
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
@@ -51,15 +46,6 @@
           <groupId>com.github.ferstl</groupId>
           <artifactId>depgraph-maven-plugin</artifactId>
           <version>${it-plugin.version}</version>
-          <!--           <dependencies> -->
-          <!--             <dependency> -->
-          <!--               <groupId>com.github.ferstl</groupId> -->
-          <!--               <artifactId>depgraph-styles</artifactId> -->
-          <!--               <version>1.0.0</version> -->
-          <!--               <systemPath>${project.basedir}/depgraph-styles.jar</systemPath> -->
-          <!--               <scope>system</scope> -->
-          <!--             </dependency> -->
-          <!--           </dependencies> -->
         </plugin>
       </plugins>
     </pluginManagement>
