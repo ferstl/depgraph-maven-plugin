@@ -108,7 +108,7 @@ public class StyleConfiguration {
 
     // Specific edge style-from win over node resolution
     if (from != null) {
-      StyleKey artifactKeyFrom = StyleKey.create(from.getGroupId(), from.getArtifactId(), from.getScope(), from.getType(), from.getVersion());
+      StyleKey artifactKeyFrom = StyleKey.create(from.getGroupId(), from.getArtifactId(), from.getScope(), from.getType(), from.getVersion(), from.getClassifier());
       for (Entry<StyleKey, Edge> entry : this.edgeNodeStylesFrom.entrySet()) {
         StyleKey styleKey = entry.getKey();
         if (styleKey.matches(artifactKeyFrom)) {
@@ -119,7 +119,7 @@ public class StyleConfiguration {
     }
     // Specific edge style-from to over node resolution
     if (to != null) {
-      StyleKey artifactKeyTo = StyleKey.create(to.getGroupId(), to.getArtifactId(), to.getScope(), to.getType(), to.getVersion());
+      StyleKey artifactKeyTo = StyleKey.create(to.getGroupId(), to.getArtifactId(), to.getScope(), to.getType(), to.getVersion(), to.getClassifier());
       for (Entry<StyleKey, Edge> entry : this.edgeNodeStylesTo.entrySet()) {
         StyleKey styleKey = entry.getKey();
         if (styleKey.matches(artifactKeyTo)) {

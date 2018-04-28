@@ -15,27 +15,29 @@
  */
 package com.github.ferstl.depgraph.dependency.dot.style;
 
-import java.util.Objects;
-import org.apache.commons.lang3.StringUtils;
 import com.google.common.base.Joiner;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public final class StyleKey {
 
-  private static final int NUM_ELEMENTS = 5;
+  private static final int NUM_ELEMENTS = 6;
 
   private final String groupId;
   private final String artifactId;
   private final String scope;
   private final String type;
   private final String version;
+  private final String classifier;
 
 
   private StyleKey(String[] parts) {
     if (parts.length > NUM_ELEMENTS) {
-      throw new IllegalArgumentException("Too many parts. Expecting '<groupId>:<artifactId>:<version>:<scope>:<type>'");
+      throw new IllegalArgumentException("Too many parts. Expecting '<groupId>:<artifactId>:<version>:<scope>:<type>:<classifier>'");
     }
 
     String[] expanded = new String[NUM_ELEMENTS];
@@ -52,6 +54,7 @@ public final class StyleKey {
     this.scope = expanded[2];
     this.type = expanded[3];
     this.version = expanded[4];
+    this.classifier = expanded[5];
   }
 
   public static StyleKey fromString(String keyString) {
@@ -59,8 +62,8 @@ public final class StyleKey {
     return new StyleKey(parts);
   }
 
-  public static StyleKey create(String groupId, String artifactId, String scope, String type, String version) {
-    return new StyleKey(new String[]{groupId, artifactId, scope, type, version});
+  public static StyleKey create(String groupId, String artifactId, String scope, String type, String version, String classifier) {
+    return new StyleKey(new String[]{groupId, artifactId, scope, type, version, classifier});
   }
 
   public boolean matches(StyleKey other) {
@@ -68,7 +71,8 @@ public final class StyleKey {
         && (wildcardMatch(this.artifactId, other.artifactId))
         && (match(this.scope, other.scope))
         && (match(this.type, other.type))
-        && (wildcardMatch(this.version, other.version));
+        && (wildcardMatch(this.version, other.version))
+        && (wildcardMatch(this.classifier, other.classifier));
 
   }
 
@@ -88,17 +92,18 @@ public final class StyleKey {
         && Objects.equals(this.artifactId, other.artifactId)
         && Objects.equals(this.scope, other.scope)
         && Objects.equals(this.type, other.type)
-        && Objects.equals(this.version, other.version);
+        && Objects.equals(this.version, other.version)
+        && Objects.equals(this.classifier, other.classifier);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.groupId, this.artifactId, this.scope, this.type, this.version);
+    return Objects.hash(this.groupId, this.artifactId, this.scope, this.type, this.version, this.classifier);
   }
 
   @Override
   public String toString() {
-    return Joiner.on(",").join(this.groupId, this.artifactId, this.scope, this.type, this.version);
+    return Joiner.on(",").join(this.groupId, this.artifactId, this.scope, this.type, this.version, this.classifier);
   }
 
   private static boolean wildcardMatch(String value1, String value2) {

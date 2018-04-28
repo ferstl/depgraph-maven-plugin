@@ -31,6 +31,7 @@ public class StyleKeyTest {
   private StyleKey scope;
   private StyleKey type;
   private StyleKey version;
+  private StyleKey classifier;
 
   @Before
   public void before() {
@@ -39,57 +40,63 @@ public class StyleKeyTest {
     this.scope = StyleKey.fromString(",,scope");
     this.type = StyleKey.fromString(",,,type");
     this.version = StyleKey.fromString(",,,,version");
+    this.classifier = StyleKey.fromString(",,,,,classifier");
   }
 
   @Test
   public void fromStringWithGroupIdOnly() {
-    assertEquals("group.id,,,,", this.groupId.toString());
+    assertEquals("group.id,,,,,", this.groupId.toString());
   }
 
   @Test
   public void fromStringWithArtifactIdOnly() {
-    assertEquals(",artifactId,,,", this.artifactId.toString());
+    assertEquals(",artifactId,,,,", this.artifactId.toString());
   }
 
   @Test
   public void fromStringWithScopeOnly() {
-    assertEquals(",,scope,,", this.scope.toString());
+    assertEquals(",,scope,,,", this.scope.toString());
   }
 
   @Test
   public void fromStringWithTypeOnly() {
-    assertEquals(",,,type,", this.type.toString());
+    assertEquals(",,,type,,", this.type.toString());
   }
 
   @Test
   public void fromStringWithVersionOnly() {
-    assertEquals(",,,,version", this.version.toString());
+    assertEquals(",,,,version,", this.version.toString());
+  }
+
+  @Test
+  public void fromStringWithClassifierOnly() {
+    assertEquals(",,,,,classifier", this.classifier.toString());
   }
 
   @Test
   public void fromStringEmpty() {
     StyleKey key = StyleKey.fromString("");
 
-    assertEquals(",,,,", key.toString());
+    assertEquals(",,,,,", key.toString());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void fromStringTooManyParts() {
-    StyleKey.fromString("groupId,artifactId,scope,type,version,something,else");
+    StyleKey.fromString("groupId,artifactId,scope,type,version,something,classifier,else");
   }
 
   @Test
   public void create() {
-    StyleKey key = StyleKey.create("groupId", "artifactId", "scope", "type", "version");
+    StyleKey key = StyleKey.create("groupId", "artifactId", "scope", "type", "version", "classifier");
 
-    assertEquals("groupId,artifactId,scope,type,version", key.toString());
+    assertEquals("groupId,artifactId,scope,type,version,classifier", key.toString());
   }
 
   @Test
   public void createWithNullValues() {
-    StyleKey key = StyleKey.create(null, null, null, null, null);
+    StyleKey key = StyleKey.create(null, null, null, null, null, null);
 
-    assertEquals(",,,,", key.toString());
+    assertEquals(",,,,,", key.toString());
   }
 
   @Test
@@ -147,5 +154,13 @@ public class StyleKeyTest {
 
     assertTrue(this.version.matches(this.version));
     assertTrue(wildcard.matches(this.version));
+  }
+
+  @Test
+  public void matchesForClassifier() {
+    StyleKey wildcard = StyleKey.fromString(",,,,,classifier*");
+
+    assertTrue(this.classifier.matches(this.classifier));
+    assertTrue(wildcard.matches(this.classifier));
   }
 }
