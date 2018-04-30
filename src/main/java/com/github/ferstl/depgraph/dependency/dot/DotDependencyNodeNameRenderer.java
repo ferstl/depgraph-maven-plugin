@@ -54,7 +54,7 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
     String classifiers = createClassifierString(node.getClassifiers());
 
     String effectiveScope = node.getEffectiveScope();
-    StyleKey styleKey = StyleKey.create(artifact.getGroupId(), artifact.getArtifactId(), effectiveScope, artifact.getType(), node.getEffectiveVersion());
+    StyleKey styleKey = StyleKey.create(artifact.getGroupId(), artifact.getArtifactId(), effectiveScope, artifact.getType(), node.getEffectiveVersion(), classifiers);
 
     return this.styleConfiguration.nodeAttributes(
         styleKey,

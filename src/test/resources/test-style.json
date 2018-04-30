@@ -25,6 +25,11 @@
     }
   },
   "node-styles" : {
+    ",,,,,classifier" : {
+      "type": "polygon",
+      "style": "filled",
+      "fill-color": "green"
+    },
     ",,test" : {
       "type": "box",
       "style": "filled",

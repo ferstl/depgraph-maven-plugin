@@ -41,12 +41,14 @@ public class StyleConfigurationTest {
   private static final String ARTIFACT_ID = "artifactId";
   private static final String VERSION = "1.0.0";
   private static final String TYPE = "jar";
+  private static final String CLASSIFIER = "classifier";
   private static final String CLASSIFIER_DEFAULT = "";
   private static final String CLASSIFIER_LINUX = "linux";
 
-  private static final StyleKey COMPILE_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_COMPILE, TYPE, VERSION);
-  private static final StyleKey TEST_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_TEST, TYPE, VERSION);
-  private static final StyleKey PROVIDED_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_PROVIDED, TYPE, VERSION);
+  private static final StyleKey COMPILE_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_COMPILE, TYPE, VERSION, CLASSIFIER_DEFAULT);
+  private static final StyleKey TEST_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_TEST, TYPE, VERSION, CLASSIFIER_LINUX);
+  private static final StyleKey TEST_STYLE_KEY_CLASSIFIER = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_TEST, TYPE, VERSION, CLASSIFIER);
+  private static final StyleKey PROVIDED_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_PROVIDED, TYPE, VERSION, CLASSIFIER_DEFAULT);
 
   private ClasspathStyleResource testStyle;
   private StyleConfiguration emptyConfig;
@@ -74,6 +76,7 @@ public class StyleConfigurationTest {
     assertEquals("[style=\"dashed\"]", config.edgeAttributes(NodeResolution.OMITTED_FOR_DUPLICATE, SCOPE_COMPILE, null, null).toString());
     assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>compile>]", config.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_DEFAULT, SCOPE_COMPILE).toString());
     assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_LINUX, SCOPE_TEST).toString());
+    assertEquals("[shape=\"polygon\",style=\"filled\",fillcolor=\"green\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>classifier<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY_CLASSIFIER, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER, SCOPE_TEST).toString());
   }
 
   @Test
