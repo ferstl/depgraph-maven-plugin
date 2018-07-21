@@ -55,7 +55,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
         .configure(GraphBuilder.create(DependencyNodeIdRenderer.groupId().withScope(true)))
         .omitSelfReferences();
 
-    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), false);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), false);
     return new SimpleGraphFactory(adapter, globalFilter, graphBuilder);
   }
 

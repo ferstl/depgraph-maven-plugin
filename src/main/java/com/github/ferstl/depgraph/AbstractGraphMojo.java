@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
@@ -37,11 +36,10 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectDependenciesResolver;
 import org.apache.maven.shared.artifact.filter.ScopeArtifactFilter;
 import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilter;
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
@@ -237,20 +235,11 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Parameter(defaultValue = "${project.artifactId}", readonly = true)
   private String artifactId;
 
-  /**
-   * Local maven repository required by the {@link DependencyTreeBuilder}.
-   */
-  @Parameter(defaultValue = "${localRepository}", readonly = true)
-  ArtifactRepository localRepository;
-
   @Parameter(defaultValue = "${project}", readonly = true)
   private MavenProject project;
 
-  @Component(hint = "default")
-  DependencyGraphBuilder dependencyGraphBuilder;
-
   @Component
-  DependencyTreeBuilder dependencyTreeBuilder;
+  ProjectDependenciesResolver dependenciesResolver;
 
   @Override
   public final void execute() throws MojoExecutionException, MojoFailureException {

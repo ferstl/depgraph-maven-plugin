@@ -18,6 +18,7 @@ package com.github.ferstl.depgraph.dependency;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DefaultArtifact;
 import com.google.common.collect.ImmutableSet;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -74,6 +75,10 @@ public final class DependencyNode {
     if (!isNullOrEmpty(artifact.getClassifier())) {
       this.classifiers.add(artifact.getClassifier());
     }
+  }
+
+  public DependencyNode(org.eclipse.aether.graph.DependencyNode dependencyNode) {
+    this(createMavenArtifact(dependencyNode));
   }
 
   public void merge(DependencyNode other) {
@@ -140,6 +145,24 @@ public final class DependencyNode {
   @Override
   public String toString() {
     return this.artifact.toString();
+  }
+
+  private static Artifact createMavenArtifact(org.eclipse.aether.graph.DependencyNode dependencyNode) {
+    org.eclipse.aether.artifact.Artifact artifact = dependencyNode.getArtifact();
+    String scope = null;
+    if (dependencyNode.getDependency() != null) {
+      scope = dependencyNode.getDependency().getScope();
+    }
+
+    return new DefaultArtifact(
+        artifact.getGroupId(),
+        artifact.getArtifactId(),
+        artifact.getVersion(),
+        scope,
+        artifact.getProperty("type", artifact.getExtension()),
+        artifact.getClassifier(),
+        null
+    );
   }
 
   private static NodeResolution determineResolution(int res) {

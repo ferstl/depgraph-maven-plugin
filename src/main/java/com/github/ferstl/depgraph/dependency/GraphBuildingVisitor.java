@@ -20,6 +20,7 @@ import java.util.Deque;
 import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.eclipse.aether.graph.DependencyVisitor;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static java.util.EnumSet.allOf;
@@ -30,7 +31,7 @@ import static java.util.EnumSet.allOf;
  * {@code DependencyNodeVisitor} interfaces for dependency trees and dependency graphs and adapts the different node
  * instances using {@link DependencyNode}.
  */
-class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor {
+class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor, DependencyVisitor {
 
   private final GraphBuilder<DependencyNode> graphBuilder;
   private final boolean omitReachablePaths;
@@ -49,8 +50,8 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
     this(graphBuilder, globalFilter, transitiveFilter, targetFilter, includedResolutions, false);
   }
 
-  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, boolean omitReachablePaths) {
-    this(graphBuilder, DoNothingArtifactFilter.INSTANCE, transitiveFilter, targetFilter, allOf(NodeResolution.class), omitReachablePaths);
+  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, boolean omitReachablePaths) {
+    this(graphBuilder, globalFilter, transitiveFilter, targetFilter, allOf(NodeResolution.class), omitReachablePaths);
   }
 
   private GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
@@ -80,6 +81,17 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
 
   @Override
   public boolean endVisit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
+    return internalEndVisit(new DependencyNode(node));
+  }
+
+
+  @Override
+  public boolean visitEnter(org.eclipse.aether.graph.DependencyNode node) {
+    return internalVisit(new DependencyNode(node));
+  }
+
+  @Override
+  public boolean visitLeave(org.eclipse.aether.graph.DependencyNode node) {
     return internalEndVisit(new DependencyNode(node));
   }
 
@@ -136,15 +148,5 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   private void mergeWithExisting(DependencyNode node) {
     DependencyNode effectiveNode = this.graphBuilder.getEffectiveNode(node);
     node.merge(effectiveNode);
-  }
-
-  private enum DoNothingArtifactFilter implements ArtifactFilter {
-    INSTANCE;
-
-    @Override
-    public boolean include(Artifact artifact) {
-      return true;
-    }
-
   }
 }
