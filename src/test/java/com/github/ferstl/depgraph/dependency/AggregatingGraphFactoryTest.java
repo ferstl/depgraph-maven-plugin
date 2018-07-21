@@ -17,6 +17,7 @@ package com.github.ferstl.depgraph.dependency;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -28,6 +29,7 @@ import org.mockito.ArgumentMatchers;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
+import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEdges;
 import static org.junit.Assert.assertThat;
@@ -71,7 +73,7 @@ public class AggregatingGraphFactoryTest {
     this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
     when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
 
-    this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.transitiveIncludeExcludeFilter, this.targetFilter, false);
+    this.adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.transitiveIncludeExcludeFilter, this.targetFilter, EnumSet.of(INCLUDED), false);
 
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 

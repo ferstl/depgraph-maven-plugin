@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import java.util.EnumSet;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
@@ -31,6 +32,7 @@ import org.mockito.ArgumentMatchers;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
+import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static java.util.EnumSet.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
@@ -77,8 +79,8 @@ public class MavenGraphAdapterTest {
 
 
     this.artifactRepository = mock(ArtifactRepository.class);
-    this.graphAdapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.transitiveIncludeExcludeFilter, this.targetFilter, false);
-    this.treeAdapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.transitiveIncludeExcludeFilter, this.targetFilter, allOf(NodeResolution.class));
+    this.graphAdapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.transitiveIncludeExcludeFilter, this.targetFilter, EnumSet.of(INCLUDED), false);
+    this.treeAdapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.transitiveIncludeExcludeFilter, this.targetFilter, allOf(NodeResolution.class), false);
   }
 
   @Test

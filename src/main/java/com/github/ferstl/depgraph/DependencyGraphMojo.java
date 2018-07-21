@@ -21,6 +21,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.eclipse.aether.RepositorySystemSession;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
@@ -30,6 +31,7 @@ import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
+import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
 import static java.util.EnumSet.of;
@@ -116,6 +118,9 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   @Parameter(property = "mergeClassifiers", defaultValue = "false")
   private boolean mergeClassifiers;
 
+  @Parameter(defaultValue = "${repositorySystemSession}", readonly = true)
+  RepositorySystemSession repositorySystemSession;
+
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
     handleOptionsForFullGraph();
@@ -157,10 +162,10 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
       resolutions = !this.showConflicts ? complementOf(of(NodeResolution.OMITTED_FOR_CONFLICT)) : resolutions;
       resolutions = !this.showDuplicates ? complementOf(of(NodeResolution.OMITTED_FOR_DUPLICATE)) : resolutions;
 
-      adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, transitiveIncludeExcludeFilter, targetFilter, resolutions);
+      adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveIncludeExcludeFilter, targetFilter, resolutions, false);
     } else {
       // there are no reachable paths to be omitted
-      adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveIncludeExcludeFilter, targetFilter, false);
+      adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), false);
     }
     return adapter;
   }

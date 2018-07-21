@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.EnumSet;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -27,6 +28,8 @@ import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
+
+import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 
 /**
  * Aggregates all dependencies of a multi-module project into one single graph.
@@ -117,7 +120,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .repeatTransitiveDependencies(this.repeatTransitiveDependenciesInTextGraph)
         .configure(GraphBuilder.create(nodeIdRenderer));
 
-    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveIncludeExcludeFilter, targetFilter, this.reduceEdges);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), this.reduceEdges);
     return new AggregatingGraphFactory(adapter, createReactorOrderSubProjectSupplier(), globalFilter, graphBuilder, this.includeParentProjects);
   }
 

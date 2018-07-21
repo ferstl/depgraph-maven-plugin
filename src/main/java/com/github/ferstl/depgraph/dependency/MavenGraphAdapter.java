@@ -31,7 +31,6 @@ import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static java.util.Collections.singletonList;
-import static java.util.EnumSet.allOf;
 
 /**
  * Adapter for {@link DependencyGraphBuilder} and {@link DependencyTreeBuilder}.
@@ -46,12 +45,12 @@ public final class MavenGraphAdapter {
   private final boolean omitReachablePaths;
   private final Set<NodeResolution> includedResolutions;
 
-  public MavenGraphAdapter(DependencyGraphBuilder builder, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, boolean omitReachablePaths) {
+  public MavenGraphAdapter(DependencyGraphBuilder builder, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
     this.dependencyGraphBuilder = builder;
     this.transitiveIncludeExcludeFilter = transitiveIncludeExcludeFilter;
     this.targetFilter = targetFilter;
     this.omitReachablePaths = omitReachablePaths;
-    this.includedResolutions = allOf(NodeResolution.class);
+    this.includedResolutions = includedResolutions;
     this.dependencyTreeBuilder = null;
     this.artifactRepository = null;
   }
