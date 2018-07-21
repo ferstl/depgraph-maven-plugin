@@ -19,8 +19,12 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
+import org.eclipse.aether.util.graph.transformer.ConflictResolver;
 import com.google.common.collect.ImmutableSet;
 
+import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
+import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_CONFLICT;
+import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_DUPLICATE;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
@@ -35,6 +39,7 @@ public final class DependencyNode {
 
   private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
   private final Artifact artifact;
+  private String effectiveVersion;
   private final NodeResolution resolution;
   private final Set<String> scopes;
   private final Set<String> classifiers;
@@ -42,7 +47,8 @@ public final class DependencyNode {
 
 
   public DependencyNode(Artifact artifact) {
-    this(artifact, NodeResolution.INCLUDED);
+    this(artifact, INCLUDED);
+    this.effectiveVersion = artifact.getVersion();
   }
 
   public DependencyNode(org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode) {
@@ -51,7 +57,13 @@ public final class DependencyNode {
 
   public DependencyNode(org.apache.maven.shared.dependency.tree.DependencyNode dependencyNode) {
     this(dependencyNode.getArtifact(), determineResolution(dependencyNode.getState()));
+    this.effectiveVersion = dependencyNode.getArtifact().getVersion();
     this.treeNode = dependencyNode;
+  }
+
+  public DependencyNode(org.eclipse.aether.graph.DependencyNode dependencyNode) {
+    this(createMavenArtifact(dependencyNode), determineResolution(dependencyNode));
+    this.effectiveVersion = determineEffectiveVersion(dependencyNode);
   }
 
   private DependencyNode(Artifact artifact, NodeResolution resolution) {
@@ -75,10 +87,7 @@ public final class DependencyNode {
     if (!isNullOrEmpty(artifact.getClassifier())) {
       this.classifiers.add(artifact.getClassifier());
     }
-  }
-
-  public DependencyNode(org.eclipse.aether.graph.DependencyNode dependencyNode) {
-    this(createMavenArtifact(dependencyNode));
+    this.effectiveVersion = artifact.getVersion();
   }
 
   public void merge(DependencyNode other) {
@@ -111,6 +120,7 @@ public final class DependencyNode {
     return ImmutableSet.copyOf(this.types);
   }
 
+
   /**
    * Returns the <strong>effective</strong> version of this node, i.e. the version that is actually used. This is
    * important for nodes with a resolution of {@link NodeResolution#OMITTED_FOR_CONFLICT} where
@@ -120,7 +130,7 @@ public final class DependencyNode {
    */
   public String getEffectiveVersion() {
     if (this.treeNode == null || this.treeNode.getRelatedArtifact() == null) {
-      return this.artifact.getVersion();
+      return this.effectiveVersion;
     }
 
     return this.treeNode.getRelatedArtifact().getVersion();
@@ -165,6 +175,29 @@ public final class DependencyNode {
     );
   }
 
+  private static NodeResolution determineResolution(org.eclipse.aether.graph.DependencyNode dependencyNode) {
+    org.eclipse.aether.graph.DependencyNode winner = (org.eclipse.aether.graph.DependencyNode) dependencyNode.getData().get(ConflictResolver.NODE_DATA_WINNER);
+
+    if (winner != null) {
+      if (winner.getArtifact().getVersion().equals(dependencyNode.getArtifact().getVersion())) {
+        return OMITTED_FOR_DUPLICATE;
+      }
+
+      return OMITTED_FOR_CONFLICT;
+    }
+
+    return INCLUDED;
+  }
+
+  private static String determineEffectiveVersion(org.eclipse.aether.graph.DependencyNode dependencyNode) {
+    org.eclipse.aether.graph.DependencyNode winner = (org.eclipse.aether.graph.DependencyNode) dependencyNode.getData().get(ConflictResolver.NODE_DATA_WINNER);
+    if (winner != null) {
+      return winner.getArtifact().getVersion();
+    }
+
+    return dependencyNode.getArtifact().getVersion();
+  }
+
   private static NodeResolution determineResolution(int res) {
     switch (res) {
       case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE:
@@ -174,7 +207,7 @@ public final class DependencyNode {
       case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CYCLE:
         return NodeResolution.OMITTED_FOR_CYCLE;
       default:
-        return NodeResolution.INCLUDED;
+        return INCLUDED;
     }
   }
 }

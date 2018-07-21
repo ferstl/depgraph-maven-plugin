@@ -23,8 +23,6 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.eclipse.aether.graph.DependencyVisitor;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
-import static java.util.EnumSet.allOf;
-
 
 /**
  * A node visitor that creates edges between the visited nodes using a {@link GraphBuilder}. This class implements the
@@ -46,15 +44,7 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
    */
   private int cutOffDepth = 0;
 
-  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
-    this(graphBuilder, globalFilter, transitiveFilter, targetFilter, includedResolutions, false);
-  }
-
-  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, boolean omitReachablePaths) {
-    this(graphBuilder, globalFilter, transitiveFilter, targetFilter, allOf(NodeResolution.class), omitReachablePaths);
-  }
-
-  private GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
+  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
     this.graphBuilder = graphBuilder;
     this.omitReachablePaths = omitReachablePaths;
     this.nodeStack = new ArrayDeque<>();

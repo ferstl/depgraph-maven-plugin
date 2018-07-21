@@ -70,7 +70,7 @@ public final class MavenGraphAdapter {
     org.eclipse.aether.graph.DependencyNode root = result.getDependencyGraph();
     ArtifactFilter transitiveDependencyFilter = createTransitiveDependencyFilter(project);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, globalFilter, transitiveDependencyFilter, this.targetFilter, this.omitReachablePaths);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, globalFilter, transitiveDependencyFilter, this.targetFilter, this.includedResolutions, this.omitReachablePaths);
     root.accept(visitor);
   }
 
