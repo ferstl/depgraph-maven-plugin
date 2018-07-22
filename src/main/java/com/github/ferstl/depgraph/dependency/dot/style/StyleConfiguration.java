@@ -35,6 +35,7 @@ import com.github.ferstl.depgraph.dependency.dot.style.resource.StyleResource;
 import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
 
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
+import static com.github.ferstl.depgraph.dependency.NodeResolution.PARENT;
 
 public class StyleConfiguration {
 
@@ -98,11 +99,16 @@ public class StyleConfiguration {
     return this.defaultEdge.createAttributes();
   }
 
-  public DotAttributeBuilder edgeAttributes(NodeResolution resolution, String targetScope, Artifact from, Artifact to) {
-    Edge edge = this.edgeResolutionStyles.get(resolution);
+  public DotAttributeBuilder edgeAttributes(NodeResolution fromResolution, NodeResolution toResolution, String targetScope, Artifact from, Artifact to) {
+    Edge edge;
+    if (fromResolution == PARENT) {
+      edge = this.edgeResolutionStyles.get(fromResolution);
+    } else {
+      edge = this.edgeResolutionStyles.get(toResolution);
+    }
 
     // Scope style win over INCLUDED node resolution
-    if (resolution == INCLUDED && this.edgeScopeStyles.containsKey(targetScope)) {
+    if (toResolution == INCLUDED && this.edgeScopeStyles.containsKey(targetScope)) {
       edge = this.edgeScopeStyles.get(targetScope);
     }
 

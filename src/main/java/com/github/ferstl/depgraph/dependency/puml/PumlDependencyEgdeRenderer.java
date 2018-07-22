@@ -62,7 +62,6 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
             .withEnd("].>")
             .withLabel("");
         break;
-      case OMITTED_FOR_CYCLE:
       default:
         // do not output an edge in other cases
     }

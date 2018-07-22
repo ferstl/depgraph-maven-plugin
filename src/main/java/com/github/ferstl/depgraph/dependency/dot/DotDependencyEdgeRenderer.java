@@ -36,10 +36,11 @@ public class DotDependencyEdgeRenderer implements EdgeRenderer<DependencyNode> {
 
   @Override
   public String render(DependencyNode from, DependencyNode to) {
-    NodeResolution resolution = to.getResolution();
+    NodeResolution fromResolution = from.getResolution();
+    NodeResolution toResolution = to.getResolution();
 
-    DotAttributeBuilder builder = this.styleConfiguration.edgeAttributes(resolution, to.getEffectiveScope(), from.getArtifact(), to.getArtifact());
-    if (resolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions) {
+    DotAttributeBuilder builder = this.styleConfiguration.edgeAttributes(fromResolution, toResolution, to.getEffectiveScope(), from.getArtifact(), to.getArtifact());
+    if (toResolution == NodeResolution.OMITTED_FOR_CONFLICT && this.renderVersions) {
       builder.label(abbreviateVersion(to.getArtifact().getVersion()));
     }
 

@@ -14,9 +14,9 @@ digraph "parent" {
   "org.hamcrest:hamcrest-core:jar:test"[label=<hamcrest-core<font point-size="10"><br/>(test)</font>>]
 
   // Edge Definitions:
-  "org.springframework.boot:spring-boot-starter-parent:pom:compile" -> "org.springframework.boot:module-other-parent:jar:compile"
-  "org.springframework.boot:spring-boot-dependencies:pom:compile" -> "org.springframework.boot:spring-boot-starter-parent:pom:compile"
-  "com.github.ferstl:parent:pom:compile" -> "com.github.ferstl:submodule:jar:compile"
+  "org.springframework.boot:spring-boot-starter-parent:pom:compile" -> "org.springframework.boot:module-other-parent:jar:compile"[style="dashed"]
+  "org.springframework.boot:spring-boot-dependencies:pom:compile" -> "org.springframework.boot:spring-boot-starter-parent:pom:compile"[style="dashed"]
+  "com.github.ferstl:parent:pom:compile" -> "com.github.ferstl:submodule:jar:compile"[style="dashed"]
   "org.springframework.boot:module-other-parent:jar:compile" -> "commons-codec:commons-codec:jar:compile"
   "org.springframework.boot:module-other-parent:jar:compile" -> "org.apache.commons:commons-lang3:jar:compile"
   "com.github.ferstl:submodule:jar:compile" -> "commons-codec:commons-codec:jar:compile"
