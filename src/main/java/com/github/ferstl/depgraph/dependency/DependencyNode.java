@@ -37,7 +37,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 public final class DependencyNode {
 
   private final Artifact artifact;
-  private String effectiveVersion;
+  private final String effectiveVersion;
   private final NodeResolution resolution;
   private final Set<String> scopes;
   private final Set<String> classifiers;
@@ -45,16 +45,14 @@ public final class DependencyNode {
 
 
   public DependencyNode(Artifact artifact) {
-    this(artifact, INCLUDED);
-    this.effectiveVersion = artifact.getVersion();
+    this(artifact, determineNodeResolution(artifact), artifact.getVersion());
   }
 
   public DependencyNode(org.eclipse.aether.graph.DependencyNode dependencyNode) {
-    this(createMavenArtifact(dependencyNode), determineResolution(dependencyNode));
-    this.effectiveVersion = determineEffectiveVersion(dependencyNode);
+    this(createMavenArtifact(dependencyNode), determineResolution(dependencyNode), determineEffectiveVersion(dependencyNode));
   }
 
-  private DependencyNode(Artifact artifact, NodeResolution resolution) {
+  private DependencyNode(Artifact artifact, NodeResolution resolution, String effectiveVersion) {
     if (artifact == null) {
       throw new NullPointerException("Artifact must not be null");
     }
@@ -64,6 +62,7 @@ public final class DependencyNode {
       artifact.setScope("compile");
     }
 
+    this.effectiveVersion = effectiveVersion;
     this.scopes = new TreeSet<>();
     this.classifiers = new TreeSet<>();
     this.types = new TreeSet<>();
@@ -170,6 +169,14 @@ public final class DependencyNode {
     }
 
     return INCLUDED;
+  }
+
+  private static NodeResolution determineNodeResolution(Artifact artifact) {
+    if (artifact.getScope() == null) {
+      return NodeResolution.PARENT;
+    }
+
+    return NodeResolution.INCLUDED;
   }
 
   private static String determineEffectiveVersion(org.eclipse.aether.graph.DependencyNode dependencyNode) {
