@@ -87,7 +87,6 @@ public abstract class AbstractDependencyEdgeRendererTest {
     EdgeRenderer<DependencyNode> edgeRenderer = createEdgeRenderer(false);
 
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
-    DependencyNode to = createDependencyNode("group2", "artifact2", "version2");
     DependencyNode duplicateTo = createDependencyNodeWithDuplicate("group2", "artifact2", "version2");
 
     // act

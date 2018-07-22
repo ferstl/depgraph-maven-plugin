@@ -21,7 +21,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.eclipse.aether.RepositorySystemSession;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
@@ -81,10 +80,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   private boolean showClassifiers;
 
   /**
-   * If set to {@code true}, the graph will additionally contain conflicting dependencies. Note that the dependency
-   * graph may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater
-   * or equal 3.0!<br/>
-   * Because of these possible inaccuracies the option {@link #showAllAttributesForJson} does not enable this flag.
+   * If set to {@code true}, the graph will additionally contain conflicting dependencies.<br/>
+   * The option {@link #showAllAttributesForJson} does not enable this flag.
    *
    * @since 1.0.0
    */
@@ -92,10 +89,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   private boolean showConflicts;
 
   /**
-   * If set to {@code true}, the graph will additionally contain duplicate dependencies. Note that the dependency graph
-   * may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater or
-   * equal 3.0!<br/>
-   * Because of these possible inaccuracies the option {@link #showAllAttributesForJson} does not enable this flag.
+   * If set to {@code true}, the graph will additionally contain duplicate dependencies.<br/>
+   * The option {@link #showAllAttributesForJson} does not enable this flag.
    *
    * @since 1.0.0
    */
@@ -117,9 +112,6 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
    */
   @Parameter(property = "mergeClassifiers", defaultValue = "false")
   private boolean mergeClassifiers;
-
-  @Parameter(defaultValue = "${repositorySystemSession}", readonly = true)
-  RepositorySystemSession repositorySystemSession;
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {

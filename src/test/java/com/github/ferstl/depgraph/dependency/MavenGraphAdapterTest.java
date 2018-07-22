@@ -17,7 +17,6 @@ package com.github.ferstl.depgraph.dependency;
 
 import java.util.EnumSet;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.DependencyResolutionException;
 import org.apache.maven.project.DependencyResolutionRequest;
@@ -52,10 +51,6 @@ public class MavenGraphAdapterTest {
   private MavenProject mavenProject;
   private GraphBuilder<DependencyNode> graphBuilder;
   private ArtifactFilter globalFilter;
-  private ArtifactFilter transitiveIncludeExcludeFilter;
-  private ArtifactFilter targetFilter;
-  private ArtifactRepository artifactRepository;
-
   private MavenGraphAdapter graphAdapter;
 
 
@@ -71,8 +66,8 @@ public class MavenGraphAdapterTest {
     this.mavenProject.setProjectBuildingRequest(projectBuildingRequest);
 
     this.globalFilter = mock(ArtifactFilter.class);
-    this.transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
-    this.targetFilter = mock(ArtifactFilter.class);
+    ArtifactFilter transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
+    ArtifactFilter targetFilter = mock(ArtifactFilter.class);
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 
     this.dependenciesResolver = mock(ProjectDependenciesResolver.class);
@@ -80,8 +75,7 @@ public class MavenGraphAdapterTest {
     when(dependencyResolutionResult.getDependencyGraph()).thenReturn(mock(org.eclipse.aether.graph.DependencyNode.class));
     when(this.dependenciesResolver.resolve(any(DependencyResolutionRequest.class))).thenReturn(dependencyResolutionResult);
 
-    this.artifactRepository = mock(ArtifactRepository.class);
-    this.graphAdapter = new MavenGraphAdapter(this.dependenciesResolver, this.transitiveIncludeExcludeFilter, this.targetFilter, EnumSet.of(INCLUDED), false);
+    this.graphAdapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), false);
   }
 
   @Test

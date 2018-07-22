@@ -60,8 +60,6 @@ import static org.mockito.Mockito.when;
 public class AggregatingGraphFactoryTest {
 
   private ArtifactFilter globalFilter;
-  private ArtifactFilter transitiveIncludeExcludeFilter;
-  private ArtifactFilter targetFilter;
   private ProjectDependenciesResolver dependenciesResolver;
   private MavenGraphAdapter adapter;
   private GraphBuilder<DependencyNode> graphBuilder;
@@ -71,11 +69,11 @@ public class AggregatingGraphFactoryTest {
   @Before
   public void before() throws Exception {
     this.globalFilter = mock(ArtifactFilter.class);
-    this.transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
-    this.targetFilter = mock(ArtifactFilter.class);
+    ArtifactFilter transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
+    ArtifactFilter targetFilter = mock(ArtifactFilter.class);
     when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
-    when(this.transitiveIncludeExcludeFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
-    when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
+    when(transitiveIncludeExcludeFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
+    when(targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
     DependencyResolutionResult dependencyResolutionResult = mock(DependencyResolutionResult.class);
     org.eclipse.aether.graph.DependencyNode dependencyNode = mock(org.eclipse.aether.graph.DependencyNode.class);
@@ -84,7 +82,7 @@ public class AggregatingGraphFactoryTest {
     this.dependenciesResolver = mock(ProjectDependenciesResolver.class);
     when(this.dependenciesResolver.resolve(any(DependencyResolutionRequest.class))).thenReturn(dependencyResolutionResult);
 
-    this.adapter = new MavenGraphAdapter(this.dependenciesResolver, this.transitiveIncludeExcludeFilter, this.targetFilter, EnumSet.of(INCLUDED), false);
+    this.adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), false);
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
     this.collectedProjectSupplier = new SubProjectSupplier() {
 
@@ -105,7 +103,7 @@ public class AggregatingGraphFactoryTest {
    * </pre>
    */
   @Test
-  public void moduleTree() throws Exception {
+  public void moduleTree() {
     AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.collectedProjectSupplier, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parent = createMavenProject("parent");
@@ -138,8 +136,8 @@ public class AggregatingGraphFactoryTest {
     AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.collectedProjectSupplier, this.globalFilter, this.graphBuilder, false);
 
     MavenProject parent = createMavenProject("parent");
-    MavenProject child1 = createMavenProject("child1", parent);
-    MavenProject child2 = createMavenProject("child2", parent);
+    createMavenProject("child1", parent);
+    createMavenProject("child2", parent);
 
     graphFactory.createGraph(parent);
 
@@ -202,7 +200,7 @@ public class AggregatingGraphFactoryTest {
    * </pre>
    */
   @Test
-  public void stopAtParent() throws Exception {
+  public void stopAtParent() {
     AggregatingGraphFactory graphFactory = new AggregatingGraphFactory(this.adapter, this.collectedProjectSupplier, this.globalFilter, this.graphBuilder, true);
 
     MavenProject parentParent = createMavenProject("parentParent");
@@ -303,6 +301,7 @@ public class AggregatingGraphFactoryTest {
     RepositorySystemSession repositorySession = mock(RepositorySystemSession.class);
     ProjectBuildingRequest projectBuildingRequest = mock(ProjectBuildingRequest.class);
     when(projectBuildingRequest.getRepositorySession()).thenReturn(repositorySession);
+    //noinspection deprecation
     project.setProjectBuildingRequest(projectBuildingRequest);
 
     return project;

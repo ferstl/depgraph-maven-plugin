@@ -68,7 +68,7 @@ public class PumlGraphFormatterTest {
   );
 
   @Test
-  public void testFormatDependenciesGraphAsPumlDiagram() throws Exception {
+  public void testFormatDependenciesGraphAsPumlDiagram() {
     String puml = this.formatter.format("graphName", this.nodes, this.edges);
     assertEquals("@startuml\n"
         + "skinparam defaultTextAlignment center\n"
@@ -121,7 +121,7 @@ public class PumlGraphFormatterTest {
   private static class Tuple {
 
     private final String description;
-    private boolean conflict = false;
+    private final boolean conflict;
 
     Tuple(String description, boolean conflict) {
       this.description = description;
