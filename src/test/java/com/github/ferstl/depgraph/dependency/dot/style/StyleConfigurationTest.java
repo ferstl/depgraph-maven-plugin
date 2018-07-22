@@ -74,6 +74,7 @@ public class StyleConfigurationTest {
     assertEquals("", config.edgeAttributes(NodeResolution.INCLUDED, NodeResolution.INCLUDED, SCOPE_COMPILE, null, null).toString());
     assertEquals("[style=\"dotted\",color=\"gray\"]", config.edgeAttributes(NodeResolution.INCLUDED, NodeResolution.INCLUDED, SCOPE_TEST, null, null).toString());
     assertEquals("[style=\"dashed\"]", config.edgeAttributes(NodeResolution.INCLUDED, NodeResolution.OMITTED_FOR_DUPLICATE, SCOPE_COMPILE, null, null).toString());
+    assertEquals("[style=\"dotted\"]", config.edgeAttributes(NodeResolution.PARENT, NodeResolution.INCLUDED, SCOPE_COMPILE, null, null).toString());
     assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>compile>]", config.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_DEFAULT, SCOPE_COMPILE).toString());
     assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_LINUX, SCOPE_TEST).toString());
     assertEquals("[shape=\"polygon\",style=\"filled\",fillcolor=\"green\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>classifier<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY_CLASSIFIER, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER, SCOPE_TEST).toString());

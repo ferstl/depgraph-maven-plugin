@@ -13,24 +13,27 @@
     "style": "dotted",
     "color": "blue"
   },
-  "edge-scope-styles" : {
-    "test" : {
-      "style" : "dotted",
-      "color" : "gray"
+  "edge-scope-styles": {
+    "test": {
+      "style": "dotted",
+      "color": "gray"
     }
   },
   "edge-resolution-styles": {
+    "parent": {
+      "style": "dotted"
+    },
     "omitted-for-duplicate": {
       "style": "dashed"
     }
   },
-  "node-styles" : {
-    ",,,,,classifier" : {
+  "node-styles": {
+    ",,,,,classifier": {
       "type": "polygon",
       "style": "filled",
       "fill-color": "green"
     },
-    ",,test" : {
+    ",,test": {
       "type": "box",
       "style": "filled",
       "fill-color": "orange"
