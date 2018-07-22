@@ -30,6 +30,7 @@ import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
+import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
 import static java.util.EnumSet.of;
@@ -79,10 +80,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   private boolean showClassifiers;
 
   /**
-   * If set to {@code true}, the graph will additionally contain conflicting dependencies. Note that the dependency
-   * graph may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater
-   * or equal 3.0!<br/>
-   * Because of these possible inaccuracies the option {@link #showAllAttributesForJson} does not enable this flag.
+   * If set to {@code true}, the graph will additionally contain conflicting dependencies.<br/>
+   * The option {@link #showAllAttributesForJson} does not enable this flag.
    *
    * @since 1.0.0
    */
@@ -90,10 +89,8 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   private boolean showConflicts;
 
   /**
-   * If set to {@code true}, the graph will additionally contain duplicate dependencies. Note that the dependency graph
-   * may not be 100% accurate when this flag is enabled and the plugin is executed with a Maven version greater or
-   * equal 3.0!<br/>
-   * Because of these possible inaccuracies the option {@link #showAllAttributesForJson} does not enable this flag.
+   * If set to {@code true}, the graph will additionally contain duplicate dependencies.<br/>
+   * The option {@link #showAllAttributesForJson} does not enable this flag.
    *
    * @since 1.0.0
    */
@@ -157,10 +154,10 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
       resolutions = !this.showConflicts ? complementOf(of(NodeResolution.OMITTED_FOR_CONFLICT)) : resolutions;
       resolutions = !this.showDuplicates ? complementOf(of(NodeResolution.OMITTED_FOR_DUPLICATE)) : resolutions;
 
-      adapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.localRepository, transitiveIncludeExcludeFilter, targetFilter, resolutions);
+      adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, resolutions, false);
     } else {
       // there are no reachable paths to be omitted
-      adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveIncludeExcludeFilter, targetFilter, false);
+      adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), false);
     }
     return adapter;
   }

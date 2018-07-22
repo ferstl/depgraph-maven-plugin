@@ -17,10 +17,15 @@ package com.github.ferstl.depgraph.dependency;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
+import org.eclipse.aether.graph.DefaultDependencyNode;
+import org.eclipse.aether.graph.Dependency;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_CONFLICT;
+import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_DUPLICATE;
+import static org.eclipse.aether.util.graph.transformer.ConflictResolver.NODE_DATA_WINNER;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
@@ -34,51 +39,60 @@ public class DependencyNodeTest {
   public ExpectedException expectedException = ExpectedException.none();
 
   @Test
-  public void defaultResolutionFromArtifact() {
-    DependencyNode adapter = new DependencyNode(createArtifact());
+  public void defaultResolutionFromMavenArtifact() {
+    // arrange
+    DependencyNode adapter = new DependencyNode(createMavenArtifact());
+
+    // assert
     assertEquals(NodeResolution.INCLUDED, adapter.getResolution());
   }
 
   @Test
-  public void defaultResolutionFromDependencyGraphNode() {
-    org.apache.maven.shared.dependency.graph.DependencyNode node =
-        new org.apache.maven.shared.dependency.graph.internal.DefaultDependencyNode(null, createArtifact(), "", "", "");
-    DependencyNode adapter = new DependencyNode(node);
+  public void defaultResolutionFromAetherDependencyNode() {
+    // arrange
+    org.eclipse.aether.graph.DependencyNode aetherDependencyNode = createAetherDependencyNode();
 
+    // act
+    DependencyNode adapter = new DependencyNode(aetherDependencyNode);
+
+    // assert
     assertEquals(NodeResolution.INCLUDED, adapter.getResolution());
   }
 
   @Test
-  public void defaultResolutionFromDependencyTreeNode() {
-    org.apache.maven.shared.dependency.tree.DependencyNode node =
-        new org.apache.maven.shared.dependency.tree.DependencyNode(createArtifact());
-    DependencyNode adapter = new DependencyNode(node);
+  public void duplicateFromAetherDependencyNode() {
+    // arrange
+    org.eclipse.aether.graph.DependencyNode aetherDependencyNode = createAetherDependencyNode();
+    DefaultDependencyNode winner = new DefaultDependencyNode(aetherDependencyNode);
+    aetherDependencyNode.setData(NODE_DATA_WINNER, winner);
 
-    assertEquals(NodeResolution.INCLUDED, adapter.getResolution());
+    // act
+    DependencyNode adapter = new DependencyNode(aetherDependencyNode);
+
+    // assert
+    assertEquals(OMITTED_FOR_DUPLICATE, adapter.getResolution());
   }
 
   @Test
-  public void resolutionFromDependencyTreeNode() {
-    Artifact artifact = createArtifact();
-    Artifact relatedArtifact = createArtifact();
+  public void conflictFromAetherDependencyNode() {
+    // arrange
+    org.eclipse.aether.graph.DependencyNode aetherDependencyNode = createAetherDependencyNode();
+    org.eclipse.aether.artifact.Artifact winnerArtifact = createAetherArtifact();
+    winnerArtifact = winnerArtifact.setVersion(winnerArtifact.getVersion() + "-alpha");
+    DefaultDependencyNode winner = new DefaultDependencyNode(new Dependency(winnerArtifact, "compile"));
 
-    org.apache.maven.shared.dependency.tree.DependencyNode node =
-        new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT, relatedArtifact);
-    DependencyNode adapter = new DependencyNode(node);
-    assertEquals(NodeResolution.OMITTED_FOR_CONFLICT, adapter.getResolution());
+    aetherDependencyNode.setData(NODE_DATA_WINNER, winner);
 
-    node = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE, relatedArtifact);
-    adapter = new DependencyNode(node);
-    assertEquals(NodeResolution.OMITTED_FOR_DUPLICATE, adapter.getResolution());
+    // act
+    DependencyNode adapter = new DependencyNode(aetherDependencyNode);
 
-    node = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CYCLE);
-    adapter = new DependencyNode(node);
-    assertEquals(NodeResolution.OMITTED_FOR_CYCLE, adapter.getResolution());
+    // assert
+    assertEquals(OMITTED_FOR_CONFLICT, adapter.getResolution());
   }
 
   @Test
   public void defaultCompileScope() {
-    Artifact artifact = createArtifact();
+    Artifact artifact = createMavenArtifact();
     artifact.setScope(null);
 
     DependencyNode adapter = new DependencyNode(artifact);
@@ -88,9 +102,9 @@ public class DependencyNodeTest {
   @Test
   public void effectiveScope() {
     // arrange
-    Artifact artifact1 = createArtifact();
+    Artifact artifact1 = createMavenArtifact();
     artifact1.setScope("runtime");
-    Artifact artifact2 = createArtifact();
+    Artifact artifact2 = createMavenArtifact();
     artifact2.setScope("provided");
 
     // act
@@ -110,8 +124,17 @@ public class DependencyNodeTest {
   }
 
 
-  private Artifact createArtifact() {
+  private Artifact createMavenArtifact() {
     return new DefaultArtifact("groupId", "artifactId", "1.0.0", "compile", "jar", "", null);
+  }
+
+  private org.eclipse.aether.artifact.DefaultArtifact createAetherArtifact() {
+    return new org.eclipse.aether.artifact.DefaultArtifact("groupId", "artifactId", "jar", "1.0.0");
+  }
+
+  private org.eclipse.aether.graph.DependencyNode createAetherDependencyNode() {
+    Dependency dependency = new Dependency(createAetherArtifact(), "compile");
+    return new DefaultDependencyNode(dependency);
   }
 
 }

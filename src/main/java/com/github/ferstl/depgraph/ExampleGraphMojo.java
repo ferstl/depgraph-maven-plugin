@@ -15,16 +15,21 @@
  */
 package com.github.ferstl.depgraph;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.eclipse.aether.graph.DefaultDependencyNode;
+import org.eclipse.aether.graph.Dependency;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
+
+import static org.eclipse.aether.util.graph.transformer.ConflictResolver.NODE_DATA_WINNER;
 
 /**
  * Creates an example graph. This Mojo has the same capabilities as the {@code graph} Mojo. So it might be useful to
@@ -65,7 +70,6 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
       DefaultArtifact aA = new DefaultArtifact("com.example", "artifact-a", "1.0.0", "compile", "jar", "", null);
       DefaultArtifact aB = new DefaultArtifact("com.example", "artifact-b", "1.0.0", "compile", "jar", "", null);
       DefaultArtifact aC = new DefaultArtifact("com.example", "artifact-c", "2.0.0", "compile", "jar", "", null);
-      DefaultArtifact aCV1 = new DefaultArtifact("com.example", "artifact-c", "1.0.0", "compile", "jar", "", null);
       DefaultArtifact aD = new DefaultArtifact("com.example", "artifact-d", "1.0.0", "compile", "jar", "", null);
       DefaultArtifact aE = new DefaultArtifact("com.example.sub", "artifact-e", "1.0.0", "provided", "jar", "", null);
       DefaultArtifact aF = new DefaultArtifact("com.example.sub", "artifact-f", "1.0.0", "runtime", "jar", "", null);
@@ -75,8 +79,8 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
       DependencyNode nA = new DependencyNode(aA);
       DependencyNode nB = new DependencyNode(aB);
       DependencyNode nC = new DependencyNode(aC);
-      DependencyNode nCDup = new DependencyNode(new org.apache.maven.shared.dependency.tree.DependencyNode(aC, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE, aC));
-      DependencyNode nCConfl = new DependencyNode(new org.apache.maven.shared.dependency.tree.DependencyNode(aCV1, org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT, aCV1));
+      DependencyNode nCDup = createConflict(aC, aC.getVersion());
+      DependencyNode nCConfl = createConflict(aC, "1.0.0");
       DependencyNode nD = new DependencyNode(aD);
       DependencyNode nE = new DependencyNode(aE);
       DependencyNode nF = new DependencyNode(aF);
@@ -104,6 +108,16 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
 
         this.graphBuilder.addEdge(from, to);
       }
+    }
+
+    private static DependencyNode createConflict(Artifact artifact, String winningVersion) {
+      org.eclipse.aether.artifact.DefaultArtifact aetherArtifact = new org.eclipse.aether.artifact.DefaultArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getClassifier(), artifact.getType(), artifact.getVersion());
+      org.eclipse.aether.artifact.DefaultArtifact winnerArtifact = new org.eclipse.aether.artifact.DefaultArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getClassifier(), artifact.getType(), winningVersion);
+
+      DefaultDependencyNode dependencyNode = new DefaultDependencyNode(new Dependency(aetherArtifact, artifact.getScope()));
+      dependencyNode.setData(NODE_DATA_WINNER, new DefaultDependencyNode(new Dependency(winnerArtifact, "compile")));
+
+      return new DependencyNode(dependencyNode);
     }
 
   }

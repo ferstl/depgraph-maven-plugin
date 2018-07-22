@@ -131,9 +131,9 @@ public abstract class AbstractGraphStyleConfigurerTest {
     // assert
     assertThat(this.formatter.nodes, Matchers.<Node>containsInAnyOrder(
         new Node<>(this.fromId, getNodeNameForVersionOnly("version1"), this.from),
-        new Node<>(this.toId, getNodeNameForVersionOnly("version2-alpha"), this.to)));
+        new Node<>(this.toId, getNodeNameForVersionOnly("version2"), this.to)));
 
-    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2", false))));
+    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2-alpha", false))));
   }
 
   @Test
@@ -175,7 +175,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
         new Node<>(this.fromId, getEmptyNodeName(), this.from),
         new Node<>(this.toId, getEmptyNodeName(), this.toWithConflict)));
 
-    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2", true))));
+    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2-alpha", true))));
   }
 
   @Test
@@ -197,9 +197,9 @@ public abstract class AbstractGraphStyleConfigurerTest {
     // assert
     assertThat(this.formatter.nodes, Matchers.<Node>containsInAnyOrder(
         new Node<>(this.fromId, getNodeNameForAllAttributes("group1", "artifact1", "version1"), this.from),
-        new Node<>(this.toId, getNodeNameForAllAttributes("group2", "artifact2", "version2-alpha"), this.to)));
+        new Node<>(this.toId, getNodeNameForAllAttributes("group2", "artifact2", "version2"), this.to)));
 
-    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2", true))));
+    assertThat(this.formatter.edges, Matchers.containsInAnyOrder(new Edge(this.fromId, this.toId, getEdgeNameForConflictingVersion("version2-alpha", true))));
   }
 
   @Test

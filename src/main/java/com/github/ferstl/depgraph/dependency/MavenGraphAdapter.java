@@ -18,86 +18,68 @@ package com.github.ferstl.depgraph.dependency;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.OrArtifactFilter;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.project.DefaultDependencyResolutionRequest;
+import org.apache.maven.project.DependencyResolutionException;
+import org.apache.maven.project.DependencyResolutionResult;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectDependenciesResolver;
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.RepositorySystemSession;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static java.util.Collections.singletonList;
-import static java.util.EnumSet.allOf;
+import static org.eclipse.aether.util.graph.transformer.ConflictResolver.CONFIG_PROP_VERBOSE;
 
 /**
- * Adapter for {@link DependencyGraphBuilder} and {@link DependencyTreeBuilder}.
+ * Adapter for Aether's dependency graph.
  */
 public final class MavenGraphAdapter {
 
-  private final DependencyGraphBuilder dependencyGraphBuilder;
-  private final DependencyTreeBuilder dependencyTreeBuilder;
-  private final ArtifactRepository artifactRepository;
+  private final ProjectDependenciesResolver dependenciesResolver;
   private final ArtifactFilter transitiveIncludeExcludeFilter;
   private final ArtifactFilter targetFilter;
   private final boolean omitReachablePaths;
   private final Set<NodeResolution> includedResolutions;
 
-  public MavenGraphAdapter(DependencyGraphBuilder builder, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, boolean omitReachablePaths) {
-    this.dependencyGraphBuilder = builder;
+  public MavenGraphAdapter(ProjectDependenciesResolver dependenciesResolver, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
+    this.dependenciesResolver = dependenciesResolver;
     this.transitiveIncludeExcludeFilter = transitiveIncludeExcludeFilter;
     this.targetFilter = targetFilter;
     this.omitReachablePaths = omitReachablePaths;
-    this.includedResolutions = allOf(NodeResolution.class);
-    this.dependencyTreeBuilder = null;
-    this.artifactRepository = null;
-  }
-
-  public MavenGraphAdapter(DependencyTreeBuilder builder, ArtifactRepository artifactRepository, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
-    this.dependencyTreeBuilder = builder;
-    this.artifactRepository = artifactRepository;
-    this.transitiveIncludeExcludeFilter = transitiveIncludeExcludeFilter;
-    this.targetFilter = targetFilter;
-    this.omitReachablePaths = false;
     this.includedResolutions = includedResolutions;
-    this.dependencyGraphBuilder = null;
   }
 
   public void buildDependencyGraph(MavenProject project, ArtifactFilter globalFilter, GraphBuilder<DependencyNode> graphBuilder) {
+    DefaultDependencyResolutionRequest request = new DefaultDependencyResolutionRequest();
+    request.setMavenProject(project);
+    request.setRepositorySession(getVerboseRepositorySession(project));
+
+    DependencyResolutionResult result;
+    try {
+      result = this.dependenciesResolver.resolve(request);
+    } catch (DependencyResolutionException e) {
+      throw new DependencyGraphException(e);
+    }
+
+    org.eclipse.aether.graph.DependencyNode root = result.getDependencyGraph();
     ArtifactFilter transitiveDependencyFilter = createTransitiveDependencyFilter(project);
-    if (this.dependencyGraphBuilder != null) {
-      createGraph(project, globalFilter, transitiveDependencyFilter, graphBuilder);
-    } else {
-      createTree(project, globalFilter, transitiveDependencyFilter, graphBuilder);
-    }
-  }
 
-  private void createGraph(MavenProject project, ArtifactFilter globalFilter, ArtifactFilter transitiveDependencyFilter, GraphBuilder<DependencyNode> graphBuilder) throws DependencyGraphException {
-    org.apache.maven.shared.dependency.graph.DependencyNode root;
-    try {
-      root = this.dependencyGraphBuilder.buildDependencyGraph(project, globalFilter);
-    } catch (DependencyGraphBuilderException e) {
-      throw new DependencyGraphException(e);
-    }
-
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, transitiveDependencyFilter, this.targetFilter, this.omitReachablePaths);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, globalFilter, transitiveDependencyFilter, this.targetFilter, this.includedResolutions, this.omitReachablePaths);
     root.accept(visitor);
   }
 
-  private void createTree(MavenProject project, ArtifactFilter globalFilter, ArtifactFilter transitiveDependencyFilter, GraphBuilder<DependencyNode> graphBuilder) throws DependencyGraphException {
-    org.apache.maven.shared.dependency.tree.DependencyNode root;
-    try {
-      root = this.dependencyTreeBuilder.buildDependencyTree(project, this.artifactRepository, globalFilter);
-    } catch (DependencyTreeBuilderException e) {
-      throw new DependencyGraphException(e);
-    }
-
-    // Due to MNG-3236, we need to filter the artifacts on our own.
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, globalFilter, transitiveDependencyFilter, this.targetFilter, this.includedResolutions);
-    root.accept(visitor);
+  private static RepositorySystemSession getVerboseRepositorySession(MavenProject project) {
+    @SuppressWarnings("deprecation")
+    RepositorySystemSession repositorySession = project.getProjectBuildingRequest().getRepositorySession();
+    DefaultRepositorySystemSession verboseRepositorySession = new DefaultRepositorySystemSession(repositorySession);
+    verboseRepositorySession.setConfigProperty(CONFIG_PROP_VERBOSE, "true");
+    verboseRepositorySession.setReadOnly();
+    repositorySession = verboseRepositorySession;
+    return repositorySession;
   }
 
   private ArtifactFilter createTransitiveDependencyFilter(MavenProject project) {

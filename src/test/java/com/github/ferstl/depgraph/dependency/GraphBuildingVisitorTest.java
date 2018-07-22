@@ -15,11 +15,13 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
+import org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
+import org.eclipse.aether.graph.DefaultDependencyNode;
+import org.eclipse.aether.graph.Dependency;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
@@ -27,6 +29,8 @@ import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEdges;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.EnumSet.allOf;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -69,14 +73,14 @@ public class GraphBuildingVisitorTest {
    */
   @Test
   public void parentAndChild() {
-    org.apache.maven.shared.dependency.graph.DependencyNode child = createGraphNode("child");
-    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child);
+    org.eclipse.aether.graph.DependencyNode child = createMavenDependencyNode("child");
+    org.eclipse.aether.graph.DependencyNode parent = createMavenDependencyNode("parent", child);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.transitiveFilter, this.targetFilter, false);
-    assertTrue(visitor.visit(parent));
-    assertTrue(visitor.visit(child));
-    assertTrue(visitor.endVisit(child));
-    assertTrue(visitor.endVisit(parent));
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, false);
+    assertTrue(visitor.visitEnter(parent));
+    assertTrue(visitor.visitEnter(child));
+    assertTrue(visitor.visitLeave(child));
+    assertTrue(visitor.visitLeave(parent));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
@@ -96,20 +100,21 @@ public class GraphBuildingVisitorTest {
    */
   @Test
   public void ignoredNode() {
-    org.apache.maven.shared.dependency.graph.DependencyNode child1 = createGraphNode("child1");
-    org.apache.maven.shared.dependency.graph.DependencyNode child2 = createGraphNode("child2");
-    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child1, child2);
+    org.eclipse.aether.graph.DependencyNode child1 = createMavenDependencyNode("child1");
+    org.eclipse.aether.graph.DependencyNode child2 = createMavenDependencyNode("child2");
+    org.eclipse.aether.graph.DependencyNode parent = createMavenDependencyNode("parent", child1, child2);
 
-    when(this.globalFilter.include(child2.getArtifact())).thenReturn(false);
+    String filterPattern = child2.getArtifact().getGroupId() + ":" + child2.getArtifact().getArtifactId();
+    this.globalFilter = new ExcludesArtifactFilter(singletonList(filterPattern));
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions);
-    assertTrue(visitor.visit(parent));
-    assertTrue(visitor.visit(child1));
-    assertTrue(visitor.endVisit(child1));
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, false);
+    assertTrue(visitor.visitEnter(parent));
+    assertTrue(visitor.visitEnter(child1));
+    assertTrue(visitor.visitLeave(child1));
 
     // Don't process any further children of child2
-    assertFalse(visitor.visit(child2));
-    assertTrue(visitor.endVisit(child2));
+    assertFalse(visitor.visitEnter(child2));
+    assertTrue(visitor.visitLeave(child2));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
@@ -129,21 +134,21 @@ public class GraphBuildingVisitorTest {
    */
   @Test
   public void targetDepNode() {
-    org.apache.maven.shared.dependency.graph.DependencyNode child1 = createGraphNode("child1");
-    org.apache.maven.shared.dependency.graph.DependencyNode child2 = createGraphNode("child2");
-    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child1, child2);
+    org.eclipse.aether.graph.DependencyNode child1 = createMavenDependencyNode("child1");
+    org.eclipse.aether.graph.DependencyNode child2 = createMavenDependencyNode("child2");
+    org.eclipse.aether.graph.DependencyNode parent = createMavenDependencyNode("parent", child1, child2);
 
-    when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(false);
-    when(this.targetFilter.include(child2.getArtifact())).thenReturn(true);
+    String filterPattern = child2.getArtifact().getGroupId() + ":" + child2.getArtifact().getArtifactId();
+    this.targetFilter = new IncludesArtifactFilter(singletonList(filterPattern));
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.transitiveFilter, this.targetFilter, false);
-    assertTrue(visitor.visit(parent));
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, false);
+    assertTrue(visitor.visitEnter(parent));
 
-    assertTrue(visitor.visit(child1));
-    assertTrue(visitor.endVisit(child1));
+    assertTrue(visitor.visitEnter(child1));
+    assertTrue(visitor.visitLeave(child1));
 
-    assertTrue(visitor.visit(child2));
-    assertTrue(visitor.endVisit(child2));
+    assertTrue(visitor.visitEnter(child2));
+    assertTrue(visitor.visitLeave(child2));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
@@ -166,31 +171,31 @@ public class GraphBuildingVisitorTest {
    */
   @Test
   public void multiTargetDepNode() {
-    org.apache.maven.shared.dependency.graph.DependencyNode child4 = createGraphNode("child4");
-    org.apache.maven.shared.dependency.graph.DependencyNode child1 = createGraphNode("child1", child4);
-    org.apache.maven.shared.dependency.graph.DependencyNode child2 = createGraphNode("child2");
-    org.apache.maven.shared.dependency.graph.DependencyNode child3 = createGraphNode("child3", child4);
-    org.apache.maven.shared.dependency.graph.DependencyNode parent = createGraphNode("parent", child1, child2, child3);
+    org.eclipse.aether.graph.DependencyNode child4 = createMavenDependencyNode("child4");
+    org.eclipse.aether.graph.DependencyNode child1 = createMavenDependencyNode("child1", child4);
+    org.eclipse.aether.graph.DependencyNode child2 = createMavenDependencyNode("child2");
+    org.eclipse.aether.graph.DependencyNode child3 = createMavenDependencyNode("child3", child4);
+    org.eclipse.aether.graph.DependencyNode parent = createMavenDependencyNode("parent", child1, child2, child3);
 
-    when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(false);
-    when(this.targetFilter.include(child3.getArtifact())).thenReturn(true);
-    when(this.targetFilter.include(child4.getArtifact())).thenReturn(true);
+    String child3Pattern = child3.getArtifact().getGroupId() + ":" + child3.getArtifact().getArtifactId();
+    String child4Pattern = child4.getArtifact().getGroupId() + ":" + child4.getArtifact().getArtifactId();
+    this.targetFilter = new IncludesArtifactFilter(asList(child3Pattern, child4Pattern));
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.transitiveFilter, this.targetFilter, false);
-    assertTrue(visitor.visit(parent));
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, false);
+    assertTrue(visitor.visitEnter(parent));
 
-    assertTrue(visitor.visit(child1));
-    assertTrue(visitor.visit(child4));
-    assertTrue(visitor.endVisit(child4));
-    assertTrue(visitor.endVisit(child1));
+    assertTrue(visitor.visitEnter(child1));
+    assertTrue(visitor.visitEnter(child4));
+    assertTrue(visitor.visitLeave(child4));
+    assertTrue(visitor.visitLeave(child1));
 
-    assertTrue(visitor.visit(child2));
-    assertTrue(visitor.endVisit(child2));
+    assertTrue(visitor.visitEnter(child2));
+    assertTrue(visitor.visitLeave(child2));
 
-    assertTrue(visitor.visit(child3));
-    assertTrue(visitor.visit(child4));
-    assertTrue(visitor.endVisit(child4));
-    assertTrue(visitor.endVisit(child3));
+    assertTrue(visitor.visitEnter(child3));
+    assertTrue(visitor.visitEnter(child4));
+    assertTrue(visitor.visitLeave(child4));
+    assertTrue(visitor.visitLeave(child3));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
@@ -225,37 +230,37 @@ public class GraphBuildingVisitorTest {
    */
   @Test
   public void omitReachablePaths() {
-    org.apache.maven.shared.dependency.graph.DependencyNode nodeTest = createGraphNode("node-test");
-    nodeTest.getArtifact().setScope("test");
+    org.eclipse.aether.graph.DependencyNode nodeTest = createMavenDependencyNode("node-test");
+    nodeTest = new DefaultDependencyNode(nodeTest.getDependency().setScope("test"));
 
-    org.apache.maven.shared.dependency.graph.DependencyNode nodeD = createGraphNode("node-d");
-    org.apache.maven.shared.dependency.graph.DependencyNode nodeC = createGraphNode("node-c", nodeD);
-    org.apache.maven.shared.dependency.graph.DependencyNode nodeB = createGraphNode("node-b", nodeD, nodeTest);
-    org.apache.maven.shared.dependency.graph.DependencyNode nodeA = createGraphNode("node-a", nodeB, nodeC, nodeD, nodeTest);
+    org.eclipse.aether.graph.DependencyNode nodeD = createMavenDependencyNode("node-d");
+    org.eclipse.aether.graph.DependencyNode nodeC = createMavenDependencyNode("node-c", nodeD);
+    org.eclipse.aether.graph.DependencyNode nodeB = createMavenDependencyNode("node-b", nodeD, nodeTest);
+    org.eclipse.aether.graph.DependencyNode nodeA = createMavenDependencyNode("node-a", nodeB, nodeC, nodeD, nodeTest);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.transitiveFilter, this.targetFilter, true);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, true);
 
-    assertTrue(visitor.visit(nodeA));
+    assertTrue(visitor.visitEnter(nodeA));
 
-    assertTrue(visitor.visit(nodeB));
-    assertTrue(visitor.visit(nodeD));
-    assertTrue(visitor.endVisit(nodeD));
-    assertTrue(visitor.visit(nodeTest));
-    assertTrue(visitor.endVisit(nodeTest));
-    assertTrue(visitor.endVisit(nodeB));
+    assertTrue(visitor.visitEnter(nodeB));
+    assertTrue(visitor.visitEnter(nodeD));
+    assertTrue(visitor.visitLeave(nodeD));
+    assertTrue(visitor.visitEnter(nodeTest));
+    assertTrue(visitor.visitLeave(nodeTest));
+    assertTrue(visitor.visitLeave(nodeB));
 
-    assertTrue(visitor.visit(nodeC));
-    assertTrue(visitor.visit(nodeD));
-    assertTrue(visitor.endVisit(nodeD));
-    assertTrue(visitor.endVisit(nodeC));
+    assertTrue(visitor.visitEnter(nodeC));
+    assertTrue(visitor.visitEnter(nodeD));
+    assertTrue(visitor.visitLeave(nodeD));
+    assertTrue(visitor.visitLeave(nodeC));
 
-    assertTrue(visitor.visit(nodeD));
-    assertTrue(visitor.endVisit(nodeD));
+    assertTrue(visitor.visitEnter(nodeD));
+    assertTrue(visitor.visitLeave(nodeD));
 
-    assertTrue(visitor.visit(nodeTest));
-    assertTrue(visitor.endVisit(nodeTest));
+    assertTrue(visitor.visitEnter(nodeTest));
+    assertTrue(visitor.visitLeave(nodeTest));
 
-    assertTrue(visitor.endVisit(nodeA));
+    assertTrue(visitor.visitLeave(nodeA));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
@@ -277,15 +282,16 @@ public class GraphBuildingVisitorTest {
   }
 
 
-  private static org.apache.maven.shared.dependency.graph.DependencyNode createGraphNode(String artifactId, org.apache.maven.shared.dependency.graph.DependencyNode... children) {
-    org.apache.maven.shared.dependency.graph.DependencyNode node = mock(org.apache.maven.shared.dependency.graph.DependencyNode.class);
-    when(node.getArtifact()).thenReturn(createArtifact(artifactId));
-    when(node.getChildren()).thenReturn(Arrays.asList(children));
+  private static org.eclipse.aether.graph.DependencyNode createMavenDependencyNode(String artifactId, org.eclipse.aether.graph.DependencyNode... children) {
+    Dependency dependency = new Dependency(createArtifact(artifactId), "compile");
+    DefaultDependencyNode node = new DefaultDependencyNode(dependency);
+    node.setChildren(asList(children));
+
     return node;
   }
 
-  private static Artifact createArtifact(String artifactId) {
-    return new DefaultArtifact("groupId", artifactId, "version", "compile", "jar", "", null);
+  private static org.eclipse.aether.artifact.Artifact createArtifact(String artifactId) {
+    return new org.eclipse.aether.artifact.DefaultArtifact("groupId", artifactId, "", "jar", "version");
   }
 
 }

@@ -25,6 +25,7 @@ import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,6 +84,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void withVersions() throws Exception {
     runTest("graph", "-DshowVersions");
 
@@ -98,6 +100,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void withGroupIds() throws Exception {
     runTest("graph", "-DshowGroupIds");
 
@@ -113,6 +116,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void withDuplicatesAndConflicts() throws Exception {
     runTest("graph",
         "-DshowVersions",
@@ -131,6 +135,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void aggregated() throws Exception {
     runTest("aggregate",
         "-DincludeParentProjects",
@@ -142,6 +147,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void aggregatedJson() throws Exception {
     runTest("aggregate",
         "-DgraphFormat=json",
@@ -154,6 +160,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void aggregatedText() throws Exception {
     runTest("aggregate",
         "-DgraphFormat=text",
@@ -167,6 +174,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void aggregatedByGroupId() throws Exception {
     runTest("aggregate-by-groupid");
 
@@ -176,6 +184,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void customStyle() throws Exception {
     String styleConfiguration = this.basedir.toPath().resolve("custom-style.json").toAbsolutePath().toString();
     runTest(
@@ -191,6 +200,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void gmlWithConflicts() throws Exception {
     runTest("graph",
         "-DgraphFormat=gml",
@@ -210,6 +220,7 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void pumlWithConflicts() throws Exception {
     runTest("graph",
         "-DgraphFormat=puml",

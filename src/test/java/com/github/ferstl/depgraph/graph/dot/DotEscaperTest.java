@@ -41,12 +41,12 @@ public class DotEscaperTest {
   }
 
   @Test
-  public void escapeQuotes() throws Exception {
+  public void escapeQuotes() {
     assertEquals("\"there are \\\"quotes\\\" in the middle.\"", DotEscaper.escape("there are \"quotes\" in the middle."));
   }
 
   @Test
-  public void escapeQuotesAlreadyQuoted() throws Exception {
+  public void escapeQuotesAlreadyQuoted() {
     assertEquals("\"there are \\\"quotes\\\" in the middle.\"", DotEscaper.escape("\"there are \"quotes\" in the middle.\""));
   }
 

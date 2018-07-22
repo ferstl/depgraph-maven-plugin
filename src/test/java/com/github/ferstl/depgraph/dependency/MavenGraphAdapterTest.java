@@ -15,26 +15,27 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
+import java.util.EnumSet;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.apache.maven.project.DependencyResolutionException;
+import org.apache.maven.project.DependencyResolutionRequest;
+import org.apache.maven.project.DependencyResolutionResult;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.project.ProjectDependenciesResolver;
+import org.eclipse.aether.RepositorySystemSession;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.ArgumentMatchers;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
-import static java.util.EnumSet.allOf;
+import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -46,76 +47,52 @@ public class MavenGraphAdapterTest {
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
 
-  private DependencyGraphBuilder dependencyGraphBuilder;
-  private DependencyTreeBuilder dependencyTreeBuilder;
+  private ProjectDependenciesResolver dependenciesResolver;
   private MavenProject mavenProject;
   private GraphBuilder<DependencyNode> graphBuilder;
   private ArtifactFilter globalFilter;
-  private ArtifactFilter transitiveIncludeExcludeFilter;
-  private ArtifactFilter targetFilter;
-  private ArtifactRepository artifactRepository;
-
   private MavenGraphAdapter graphAdapter;
-  private MavenGraphAdapter treeAdapter;
 
 
   @Before
   public void before() throws Exception {
-    this.mavenProject = new MavenProject();
     Artifact projectArtifact = mock(Artifact.class);
+
+    this.mavenProject = new MavenProject();
     this.mavenProject.setArtifact(projectArtifact);
+    ProjectBuildingRequest projectBuildingRequest = mock(ProjectBuildingRequest.class);
+    when(projectBuildingRequest.getRepositorySession()).thenReturn(mock(RepositorySystemSession.class));
+    //noinspection deprecation
+    this.mavenProject.setProjectBuildingRequest(projectBuildingRequest);
+
     this.globalFilter = mock(ArtifactFilter.class);
-    this.transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
-    this.targetFilter = mock(ArtifactFilter.class);
+    ArtifactFilter transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
+    ArtifactFilter targetFilter = mock(ArtifactFilter.class);
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 
-    this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
-    when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(mock(org.apache.maven.shared.dependency.graph.DependencyNode.class));
+    this.dependenciesResolver = mock(ProjectDependenciesResolver.class);
+    DependencyResolutionResult dependencyResolutionResult = mock(DependencyResolutionResult.class);
+    when(dependencyResolutionResult.getDependencyGraph()).thenReturn(mock(org.eclipse.aether.graph.DependencyNode.class));
+    when(this.dependenciesResolver.resolve(any(DependencyResolutionRequest.class))).thenReturn(dependencyResolutionResult);
 
-    this.dependencyTreeBuilder = mock(DependencyTreeBuilder.class);
-    when(this.dependencyTreeBuilder.buildDependencyTree(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactRepository>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(mock(org.apache.maven.shared.dependency.tree.DependencyNode.class));
-
-
-    this.artifactRepository = mock(ArtifactRepository.class);
-    this.graphAdapter = new MavenGraphAdapter(this.dependencyGraphBuilder, this.transitiveIncludeExcludeFilter, this.targetFilter, false);
-    this.treeAdapter = new MavenGraphAdapter(this.dependencyTreeBuilder, this.artifactRepository, this.transitiveIncludeExcludeFilter, this.targetFilter, allOf(NodeResolution.class));
+    this.graphAdapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), false);
   }
 
   @Test
   public void dependencyGraph() throws Exception {
     this.graphAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.graphBuilder);
 
-    verify(this.dependencyGraphBuilder).buildDependencyGraph(this.mavenProject, this.globalFilter);
-    verify(this.dependencyTreeBuilder, never()).buildDependencyTree(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactRepository>any(), ArgumentMatchers.<ArtifactFilter>any());
+    verify(this.dependenciesResolver).resolve(any(DependencyResolutionRequest.class));
   }
 
   @Test
   public void dependencyGraphWithException() throws Exception {
-    DependencyGraphBuilderException cause = new DependencyGraphBuilderException("boom");
-    when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenThrow(cause);
+    DependencyResolutionException exception = new DependencyResolutionException(mock(DependencyResolutionResult.class), "boom", new Exception());
+    when(this.dependenciesResolver.resolve(any(DependencyResolutionRequest.class))).thenThrow(exception);
 
     this.expectedException.expect(DependencyGraphException.class);
-    this.expectedException.expectCause(is(cause));
+    this.expectedException.expectCause(is(exception));
 
     this.graphAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.graphBuilder);
-  }
-
-  @Test
-  public void dependencyTree() throws Exception {
-    this.treeAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.graphBuilder);
-    verify(this.dependencyTreeBuilder).buildDependencyTree(this.mavenProject, this.artifactRepository, this.globalFilter);
-    verify(this.dependencyGraphBuilder, never()).buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any());
-  }
-
-
-  @Test
-  public void dependencyTreeWithException() throws Exception {
-    DependencyTreeBuilderException cause = new DependencyTreeBuilderException("boom");
-    when(this.dependencyTreeBuilder.buildDependencyTree(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactRepository>any(), ArgumentMatchers.<ArtifactFilter>any())).thenThrow(cause);
-
-    this.expectedException.expect(DependencyGraphException.class);
-    this.expectedException.expectCause(is(cause));
-
-    this.treeAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.graphBuilder);
   }
 }

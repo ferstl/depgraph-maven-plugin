@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph;
 
+import java.util.EnumSet;
 import java.util.Set;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -28,6 +29,8 @@ import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
+
+import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 
 /**
  * Aggregates all dependencies of a multi-module by their group IDs.
@@ -59,7 +62,7 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
         .configure(GraphBuilder.create(nodeIdRenderer))
         .omitSelfReferences();
 
-    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependencyGraphBuilder, transitiveIncludeExcludeFilter, targetFilter, this.reduceEdges);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), this.reduceEdges);
 
     return new AggregatingGraphFactory(adapter, createReactorOrderSubProjectSupplier(), globalFilter, graphBuilder, true);
   }
