@@ -31,13 +31,11 @@ import static com.google.common.base.Strings.isNullOrEmpty;
  * Representation of a dependency graph node. It adapts these Maven-specific classes:
  * <ul>
  * <li>{@link org.apache.maven.artifact.Artifact}</li>
- * <li>{@link org.apache.maven.shared.dependency.graph.DependencyNode}</li>
- * <li>{@link org.apache.maven.shared.dependency.tree.DependencyNode}</li>
+ * <li>{@link org.eclipse.aether.graph.DependencyNode}</li>
  * </ul>
  */
 public final class DependencyNode {
 
-  private org.apache.maven.shared.dependency.tree.DependencyNode treeNode;
   private final Artifact artifact;
   private String effectiveVersion;
   private final NodeResolution resolution;
@@ -49,16 +47,6 @@ public final class DependencyNode {
   public DependencyNode(Artifact artifact) {
     this(artifact, INCLUDED);
     this.effectiveVersion = artifact.getVersion();
-  }
-
-  public DependencyNode(org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode) {
-    this(dependencyNode.getArtifact());
-  }
-
-  public DependencyNode(org.apache.maven.shared.dependency.tree.DependencyNode dependencyNode) {
-    this(dependencyNode.getArtifact(), determineResolution(dependencyNode.getState()));
-    this.effectiveVersion = dependencyNode.getArtifact().getVersion();
-    this.treeNode = dependencyNode;
   }
 
   public DependencyNode(org.eclipse.aether.graph.DependencyNode dependencyNode) {
@@ -87,7 +75,6 @@ public final class DependencyNode {
     if (!isNullOrEmpty(artifact.getClassifier())) {
       this.classifiers.add(artifact.getClassifier());
     }
-    this.effectiveVersion = artifact.getVersion();
   }
 
   public void merge(DependencyNode other) {
@@ -129,11 +116,7 @@ public final class DependencyNode {
    * @return The effective version of this node.
    */
   public String getEffectiveVersion() {
-    if (this.treeNode == null || this.treeNode.getRelatedArtifact() == null) {
-      return this.effectiveVersion;
-    }
-
-    return this.treeNode.getRelatedArtifact().getVersion();
+    return this.effectiveVersion;
   }
 
   /**
@@ -196,18 +179,5 @@ public final class DependencyNode {
     }
 
     return dependencyNode.getArtifact().getVersion();
-  }
-
-  private static NodeResolution determineResolution(int res) {
-    switch (res) {
-      case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE:
-        return NodeResolution.OMITTED_FOR_DUPLICATE;
-      case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT:
-        return NodeResolution.OMITTED_FOR_CONFLICT;
-      case org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CYCLE:
-        return NodeResolution.OMITTED_FOR_CYCLE;
-      default:
-        return INCLUDED;
-    }
   }
 }

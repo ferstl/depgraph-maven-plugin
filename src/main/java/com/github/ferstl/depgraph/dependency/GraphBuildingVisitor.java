@@ -25,11 +25,9 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 
 /**
- * A node visitor that creates edges between the visited nodes using a {@link GraphBuilder}. This class implements the
- * {@code DependencyNodeVisitor} interfaces for dependency trees and dependency graphs and adapts the different node
- * instances using {@link DependencyNode}.
+ * A node visitor that creates edges between the visited nodes using a {@link GraphBuilder}.
  */
-class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.traversal.DependencyNodeVisitor, org.apache.maven.shared.dependency.tree.traversal.DependencyNodeVisitor, DependencyVisitor {
+class GraphBuildingVisitor implements DependencyVisitor {
 
   private final GraphBuilder<DependencyNode> graphBuilder;
   private final boolean omitReachablePaths;
@@ -55,53 +53,25 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
   }
 
   @Override
-  public boolean visit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalVisit(new DependencyNode(node));
-  }
-
-  @Override
-  public boolean endVisit(org.apache.maven.shared.dependency.graph.DependencyNode node) {
-    return internalEndVisit(new DependencyNode(node));
-  }
-
-  @Override
-  public boolean visit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalVisit(new DependencyNode(node));
-  }
-
-  @Override
-  public boolean endVisit(org.apache.maven.shared.dependency.tree.DependencyNode node) {
-    return internalEndVisit(new DependencyNode(node));
-  }
-
-
-  @Override
   public boolean visitEnter(org.eclipse.aether.graph.DependencyNode node) {
-    return internalVisit(new DependencyNode(node));
-  }
-
-  @Override
-  public boolean visitLeave(org.eclipse.aether.graph.DependencyNode node) {
-    return internalEndVisit(new DependencyNode(node));
-  }
-
-  private boolean internalVisit(DependencyNode node) {
-    if (isExcluded(node)) {
+    DependencyNode node1 = new DependencyNode(node);
+    if (isExcluded(node1)) {
       return false;
     }
 
-    this.nodeStack.push(node);
+    this.nodeStack.push(node1);
 
-    if (this.targetFilter.include(node.getArtifact())) {
+    if (this.targetFilter.include(node1.getArtifact())) {
       this.cutOffDepth = this.nodeStack.size();
     }
 
     return true;
   }
 
-
-  private boolean internalEndVisit(DependencyNode node) {
-    if (isExcluded(node)) {
+  @Override
+  public boolean visitLeave(org.eclipse.aether.graph.DependencyNode node) {
+    DependencyNode node1 = new DependencyNode(node);
+    if (isExcluded(node1)) {
       return true;
     }
 
@@ -112,20 +82,21 @@ class GraphBuildingVisitor implements org.apache.maven.shared.dependency.graph.t
       this.cutOffDepth = this.nodeStack.size();
 
       if (currentParent != null) {
-        mergeWithExisting(node);
+        mergeWithExisting(node1);
 
         // If omitReachablePaths is set, don't add an edge if there already is an existing path between the nodes.
         // An exception to that are test dependencies which are not resolved transitively.
-        if (!this.omitReachablePaths || !this.graphBuilder.isReachable(node, currentParent) || "test".equals(node.getArtifact().getScope())) {
-          this.graphBuilder.addEdge(currentParent, node);
+        if (!this.omitReachablePaths || !this.graphBuilder.isReachable(node1, currentParent) || "test".equals(node1.getArtifact().getScope())) {
+          this.graphBuilder.addEdge(currentParent, node1);
         } else {
-          this.graphBuilder.addNode(node);
+          this.graphBuilder.addNode(node1);
         }
       }
     }
 
     return true;
   }
+
 
   private boolean isExcluded(DependencyNode node) {
     Artifact artifact = node.getArtifact();

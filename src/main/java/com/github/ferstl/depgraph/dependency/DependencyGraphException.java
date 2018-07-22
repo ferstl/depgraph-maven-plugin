@@ -15,21 +15,16 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilderException;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
+import org.apache.maven.project.DependencyResolutionException;
 
 /**
- * Wrapper for {@link DependencyGraphBuilderException} and {@link DependencyTreeBuilderException}.
+ * Wrapper for {@link DependencyResolutionException}.
  */
 public final class DependencyGraphException extends RuntimeException {
 
   private static final long serialVersionUID = 4167396359488785529L;
 
-  public DependencyGraphException(DependencyGraphBuilderException cause) {
-    super(cause);
-  }
-
-  public DependencyGraphException(DependencyTreeBuilderException cause) {
+  public DependencyGraphException(DependencyResolutionException cause) {
     super(cause);
   }
 }

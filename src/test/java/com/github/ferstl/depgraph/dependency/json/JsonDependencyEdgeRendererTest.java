@@ -38,7 +38,7 @@ public class JsonDependencyEdgeRendererTest extends AbstractDependencyEdgeRender
 
   @Override
   protected String renderWithConflictShowingVersionResult() {
-    return "{\"version\":\"version2\",\"resolution\":\"OMITTED_FOR_CONFLICT\"}";
+    return "{\"version\":\"version2-alpha\",\"resolution\":\"OMITTED_FOR_CONFLICT\"}";
   }
 
   @Override

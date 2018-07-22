@@ -35,11 +35,8 @@ import static org.junit.Assert.assertEquals;
 public class PumlGraphFormatterTest {
 
   private final PumlGraphFormatter formatter = new PumlGraphFormatter();
-
   private final NodeRenderer<DependencyNode> nodeIdRenderer = DependencyNodeIdRenderer.versionlessId().withType(true);
-
   private final PumlDependencyNodeNameRenderer nodeInfoRenderer = new PumlDependencyNodeNameRenderer(true, true, false, false, true);
-
   private final PumlDependencyEgdeRenderer edgeInfoRenderer = new PumlDependencyEgdeRenderer(true);
 
   private final List<Tuple> dependencies = Arrays.asList(
@@ -72,7 +69,7 @@ public class PumlGraphFormatterTest {
 
   @Test
   public void testFormatDependenciesGraphAsPumlDiagram() throws Exception {
-    final String puml = this.formatter.format("graphName", this.nodes, this.edges);
+    String puml = this.formatter.format("graphName", this.nodes, this.edges);
     assertEquals("@startuml\n"
         + "skinparam defaultTextAlignment center\n"
         + "skinparam rectangle {\n"
@@ -85,31 +82,26 @@ public class PumlGraphFormatterTest {
         + "rectangle \"com.google.guava\\nguava\\n21.0\" as com_google_guava_guava_jar\n"
         + "rectangle \"org.apache.maven\\nmaven-core\\njar\" as org_apache_maven_maven_core_jar<<3.3.9>>\n"
         + "rectangle \"com.google.inject\\nguice\\n4.0\" as com_google_inject_guice_jar<<provided>>\n"
-        + "rectangle \"com.google.guava\\nguava\\n16.0.1-alpha\" as com_google_guava_guava_jar<<provided>>\n"
+        + "rectangle \"com.google.guava\\nguava\\n16.0.1\" as com_google_guava_guava_jar<<provided>>\n"
         + "rectangle \"junit\\njunit\\n4.12\" as junit_junit_jar<<test>>\n"
         + "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> com_fasterxml_jackson_core_jackson_databind_jar\n"
         + "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> com_google_guava_guava_jar\n"
         + "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> org_apache_maven_maven_core_jar\n"
         + "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> junit_junit_jar\n"
         + "org_apache_maven_maven_core_jar -[#000000]-> com_google_inject_guice_jar\n"
-        + "com_google_inject_guice_jar .[#FF0000].> com_google_guava_guava_jar: 16.0.1\n"
+        + "com_google_inject_guice_jar .[#FF0000].> com_google_guava_guava_jar: 16.0.1-alpha\n"
         + "@enduml", puml);
   }
 
   private Node<?> makeNode(String description, boolean conflict) {
-
-    final DependencyNode dependencyNode = makeDependencyNode(description, conflict);
-
-    final String nodeId = this.nodeIdRenderer.render(dependencyNode);
-
-    final String nodeInfo = this.nodeInfoRenderer.render(dependencyNode);
-
+    DependencyNode dependencyNode = makeDependencyNode(description, conflict);
+    String nodeId = this.nodeIdRenderer.render(dependencyNode);
+    String nodeInfo = this.nodeInfoRenderer.render(dependencyNode);
     return new Node<>(nodeId, nodeInfo, new Object());
-
   }
 
   private DependencyNode makeDependencyNode(String description, boolean conflict) {
-    final String[] parts = description.split(":");
+    String[] parts = description.split(":");
 
     return conflict
         ? DependencyNodeUtil.createDependencyNodeWithConflict(parts[0], parts[1], parts[2], parts[3])
@@ -118,9 +110,8 @@ public class PumlGraphFormatterTest {
   }
 
   private Edge makeEgde(Tuple from, Tuple to) {
-    final DependencyNode fromNode = makeDependencyNode(from.getDescription(), from.isConflict());
-
-    final DependencyNode toNode = makeDependencyNode(to.getDescription(), to.isConflict());
+    DependencyNode fromNode = makeDependencyNode(from.getDescription(), from.isConflict());
+    DependencyNode toNode = makeDependencyNode(to.getDescription(), to.isConflict());
 
     return new Edge(this.nodeIdRenderer.render(fromNode),
         this.nodeIdRenderer.render(toNode),

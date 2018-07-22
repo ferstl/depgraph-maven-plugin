@@ -38,7 +38,7 @@ public class TextDependencyEdgeRendererTest extends AbstractDependencyEdgeRender
 
   @Override
   protected String renderWithConflictShowingVersionResult() {
-    return "omitted for conflict: version2";
+    return "omitted for conflict: version2-alpha";
   }
 
   @Override

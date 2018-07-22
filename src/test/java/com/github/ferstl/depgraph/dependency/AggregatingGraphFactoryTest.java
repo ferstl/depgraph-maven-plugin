@@ -21,11 +21,15 @@ import java.util.EnumSet;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.apache.maven.project.DependencyResolutionRequest;
+import org.apache.maven.project.DependencyResolutionResult;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectDependenciesResolver;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
+import org.eclipse.aether.RepositorySystemSession;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
@@ -34,6 +38,8 @@ import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.emptyGraph;
 import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEdges;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -43,11 +49,11 @@ import static org.mockito.Mockito.when;
  * JUnit tests for {@link AggregatingGraphFactory}.
  * <p>
  * The {@link AggregatingGraphFactory} is a bit tricky to test since it cannot use a real instance of
- * {@link DependencyGraphBuilder} because it would require other components of the Maven ecosystem. Instead, we use a
- * mock of the {@link DependencyGraphBuilder} here. So to verify the correct behavior of
- * {@link AggregatingGraphFactory}, we can only check for the expected invocations of {@link DependencyGraphBuilder}
+ * {@link ProjectDependenciesResolver} because it would require other components of the Maven ecosystem. Instead, we use a
+ * mock of the {@link ProjectDependenciesResolver} here. So to verify the correct behavior of
+ * {@link AggregatingGraphFactory}, we can only check for the expected invocations of {@link ProjectDependenciesResolver}
  * instead of verifying the created graph. However, the parent/child relations are not a result of
- * {@link DependencyGraphBuilder} invocations since they are directly created via the {@link GraphBuilder}. So these
+ * {@link ProjectDependenciesResolver} invocations since they are directly created via the {@link GraphBuilder}. So these
  * relations need to be tested by verifying the {@link GraphBuilder}.
  * </p>
  */
@@ -56,10 +62,11 @@ public class AggregatingGraphFactoryTest {
   private ArtifactFilter globalFilter;
   private ArtifactFilter transitiveIncludeExcludeFilter;
   private ArtifactFilter targetFilter;
-  private DependencyGraphBuilder dependencyGraphBuilder;
+  private ProjectDependenciesResolver dependenciesResolver;
   private MavenGraphAdapter adapter;
   private GraphBuilder<DependencyNode> graphBuilder;
   private SubProjectSupplier collectedProjectSupplier;
+
 
   @Before
   public void before() throws Exception {
@@ -70,14 +77,15 @@ public class AggregatingGraphFactoryTest {
     when(this.transitiveIncludeExcludeFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
     when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
 
-    org.apache.maven.shared.dependency.graph.DependencyNode dependencyNode = mock(org.apache.maven.shared.dependency.graph.DependencyNode.class);
-    this.dependencyGraphBuilder = mock(DependencyGraphBuilder.class);
-    when(this.dependencyGraphBuilder.buildDependencyGraph(ArgumentMatchers.<MavenProject>any(), ArgumentMatchers.<ArtifactFilter>any())).thenReturn(dependencyNode);
+    DependencyResolutionResult dependencyResolutionResult = mock(DependencyResolutionResult.class);
+    org.eclipse.aether.graph.DependencyNode dependencyNode = mock(org.eclipse.aether.graph.DependencyNode.class);
+    when(dependencyResolutionResult.getDependencyGraph()).thenReturn(dependencyNode);
 
-    this.adapter = new MavenGraphAdapter(mock(ProjectDependenciesResolver.class), this.transitiveIncludeExcludeFilter, this.targetFilter, EnumSet.of(INCLUDED), false);
+    this.dependenciesResolver = mock(ProjectDependenciesResolver.class);
+    when(this.dependenciesResolver.resolve(any(DependencyResolutionRequest.class))).thenReturn(dependencyResolutionResult);
 
+    this.adapter = new MavenGraphAdapter(this.dependenciesResolver, this.transitiveIncludeExcludeFilter, this.targetFilter, EnumSet.of(INCLUDED), false);
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
-
     this.collectedProjectSupplier = new SubProjectSupplier() {
 
       @Override
@@ -135,9 +143,9 @@ public class AggregatingGraphFactoryTest {
 
     graphFactory.createGraph(parent);
 
-    verify(this.dependencyGraphBuilder, never()).buildDependencyGraph(parent, this.globalFilter);
-    verify(this.dependencyGraphBuilder).buildDependencyGraph(child1, this.globalFilter);
-    verify(this.dependencyGraphBuilder).buildDependencyGraph(child2, this.globalFilter);
+    verify(this.dependenciesResolver, never()).resolve(argThat(projectName("parent")));
+    verify(this.dependenciesResolver).resolve(argThat(projectName("child1")));
+    verify(this.dependenciesResolver).resolve(argThat(projectName("child2")));
 
     // There are no module nodes. So because of the mocked graph builder the graph must be empty here.
     assertThat(this.graphBuilder, emptyGraph());
@@ -270,7 +278,7 @@ public class AggregatingGraphFactoryTest {
     graphFactory.createGraph(parent);
 
     // graph builder must not be invoked for child1
-    verify(this.dependencyGraphBuilder, never()).buildDependencyGraph(child1, this.globalFilter);
+    verify(this.dependenciesResolver, never()).resolve(argThat(projectName("child1")));
 
 
     // module tree must not contain child1
@@ -292,6 +300,11 @@ public class AggregatingGraphFactoryTest {
     DefaultArtifact artifact = new DefaultArtifact("groupId", artifactId, "version", "compile", "jar", "", null);
     project.setArtifact(artifact);
 
+    RepositorySystemSession repositorySession = mock(RepositorySystemSession.class);
+    ProjectBuildingRequest projectBuildingRequest = mock(ProjectBuildingRequest.class);
+    when(projectBuildingRequest.getRepositorySession()).thenReturn(repositorySession);
+    project.setProjectBuildingRequest(projectBuildingRequest);
+
     return project;
   }
 
@@ -309,4 +322,21 @@ public class AggregatingGraphFactoryTest {
     return project;
   }
 
+  private static ArgumentMatcher<DependencyResolutionRequest> projectName(String projectName) {
+    return new ProjectNameMatcher(projectName);
+  }
+
+  private static class ProjectNameMatcher implements ArgumentMatcher<DependencyResolutionRequest> {
+
+    private final String expectedProjectName;
+
+    public ProjectNameMatcher(String projectName) {
+      this.expectedProjectName = projectName;
+    }
+
+    @Override
+    public boolean matches(DependencyResolutionRequest argument) {
+      return argument.getMavenProject().getName().equals(this.expectedProjectName);
+    }
+  }
 }

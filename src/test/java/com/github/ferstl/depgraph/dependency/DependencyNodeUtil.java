@@ -16,11 +16,11 @@
 package com.github.ferstl.depgraph.dependency;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DefaultArtifact;
+import org.eclipse.aether.graph.DefaultDependencyNode;
+import org.eclipse.aether.graph.Dependency;
 
-import static org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_CONFLICT;
-import static org.apache.maven.shared.dependency.tree.DependencyNode.OMITTED_FOR_DUPLICATE;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.eclipse.aether.util.graph.transformer.ConflictResolver.NODE_DATA_WINNER;
 
 public final class DependencyNodeUtil {
 
@@ -33,19 +33,13 @@ public final class DependencyNodeUtil {
   }
 
   public static DependencyNode createDependencyNodeWithConflict(String groupId, String artifactId, String effectiveVersion, String scope) {
-    Artifact artifact = createArtifact(groupId, artifactId, effectiveVersion, scope, "jar", "");
-    Artifact conflictingArtifact = mock(Artifact.class);
-    when(conflictingArtifact.getVersion()).thenReturn(effectiveVersion + "-alpha");
-
-    org.apache.maven.shared.dependency.tree.DependencyNode mavenDependencyNode = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, OMITTED_FOR_CONFLICT, conflictingArtifact);
-    return new DependencyNode(mavenDependencyNode);
+    Artifact artifact = createArtifact(groupId, artifactId, effectiveVersion + "-alpha", scope, "jar", "");
+    return createConflict(artifact, effectiveVersion);
   }
 
   public static DependencyNode createDependencyNodeWithDuplicate(String groupId, String artifactId, String version) {
     Artifact artifact = createArtifact(groupId, artifactId, version, "compile", "jar", "");
-
-    org.apache.maven.shared.dependency.tree.DependencyNode mavenDependencyNode = new org.apache.maven.shared.dependency.tree.DependencyNode(artifact, OMITTED_FOR_DUPLICATE, artifact);
-    return new DependencyNode(mavenDependencyNode);
+    return createConflict(artifact, artifact.getVersion());
   }
 
   public static DependencyNode createDependencyNode(String groupId, String artifactId, String version) {
@@ -77,13 +71,17 @@ public final class DependencyNodeUtil {
   }
 
   private static Artifact createArtifact(String groupId, String artifactId, String version, String scope, String type, String classifier) {
-    Artifact artifact = mock(Artifact.class);
-    when(artifact.getGroupId()).thenReturn(groupId);
-    when(artifact.getArtifactId()).thenReturn(artifactId);
-    when(artifact.getVersion()).thenReturn(version);
-    when(artifact.getScope()).thenReturn(scope);
-    when(artifact.getType()).thenReturn(type);
-    when(artifact.getClassifier()).thenReturn(classifier);
-    return artifact;
+    return new DefaultArtifact(groupId, artifactId, version, scope, type, classifier, null);
+  }
+
+
+  private static DependencyNode createConflict(Artifact artifact, String winningVersion) {
+    org.eclipse.aether.artifact.DefaultArtifact aetherArtifact = new org.eclipse.aether.artifact.DefaultArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getClassifier(), artifact.getType(), artifact.getVersion());
+    org.eclipse.aether.artifact.DefaultArtifact winnerArtifact = new org.eclipse.aether.artifact.DefaultArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getClassifier(), artifact.getType(), winningVersion);
+
+    DefaultDependencyNode dependencyNode = new DefaultDependencyNode(new Dependency(aetherArtifact, artifact.getScope()));
+    dependencyNode.setData(NODE_DATA_WINNER, new DefaultDependencyNode(new Dependency(winnerArtifact, "compile")));
+
+    return new DependencyNode(dependencyNode);
   }
 }

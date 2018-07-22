@@ -27,8 +27,6 @@ import org.apache.maven.project.DependencyResolutionResult;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectDependenciesResolver;
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
-import org.apache.maven.shared.dependency.graph.DependencyGraphBuilder;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystemSession;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
@@ -37,7 +35,7 @@ import static java.util.Collections.singletonList;
 import static org.eclipse.aether.util.graph.transformer.ConflictResolver.CONFIG_PROP_VERBOSE;
 
 /**
- * Adapter for {@link DependencyGraphBuilder} and {@link DependencyTreeBuilder}.
+ * Adapter for Aether's dependency graph.
  */
 public final class MavenGraphAdapter {
 
@@ -64,7 +62,7 @@ public final class MavenGraphAdapter {
     try {
       result = this.dependenciesResolver.resolve(request);
     } catch (DependencyResolutionException e) {
-      throw new RuntimeException(e);
+      throw new DependencyGraphException(e);
     }
 
     org.eclipse.aether.graph.DependencyNode root = result.getDependencyGraph();
@@ -75,6 +73,7 @@ public final class MavenGraphAdapter {
   }
 
   private static RepositorySystemSession getVerboseRepositorySession(MavenProject project) {
+    @SuppressWarnings("deprecation")
     RepositorySystemSession repositorySession = project.getProjectBuildingRequest().getRepositorySession();
     DefaultRepositorySystemSession verboseRepositorySession = new DefaultRepositorySystemSession(repositorySession);
     verboseRepositorySession.setConfigProperty(CONFIG_PROP_VERBOSE, "true");
