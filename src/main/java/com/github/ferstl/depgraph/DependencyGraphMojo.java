@@ -80,6 +80,14 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
   private boolean showClassifiers;
 
   /**
+   * If set to {@code true}, the created graph will mark optional dependencies.
+   *
+   * @since 3.2.0
+   */
+  @Parameter(property = "showOptional", defaultValue = "true")
+  private boolean showOptional;
+
+  /**
    * If set to {@code true}, the graph will additionally contain conflicting dependencies.<br/>
    * The option {@link #showAllAttributesForJson} does not enable this flag.
    *
@@ -133,6 +141,7 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
         .showArtifactIds(true)
         .showTypes(this.showTypes)
         .showClassifiers(this.showClassifiers)
+        .showOptional(this.showOptional)
         .showVersionsOnNodes(this.showVersions)
         .showVersionsOnEdges(this.showVersions && requiresFullGraph())
         .configure(GraphBuilder.create(nodeIdRenderer));

@@ -76,6 +76,14 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
   private boolean showClassifiers;
 
   /**
+   * If set to {@code true}, the created graph will mark optional dependencies.
+   *
+   * @since 3.2.0
+   */
+  @Parameter(property = "showOptional", defaultValue = "true")
+  private boolean showOptional;
+
+  /**
    * If set to {@code true}, all parent modules (&lt;packaging&gt;pom&lt;/packaging&gt) will be shown as nodes with
    * edges pointing to their child modules.
    *
@@ -114,6 +122,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .showArtifactIds(true)
         .showTypes(this.showTypes)
         .showClassifiers(this.showClassifiers)
+        .showOptional(this.showOptional)
         .showVersionsOnNodes(this.showVersions)
         // This graph won't show any conflicting dependencies. So don't show versions on edges
         .showVersionsOnEdges(false)

@@ -29,6 +29,7 @@ import static org.eclipse.aether.util.graph.transformer.ConflictResolver.NODE_DA
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * JUnit tests for {@link DependencyNode}.
@@ -88,6 +89,19 @@ public class DependencyNodeTest {
 
     // assert
     assertEquals(OMITTED_FOR_CONFLICT, adapter.getResolution());
+  }
+
+  @Test
+  public void optionalFromAetherDependencyNode() {
+    // arrange
+    org.eclipse.aether.graph.DependencyNode aetherDependencyNode = createAetherDependencyNode();
+    aetherDependencyNode.setOptional(true);
+
+    // act
+    DependencyNode adapter = new DependencyNode(aetherDependencyNode);
+
+    // assert
+    assertTrue(adapter.getArtifact().isOptional());
   }
 
   @Test
