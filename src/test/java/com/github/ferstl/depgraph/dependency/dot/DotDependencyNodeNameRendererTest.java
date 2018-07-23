@@ -32,7 +32,7 @@ public class DotDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
 
   @Override
   protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
-    return new DotDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, this.styleConfiguration);
+    return new DotDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, false, this.styleConfiguration);
   }
 
   @Override

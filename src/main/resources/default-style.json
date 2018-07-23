@@ -6,6 +6,9 @@
       "size": 14,
       "name": "Helvetica"
     },
+    "optional-font": {
+      "size": 10
+    },
     "group-id-font": {
       "size": 10
     },

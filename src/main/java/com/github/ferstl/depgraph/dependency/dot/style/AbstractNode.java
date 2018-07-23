@@ -33,6 +33,7 @@ abstract class AbstractNode {
   private final Font groupIdFont = new Font();
   private final Font artifactIdFont = new Font();
   private final Font versionFont = new Font();
+  private final Font optionalFont = new Font();
   private final Font typeFont = new Font();
   private final Font classifierFont = new Font();
   private final Font scopeFont = new Font();
@@ -53,10 +54,11 @@ abstract class AbstractNode {
         .fontColor(defaultFont.color);
   }
 
-  DotAttributeBuilder createAttributes(String groupId, String artifactId, String version, String types, String scopes, String classifiers, boolean includeNodeAttributes) {
+  DotAttributeBuilder createAttributes(String groupId, String artifactId, String version, boolean isOptional, String types, String scopes, String classifiers, boolean includeNodeAttributes) {
     Font groupIdFont = this.groupIdFont;
     Font artifactIdFont = this.artifactIdFont;
     Font versionFont = this.versionFont;
+    Font optionalFont = this.optionalFont;
     Font typeFont = this.typeFont;
     Font classiferFont = this.classifierFont;
     Font scopeFont = this.scopeFont;
@@ -64,6 +66,12 @@ abstract class AbstractNode {
     DotAttributeBuilder builder = includeNodeAttributes ? createAttributes() : new DotAttributeBuilder();
     return builder
         .label(new DotLabelBuilder()
+            .font()
+            .name(optionalFont.name)
+            .color(optionalFont.color)
+            .size(optionalFont.size)
+            .text(isOptional ? "<optional>" : null)
+            .smartNewLine()
             .font()
             .name(groupIdFont.name)
             .color(groupIdFont.color)

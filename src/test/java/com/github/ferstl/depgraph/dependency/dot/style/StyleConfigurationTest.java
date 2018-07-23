@@ -75,9 +75,11 @@ public class StyleConfigurationTest {
     assertEquals("[style=\"dotted\",color=\"gray\"]", config.edgeAttributes(NodeResolution.INCLUDED, NodeResolution.INCLUDED, SCOPE_TEST, null, null).toString());
     assertEquals("[style=\"dashed\"]", config.edgeAttributes(NodeResolution.INCLUDED, NodeResolution.OMITTED_FOR_DUPLICATE, SCOPE_COMPILE, null, null).toString());
     assertEquals("[style=\"dotted\"]", config.edgeAttributes(NodeResolution.PARENT, NodeResolution.INCLUDED, SCOPE_COMPILE, null, null).toString());
-    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>compile>]", config.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_DEFAULT, SCOPE_COMPILE).toString());
-    assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_LINUX, SCOPE_TEST).toString());
-    assertEquals("[shape=\"polygon\",style=\"filled\",fillcolor=\"green\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>classifier<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY_CLASSIFIER, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER, SCOPE_TEST).toString());
+
+    assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>compile>]", config.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, false, TYPE, CLASSIFIER_DEFAULT, SCOPE_COMPILE).toString());
+    assertEquals("[label=<<font point-size=\"9\">&lt;optional&gt;</font><br/>groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>compile>]", config.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, true, TYPE, CLASSIFIER_DEFAULT, SCOPE_COMPILE).toString());
+    assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, false, TYPE, CLASSIFIER_LINUX, SCOPE_TEST).toString());
+    assertEquals("[shape=\"polygon\",style=\"filled\",fillcolor=\"green\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>classifier<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY_CLASSIFIER, GROUP_ID, ARTIFACT_ID, VERSION, false, TYPE, CLASSIFIER, SCOPE_TEST).toString());
   }
 
   @Test
@@ -91,8 +93,8 @@ public class StyleConfigurationTest {
     assertEquals("[style=\"dashed\",color=\"green\"]", config.edgeAttributes(NodeResolution.INCLUDED, NodeResolution.OMITTED_FOR_DUPLICATE, SCOPE_TEST, null, null).toString());
     assertEquals("[fontname=\"Courier\"]", config.edgeAttributes(NodeResolution.INCLUDED, NodeResolution.OMITTED_FOR_CONFLICT, StyleConfigurationTest.SCOPE_PROVIDED, null, null).toString());
 
-    assertEquals("[shape=\"box\",style=\"filled\",color=\"red\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_DEFAULT, SCOPE_TEST).toString());
-    assertEquals("[shape=\"box\",color=\"blue\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>provided>]", config.nodeAttributes(PROVIDED_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_LINUX, SCOPE_PROVIDED).toString());
+    assertEquals("[shape=\"box\",style=\"filled\",color=\"red\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, false, TYPE, CLASSIFIER_DEFAULT, SCOPE_TEST).toString());
+    assertEquals("[shape=\"box\",color=\"blue\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>provided>]", config.nodeAttributes(PROVIDED_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, false, TYPE, CLASSIFIER_LINUX, SCOPE_PROVIDED).toString());
   }
 
   @Test
@@ -111,7 +113,7 @@ public class StyleConfigurationTest {
 
   @Test
   public void nodeAttributesForEmptyConfiguration() {
-    DotAttributeBuilder attributes = this.emptyConfig.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, TYPE, CLASSIFIER_LINUX, SCOPE_COMPILE);
+    DotAttributeBuilder attributes = this.emptyConfig.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, false, TYPE, CLASSIFIER_LINUX, SCOPE_COMPILE);
 
     assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>compile>]", attributes.toString());
   }
