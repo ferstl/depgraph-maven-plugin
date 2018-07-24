@@ -121,6 +121,21 @@ public class DotLabelBuilderTest {
   }
 
   @Test
+  public void smartNewLineWithEmptyTextAtBeginning() {
+    String label = new DotLabelBuilder()
+        .font()
+        .size(10)
+        .color("green")
+        .text(null)
+        .smartNewLine()
+        .text("text")
+        .smartNewLine()
+        .build();
+
+    assertEquals("<text>", label);
+  }
+
+  @Test
   public void smartNewLineWithinText() {
     String label = new DotLabelBuilder()
         .text("text1")
