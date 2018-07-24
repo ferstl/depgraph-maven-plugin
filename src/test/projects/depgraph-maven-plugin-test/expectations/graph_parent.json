@@ -6,6 +6,7 @@
     "groupId" : "com.github.ferstl",
     "artifactId" : "parent",
     "version" : "1.0.0-SNAPSHOT",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "pom" ]
   } ]

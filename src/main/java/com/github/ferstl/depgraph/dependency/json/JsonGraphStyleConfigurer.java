@@ -25,7 +25,7 @@ public class JsonGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
   @Override
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
     return graphBuilder
-        .useNodeNameRenderer(new JsonDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes))
+        .useNodeNameRenderer(new JsonDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes, this.showOptional))
         .useEdgeRenderer(new JsonDependencyEdgeRenderer(this.showVersionOnEdges))
         .graphFormatter(new JsonGraphFormatter());
   }

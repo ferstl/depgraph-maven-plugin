@@ -23,7 +23,7 @@ public class JsonDependencyNodeNameRendererTest extends AbstractDependencyNodeNa
 
   @Override
   protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
-    return new JsonDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion);
+    return new JsonDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, false);
   }
 
   @Override
