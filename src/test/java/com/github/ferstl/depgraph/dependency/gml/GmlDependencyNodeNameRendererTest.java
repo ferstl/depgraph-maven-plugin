@@ -23,7 +23,7 @@ public class GmlDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
 
   @Override
   protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
-    return new GmlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion);
+    return new GmlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, false);
   }
 
   @Override

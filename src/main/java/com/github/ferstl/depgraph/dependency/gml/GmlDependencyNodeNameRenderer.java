@@ -31,18 +31,21 @@ public class GmlDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
   private final boolean showTypes;
   private final boolean showClassifiers;
   private final boolean showVersion;
+  private final boolean showOptional;
 
-  public GmlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
+  public GmlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showTypes = showTypes;
     this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
+    this.showOptional = showOptional;
   }
 
   @Override
   public String render(DependencyNode node) {
     String content = NEWLINE_JOINER.join(
+        this.showOptional && node.getArtifact().isOptional() ? "<optional>" : null,
         this.showGroupId ? node.getArtifact().getGroupId() : null,
         this.showArtifactId ? node.getArtifact().getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
