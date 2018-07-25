@@ -49,15 +49,16 @@ public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
     PumlNodeInfo nodeInfo = new PumlNodeInfo().withComponent("rectangle");
 
     String name = NEWLINE_JOINER.join(
-        this.showOptional && artifact.isOptional() ? "<optional>" : null,
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showTypes ? createTypeString(node.getTypes()) : null,
         this.showClassifiers ? createClassifierString(node.getClassifiers()) : null,
         this.showVersion ? node.getEffectiveVersion() : null);
 
-    nodeInfo.withLabel(name)
-        .withStereotype(node.getArtifact().getScope());
+    nodeInfo
+        .withLabel(name)
+        .withStereotype(node.getArtifact().getScope())
+        .withOptional(this.showOptional && artifact.isOptional());
 
     return nodeInfo.toString();
   }
