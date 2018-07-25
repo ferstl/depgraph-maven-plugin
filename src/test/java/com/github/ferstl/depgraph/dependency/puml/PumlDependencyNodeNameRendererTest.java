@@ -22,72 +22,97 @@ import com.github.ferstl.depgraph.graph.NodeRenderer;
 public class PumlDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
   @Override
-  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
-    return new PumlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, false);
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
+    return new PumlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional);
   }
 
   @Override
   protected String renderNothingResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderGroupIdResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"groupId\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"groupId\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderArtifactIdResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"artifactId\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderVersionResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"version\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"version\",\"stereotype\":\"compile\"}";
+  }
+
+  @Override
+  protected String renderOptionalResult() {
+    return "{\"component\":\"rectangle\",\"optional\":true,\"label\":\"\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderGroupIdArtifactIdVersionResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"groupId\\\\nartifactId\\\\nversion\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"groupId\\\\nartifactId\\\\nversion\",\"stereotype\":\"compile\"}";
+  }
+
+  @Override
+  protected String renderGroupIdArtifactIdVersionOptionalResult() {
+    return "{\"component\":\"rectangle\",\"optional\":true,\"label\":\"groupId\\\\nartifactId\\\\nversion\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderGroupIdArtifactIdResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"groupId\\\\nartifactId\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"groupId\\\\nartifactId\",\"stereotype\":\"compile\"}";
+  }
+
+  @Override
+  protected String renderGroupIdArtifactIdOptionalResult() {
+    return "{\"component\":\"rectangle\",\"optional\":true,\"label\":\"groupId\\\\nartifactId\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderGroupIdVersionResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"groupId\\\\nversion\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"groupId\\\\nversion\",\"stereotype\":\"compile\"}";
+  }
+
+  @Override
+  protected String renderGroupIdVersionOptionalResult() {
+    return "{\"component\":\"rectangle\",\"optional\":true,\"label\":\"groupId\\\\nversion\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderArtifactIdVersionResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\nversion\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"artifactId\\\\nversion\",\"stereotype\":\"compile\"}";
+  }
+
+  @Override
+  protected String renderArtifactIdVersionOptionalResult() {
+    return "{\"component\":\"rectangle\",\"optional\":true,\"label\":\"artifactId\\\\nversion\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderTypesResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\n.jar/.zip\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"artifactId\\\\n.jar/.zip\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderJarTypeOnlyResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\n\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"artifactId\\\\n\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderClassifiersResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\nclassifier1/classifier2\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"artifactId\\\\nclassifier1/classifier2\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderEmptyClassifierResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"artifactId\\\\n\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"artifactId\\\\n\",\"stereotype\":\"compile\"}";
   }
 
   @Override
   protected String renderAllResult() {
-    return "{\"component\":\"rectangle\",\"label\":\"groupId\\\\nartifactId\\\\n.jar/.tar.gz/.zip\\\\nclassifier1/classifier2\\\\nversion\",\"stereotype\":\"test\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"groupId\\\\nartifactId\\\\n.jar/.tar.gz/.zip\\\\nclassifier1/classifier2\\\\nversion\",\"stereotype\":\"test\"}";
   }
 }

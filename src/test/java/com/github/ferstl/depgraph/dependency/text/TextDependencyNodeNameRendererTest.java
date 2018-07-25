@@ -22,8 +22,8 @@ import com.github.ferstl.depgraph.graph.NodeRenderer;
 public class TextDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
   @Override
-  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
-    return new TextDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, false);
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
+    return new TextDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional);
   }
 
   @Override
@@ -47,8 +47,18 @@ public class TextDependencyNodeNameRendererTest extends AbstractDependencyNodeNa
   }
 
   @Override
+  protected String renderOptionalResult() {
+    return "compile (optional)";
+  }
+
+  @Override
   protected String renderGroupIdArtifactIdVersionResult() {
     return "groupId:artifactId:version:compile";
+  }
+
+  @Override
+  protected String renderGroupIdArtifactIdVersionOptionalResult() {
+    return "groupId:artifactId:version:compile (optional)";
   }
 
   @Override
@@ -57,13 +67,28 @@ public class TextDependencyNodeNameRendererTest extends AbstractDependencyNodeNa
   }
 
   @Override
+  protected String renderGroupIdArtifactIdOptionalResult() {
+    return "groupId:artifactId:compile (optional)";
+  }
+
+  @Override
   protected String renderGroupIdVersionResult() {
     return "groupId:version:compile";
   }
 
   @Override
+  protected String renderGroupIdVersionOptionalResult() {
+    return "groupId:version:compile (optional)";
+  }
+
+  @Override
   protected String renderArtifactIdVersionResult() {
     return "artifactId:version:compile";
+  }
+
+  @Override
+  protected String renderArtifactIdVersionOptionalResult() {
+    return "artifactId:version:compile (optional)";
   }
 
   @Override

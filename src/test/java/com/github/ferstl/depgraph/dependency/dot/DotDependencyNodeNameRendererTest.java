@@ -31,8 +31,8 @@ public class DotDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
   }
 
   @Override
-  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
-    return new DotDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, false, this.styleConfiguration);
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
+    return new DotDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional, this.styleConfiguration);
   }
 
   @Override
@@ -56,8 +56,18 @@ public class DotDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
   }
 
   @Override
+  protected String renderOptionalResult() {
+    return "[label=<&lt;optional&gt;>]";
+  }
+
+  @Override
   protected String renderGroupIdArtifactIdVersionResult() {
     return "[label=<groupId<br/>artifactId<br/>version>]";
+  }
+
+  @Override
+  protected String renderGroupIdArtifactIdVersionOptionalResult() {
+    return "[label=<&lt;optional&gt;<br/>groupId<br/>artifactId<br/>version>]";
   }
 
   @Override
@@ -66,13 +76,28 @@ public class DotDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
   }
 
   @Override
+  protected String renderGroupIdArtifactIdOptionalResult() {
+    return "[label=<&lt;optional&gt;<br/>groupId<br/>artifactId>]";
+  }
+
+  @Override
   protected String renderGroupIdVersionResult() {
     return "[label=<groupId<br/>version>]";
   }
 
   @Override
+  protected String renderGroupIdVersionOptionalResult() {
+    return "[label=<&lt;optional&gt;<br/>groupId<br/>version>]";
+  }
+
+  @Override
   protected String renderArtifactIdVersionResult() {
     return "[label=<artifactId<br/>version>]";
+  }
+
+  @Override
+  protected String renderArtifactIdVersionOptionalResult() {
+    return "[label=<&lt;optional&gt;<br/>artifactId<br/>version>]";
   }
 
   @Override
