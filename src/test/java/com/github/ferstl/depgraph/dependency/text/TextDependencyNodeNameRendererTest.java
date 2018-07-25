@@ -23,7 +23,7 @@ public class TextDependencyNodeNameRendererTest extends AbstractDependencyNodeNa
 
   @Override
   protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
-    return new TextDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion);
+    return new TextDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, false);
   }
 
   @Override
