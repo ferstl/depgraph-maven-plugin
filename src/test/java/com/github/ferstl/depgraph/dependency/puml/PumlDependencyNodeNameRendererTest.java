@@ -23,7 +23,7 @@ public class PumlDependencyNodeNameRendererTest extends AbstractDependencyNodeNa
 
   @Override
   protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
-    return new PumlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion);
+    return new PumlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, false);
   }
 
   @Override

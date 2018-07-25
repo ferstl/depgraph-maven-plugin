@@ -32,13 +32,15 @@ public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
   private final boolean showTypes;
   private final boolean showClassifiers;
   private final boolean showVersion;
+  private final boolean showOptional;
 
-  public PumlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
+  public PumlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showTypes = showTypes;
     this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
+    this.showOptional = showOptional;
   }
 
   @Override
@@ -47,6 +49,7 @@ public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
     PumlNodeInfo nodeInfo = new PumlNodeInfo().withComponent("rectangle");
 
     String name = NEWLINE_JOINER.join(
+        this.showOptional && artifact.isOptional() ? "<optional>" : null,
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showTypes ? createTypeString(node.getTypes()) : null,
