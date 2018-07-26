@@ -53,6 +53,9 @@
       },
       "scope-font": {
         "size": 10
+      },
+      "optional-font": {
+        "size": 10
       }
     },
     ",,,pom": {
