@@ -1,0 +1,19 @@
+digraph "optional-test" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:module-a:jar:compile"[label=<<font point-size="10">&lt;optional&gt;</font><br/>module-a>]
+  "com.github.ferstl:module-b:jar:compile"[label=<<font point-size="10">&lt;optional&gt;</font><br/>module-b>]
+  "com.github.ferstl:module-c:jar:compile"[label=<module-c>]
+  "com.github.ferstl:module-d:jar:compile"[label=<module-d>]
+  "com.github.ferstl:module-test-1:jar:compile"[label=<module-test-1>]
+  "com.github.ferstl:module-test-2:jar:compile"[label=<module-test-2>]
+
+  // Edge Definitions:
+  "com.github.ferstl:module-a:jar:compile" -> "com.github.ferstl:module-b:jar:compile"
+  "com.github.ferstl:module-a:jar:compile" -> "com.github.ferstl:module-c:jar:compile"
+  "com.github.ferstl:module-d:jar:compile" -> "com.github.ferstl:module-a:jar:compile"
+  "com.github.ferstl:module-test-1:jar:compile" -> "com.github.ferstl:module-d:jar:compile"
+  "com.github.ferstl:module-test-2:jar:compile" -> "com.github.ferstl:module-a:jar:compile"
+}

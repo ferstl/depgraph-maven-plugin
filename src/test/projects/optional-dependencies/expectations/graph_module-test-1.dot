@@ -1,0 +1,11 @@
+digraph "module-test-1" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:module-test-1:jar"[label=<module-test-1>]
+  "com.github.ferstl:module-d:jar"[label=<module-d>]
+
+  // Edge Definitions:
+  "com.github.ferstl:module-test-1:jar" -> "com.github.ferstl:module-d:jar"
+}

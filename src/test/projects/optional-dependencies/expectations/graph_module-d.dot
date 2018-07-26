@@ -1,0 +1,15 @@
+digraph "module-d" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:module-a:jar"[label=<<font point-size="10">&lt;optional&gt;</font><br/>module-a>]
+  "com.github.ferstl:module-b:jar"[label=<<font point-size="10">&lt;optional&gt;</font><br/>module-b>]
+  "com.github.ferstl:module-c:jar"[label=<<font point-size="10">&lt;optional&gt;</font><br/>module-c>]
+  "com.github.ferstl:module-d:jar"[label=<module-d>]
+
+  // Edge Definitions:
+  "com.github.ferstl:module-a:jar" -> "com.github.ferstl:module-b:jar"
+  "com.github.ferstl:module-a:jar" -> "com.github.ferstl:module-c:jar"
+  "com.github.ferstl:module-d:jar" -> "com.github.ferstl:module-a:jar"
+}
