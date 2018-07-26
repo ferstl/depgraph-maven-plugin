@@ -49,13 +49,11 @@ public class OptionalDependenciesIntegrationTest {
         "module-b/target/dependency-graph.dot",
         "module-c/target/dependency-graph.dot",
         "module-d/target/dependency-graph.dot",
-        "module-test-1/target/dependency-graph.dot",
-        "module-test-2/target/dependency-graph.dot",
+        "module-test/target/dependency-graph.dot",
         "target/dependency-graph.dot");
 
     assertFileContents(basedir, "expectations/graph_module-d.dot", "module-d/target/dependency-graph.dot");
-    assertFileContents(basedir, "expectations/graph_module-test-1.dot", "module-test-1/target/dependency-graph.dot");
-    assertFileContents(basedir, "expectations/graph_module-test-2.dot", "module-test-2/target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/graph_module-test.dot", "module-test/target/dependency-graph.dot");
   }
 
 

@@ -12,8 +12,7 @@
     <module>module-b</module>
     <module>module-c</module>
     <module>module-d</module>
-    <module>module-test-1</module>
-    <module>module-test-2</module>
+    <module>module-test</module>
   </modules>
 
   <build>

@@ -7,9 +7,14 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>module-test-1</artifactId>
+  <artifactId>module-test</artifactId>
 
   <dependencies>
+    <dependency>
+      <groupId>com.github.ferstl</groupId>
+      <artifactId>module-c</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>com.github.ferstl</groupId>
       <artifactId>module-d</artifactId>
