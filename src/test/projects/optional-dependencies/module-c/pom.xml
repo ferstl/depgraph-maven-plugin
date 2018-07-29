@@ -9,4 +9,11 @@
 
   <artifactId>module-c</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+    </dependency>
+  </dependencies>
+
 </project>

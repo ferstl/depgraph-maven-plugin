@@ -11,12 +11,11 @@ import io.takari.maven.testing.executor.MavenExecutionResult;
 import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
-
 import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.5.2"})
+@MavenVersions({"3.5.2", "3.3.9"})
 public class OptionalDependenciesIntegrationTest {
 
   @Rule
@@ -56,7 +55,6 @@ public class OptionalDependenciesIntegrationTest {
     assertFileContents(basedir, "expectations/graph_module-test.dot", "module-test/target/dependency-graph.dot");
   }
 
-
   @Test
   public void aggregate() throws Exception {
     File basedir = this.resources.getBasedir("optional-dependencies");
@@ -72,5 +70,46 @@ public class OptionalDependenciesIntegrationTest {
         "target/dependency-graph.dot");
 
     assertFileContents(basedir, "expectations/aggregate_graph.dot", "target/dependency-graph.dot");
+  }
+
+  @Test
+  public void graphExcludeOptional() throws Exception {
+    File basedir = this.resources.getBasedir("optional-dependencies");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-B")
+        .withCliOption("-DexcludeOptionalDependencies")
+        .execute("clean", "package", "depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(
+        basedir,
+        "module-a/target/dependency-graph.dot",
+        "module-b/target/dependency-graph.dot",
+        "module-c/target/dependency-graph.dot",
+        "module-d/target/dependency-graph.dot",
+        "module-test/target/dependency-graph.dot",
+        "target/dependency-graph.dot");
+
+    assertFileContents(basedir, "expectations/graphExcludeOptional_module-d.dot", "module-d/target/dependency-graph.dot");
+    assertFileContents(basedir, "expectations/graphExcludeOptional_module-test.dot", "module-test/target/dependency-graph.dot");
+  }
+
+  @Test
+  public void aggregateExcludeOptional() throws Exception {
+    File basedir = this.resources.getBasedir("optional-dependencies");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-B")
+        .withCliOption("-DexcludeOptionalDependencies")
+        .execute("clean", "package", "depgraph:aggregate");
+
+    result.assertErrorFreeLog();
+
+    assertFilesPresent(
+        basedir,
+        "target/dependency-graph.dot");
+
+    assertFileContents(basedir, "expectations/aggregateExcludeOptional_graph.dot", "target/dependency-graph.dot");
   }
 }
