@@ -7,6 +7,7 @@ com.github.ferstl:module-3:compile
 +- com.github.ferstl:module-2:compile
 |  +- com.github.ferstl:module-1:compile
 |  +- com.google.guava:guava:compile
+|  +- org.springframework:spring-core:compile (optional)
 |  \- junit:junit:test
 \- com.mysema.querydsl:querydsl-core:compile
    +- com.mysema.commons:mysema-commons-lang:compile

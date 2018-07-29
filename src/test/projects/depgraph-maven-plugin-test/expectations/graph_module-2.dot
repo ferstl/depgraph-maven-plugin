@@ -8,6 +8,7 @@ digraph "module-2" {
   "com.google.guava:guava:jar"[label=<guava>]
   "commons-codec:commons-codec:jar"[label=<commons-codec>]
   "org.apache.commons:commons-lang3:jar"[label=<commons-lang3>]
+  "org.springframework:spring-core:jar"[label=<<font point-size="10">&lt;optional&gt;</font><br/>spring-core>]
   "junit:junit:jar"[label=<junit<font point-size="10"><br/>(test)</font>>]
   "org.hamcrest:hamcrest-core:jar"[label=<hamcrest-core<font point-size="10"><br/>(test)</font>>]
 
@@ -16,6 +17,7 @@ digraph "module-2" {
   "com.github.ferstl:module-2:jar" -> "com.google.guava:guava:jar"
   "com.github.ferstl:module-2:jar" -> "commons-codec:commons-codec:jar"
   "com.github.ferstl:module-2:jar" -> "org.apache.commons:commons-lang3:jar"
+  "com.github.ferstl:module-2:jar" -> "org.springframework:spring-core:jar"
   "junit:junit:jar" -> "org.hamcrest:hamcrest-core:jar"
   "com.github.ferstl:module-2:jar" -> "junit:junit:jar"
 }
