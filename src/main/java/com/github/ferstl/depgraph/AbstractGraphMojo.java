@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
@@ -60,7 +61,6 @@ import com.github.ferstl.depgraph.dependency.text.TextGraphStyleConfigurer;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
-
 import static com.github.ferstl.depgraph.GraphFormat.JSON;
 
 /**
@@ -133,6 +133,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    */
   @Parameter(property = "targetIncludes")
   private List<String> targetIncludes;
+
+  /**
+   * Indicates whether optional dependencies should be excluded from the graph.
+   *
+   * @since 3.2.0
+   */
+  @Parameter(property = "excludeOptionalDependencies", defaultValue = "false")
+  private boolean excludeOptionalDependencies;
 
   /**
    * Format of the graph, either &quot;dot&quot; (default), &quot;gml&quot;, &quot;puml&quot;, &quot;json&quot; or &quot;text&quot;.
@@ -304,6 +312,10 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
     if (!this.excludes.isEmpty()) {
       filter.add(new StrictPatternExcludesArtifactFilter(this.excludes));
+    }
+
+    if (this.excludeOptionalDependencies) {
+      filter.add(new OptionalArtifactFilter());
     }
 
     return filter;
@@ -487,5 +499,13 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
 
     return dotExecutablePath.toAbsolutePath().toString();
+  }
+
+  private static class OptionalArtifactFilter implements ArtifactFilter {
+
+    @Override
+    public boolean include(Artifact artifact) {
+      return !artifact.isOptional();
+    }
   }
 }

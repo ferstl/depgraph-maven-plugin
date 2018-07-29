@@ -28,6 +28,7 @@ public class DotLabelBuilder {
   private static final String NEWLINE = "<br/>";
   private final StringBuilder labelBuilder = new StringBuilder();
   private boolean smartNewLine;
+  private boolean empty = true;
 
   /**
    * Add the given text.
@@ -145,6 +146,8 @@ public class DotLabelBuilder {
 
     // end tag
     this.labelBuilder.append("</").append(tagName).append(">");
+
+    this.empty = false;
   }
 
   private void addText(String text) {
@@ -152,11 +155,13 @@ public class DotLabelBuilder {
       return;
     }
 
-    if (this.smartNewLine && this.labelBuilder.length() > 0) {
+    if (this.smartNewLine && !this.empty) {
       newLine();
       this.smartNewLine = false;
     }
     this.labelBuilder.append(HtmlEscapers.htmlEscaper().escape(text));
+
+    this.empty = false;
   }
 
   public class FontBuilder {

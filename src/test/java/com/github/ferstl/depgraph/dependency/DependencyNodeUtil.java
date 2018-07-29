@@ -33,27 +33,31 @@ public final class DependencyNodeUtil {
   }
 
   public static DependencyNode createDependencyNodeWithConflict(String groupId, String artifactId, String effectiveVersion, String scope) {
-    Artifact artifact = createArtifact(groupId, artifactId, effectiveVersion + "-alpha", scope, "jar", "");
+    Artifact artifact = createArtifact(groupId, artifactId, effectiveVersion + "-alpha", scope, "jar", "", false);
     return createConflict(artifact, effectiveVersion);
   }
 
   public static DependencyNode createDependencyNodeWithDuplicate(String groupId, String artifactId, String version) {
-    Artifact artifact = createArtifact(groupId, artifactId, version, "compile", "jar", "");
+    Artifact artifact = createArtifact(groupId, artifactId, version, "compile", "jar", "", false);
     return createConflict(artifact, artifact.getVersion());
   }
 
   public static DependencyNode createDependencyNode(String groupId, String artifactId, String version) {
-    return new DependencyNode(createArtifact(groupId, artifactId, version));
+    return new DependencyNode(createArtifact(groupId, artifactId, version, false));
+  }
+
+  public static DependencyNode createDependencyNode(String groupId, String artifactId, String version, boolean optional) {
+    return new DependencyNode(createArtifact(groupId, artifactId, version, optional));
   }
 
   public static DependencyNode createDependencyNode(String groupId, String artifactId, String version, String scope) {
-    return new DependencyNode(createArtifact(groupId, artifactId, version, scope, "jar", ""));
+    return new DependencyNode(createArtifact(groupId, artifactId, version, scope, "jar", "", false));
   }
 
   public static void addTypes(DependencyNode dependencyNode, String... types) {
     for (String type : types) {
       Artifact artifact = dependencyNode.getArtifact();
-      DependencyNode nodeWithClassifier = new DependencyNode(createArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), artifact.getScope(), type, artifact.getClassifier()));
+      DependencyNode nodeWithClassifier = new DependencyNode(createArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), artifact.getScope(), type, artifact.getClassifier(), artifact.isOptional()));
       dependencyNode.merge(nodeWithClassifier);
     }
   }
@@ -61,17 +65,19 @@ public final class DependencyNodeUtil {
   public static void addClassifiers(DependencyNode dependencyNode, String... classifiers) {
     for (String classifier : classifiers) {
       Artifact artifact = dependencyNode.getArtifact();
-      DependencyNode nodeWithClassifier = new DependencyNode(createArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), artifact.getScope(), "jar", classifier));
+      DependencyNode nodeWithClassifier = new DependencyNode(createArtifact(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), artifact.getScope(), "jar", classifier, artifact.isOptional()));
       dependencyNode.merge(nodeWithClassifier);
     }
   }
 
-  private static Artifact createArtifact(String groupId, String artifactId, String version) {
-    return createArtifact(groupId, artifactId, version, "compile", "jar", "");
+  private static Artifact createArtifact(String groupId, String artifactId, String version, boolean optional) {
+    return createArtifact(groupId, artifactId, version, "compile", "jar", "", optional);
   }
 
-  private static Artifact createArtifact(String groupId, String artifactId, String version, String scope, String type, String classifier) {
-    return new DefaultArtifact(groupId, artifactId, version, scope, type, classifier, null);
+  private static Artifact createArtifact(String groupId, String artifactId, String version, String scope, String type, String classifier, boolean optional) {
+    DefaultArtifact artifact = new DefaultArtifact(groupId, artifactId, version, scope, type, classifier, null);
+    artifact.setOptional(optional);
+    return artifact;
   }
 
 

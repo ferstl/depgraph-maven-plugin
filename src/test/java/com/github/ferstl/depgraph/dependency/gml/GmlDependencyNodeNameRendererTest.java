@@ -22,8 +22,8 @@ import com.github.ferstl.depgraph.graph.NodeRenderer;
 public class GmlDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
   @Override
-  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
-    return new GmlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion);
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
+    return new GmlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional);
   }
 
   @Override
@@ -47,8 +47,21 @@ public class GmlDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
   }
 
   @Override
+  protected String renderOptionalResult() {
+    return "label \"<optional>\"";
+  }
+
+  @Override
   protected String renderGroupIdArtifactIdVersionResult() {
     return "label \"groupId\n"
+        + "artifactId\n"
+        + "version\"";
+  }
+
+  @Override
+  protected String renderGroupIdArtifactIdVersionOptionalResult() {
+    return "label \"<optional>\n"
+        + "groupId\n"
         + "artifactId\n"
         + "version\"";
   }
@@ -60,14 +73,35 @@ public class GmlDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
   }
 
   @Override
+  protected String renderGroupIdArtifactIdOptionalResult() {
+    return "label \"<optional>\n"
+        + "groupId\n"
+        + "artifactId\"";
+  }
+
+  @Override
   protected String renderGroupIdVersionResult() {
     return "label \"groupId\n"
         + "version\"";
   }
 
   @Override
+  protected String renderGroupIdVersionOptionalResult() {
+    return "label \"<optional>\n"
+        + "groupId\n"
+        + "version\"";
+  }
+
+  @Override
   protected String renderArtifactIdVersionResult() {
     return "label \"artifactId\n"
+        + "version\"";
+  }
+
+  @Override
+  protected String renderArtifactIdVersionOptionalResult() {
+    return "label \"<optional>\n"
+        + "artifactId\n"
         + "version\"";
   }
 

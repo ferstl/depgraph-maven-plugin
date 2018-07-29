@@ -35,6 +35,14 @@ commons-lang3
 ]
 
 node [
+id "org.springframework:spring-core:jar"
+label "<optional>
+org.springframework
+spring-core
+5.0.6.RELEASE"
+]
+
+node [
 id "junit:junit:jar"
 label "junit
 junit
@@ -68,6 +76,11 @@ target "commons-codec:commons-codec:jar"
 edge [
 source "com.github.ferstl:module-2:jar"
 target "org.apache.commons:commons-lang3:jar"
+]
+
+edge [
+source "com.github.ferstl:module-2:jar"
+target "org.springframework:spring-core:jar"
 ]
 
 edge [

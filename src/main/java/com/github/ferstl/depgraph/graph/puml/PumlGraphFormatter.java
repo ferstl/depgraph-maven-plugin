@@ -30,7 +30,7 @@ public class PumlGraphFormatter implements GraphFormatter {
 
   @Override
   public String format(String graphName, Collection<Node<?>> nodes, Collection<Edge> edges) {
-    final StringBuilder puml = new StringBuilder();
+    StringBuilder puml = new StringBuilder();
 
     startUml(puml);
     skinParam(puml);
@@ -48,6 +48,7 @@ public class PumlGraphFormatter implements GraphFormatter {
   private void skinParam(StringBuilder puml) {
     puml.append("skinparam defaultTextAlignment center\n")
         .append("skinparam rectangle {\n")
+        .append("  BackgroundColor<<optional>> beige\n")
         .append("  BackgroundColor<<test>> lightGreen\n")
         .append("  BackgroundColor<<runtime>> lightBlue\n")
         .append("  BackgroundColor<<provided>> lightGray\n")
@@ -57,7 +58,7 @@ public class PumlGraphFormatter implements GraphFormatter {
   private void writeNodes(StringBuilder puml, Collection<Node<?>> nodes) {
     for (Node<?> node : nodes) {
 
-      final PumlNodeInfo nodeInfo = PumlNodeInfo.parse(node.getNodeName());
+      PumlNodeInfo nodeInfo = PumlNodeInfo.parse(node.getNodeName());
 
       puml.append(nodeInfo.getComponent())
           .append(" \"")
@@ -72,6 +73,12 @@ public class PumlGraphFormatter implements GraphFormatter {
             .append(">>");
       }
 
+      if (nodeInfo.isOptional()) {
+        puml.append("<<")
+            .append("optional")
+            .append(">>");
+      }
+
 
       puml.append("\n");
     }
@@ -79,7 +86,7 @@ public class PumlGraphFormatter implements GraphFormatter {
 
   private void writeEdges(StringBuilder puml, Collection<Edge> edges) {
     for (Edge edge : edges) {
-      final PumlEdgeInfo edgeInfo = PumlEdgeInfo.parse(edge.getName());
+      PumlEdgeInfo edgeInfo = PumlEdgeInfo.parse(edge.getName());
       puml.append(escape(edge.getFromNodeId()))
           .append(" ")
           .append(edgeInfo.getBegin())

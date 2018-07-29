@@ -34,14 +34,16 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
   private final boolean showTypes;
   private final boolean showClassifiers;
   private final boolean showVersion;
+  private final boolean showOptional;
   private final StyleConfiguration styleConfiguration;
 
-  public DotDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, StyleConfiguration styleConfiguration) {
+  public DotDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, StyleConfiguration styleConfiguration) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showTypes = showTypes;
     this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
+    this.showOptional = showOptional;
     this.styleConfiguration = styleConfiguration;
   }
 
@@ -54,13 +56,14 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
     String classifiers = createClassifierString(node.getClassifiers());
 
     String effectiveScope = node.getEffectiveScope();
-    StyleKey styleKey = StyleKey.create(artifact.getGroupId(), artifact.getArtifactId(), effectiveScope, artifact.getType(), node.getEffectiveVersion(), classifiers);
+    StyleKey styleKey = StyleKey.create(artifact.getGroupId(), artifact.getArtifactId(), effectiveScope, artifact.getType(), node.getEffectiveVersion(), classifiers, artifact.isOptional());
 
     return this.styleConfiguration.nodeAttributes(
         styleKey,
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
+        this.showOptional && artifact.isOptional(),
         this.showTypes ? types : null,
         this.showClassifiers ? classifiers : null,
         scopes

@@ -58,6 +58,7 @@ public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregating
         .showClassifiers(false)
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
+        .showOptional(false)
         .repeatTransitiveDependencies(this.repeatTransitiveDependenciesInTextGraph)
         .configure(GraphBuilder.create(nodeIdRenderer))
         .omitSelfReferences();

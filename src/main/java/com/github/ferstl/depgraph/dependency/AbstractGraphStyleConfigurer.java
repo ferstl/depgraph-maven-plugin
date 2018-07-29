@@ -23,6 +23,7 @@ public abstract class AbstractGraphStyleConfigurer implements GraphStyleConfigur
   protected boolean showTypes;
   protected boolean showClassifiers;
   protected boolean showVersionOnEdges;
+  protected boolean showOptional;
 
   @Override
   public final GraphStyleConfigurer showGroupIds(boolean showGroupId) {
@@ -57,6 +58,12 @@ public abstract class AbstractGraphStyleConfigurer implements GraphStyleConfigur
   @Override
   public final GraphStyleConfigurer showVersionsOnEdges(boolean showVersionOnEdges) {
     this.showVersionOnEdges = showVersionOnEdges;
+    return this;
+  }
+
+  @Override
+  public GraphStyleConfigurer showOptional(boolean optional) {
+    this.showOptional = optional;
     return this;
   }
 

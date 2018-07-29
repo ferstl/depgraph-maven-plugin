@@ -33,7 +33,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.dot.style.resource.StyleResource;
 import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
-
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.PARENT;
 
@@ -114,7 +113,7 @@ public class StyleConfiguration {
 
     // Specific edge style-from win over node resolution
     if (from != null) {
-      StyleKey artifactKeyFrom = StyleKey.create(from.getGroupId(), from.getArtifactId(), from.getScope(), from.getType(), from.getVersion(), from.getClassifier());
+      StyleKey artifactKeyFrom = StyleKey.create(from.getGroupId(), from.getArtifactId(), from.getScope(), from.getType(), from.getVersion(), from.getClassifier(), from.isOptional());
       for (Entry<StyleKey, Edge> entry : this.edgeNodeStylesFrom.entrySet()) {
         StyleKey styleKey = entry.getKey();
         if (styleKey.matches(artifactKeyFrom)) {
@@ -125,7 +124,7 @@ public class StyleConfiguration {
     }
     // Specific edge style-from to over node resolution
     if (to != null) {
-      StyleKey artifactKeyTo = StyleKey.create(to.getGroupId(), to.getArtifactId(), to.getScope(), to.getType(), to.getVersion(), to.getClassifier());
+      StyleKey artifactKeyTo = StyleKey.create(to.getGroupId(), to.getArtifactId(), to.getScope(), to.getType(), to.getVersion(), to.getClassifier(), to.isOptional());
       for (Entry<StyleKey, Edge> entry : this.edgeNodeStylesTo.entrySet()) {
         StyleKey styleKey = entry.getKey();
         if (styleKey.matches(artifactKeyTo)) {
@@ -138,7 +137,7 @@ public class StyleConfiguration {
     return edge != null ? edge.createAttributes() : new DotAttributeBuilder();
   }
 
-  public DotAttributeBuilder nodeAttributes(StyleKey artifactKey, String groupId, String artifactId, String version, String types, String classifiers, String scopes) {
+  public DotAttributeBuilder nodeAttributes(StyleKey artifactKey, String groupId, String artifactId, String version, boolean isOptional, String types, String classifiers, String scopes) {
     AbstractNode node = this.defaultNode;
 
     for (Entry<StyleKey, AbstractNode> entry : this.nodeStyles.entrySet()) {
@@ -149,7 +148,7 @@ public class StyleConfiguration {
       }
     }
 
-    return node.createAttributes(groupId, artifactId, version, types, scopes, classifiers, node != this.defaultNode);
+    return node.createAttributes(groupId, artifactId, version, isOptional, types, scopes, classifiers, node != this.defaultNode);
   }
 
   public String toJson() {

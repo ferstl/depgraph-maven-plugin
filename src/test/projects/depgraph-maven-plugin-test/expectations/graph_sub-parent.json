@@ -6,6 +6,7 @@
     "groupId" : "com.github.ferstl",
     "artifactId" : "module-1",
     "version" : "1.0.0-SNAPSHOT",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -14,6 +15,7 @@
     "groupId" : "commons-codec",
     "artifactId" : "commons-codec",
     "version" : "1.10",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -22,6 +24,7 @@
     "groupId" : "org.apache.commons",
     "artifactId" : "commons-lang3",
     "version" : "3.0",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -30,6 +33,7 @@
     "groupId" : "com.github.ferstl",
     "artifactId" : "module-2",
     "version" : "1.0.0-SNAPSHOT",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -38,6 +42,7 @@
     "groupId" : "com.google.guava",
     "artifactId" : "guava",
     "version" : "21.0",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -46,6 +51,7 @@
     "groupId" : "com.github.ferstl",
     "artifactId" : "sub-parent",
     "version" : "1.0.0-SNAPSHOT",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "pom" ]
   } ],

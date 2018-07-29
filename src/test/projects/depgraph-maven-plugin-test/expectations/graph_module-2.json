@@ -6,6 +6,7 @@
     "groupId" : "com.github.ferstl",
     "artifactId" : "module-1",
     "version" : "1.0.0-SNAPSHOT",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -14,6 +15,7 @@
     "groupId" : "commons-codec",
     "artifactId" : "commons-codec",
     "version" : "1.10",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -22,6 +24,7 @@
     "groupId" : "org.apache.commons",
     "artifactId" : "commons-lang3",
     "version" : "3.0",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -30,6 +33,7 @@
     "groupId" : "com.github.ferstl",
     "artifactId" : "module-2",
     "version" : "1.0.0-SNAPSHOT",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -38,22 +42,34 @@
     "groupId" : "com.google.guava",
     "artifactId" : "guava",
     "version" : "21.0",
+    "optional" : false,
+    "scopes" : [ "compile" ],
+    "types" : [ "jar" ]
+  }, {
+    "id" : "org.springframework:spring-core:jar",
+    "numericId" : 6,
+    "groupId" : "org.springframework",
+    "artifactId" : "spring-core",
+    "version" : "5.0.6.RELEASE",
+    "optional" : true,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
     "id" : "junit:junit:jar",
-    "numericId" : 6,
+    "numericId" : 7,
     "groupId" : "junit",
     "artifactId" : "junit",
     "version" : "4.12",
+    "optional" : false,
     "scopes" : [ "test" ],
     "types" : [ "jar" ]
   }, {
     "id" : "org.hamcrest:hamcrest-core:jar",
-    "numericId" : 7,
+    "numericId" : 8,
     "groupId" : "org.hamcrest",
     "artifactId" : "hamcrest-core",
     "version" : "1.3",
+    "optional" : false,
     "scopes" : [ "test" ],
     "types" : [ "jar" ]
   } ],
@@ -95,16 +111,22 @@
     "numericTo" : 2,
     "resolution" : "INCLUDED"
   }, {
+    "from" : "com.github.ferstl:module-2:jar",
+    "to" : "org.springframework:spring-core:jar",
+    "numericFrom" : 3,
+    "numericTo" : 5,
+    "resolution" : "INCLUDED"
+  }, {
     "from" : "junit:junit:jar",
     "to" : "org.hamcrest:hamcrest-core:jar",
-    "numericFrom" : 5,
-    "numericTo" : 6,
+    "numericFrom" : 6,
+    "numericTo" : 7,
     "resolution" : "INCLUDED"
   }, {
     "from" : "com.github.ferstl:module-2:jar",
     "to" : "junit:junit:jar",
     "numericFrom" : 3,
-    "numericTo" : 5,
+    "numericTo" : 6,
     "resolution" : "INCLUDED"
   } ]
 }

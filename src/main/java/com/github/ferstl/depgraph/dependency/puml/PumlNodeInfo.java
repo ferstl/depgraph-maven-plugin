@@ -17,18 +17,23 @@ package com.github.ferstl.depgraph.dependency.puml;
 
 import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 /**
  * @author gushakov
  */
+@JsonInclude(NON_NULL)
 public class PumlNodeInfo {
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   private String component;
+  private boolean optional;
   private String label;
   private String stereotype;
 
@@ -36,10 +41,13 @@ public class PumlNodeInfo {
   }
 
   @JsonCreator
-  public PumlNodeInfo(@JsonProperty("component") String component,
+  public PumlNodeInfo(
+      @JsonProperty("component") String component,
+      @JsonProperty("optional") boolean optional,
       @JsonProperty("label") String label,
       @JsonProperty("stereotype") String stereotype) {
     this.component = component;
+    this.optional = optional;
     this.label = label;
     this.stereotype = stereotype;
   }
@@ -56,6 +64,10 @@ public class PumlNodeInfo {
     return this.stereotype;
   }
 
+  public boolean isOptional() {
+    return this.optional;
+  }
+
   public PumlNodeInfo withComponent(String component) {
     this.component = component;
     return this;
@@ -68,6 +80,11 @@ public class PumlNodeInfo {
 
   public PumlNodeInfo withStereotype(String stereotype) {
     this.stereotype = stereotype;
+    return this;
+  }
+
+  public PumlNodeInfo withOptional(boolean optional) {
+    this.optional = optional;
     return this;
   }
 

@@ -7,6 +7,9 @@
       "size": 14,
       "name": "Courier",
       "color": "green"
+    },
+    "optional-font": {
+      "size": 9
     }
   },
   "default-edge": {
@@ -32,6 +35,11 @@
       "type": "polygon",
       "style": "filled",
       "fill-color": "green"
+    },
+    ",,,,,,true": {
+      "type": "polygon",
+      "style": "filled",
+      "fill-color": "white"
     },
     ",,test": {
       "type": "box",

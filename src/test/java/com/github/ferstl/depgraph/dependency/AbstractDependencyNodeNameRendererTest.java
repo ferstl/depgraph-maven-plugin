@@ -16,7 +16,6 @@
 package com.github.ferstl.depgraph.dependency;
 
 import org.junit.Test;
-
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.addClassifiers;
@@ -30,7 +29,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   public final void renderNothing() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, false, false, false,false);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, false, false, false, false, false);
 
     // act
     String result = renderer.render(node);
@@ -43,7 +42,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   public final void renderGroupId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, false, false, false, false);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, false, false, false, false, false);
 
     // act
     String result = renderer.render(node);
@@ -56,7 +55,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   public final void renderArtifactId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, false, false);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, false, false, false);
 
     // act
     String result = renderer.render(node);
@@ -69,7 +68,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   public final void renderVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, false, false, false, true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, false, false, false, true, false);
 
     // act
     String result = renderer.render(node);
@@ -79,10 +78,23 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
+  public final void renderOptional() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, false, false, false, false, true);
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    assertEquals(renderOptionalResult(), result);
+  }
+
+  @Test
   public final void renderGroupIdArtifactIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, true, false);
 
     // act
     String result = renderer.render(node);
@@ -92,10 +104,23 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
+  public final void renderGroupIdArtifactIdVersionOptional() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, true, true);
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    assertEquals(renderGroupIdArtifactIdVersionOptionalResult(), result);
+  }
+
+  @Test
   public final void renderGroupIdArtifactId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, false);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, false, false);
 
     // act
     String result = renderer.render(node);
@@ -105,10 +130,23 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
+  public final void renderGroupIdArtifactIdOptional() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, false, true);
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    assertEquals(renderGroupIdArtifactIdOptionalResult(), result);
+  }
+
+  @Test
   public final void renderGroupIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, false, false, false, true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, false, false, false, true, false);
 
     // act
     String result = renderer.render(node);
@@ -118,10 +156,23 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
+  public final void renderGroupIdVersionOptional() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, false, false, false, true, true);
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    assertEquals(renderGroupIdVersionOptionalResult(), result);
+  }
+
+  @Test
   public final void renderArtifactIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, false, true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, false, true, false);
 
     // act
     String result = renderer.render(node);
@@ -131,11 +182,24 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
+  public final void renderArtifactIdVersionOptional() {
+    // arrange
+    DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, false, true, true);
+
+    // act
+    String result = renderer.render(node);
+
+    // assert
+    assertEquals(renderArtifactIdVersionOptionalResult(), result);
+  }
+
+  @Test
   public final void renderTypes() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     addTypes(node, "jar", "zip");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, true, false, false);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, true, false, false, false);
 
     // act
     String result = renderer.render(node);
@@ -149,7 +213,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     addTypes(node, "jar");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, true, false, false);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, true, false, false, false);
 
     // act
     String result = renderer.render(node);
@@ -163,7 +227,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     addClassifiers(node, "classifier1", "classifier2");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, true, false);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, true, false, false);
 
     // act
     String result = renderer.render(node);
@@ -177,7 +241,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     addClassifiers(node, "");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, true, false);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, true, false, false);
 
     // act
     String result = renderer.render(node);
@@ -190,7 +254,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   public final void renderAll() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version", "test");
-    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, true, true, true);
+    NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, true, true, true, false);
     addClassifiers(node, "classifier1", "classifier2");
     addTypes(node, "jar", "zip", "tar.gz");
 
@@ -201,7 +265,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
     assertEquals(renderAllResult(), result);
   }
 
-  protected abstract NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion);
+  protected abstract NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional);
 
   protected abstract String renderNothingResult();
 
@@ -211,13 +275,23 @@ public abstract class AbstractDependencyNodeNameRendererTest {
 
   protected abstract String renderVersionResult();
 
+  protected abstract String renderOptionalResult();
+
   protected abstract String renderGroupIdArtifactIdVersionResult();
+
+  protected abstract String renderGroupIdArtifactIdVersionOptionalResult();
 
   protected abstract String renderGroupIdArtifactIdResult();
 
+  protected abstract String renderGroupIdArtifactIdOptionalResult();
+
   protected abstract String renderGroupIdVersionResult();
 
+  protected abstract String renderGroupIdVersionOptionalResult();
+
   protected abstract String renderArtifactIdVersionResult();
+
+  protected abstract String renderArtifactIdVersionOptionalResult();
 
   protected abstract String renderTypesResult();
 

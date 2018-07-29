@@ -15,17 +15,15 @@
  */
 package com.github.ferstl.depgraph.dependency.dot.style;
 
-import com.google.common.base.Joiner;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Objects;
-
+import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Joiner;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public final class StyleKey {
 
-  private static final int NUM_ELEMENTS = 6;
+  private static final int NUM_ELEMENTS = 7;
 
   private final String groupId;
   private final String artifactId;
@@ -33,11 +31,12 @@ public final class StyleKey {
   private final String type;
   private final String version;
   private final String classifier;
+  private final String optional;
 
 
   private StyleKey(String[] parts) {
     if (parts.length > NUM_ELEMENTS) {
-      throw new IllegalArgumentException("Too many parts. Expecting '<groupId>:<artifactId>:<version>:<scope>:<type>:<classifier>'");
+      throw new IllegalArgumentException("Too many parts. Expecting '<groupId>:<artifactId>:<version>:<scope>:<type>:<classifier>:<true|false>'");
     }
 
     String[] expanded = new String[NUM_ELEMENTS];
@@ -55,6 +54,7 @@ public final class StyleKey {
     this.type = expanded[3];
     this.version = expanded[4];
     this.classifier = expanded[5];
+    this.optional = expanded[6];
   }
 
   public static StyleKey fromString(String keyString) {
@@ -62,8 +62,8 @@ public final class StyleKey {
     return new StyleKey(parts);
   }
 
-  public static StyleKey create(String groupId, String artifactId, String scope, String type, String version, String classifier) {
-    return new StyleKey(new String[]{groupId, artifactId, scope, type, version, classifier});
+  public static StyleKey create(String groupId, String artifactId, String scope, String type, String version, String classifier, Boolean isOptional) {
+    return new StyleKey(new String[]{groupId, artifactId, scope, type, version, classifier, isOptional != null ? isOptional.toString() : null});
   }
 
   public boolean matches(StyleKey other) {
@@ -72,7 +72,8 @@ public final class StyleKey {
         && (match(this.scope, other.scope))
         && (match(this.type, other.type))
         && (wildcardMatch(this.version, other.version))
-        && (wildcardMatch(this.classifier, other.classifier));
+        && (wildcardMatch(this.classifier, other.classifier))
+        && (match(this.optional, other.optional));
 
   }
 
@@ -93,17 +94,18 @@ public final class StyleKey {
         && Objects.equals(this.scope, other.scope)
         && Objects.equals(this.type, other.type)
         && Objects.equals(this.version, other.version)
-        && Objects.equals(this.classifier, other.classifier);
+        && Objects.equals(this.classifier, other.classifier)
+        && Objects.equals(this.optional, other.optional);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.groupId, this.artifactId, this.scope, this.type, this.version, this.classifier);
+    return Objects.hash(this.groupId, this.artifactId, this.scope, this.type, this.version, this.classifier, this.optional);
   }
 
   @Override
   public String toString() {
-    return Joiner.on(",").join(this.groupId, this.artifactId, this.scope, this.type, this.version, this.classifier);
+    return Joiner.on(",").join(this.groupId, this.artifactId, this.scope, this.type, this.version, this.classifier, this.optional);
   }
 
   private static boolean wildcardMatch(String value1, String value2) {

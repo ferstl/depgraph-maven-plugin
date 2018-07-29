@@ -35,14 +35,16 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
   private final boolean showTypes;
   private final boolean showClassifiers;
   private final boolean showVersion;
+  private final boolean showOptional;
   private final ObjectMapper objectMapper;
 
-  public JsonDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion) {
+  public JsonDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showTypes = showTypes;
     this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
+    this.showOptional = showOptional;
 
     this.objectMapper = new ObjectMapper()
         .setSerializationInclusion(NON_EMPTY)
@@ -56,6 +58,7 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
         this.showGroupId ? artifact.getGroupId() : null,
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
+        this.showOptional ? artifact.isOptional() : null,
         this.showClassifiers ? node.getClassifiers() : Collections.<String>emptyList(),
         node.getScopes(),
         this.showTypes ? node.getTypes() : Collections.<String>emptyList());
@@ -77,6 +80,7 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
     private final String groupId;
     private final String artifactId;
     private final String version;
+    private final Boolean optional;
     private final Collection<String> classifiers;
     private final Collection<String> scopes;
     private final Collection<String> types;
@@ -85,9 +89,11 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
         String groupId,
         String artifactId,
         String version,
+        Boolean optional,
         Collection<String> classifiers,
         Collection<String> scopes,
         Collection<String> types) {
+      this.optional = optional;
       this.groupId = groupId;
       this.artifactId = artifactId;
       this.version = version;

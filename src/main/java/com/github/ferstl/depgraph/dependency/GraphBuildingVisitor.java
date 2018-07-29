@@ -70,8 +70,8 @@ class GraphBuildingVisitor implements DependencyVisitor {
 
   @Override
   public boolean visitLeave(org.eclipse.aether.graph.DependencyNode node) {
-    DependencyNode node1 = new DependencyNode(node);
-    if (isExcluded(node1)) {
+    DependencyNode dependencyNode = new DependencyNode(node);
+    if (isExcluded(dependencyNode)) {
       return true;
     }
 
@@ -82,14 +82,14 @@ class GraphBuildingVisitor implements DependencyVisitor {
       this.cutOffDepth = this.nodeStack.size();
 
       if (currentParent != null) {
-        mergeWithExisting(node1);
+        mergeWithExisting(dependencyNode);
 
         // If omitReachablePaths is set, don't add an edge if there already is an existing path between the nodes.
         // An exception to that are test dependencies which are not resolved transitively.
-        if (!this.omitReachablePaths || !this.graphBuilder.isReachable(node1, currentParent) || "test".equals(node1.getArtifact().getScope())) {
-          this.graphBuilder.addEdge(currentParent, node1);
+        if (!this.omitReachablePaths || !this.graphBuilder.isReachable(dependencyNode, currentParent) || "test".equals(dependencyNode.getArtifact().getScope())) {
+          this.graphBuilder.addEdge(currentParent, dependencyNode);
         } else {
-          this.graphBuilder.addNode(node1);
+          this.graphBuilder.addNode(dependencyNode);
         }
       }
     }

@@ -36,7 +36,7 @@ public class PumlGraphFormatterTest {
 
   private final PumlGraphFormatter formatter = new PumlGraphFormatter();
   private final NodeRenderer<DependencyNode> nodeIdRenderer = DependencyNodeIdRenderer.versionlessId().withType(true);
-  private final PumlDependencyNodeNameRenderer nodeInfoRenderer = new PumlDependencyNodeNameRenderer(true, true, false, false, true);
+  private final PumlDependencyNodeNameRenderer nodeInfoRenderer = new PumlDependencyNodeNameRenderer(true, true, false, false, true, false);
   private final PumlDependencyEgdeRenderer edgeInfoRenderer = new PumlDependencyEgdeRenderer(true);
 
   private final List<Tuple> dependencies = Arrays.asList(
@@ -46,7 +46,8 @@ public class PumlGraphFormatterTest {
       new Tuple("org.apache.maven:maven-core:jar:3.3.9:provided", false),
       new Tuple("com.google.inject:guice:4.0:provided", false),
       new Tuple("com.google.guava:guava:16.0.1:provided", true),
-      new Tuple("junit:junit:4.12:test", false)
+      new Tuple("junit:junit:4.12:test", false),
+      new Tuple("org.springframework:spring-core:5.0.6.RELEASE:optional", false)
   );
 
   private final List<Node<?>> nodes = Lists.transform(this.dependencies,
@@ -63,6 +64,7 @@ public class PumlGraphFormatterTest {
       makeEgde(this.dependencies.get(0), this.dependencies.get(2)),
       makeEgde(this.dependencies.get(0), this.dependencies.get(3)),
       makeEgde(this.dependencies.get(0), this.dependencies.get(6)),
+      makeEgde(this.dependencies.get(0), this.dependencies.get(7)),
       makeEgde(this.dependencies.get(3), this.dependencies.get(4)),
       makeEgde(this.dependencies.get(4), this.dependencies.get(5))
   );
@@ -73,6 +75,7 @@ public class PumlGraphFormatterTest {
     assertEquals("@startuml\n"
         + "skinparam defaultTextAlignment center\n"
         + "skinparam rectangle {\n"
+        + "  BackgroundColor<<optional>> beige\n"
         + "  BackgroundColor<<test>> lightGreen\n"
         + "  BackgroundColor<<runtime>> lightBlue\n"
         + "  BackgroundColor<<provided>> lightGray\n"
@@ -84,10 +87,12 @@ public class PumlGraphFormatterTest {
         + "rectangle \"com.google.inject\\nguice\\n4.0\" as com_google_inject_guice_jar<<provided>>\n"
         + "rectangle \"com.google.guava\\nguava\\n16.0.1\" as com_google_guava_guava_jar<<provided>>\n"
         + "rectangle \"junit\\njunit\\n4.12\" as junit_junit_jar<<test>>\n"
+        + "rectangle \"org.springframework\\nspring-core\\n5.0.6.RELEASE\" as org_springframework_spring_core_jar<<optional>>\n"
         + "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> com_fasterxml_jackson_core_jackson_databind_jar\n"
         + "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> com_google_guava_guava_jar\n"
         + "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> org_apache_maven_maven_core_jar\n"
         + "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> junit_junit_jar\n"
+        + "com_github_ferstl_depgraph_maven_plugin_jar -[#000000]-> org_springframework_spring_core_jar\n"
         + "org_apache_maven_maven_core_jar -[#000000]-> com_google_inject_guice_jar\n"
         + "com_google_inject_guice_jar .[#FF0000].> com_google_guava_guava_jar: 16.0.1-alpha\n"
         + "@enduml", puml);
@@ -102,11 +107,15 @@ public class PumlGraphFormatterTest {
 
   private DependencyNode makeDependencyNode(String description, boolean conflict) {
     String[] parts = description.split(":");
+    boolean optional = parts.length == 5 && "optional".equals(parts[4]);
 
-    return conflict
-        ? DependencyNodeUtil.createDependencyNodeWithConflict(parts[0], parts[1], parts[2], parts[3])
-        : DependencyNodeUtil.createDependencyNode(parts[0], parts[1], parts[2], parts[3]);
-
+    if (conflict) {
+      return DependencyNodeUtil.createDependencyNodeWithConflict(parts[0], parts[1], parts[2], parts[3]);
+    } else if (optional) {
+      return DependencyNodeUtil.createDependencyNode(parts[0], parts[1], parts[2], true);
+    } else {
+      return DependencyNodeUtil.createDependencyNode(parts[0], parts[1], parts[2], parts[3]);
+    }
   }
 
   private Edge makeEgde(Tuple from, Tuple to) {

@@ -40,6 +40,24 @@
     }
   },
   "node-styles": {
+    ",,,,,,true": {
+      "type": "box",
+      "color": "#001a4d",
+      "style": "rounded,filled",
+      "fill-color": "#f2f2f2",
+      "group-id-font": {
+        "size": 10
+      },
+      "version-font": {
+        "size": 10
+      },
+      "scope-font": {
+        "size": 10
+      },
+      "optional-font": {
+        "size": 10
+      }
+    },
     "com.github.ferstl*,,": {
       "type": "box",
       "color": "#001a4d",
@@ -52,6 +70,9 @@
         "size": 10
       },
       "scope-font": {
+        "size": 10
+      },
+      "optional-font": {
         "size": 10
       }
     },
@@ -74,7 +95,7 @@
       "type": "box",
       "color": "#262626",
       "style": "rounded,filled",
-      "fill-color": "#f2f2f2",
+      "fill-color": "#f9e0c0",
       "group-id-font": {
         "size": 10
       },
