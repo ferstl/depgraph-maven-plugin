@@ -22,13 +22,13 @@ import org.eclipse.aether.graph.Dependency;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_CONFLICT;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_DUPLICATE;
 import static org.eclipse.aether.util.graph.transformer.ConflictResolver.NODE_DATA_WINNER;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -103,6 +103,25 @@ public class DependencyNodeTest {
     // assert
     assertTrue(adapter.getArtifact().isOptional());
   }
+
+  @Test
+  public void mergeNonOptionalIntoOptional() {
+    // arrange
+    // create an optional dependency
+    org.eclipse.aether.graph.DependencyNode optionalNode = createAetherDependencyNode();
+    optionalNode.setOptional(true);
+    DependencyNode optionalDependencyNode = new DependencyNode(optionalNode);
+
+    org.eclipse.aether.graph.DependencyNode nonOptionalNode = createAetherDependencyNode();
+    DependencyNode nonOptionalDependencyNode = new DependencyNode(nonOptionalNode);
+
+    // act
+    optionalDependencyNode.merge(nonOptionalDependencyNode);
+
+    // assert
+    assertFalse(optionalDependencyNode.getArtifact().isOptional());
+  }
+
 
   @Test
   public void defaultCompileScope() {

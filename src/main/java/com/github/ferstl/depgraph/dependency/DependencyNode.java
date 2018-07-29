@@ -21,7 +21,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.eclipse.aether.util.graph.transformer.ConflictResolver;
 import com.google.common.collect.ImmutableSet;
-
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_CONFLICT;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_DUPLICATE;
@@ -81,6 +80,9 @@ public final class DependencyNode {
       return;
     }
 
+    if (this.artifact.isOptional()) {
+      this.artifact.setOptional(other.getArtifact().isOptional());
+    }
     this.scopes.addAll(other.scopes);
     this.classifiers.addAll(other.classifiers);
     this.types.addAll(other.types);
