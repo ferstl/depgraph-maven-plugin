@@ -36,6 +36,11 @@
       "style": "filled",
       "fill-color": "green"
     },
+    ",,,,,,true": {
+      "type": "polygon",
+      "style": "filled",
+      "fill-color": "white"
+    },
     ",,test": {
       "type": "box",
       "style": "filled",

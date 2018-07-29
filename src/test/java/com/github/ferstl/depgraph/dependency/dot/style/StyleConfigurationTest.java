@@ -27,7 +27,6 @@ import com.github.ferstl.depgraph.dependency.dot.style.resource.ClasspathStyleRe
 import com.github.ferstl.depgraph.dependency.dot.style.resource.FileSystemStyleResource;
 import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
 import com.google.common.io.Files;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
@@ -45,10 +44,11 @@ public class StyleConfigurationTest {
   private static final String CLASSIFIER_DEFAULT = "";
   private static final String CLASSIFIER_LINUX = "linux";
 
-  private static final StyleKey COMPILE_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_COMPILE, TYPE, VERSION, CLASSIFIER_DEFAULT);
-  private static final StyleKey TEST_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_TEST, TYPE, VERSION, CLASSIFIER_LINUX);
-  private static final StyleKey TEST_STYLE_KEY_CLASSIFIER = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_TEST, TYPE, VERSION, CLASSIFIER);
-  private static final StyleKey PROVIDED_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_PROVIDED, TYPE, VERSION, CLASSIFIER_DEFAULT);
+  private static final StyleKey COMPILE_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_COMPILE, TYPE, VERSION, CLASSIFIER_DEFAULT, null);
+  private static final StyleKey TEST_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_TEST, TYPE, VERSION, CLASSIFIER_LINUX, null);
+  private static final StyleKey TEST_STYLE_KEY_CLASSIFIER = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_TEST, TYPE, VERSION, CLASSIFIER, null);
+  private static final StyleKey PROVIDED_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_PROVIDED, TYPE, VERSION, CLASSIFIER_DEFAULT, null);
+  private static final StyleKey OPTIOINAL_STYLE_KEY = StyleKey.create(GROUP_ID, ARTIFACT_ID, SCOPE_COMPILE, TYPE, VERSION, CLASSIFIER_DEFAULT, true);
 
   private ClasspathStyleResource testStyle;
   private StyleConfiguration emptyConfig;
@@ -80,6 +80,7 @@ public class StyleConfigurationTest {
     assertEquals("[label=<<font point-size=\"9\">&lt;optional&gt;</font><br/>groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>compile>]", config.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, true, TYPE, CLASSIFIER_DEFAULT, SCOPE_COMPILE).toString());
     assertEquals("[shape=\"box\",style=\"filled\",fillcolor=\"orange\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, false, TYPE, CLASSIFIER_LINUX, SCOPE_TEST).toString());
     assertEquals("[shape=\"polygon\",style=\"filled\",fillcolor=\"green\",label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>classifier<br/>test>]", config.nodeAttributes(TEST_STYLE_KEY_CLASSIFIER, GROUP_ID, ARTIFACT_ID, VERSION, false, TYPE, CLASSIFIER, SCOPE_TEST).toString());
+    assertEquals("[shape=\"polygon\",style=\"filled\",fillcolor=\"white\",label=<&lt;optional&gt;<br/>groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>compile>]", config.nodeAttributes(OPTIOINAL_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, true, TYPE, CLASSIFIER_DEFAULT, SCOPE_COMPILE).toString());
   }
 
   @Test

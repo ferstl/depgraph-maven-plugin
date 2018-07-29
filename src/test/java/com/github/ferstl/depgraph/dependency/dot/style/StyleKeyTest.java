@@ -17,7 +17,6 @@ package com.github.ferstl.depgraph.dependency.dot.style;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -32,6 +31,7 @@ public class StyleKeyTest {
   private StyleKey type;
   private StyleKey version;
   private StyleKey classifier;
+  private StyleKey optional;
 
   @Before
   public void before() {
@@ -41,43 +41,49 @@ public class StyleKeyTest {
     this.type = StyleKey.fromString(",,,type");
     this.version = StyleKey.fromString(",,,,version");
     this.classifier = StyleKey.fromString(",,,,,classifier");
+    this.optional = StyleKey.fromString(",,,,,,true");
   }
 
   @Test
   public void fromStringWithGroupIdOnly() {
-    assertEquals("group.id,,,,,", this.groupId.toString());
+    assertEquals("group.id,,,,,,", this.groupId.toString());
   }
 
   @Test
   public void fromStringWithArtifactIdOnly() {
-    assertEquals(",artifactId,,,,", this.artifactId.toString());
+    assertEquals(",artifactId,,,,,", this.artifactId.toString());
   }
 
   @Test
   public void fromStringWithScopeOnly() {
-    assertEquals(",,scope,,,", this.scope.toString());
+    assertEquals(",,scope,,,,", this.scope.toString());
   }
 
   @Test
   public void fromStringWithTypeOnly() {
-    assertEquals(",,,type,,", this.type.toString());
+    assertEquals(",,,type,,,", this.type.toString());
   }
 
   @Test
   public void fromStringWithVersionOnly() {
-    assertEquals(",,,,version,", this.version.toString());
+    assertEquals(",,,,version,,", this.version.toString());
   }
 
   @Test
   public void fromStringWithClassifierOnly() {
-    assertEquals(",,,,,classifier", this.classifier.toString());
+    assertEquals(",,,,,classifier,", this.classifier.toString());
+  }
+
+  @Test
+  public void fromStringWithOptionalOnly() {
+    assertEquals(",,,,,,true", this.optional.toString());
   }
 
   @Test
   public void fromStringEmpty() {
     StyleKey key = StyleKey.fromString("");
 
-    assertEquals(",,,,,", key.toString());
+    assertEquals(",,,,,,", key.toString());
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -87,16 +93,16 @@ public class StyleKeyTest {
 
   @Test
   public void create() {
-    StyleKey key = StyleKey.create("groupId", "artifactId", "scope", "type", "version", "classifier");
+    StyleKey key = StyleKey.create("groupId", "artifactId", "scope", "type", "version", "classifier", true);
 
-    assertEquals("groupId,artifactId,scope,type,version,classifier", key.toString());
+    assertEquals("groupId,artifactId,scope,type,version,classifier,true", key.toString());
   }
 
   @Test
   public void createWithNullValues() {
-    StyleKey key = StyleKey.create(null, null, null, null, null, null);
+    StyleKey key = StyleKey.create(null, null, null, null, null, null, null);
 
-    assertEquals(",,,,,", key.toString());
+    assertEquals(",,,,,,", key.toString());
   }
 
   @Test
@@ -162,5 +168,13 @@ public class StyleKeyTest {
 
     assertTrue(this.classifier.matches(this.classifier));
     assertTrue(wildcard.matches(this.classifier));
+  }
+
+  @Test
+  public void matchesForOptional() {
+    StyleKey unsupportedWildcard = StyleKey.fromString(",,,,,,true*");
+
+    assertTrue(this.optional.matches(this.optional));
+    assertFalse(unsupportedWildcard.matches(this.optional));
   }
 }
