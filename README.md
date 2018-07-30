@@ -29,7 +29,7 @@ These are the plugin coordinates:
         <plugin>
           <groupId>com.github.ferstl</groupId>
           <artifactId>depgraph-maven-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
         </plugin>
       </plugins>
     </build>
@@ -133,7 +133,8 @@ parent:1.0.0-SNAPSHOT:compile
 |  \- commons-lang3:3.1:compile
 +- module-2:1.0.0-SNAPSHOT:compile
 |  +- module-1:1.0.0-SNAPSHOT:compile
-|  \- guava:21.0:compile
+|  +- guava:21.0:compile
+|  \- spring-core:5.0.6.RELEASE:compile (optional)
 \- sub-parent:1.0.0-SNAPSHOT:compile
    +- module-3:1.0.0-SNAPSHOT:compile
    |  +- module-1:1.0.0-SNAPSHOT:compile
@@ -143,6 +144,7 @@ parent:1.0.0-SNAPSHOT:compile
    |     +- mysema-commons-lang:0.2.4:compile
    |     \- bridge-method-annotation:1.13:compile
    \- module-2:1.0.0-SNAPSHOT:compile
+
 
 ```
 
@@ -161,6 +163,7 @@ JSON graphs are intended for Javascript libraries or for further processing. Usi
     "groupId" : "com.github.ferstl",
     "artifactId" : "module-2",
     "version" : "1.0.0-SNAPSHOT",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
@@ -169,6 +172,7 @@ JSON graphs are intended for Javascript libraries or for further processing. Usi
     "groupId" : "com.github.ferstl",
     "artifactId" : "module-1",
     "version" : "1.0.0-SNAPSHOT",
+    "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   } ],
