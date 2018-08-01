@@ -214,35 +214,27 @@ public class GraphBuilderTest {
     assertFalse(this.graphBuilder.isEmpty());
   }
 
+
   @Test
-  public void isReachable() {
+  public void hasAlternativePath() {
     // arrange
     this.graphBuilder.addEdge("A", "B");
     this.graphBuilder.addEdge("B", "D");
-    this.graphBuilder.addEdge("D", "E");
-    this.graphBuilder.addEdge("A", "C");
+    this.graphBuilder.addEdge("A", "D");
 
     // assert
-    assertTrue(this.graphBuilder.isReachable("E", "A"));
-    assertTrue(this.graphBuilder.isReachable("D", "A"));
-    assertTrue(this.graphBuilder.isReachable("C", "A"));
-    assertTrue(this.graphBuilder.isReachable("B", "A"));
-
-    assertFalse(this.graphBuilder.isReachable("C", "B"));
+    assertTrue(this.graphBuilder.hasAlternativePath(new Edge("A", "D", "AD")));
   }
 
   @Test
-  public void isReachableWithCycle() {
+  public void hasAlternativePathWithCycle() {
     // arrange
     this.graphBuilder.addEdge("A", "B");
     this.graphBuilder.addEdge("B", "C");
     this.graphBuilder.addEdge("C", "A");
 
     // assert
-    assertFalse(this.graphBuilder.isReachable("B", "X"));
-
-    assertTrue(this.graphBuilder.isReachable("C", "A"));
-    assertTrue(this.graphBuilder.isReachable("B", "A"));
+    assertFalse(this.graphBuilder.hasAlternativePath(new Edge("B", "X", "BX")));
   }
 
   enum TestNodeRenderer implements NodeRenderer<String> {

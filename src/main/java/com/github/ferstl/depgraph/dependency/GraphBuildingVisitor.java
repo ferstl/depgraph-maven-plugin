@@ -17,7 +17,10 @@ package com.github.ferstl.depgraph.dependency;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.Set;
+
+import com.github.ferstl.depgraph.graph.Edge;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.eclipse.aether.graph.DependencyVisitor;
@@ -83,18 +86,33 @@ class GraphBuildingVisitor implements DependencyVisitor {
 
       if (currentParent != null) {
         mergeWithExisting(dependencyNode);
-
-        // If omitReachablePaths is set, don't add an edge if there already is an existing path between the nodes.
-        // An exception to that are test dependencies which are not resolved transitively.
-        if (!this.omitReachablePaths || !this.graphBuilder.isReachable(dependencyNode, currentParent) || "test".equals(dependencyNode.getArtifact().getScope())) {
-          this.graphBuilder.addEdge(currentParent, dependencyNode);
-        } else {
-          this.graphBuilder.addNode(dependencyNode);
-        }
+        this.graphBuilder.addEdge(currentParent, dependencyNode);
       }
     }
 
+    if (this.nodeStack.size() == 0 && this.omitReachablePaths) {
+      this.removeRedundantEdges();
+    }
+
     return true;
+  }
+
+  private void removeRedundantEdges() {
+    Set<Edge> toRemove = new HashSet<>();
+
+    for (Edge edge : this.graphBuilder.getEdges()) {
+      if ("test".equals(this.graphBuilder.getNode(edge.getToNodeId()).getArtifact().getScope())) {
+        continue;
+      }
+
+      if (this.graphBuilder.hasAlternativePath(edge)) {
+        toRemove.add(edge);
+      }
+    }
+
+    for (Edge edge : toRemove) {
+      this.graphBuilder.removeEdge(edge);
+    }
   }
 
 

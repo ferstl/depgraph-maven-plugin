@@ -96,7 +96,7 @@ public final class GraphBuilderMatcher extends TypeSafeDiagnosingMatcher<GraphBu
     }
 
     return containsInAnyOrder(this.expectedNodes).matches(this.nodes)
-        | containsInAnyOrder(this.expectedEdges).matches(this.edges);
+        && containsInAnyOrder(this.expectedEdges).matches(this.edges);
   }
 
   private void init(GraphBuilder<DependencyNode> graphBuilder) {

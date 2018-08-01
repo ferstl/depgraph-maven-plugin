@@ -242,6 +242,9 @@ public class GraphBuildingVisitorTest {
 
     assertTrue(visitor.visitEnter(nodeA));
 
+    assertTrue(visitor.visitEnter(nodeD));
+    assertTrue(visitor.visitLeave(nodeD));
+
     assertTrue(visitor.visitEnter(nodeB));
     assertTrue(visitor.visitEnter(nodeD));
     assertTrue(visitor.visitLeave(nodeD));
@@ -253,9 +256,6 @@ public class GraphBuildingVisitorTest {
     assertTrue(visitor.visitEnter(nodeD));
     assertTrue(visitor.visitLeave(nodeD));
     assertTrue(visitor.visitLeave(nodeC));
-
-    assertTrue(visitor.visitEnter(nodeD));
-    assertTrue(visitor.visitLeave(nodeD));
 
     assertTrue(visitor.visitEnter(nodeTest));
     assertTrue(visitor.visitLeave(nodeTest));
@@ -280,7 +280,6 @@ public class GraphBuildingVisitorTest {
         }
     ));
   }
-
 
   private static org.eclipse.aether.graph.DependencyNode createMavenDependencyNode(String artifactId, org.eclipse.aether.graph.DependencyNode... children) {
     Dependency dependency = new Dependency(createArtifact(artifactId), "compile");
