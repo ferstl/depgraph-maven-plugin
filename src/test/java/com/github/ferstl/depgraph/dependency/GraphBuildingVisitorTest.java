@@ -84,8 +84,8 @@ public class GraphBuildingVisitorTest {
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child:jar:version:compile\"[label=\"groupId:child:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child:jar:version:compile\""}));
   }
@@ -118,8 +118,8 @@ public class GraphBuildingVisitorTest {
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child1:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child1:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\""}));
   }
@@ -152,8 +152,8 @@ public class GraphBuildingVisitorTest {
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child2:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child2:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\""}));
   }
@@ -199,10 +199,10 @@ public class GraphBuildingVisitorTest {
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child1:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]",
-            "\"groupId:child3:jar:version:compile\"[label=\"groupId:child3:jar:version:compile\"]",
-            "\"groupId:child4:jar:version:compile\"[label=\"groupId:child4:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child1:jar:version:compile\"",
+            "\"groupId:child3:jar:version:compile\"",
+            "\"groupId:child4:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\"",
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child3:jar:version:compile\"",
