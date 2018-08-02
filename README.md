@@ -1,7 +1,7 @@
 # depgraph-maven-plugin
 *- A Maven plugin that generates dependency graphs in various formats (DOT, GML, PlantUML, JSON and Text)*
 
-[![Build Status](https://travis-ci.org/ferstl/depgraph-maven-plugin.svg?branch=master)](https://travis-ci.org/ferstl/depgraph-maven-plugin) ![Maven Central](https://img.shields.io/maven-central/v/com.github.ferstl/depgraph-maven-plugin.svg) [![Coverage Status](https://coveralls.io/repos/github/ferstl/depgraph-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/ferstl/depgraph-maven-plugin?branch=master) [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Build Status](https://travis-ci.org/ferstl/depgraph-maven-plugin.svg?branch=master)](https://travis-ci.org/ferstl/depgraph-maven-plugin) [![Maven Central](https://img.shields.io/maven-central/v/com.github.ferstl/depgraph-maven-plugin.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/depgraph-maven-plugin) [![Coverage Status](https://coveralls.io/repos/github/ferstl/depgraph-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/ferstl/depgraph-maven-plugin?branch=master) [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This Maven plugin generates dependency graphs on single modules or in an aggregated form on multi-module projects. The dependency graphs can be created in the following formats:
 - `.dot`<br/>
