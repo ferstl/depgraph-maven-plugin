@@ -96,14 +96,6 @@ public class DotLabelBuilder {
    */
   public DotLabelBuilder smartNewLine() {
     this.smartNewLine = true;
-    // int length = this.labelBuilder.length();
-    // int nLength = NEWLINE.length();
-    //
-    // if ((length > 0 && length < nLength) || (length >= nLength && !NEWLINE.equals(this.labelBuilder.substring(length
-    // - nLength, length)))) {
-    // return newLine();
-    // }
-
     return this;
   }
 
