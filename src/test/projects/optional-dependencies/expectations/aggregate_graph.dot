@@ -7,7 +7,7 @@ digraph "optional-test" {
   "org.apache.commons:commons-lang3:jar:compile"[label=<<font point-size="10">&lt;optional&gt;</font><br/>commons-lang3>]
   "commons-codec:commons-codec:jar:compile"[label=<commons-codec>]
   "com.github.ferstl:module-c:jar:compile"[label=<module-c>]
-  "com.github.ferstl:module-a:jar:compile"[label=<module-a>]
+  "com.github.ferstl:module-a:jar:compile"[label=<<font point-size="10">&lt;optional&gt;</font><br/>module-a>]
   "com.github.ferstl:module-d:jar:compile"[label=<module-d>]
   "com.github.ferstl:module-test:jar:compile"[label=<module-test>]
 
@@ -18,6 +18,5 @@ digraph "optional-test" {
   "com.github.ferstl:module-a:jar:compile" -> "com.github.ferstl:module-b:jar:compile"
   "com.github.ferstl:module-a:jar:compile" -> "com.github.ferstl:module-c:jar:compile"
   "com.github.ferstl:module-d:jar:compile" -> "com.github.ferstl:module-a:jar:compile"
-  "com.github.ferstl:module-test:jar:compile" -> "com.github.ferstl:module-c:jar:compile"
   "com.github.ferstl:module-test:jar:compile" -> "com.github.ferstl:module-d:jar:compile"
 }

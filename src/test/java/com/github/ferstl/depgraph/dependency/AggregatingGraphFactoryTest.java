@@ -118,8 +118,8 @@ public class AggregatingGraphFactoryTest {
             "\"groupId:child1:jar:version:compile\"",
             "\"groupId:child2:jar:version:compile\""},
         new String[]{
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\"[style=dotted]",
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\"[style=dotted]"}));
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\"",
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\""}));
   }
 
   /**
@@ -184,11 +184,11 @@ public class AggregatingGraphFactoryTest {
             "\"groupId:child2-1:jar:version:compile\"",
             "\"groupId:child2-2:jar:version:compile\""},
         new String[]{
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-1:jar:version:compile\"[style=dotted]",
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-2:jar:version:compile\"[style=dotted]",
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:subParent:jar:version:compile\"[style=dotted]",
-            "\"groupId:subParent:jar:version:compile\" -> \"groupId:child2-1:jar:version:compile\"[style=dotted]",
-            "\"groupId:subParent:jar:version:compile\" -> \"groupId:child2-2:jar:version:compile\"[style=dotted]"}));
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-1:jar:version:compile\"",
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-2:jar:version:compile\"",
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:subParent:jar:version:compile\"",
+            "\"groupId:subParent:jar:version:compile\" -> \"groupId:child2-1:jar:version:compile\"",
+            "\"groupId:subParent:jar:version:compile\" -> \"groupId:child2-2:jar:version:compile\""}));
   }
 
   /**
@@ -214,7 +214,7 @@ public class AggregatingGraphFactoryTest {
             "\"groupId:parent:jar:version:compile\"",
             "\"groupId:child:jar:version:compile\""},
         new String[]{
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\"[style=dotted]"}));
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child:jar:version:compile\""}));
   }
 
   /**
@@ -250,8 +250,8 @@ public class AggregatingGraphFactoryTest {
             "\"groupId:child1-1:jar:version:compile\"",
             "\"groupId:child1-2:jar:version:compile\""},
         new String[]{
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-1:jar:version:compile\"[style=dotted]",
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-2:jar:version:compile\"[style=dotted]"}));
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-1:jar:version:compile\"",
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1-2:jar:version:compile\""}));
   }
 
   /**
@@ -285,7 +285,7 @@ public class AggregatingGraphFactoryTest {
             "\"groupId:parent:jar:version:compile\"",
             "\"groupId:child2:jar:version:compile\""},
         new String[]{
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\"[style=dotted]"}));
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\""}));
   }
 
 

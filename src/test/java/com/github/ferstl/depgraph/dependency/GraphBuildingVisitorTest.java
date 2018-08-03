@@ -84,8 +84,8 @@ public class GraphBuildingVisitorTest {
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child:jar:version:compile\"[label=\"groupId:child:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child:jar:version:compile\""}));
   }
@@ -118,8 +118,8 @@ public class GraphBuildingVisitorTest {
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child1:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child1:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\""}));
   }
@@ -152,8 +152,8 @@ public class GraphBuildingVisitorTest {
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child2:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child2:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:compile\""}));
   }
@@ -199,10 +199,10 @@ public class GraphBuildingVisitorTest {
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
-            "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child1:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]",
-            "\"groupId:child3:jar:version:compile\"[label=\"groupId:child3:jar:version:compile\"]",
-            "\"groupId:child4:jar:version:compile\"[label=\"groupId:child4:jar:version:compile\"]"},
+            "\"groupId:parent:jar:version:compile\"",
+            "\"groupId:child1:jar:version:compile\"",
+            "\"groupId:child3:jar:version:compile\"",
+            "\"groupId:child4:jar:version:compile\""},
         new String[]{
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\"",
             "\"groupId:parent:jar:version:compile\" -> \"groupId:child3:jar:version:compile\"",
@@ -242,6 +242,9 @@ public class GraphBuildingVisitorTest {
 
     assertTrue(visitor.visitEnter(nodeA));
 
+    assertTrue(visitor.visitEnter(nodeD));
+    assertTrue(visitor.visitLeave(nodeD));
+
     assertTrue(visitor.visitEnter(nodeB));
     assertTrue(visitor.visitEnter(nodeD));
     assertTrue(visitor.visitLeave(nodeD));
@@ -253,9 +256,6 @@ public class GraphBuildingVisitorTest {
     assertTrue(visitor.visitEnter(nodeD));
     assertTrue(visitor.visitLeave(nodeD));
     assertTrue(visitor.visitLeave(nodeC));
-
-    assertTrue(visitor.visitEnter(nodeD));
-    assertTrue(visitor.visitLeave(nodeD));
 
     assertTrue(visitor.visitEnter(nodeTest));
     assertTrue(visitor.visitLeave(nodeTest));
@@ -280,7 +280,6 @@ public class GraphBuildingVisitorTest {
         }
     ));
   }
-
 
   private static org.eclipse.aether.graph.DependencyNode createMavenDependencyNode(String artifactId, org.eclipse.aether.graph.DependencyNode... children) {
     Dependency dependency = new Dependency(createArtifact(artifactId), "compile");

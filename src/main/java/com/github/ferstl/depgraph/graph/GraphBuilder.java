@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph.graph;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -95,6 +96,18 @@ public final class GraphBuilder<T> {
     return this.nodeDefinitions.isEmpty();
   }
 
+  public Collection<Edge> getEdges() {
+    return this.edges;
+  }
+
+  public T getNode(String id) {
+    return this.nodeDefinitions.get(id).nodeObject;
+  }
+
+  public void removeEdge(Edge edge) {
+    this.edges.remove(edge);
+  }
+
   /**
    * Adds a single node to the graph.
    *
@@ -144,11 +157,8 @@ public final class GraphBuilder<T> {
     return node;
   }
 
-  public boolean isReachable(T target, T source) {
-    String targetId = this.nodeIdRenderer.render(target);
-    String sourceId = this.nodeIdRenderer.render(source);
-
-    return this.reachabilityMap.isReachable(targetId, sourceId);
+  public boolean hasAlternativePath(Edge edge) {
+    return this.reachabilityMap.existsAlternativePath(edge.getToNodeId(), edge.getFromNodeId());
   }
 
   @Override
@@ -212,8 +222,17 @@ public final class GraphBuilder<T> {
       parents.add(from);
     }
 
-    boolean isReachable(String target, String source) {
-      return isReachableInternal(target, source, new HashSet<String>());
+    boolean existsAlternativePath(String target, String source) {
+      Set<String> parents = safelyGetParents(target);
+      for (String parent : parents) {
+        if (parent.equals(source)) {
+          continue;
+        }
+        if (existsPathInternal(parent, source, new HashSet<String>())) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /**
@@ -222,7 +241,7 @@ public final class GraphBuilder<T> {
      *
      * @return {@code true} if {@code target} is reachable via {@code source}, {@code false} else.
      */
-    private boolean isReachableInternal(String target, String source, Set<String> alreadyVisited) {
+    private boolean existsPathInternal(String target, String source, Set<String> alreadyVisited) {
       if (alreadyVisited.contains(target)) {
         return false;
       }
@@ -235,7 +254,7 @@ public final class GraphBuilder<T> {
       }
 
       for (String parent : parents) {
-        if (isReachableInternal(parent, source, alreadyVisited)) {
+        if (existsPathInternal(parent, source, alreadyVisited)) {
           return true;
         }
       }
