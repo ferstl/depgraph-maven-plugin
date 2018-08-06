@@ -15,7 +15,6 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -205,7 +204,7 @@ public final class GraphBuilder<T> {
    */
   private static class ReachabilityMap {
 
-    private final Map<String, Set<String>> parentIndex = new HashMap<>();
+    private final Map<String, Set<String>> parentIndex = new LinkedHashMap<>();
 
     void registerEdge(String from, String to) {
       Set<String> parents = safelyGetParents(to);
@@ -246,7 +245,7 @@ public final class GraphBuilder<T> {
     private Set<String> safelyGetParents(String node) {
       Set<String> parentPath = this.parentIndex.get(node);
       if (parentPath == null) {
-        parentPath = new HashSet<>();
+        parentPath = new LinkedHashSet<>();
         this.parentIndex.put(node, parentPath);
       }
 
