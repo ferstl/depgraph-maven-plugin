@@ -30,7 +30,6 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 class GraphBuildingVisitor implements DependencyVisitor {
 
   private final GraphBuilder<DependencyNode> graphBuilder;
-  private final boolean omitReachablePaths;
   private final Deque<DependencyNode> nodeStack;
   private final ArtifactFilter globalFilter;
   private final ArtifactFilter transitiveFilter;
@@ -42,9 +41,8 @@ class GraphBuildingVisitor implements DependencyVisitor {
    */
   private int cutOffDepth = 0;
 
-  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
+  GraphBuildingVisitor(GraphBuilder<DependencyNode> graphBuilder, ArtifactFilter globalFilter, ArtifactFilter transitiveFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.graphBuilder = graphBuilder;
-    this.omitReachablePaths = omitReachablePaths;
     this.nodeStack = new ArrayDeque<>();
     this.globalFilter = globalFilter;
     this.transitiveFilter = transitiveFilter;
@@ -83,13 +81,10 @@ class GraphBuildingVisitor implements DependencyVisitor {
 
       if (currentParent != null) {
         mergeWithExisting(dependencyNode);
-
-        // If omitReachablePaths is set, don't add an edge if there already is an existing path between the nodes.
-        // An exception to that are test dependencies which are not resolved transitively.
-        if (!this.omitReachablePaths || !this.graphBuilder.isReachable(dependencyNode, currentParent) || "test".equals(dependencyNode.getArtifact().getScope())) {
-          this.graphBuilder.addEdge(currentParent, dependencyNode);
+        if ("test".equals(dependencyNode.getArtifact().getScope())) {
+          this.graphBuilder.addPermanentEdge(currentParent, dependencyNode);
         } else {
-          this.graphBuilder.addNode(dependencyNode);
+          this.graphBuilder.addEdge(currentParent, dependencyNode);
         }
       }
     }

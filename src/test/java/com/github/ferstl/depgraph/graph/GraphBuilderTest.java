@@ -19,7 +19,6 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
-
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -243,6 +242,63 @@ public class GraphBuilderTest {
 
     assertTrue(this.graphBuilder.isReachable("C", "A"));
     assertTrue(this.graphBuilder.isReachable("B", "A"));
+  }
+
+  @Test
+  public void reduceEdges() {
+    // arrange
+    this.graphBuilder.addEdge("A", "B");
+    this.graphBuilder.addEdge("B", "C");
+    this.graphBuilder.addEdge("A", "C");
+
+    // act
+    this.graphBuilder.reduceEdges();
+    this.graphBuilder.toString();
+
+    // assert
+    // A -> C is redundant
+    assertThat(this.formatter.edges, containsInAnyOrder(
+        new Edge("A", "B", ""),
+        new Edge("B", "C", "")));
+  }
+
+  @Test
+  public void reduceEdgesWithPermanentEdge() {
+    // arrange
+    this.graphBuilder.addEdge("A", "B");
+    this.graphBuilder.addEdge("B", "C");
+    this.graphBuilder.addPermanentEdge("A", "C");
+
+    // act
+    this.graphBuilder.reduceEdges();
+    this.graphBuilder.toString();
+
+    // assert
+    // A -> C is permanen t
+    assertThat(this.formatter.edges, containsInAnyOrder(
+        new Edge("A", "B", ""),
+        new Edge("B", "C", ""),
+        new Edge("A", "C", "")));
+  }
+
+  @Test
+  public void reduceEdgesWithCycle() {
+    // arrange
+    this.graphBuilder.addEdge("A", "B");
+    this.graphBuilder.addEdge("B", "C");
+    this.graphBuilder.addEdge("A", "C");
+    this.graphBuilder.addEdge("C", "A");
+
+    // act
+    this.graphBuilder.reduceEdges();
+    this.graphBuilder.toString();
+
+    // assert
+    // A -> C is redundant
+    assertThat(this.formatter.edges, containsInAnyOrder(
+        new Edge("A", "B", ""),
+        new Edge("B", "C", ""),
+        new Edge("C", "A", "")));
   }
 
   enum TestNodeRenderer implements NodeRenderer<String> {

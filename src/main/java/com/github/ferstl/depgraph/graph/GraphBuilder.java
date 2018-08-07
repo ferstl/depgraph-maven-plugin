@@ -109,24 +109,12 @@ public final class GraphBuilder<T> {
     return this;
   }
 
-  /**
-   * Adds the two given nodes to the graph and creates an edge between them <strong>if they are not {@code null}</strong>.
-   * Nothing will be added to the graph if one or both nodes are {@code null}.
-   *
-   * @param from From node.
-   * @param to To node.
-   * @return This builder.
-   */
-  // no edge will be created in case one or both nodes are null.
   public GraphBuilder<T> addEdge(T from, T to) {
-    if (from != null && to != null) {
-      addNode(from);
-      addNode(to);
+    return addEdgeInternal(from, to, false);
+  }
 
-      safelyAddEdge(from, to, false);
-    }
-
-    return this;
+  public GraphBuilder<T> addPermanentEdge(T from, T to) {
+    return addEdgeInternal(from, to, true);
   }
 
   /**
@@ -142,6 +130,16 @@ public final class GraphBuilder<T> {
     }
 
     return node;
+  }
+
+  public void reduceEdges() {
+    Iterator<Edge> edgeIterator = this.edges.iterator();
+    while (edgeIterator.hasNext()) {
+      Edge edge = edgeIterator.next();
+      if (!edge.isPermanent() && this.reachabilityMap.hasOlderPath(edge.getToNodeId(), edge.getFromNodeId())) {
+        edgeIterator.remove();
+      }
+    }
   }
 
   public boolean isReachable(T target, T source) {
@@ -162,6 +160,26 @@ public final class GraphBuilder<T> {
     ImmutableSet<Edge> edgeSet = ImmutableSet.copyOf(this.edges);
 
     return this.graphFormatter.format(this.graphName, nodeList, edgeSet);
+  }
+
+  /**
+   * Adds the two given nodes to the graph and creates an edge between them <strong>if they are not {@code null}</strong>.
+   * Nothing will be added to the graph if one or both nodes are {@code null}.
+   *
+   * @param from From node.
+   * @param to To node.
+   * @param permanent Whether the edge is permanent.
+   * @return This builder.
+   */
+  private GraphBuilder<T> addEdgeInternal(T from, T to, boolean permanent) {
+    if (from != null && to != null) {
+      addNode(from);
+      addNode(to);
+
+      safelyAddEdge(from, to, permanent);
+    }
+
+    return this;
   }
 
   private void safelyAddEdge(T fromNode, T toNode, boolean permanent) {

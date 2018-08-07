@@ -27,7 +27,6 @@ import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-
 import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEdges;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -68,26 +67,32 @@ public class GraphBuildingVisitorTest {
    * .
    * <pre>
    * parent
-   *     - child
+   *     - child1
+   *     - child2 (test)
    * </pre>
    */
   @Test
-  public void parentAndChild() {
-    org.eclipse.aether.graph.DependencyNode child = createMavenDependencyNode("child");
-    org.eclipse.aether.graph.DependencyNode parent = createMavenDependencyNode("parent", child);
+  public void parentAndChildren() {
+    org.eclipse.aether.graph.DependencyNode child1 = createMavenDependencyNode("child1");
+    org.eclipse.aether.graph.DependencyNode child2 = createMavenDependencyNode("child2", "test");
+    org.eclipse.aether.graph.DependencyNode parent = createMavenDependencyNode("parent", child1, child2);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, false);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions);
     assertTrue(visitor.visitEnter(parent));
-    assertTrue(visitor.visitEnter(child));
-    assertTrue(visitor.visitLeave(child));
+    assertTrue(visitor.visitEnter(child1));
+    assertTrue(visitor.visitLeave(child1));
+    assertTrue(visitor.visitEnter(child2));
+    assertTrue(visitor.visitLeave(child2));
     assertTrue(visitor.visitLeave(parent));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
         new String[]{
             "\"groupId:parent:jar:version:compile\"[label=\"groupId:parent:jar:version:compile\"]",
-            "\"groupId:child:jar:version:compile\"[label=\"groupId:child:jar:version:compile\"]"},
+            "\"groupId:child:jar:version:compile\"[label=\"groupId:child1:jar:version:compile\"]",
+            "\"groupId:child:jar:version:compile\"[label=\"groupId:child2:jar:version:compile\"]"},
         new String[]{
-            "\"groupId:parent:jar:version:compile\" -> \"groupId:child:jar:version:compile\""}));
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child1:jar:version:compile\"",
+            "\"groupId:parent:jar:version:compile\" -> \"groupId:child2:jar:version:test\""}));
   }
 
   /**
@@ -107,7 +112,7 @@ public class GraphBuildingVisitorTest {
     String filterPattern = child2.getArtifact().getGroupId() + ":" + child2.getArtifact().getArtifactId();
     this.globalFilter = new ExcludesArtifactFilter(singletonList(filterPattern));
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, false);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions);
     assertTrue(visitor.visitEnter(parent));
     assertTrue(visitor.visitEnter(child1));
     assertTrue(visitor.visitLeave(child1));
@@ -141,7 +146,7 @@ public class GraphBuildingVisitorTest {
     String filterPattern = child2.getArtifact().getGroupId() + ":" + child2.getArtifact().getArtifactId();
     this.targetFilter = new IncludesArtifactFilter(singletonList(filterPattern));
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, false);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions);
     assertTrue(visitor.visitEnter(parent));
 
     assertTrue(visitor.visitEnter(child1));
@@ -181,7 +186,7 @@ public class GraphBuildingVisitorTest {
     String child4Pattern = child4.getArtifact().getGroupId() + ":" + child4.getArtifact().getArtifactId();
     this.targetFilter = new IncludesArtifactFilter(asList(child3Pattern, child4Pattern));
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, false);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions);
     assertTrue(visitor.visitEnter(parent));
 
     assertTrue(visitor.visitEnter(child1));
@@ -213,77 +218,13 @@ public class GraphBuildingVisitorTest {
         }));
   }
 
-  /**
-   * .
-   * <pre>
-   * node-a
-   *   - node-b
-   *   - node-c
-   *   - node-d (omitted)
-   *   - node-test (not omitted test dependency)
-   * node-b
-   *   - node-d
-   *   - node-test
-   * node-c
-   *   - node-d
-   * </pre>
-   */
-  @Test
-  public void omitReachablePaths() {
-    org.eclipse.aether.graph.DependencyNode nodeTest = createMavenDependencyNode("node-test");
-    nodeTest = new DefaultDependencyNode(nodeTest.getDependency().setScope("test"));
-
-    org.eclipse.aether.graph.DependencyNode nodeD = createMavenDependencyNode("node-d");
-    org.eclipse.aether.graph.DependencyNode nodeC = createMavenDependencyNode("node-c", nodeD);
-    org.eclipse.aether.graph.DependencyNode nodeB = createMavenDependencyNode("node-b", nodeD, nodeTest);
-    org.eclipse.aether.graph.DependencyNode nodeA = createMavenDependencyNode("node-a", nodeB, nodeC, nodeD, nodeTest);
-
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(this.graphBuilder, this.globalFilter, this.transitiveFilter, this.targetFilter, this.includedResolutions, true);
-
-    assertTrue(visitor.visitEnter(nodeA));
-
-    assertTrue(visitor.visitEnter(nodeB));
-    assertTrue(visitor.visitEnter(nodeD));
-    assertTrue(visitor.visitLeave(nodeD));
-    assertTrue(visitor.visitEnter(nodeTest));
-    assertTrue(visitor.visitLeave(nodeTest));
-    assertTrue(visitor.visitLeave(nodeB));
-
-    assertTrue(visitor.visitEnter(nodeC));
-    assertTrue(visitor.visitEnter(nodeD));
-    assertTrue(visitor.visitLeave(nodeD));
-    assertTrue(visitor.visitLeave(nodeC));
-
-    assertTrue(visitor.visitEnter(nodeD));
-    assertTrue(visitor.visitLeave(nodeD));
-
-    assertTrue(visitor.visitEnter(nodeTest));
-    assertTrue(visitor.visitLeave(nodeTest));
-
-    assertTrue(visitor.visitLeave(nodeA));
-
-    assertThat(this.graphBuilder, hasNodesAndEdges(
-        new String[]{
-            "\"groupId:node-b:jar:version:compile\"",
-            "\"groupId:node-d:jar:version:compile\"",
-            "\"groupId:node-test:jar:version:test\"",
-            "\"groupId:node-a:jar:version:compile\"",
-            "\"groupId:node-c:jar:version:compile\""
-        },
-        new String[]{
-            "\"groupId:node-b:jar:version:compile\" -> \"groupId:node-d:jar:version:compile\"",
-            "\"groupId:node-b:jar:version:compile\" -> \"groupId:node-test:jar:version:test\"",
-            "\"groupId:node-a:jar:version:compile\" -> \"groupId:node-b:jar:version:compile\"",
-            "\"groupId:node-c:jar:version:compile\" -> \"groupId:node-d:jar:version:compile\"",
-            "\"groupId:node-a:jar:version:compile\" -> \"groupId:node-c:jar:version:compile\"",
-            "\"groupId:node-a:jar:version:compile\" -> \"groupId:node-test:jar:version:test\"",
-        }
-    ));
-  }
-
 
   private static org.eclipse.aether.graph.DependencyNode createMavenDependencyNode(String artifactId, org.eclipse.aether.graph.DependencyNode... children) {
-    Dependency dependency = new Dependency(createArtifact(artifactId), "compile");
+    return createMavenDependencyNode(artifactId, "compile", children);
+  }
+
+  private static org.eclipse.aether.graph.DependencyNode createMavenDependencyNode(String artifactId, String scope, org.eclipse.aether.graph.DependencyNode... children) {
+    Dependency dependency = new Dependency(createArtifact(artifactId), scope);
     DefaultDependencyNode node = new DefaultDependencyNode(dependency);
     node.setChildren(asList(children));
 
