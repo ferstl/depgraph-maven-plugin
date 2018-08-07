@@ -122,7 +122,7 @@ public final class GraphBuilder<T> {
       addNode(from);
       addNode(to);
 
-      safelyAddEdge(from, to);
+      safelyAddEdge(from, to, false);
     }
 
     return this;
@@ -163,12 +163,12 @@ public final class GraphBuilder<T> {
     return this.graphFormatter.format(this.graphName, nodeList, edgeSet);
   }
 
-  private void safelyAddEdge(T fromNode, T toNode) {
+  private void safelyAddEdge(T fromNode, T toNode, boolean permanent) {
     String fromNodeId = this.nodeIdRenderer.render(fromNode);
     String toNodeId = this.nodeIdRenderer.render(toNode);
 
     if (!this.omitSelfReferences || !fromNodeId.equals(toNodeId)) {
-      Edge edge = new Edge(fromNodeId, toNodeId, this.edgeRenderer.render(fromNode, toNode));
+      Edge edge = new Edge(fromNodeId, toNodeId, this.edgeRenderer.render(fromNode, toNode), permanent);
       this.edges.add(edge);
       this.reachabilityMap.registerEdge(fromNodeId, toNodeId);
     }
