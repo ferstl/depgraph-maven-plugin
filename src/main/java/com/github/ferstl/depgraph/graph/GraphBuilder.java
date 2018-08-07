@@ -16,6 +16,7 @@
 package com.github.ferstl.depgraph.graph;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -215,6 +216,10 @@ public final class GraphBuilder<T> {
       return isReachableInternal(target, source, new HashSet<String>());
     }
 
+    boolean hasOlderPath(String target, String source) {
+      return hasOlderPathInternal(target, source, new HashSet<String>());
+    }
+
     /**
      * Recursively traverses the parents of {@code target} trying to find {@code source} by keeping track of already traversed
      * nodes.
@@ -240,6 +245,45 @@ public final class GraphBuilder<T> {
       }
 
       return false;
+    }
+
+    private boolean hasOlderPathInternal(String target, String source, Set<String> alreadyVisited) {
+      if (alreadyVisited.contains(target)) {
+        return false;
+      }
+
+      alreadyVisited.add(target);
+
+      Set<String> parents = findOlderParents(target, source);
+      if (parents.contains(source)) {
+        return true;
+      }
+
+      for (String parent : parents) {
+        if (isReachableInternal(parent, source, alreadyVisited)) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    private Set<String> findOlderParents(String target, String source) {
+      Set<String> olderParents = new LinkedHashSet<>(safelyGetParents(target));
+      boolean remove = false;
+      Iterator<String> iterator = olderParents.iterator();
+      while (iterator.hasNext()) {
+        String value = iterator.next();
+        if (value.equals(source)) {
+          remove = true;
+        }
+
+        if (remove) {
+          iterator.remove();
+        }
+      }
+
+      return olderParents;
     }
 
     private Set<String> safelyGetParents(String node) {
