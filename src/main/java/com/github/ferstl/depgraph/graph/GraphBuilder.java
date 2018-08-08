@@ -142,13 +142,6 @@ public final class GraphBuilder<T> {
     }
   }
 
-  public boolean isReachable(T target, T source) {
-    String targetId = this.nodeIdRenderer.render(target);
-    String sourceId = this.nodeIdRenderer.render(source);
-
-    return this.reachabilityMap.isReachable(targetId, sourceId);
-  }
-
   @Override
   public String toString() {
     // Work around some generics restrictions
@@ -228,10 +221,6 @@ public final class GraphBuilder<T> {
     void registerEdge(String from, String to) {
       Set<String> parents = safelyGetParents(to);
       parents.add(from);
-    }
-
-    boolean isReachable(String target, String source) {
-      return isReachableInternal(target, source, new HashSet<String>());
     }
 
     boolean hasOlderPath(String target, String source) {
