@@ -224,29 +224,31 @@ public final class GraphBuilder<T> {
     }
 
     boolean hasOlderPath(String target, String source) {
-      return hasOlderPathInternal(target, source, new HashSet<String>());
+      return isReachable(target, source, true, new HashSet<String>());
     }
+
 
     /**
      * Recursively traverses the parents of {@code target} trying to find {@code source} by keeping track of already traversed
-     * nodes.
+     * nodes. If {@code olderParentsOnly} is set to {@code true}, only the parents that were inserted <strong>before</strong>
+     * {@code source} will be considered.
      *
      * @return {@code true} if {@code target} is reachable via {@code source}, {@code false} else.
      */
-    private boolean isReachableInternal(String target, String source, Set<String> alreadyVisited) {
+    private boolean isReachable(String target, String source, boolean olderParentsOnly, Set<String> alreadyVisited) {
       if (alreadyVisited.contains(target)) {
         return false;
       }
 
       alreadyVisited.add(target);
 
-      Set<String> parents = safelyGetParents(target);
+      Set<String> parents = olderParentsOnly ? getOlderParents(target, source) : safelyGetParents(target);
       if (parents.contains(source)) {
         return true;
       }
 
       for (String parent : parents) {
-        if (isReachableInternal(parent, source, alreadyVisited)) {
+        if (isReachable(parent, source, false, alreadyVisited)) {
           return true;
         }
       }
@@ -254,28 +256,7 @@ public final class GraphBuilder<T> {
       return false;
     }
 
-    private boolean hasOlderPathInternal(String target, String source, Set<String> alreadyVisited) {
-      if (alreadyVisited.contains(target)) {
-        return false;
-      }
-
-      alreadyVisited.add(target);
-
-      Set<String> parents = findOlderParents(target, source);
-      if (parents.contains(source)) {
-        return true;
-      }
-
-      for (String parent : parents) {
-        if (isReachableInternal(parent, source, alreadyVisited)) {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    private Set<String> findOlderParents(String target, String source) {
+    private Set<String> getOlderParents(String target, String source) {
       Set<String> olderParents = new LinkedHashSet<>(safelyGetParents(target));
       boolean remove = false;
       Iterator<String> iterator = olderParents.iterator();
