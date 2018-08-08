@@ -29,7 +29,6 @@ import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
 import com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 
 /**
@@ -56,7 +55,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
         .configure(GraphBuilder.create(DependencyNodeIdRenderer.groupId().withScope(true)))
         .omitSelfReferences();
 
-    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), false);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED));
     return new SimpleGraphFactory(adapter, globalFilter, graphBuilder);
   }
 

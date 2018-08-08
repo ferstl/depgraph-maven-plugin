@@ -33,18 +33,21 @@ public class AggregatingGraphFactory implements GraphFactory {
   private final ArtifactFilter globalFilter;
   private final GraphBuilder<DependencyNode> graphBuilder;
   private final boolean includeParentProjects;
+  private final boolean reduceEdges;
 
   public AggregatingGraphFactory(
       MavenGraphAdapter mavenGraphAdapter,
       SubProjectSupplier subProjectSupplier,
       ArtifactFilter globalFilter,
       GraphBuilder<DependencyNode> graphBuilder,
-      boolean includeParentProjects) {
+      boolean includeParentProjects,
+      boolean reduceEdges) {
     this.mavenGraphAdapter = mavenGraphAdapter;
     this.subProjectSupplier = subProjectSupplier;
     this.globalFilter = globalFilter;
     this.graphBuilder = graphBuilder;
     this.includeParentProjects = includeParentProjects;
+    this.reduceEdges = reduceEdges;
   }
 
   @Override
@@ -67,6 +70,10 @@ public class AggregatingGraphFactory implements GraphFactory {
     Artifact artifact = parent.getArtifact();
     if (this.graphBuilder.isEmpty() && this.globalFilter.include(artifact)) {
       this.graphBuilder.addNode(new DependencyNode(artifact));
+    }
+
+    if (this.reduceEdges) {
+      this.graphBuilder.reduceEdges();
     }
 
     return this.graphBuilder.toString();

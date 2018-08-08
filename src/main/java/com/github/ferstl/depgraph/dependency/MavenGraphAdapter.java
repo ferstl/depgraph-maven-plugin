@@ -30,7 +30,6 @@ import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilt
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystemSession;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-
 import static java.util.Collections.singletonList;
 import static org.eclipse.aether.util.graph.transformer.ConflictResolver.CONFIG_PROP_VERBOSE;
 
@@ -42,14 +41,12 @@ public final class MavenGraphAdapter {
   private final ProjectDependenciesResolver dependenciesResolver;
   private final ArtifactFilter transitiveIncludeExcludeFilter;
   private final ArtifactFilter targetFilter;
-  private final boolean omitReachablePaths;
   private final Set<NodeResolution> includedResolutions;
 
-  public MavenGraphAdapter(ProjectDependenciesResolver dependenciesResolver, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions, boolean omitReachablePaths) {
+  public MavenGraphAdapter(ProjectDependenciesResolver dependenciesResolver, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, Set<NodeResolution> includedResolutions) {
     this.dependenciesResolver = dependenciesResolver;
     this.transitiveIncludeExcludeFilter = transitiveIncludeExcludeFilter;
     this.targetFilter = targetFilter;
-    this.omitReachablePaths = omitReachablePaths;
     this.includedResolutions = includedResolutions;
   }
 
@@ -68,7 +65,7 @@ public final class MavenGraphAdapter {
     org.eclipse.aether.graph.DependencyNode root = result.getDependencyGraph();
     ArtifactFilter transitiveDependencyFilter = createTransitiveDependencyFilter(project);
 
-    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, globalFilter, transitiveDependencyFilter, this.targetFilter, this.includedResolutions, this.omitReachablePaths);
+    GraphBuildingVisitor visitor = new GraphBuildingVisitor(graphBuilder, globalFilter, transitiveDependencyFilter, this.targetFilter, this.includedResolutions);
     root.accept(visitor);
   }
 

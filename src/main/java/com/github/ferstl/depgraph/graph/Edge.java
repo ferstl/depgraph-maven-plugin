@@ -22,11 +22,18 @@ public final class Edge {
   private final String fromNodeId;
   private final String toNodeId;
   private final String name;
+  // Not part of equals()/hashCode()
+  private final boolean permanent;
 
   public Edge(String fromNodeId, String toNodeId, String name) {
+    this(fromNodeId, toNodeId, name, false);
+  }
+
+  public Edge(String fromNodeId, String toNodeId, String name, boolean permanent) {
     this.fromNodeId = fromNodeId;
     this.toNodeId = toNodeId;
     this.name = name;
+    this.permanent = permanent;
   }
 
   public String getFromNodeId() {
@@ -39,6 +46,10 @@ public final class Edge {
 
   public String getName() {
     return this.name;
+  }
+
+  public boolean isPermanent() {
+    return this.permanent;
   }
 
   @Override

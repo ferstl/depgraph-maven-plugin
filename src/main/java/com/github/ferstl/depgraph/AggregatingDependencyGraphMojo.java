@@ -28,7 +28,6 @@ import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 
 /**
@@ -129,8 +128,8 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .repeatTransitiveDependencies(this.repeatTransitiveDependenciesInTextGraph)
         .configure(GraphBuilder.create(nodeIdRenderer));
 
-    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), this.reduceEdges);
-    return new AggregatingGraphFactory(adapter, createReactorOrderSubProjectSupplier(), globalFilter, graphBuilder, this.includeParentProjects);
+    MavenGraphAdapter adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED));
+    return new AggregatingGraphFactory(adapter, createReactorOrderSubProjectSupplier(), globalFilter, graphBuilder, this.includeParentProjects, this.reduceEdges);
   }
 
   private void handleOptionsForFullGraph() {

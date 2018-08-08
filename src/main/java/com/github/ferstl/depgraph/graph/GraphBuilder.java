@@ -15,8 +15,8 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -109,24 +109,12 @@ public final class GraphBuilder<T> {
     return this;
   }
 
-  /**
-   * Adds the two given nodes to the graph and creates an edge between them <strong>if they are not {@code null}</strong>.
-   * Nothing will be added to the graph if one or both nodes are {@code null}.
-   *
-   * @param from From node.
-   * @param to To node.
-   * @return This builder.
-   */
-  // no edge will be created in case one or both nodes are null.
   public GraphBuilder<T> addEdge(T from, T to) {
-    if (from != null && to != null) {
-      addNode(from);
-      addNode(to);
+    return addEdgeInternal(from, to, false);
+  }
 
-      safelyAddEdge(from, to);
-    }
-
-    return this;
+  public GraphBuilder<T> addPermanentEdge(T from, T to) {
+    return addEdgeInternal(from, to, true);
   }
 
   /**
@@ -144,11 +132,14 @@ public final class GraphBuilder<T> {
     return node;
   }
 
-  public boolean isReachable(T target, T source) {
-    String targetId = this.nodeIdRenderer.render(target);
-    String sourceId = this.nodeIdRenderer.render(source);
-
-    return this.reachabilityMap.isReachable(targetId, sourceId);
+  public void reduceEdges() {
+    Iterator<Edge> edgeIterator = this.edges.iterator();
+    while (edgeIterator.hasNext()) {
+      Edge edge = edgeIterator.next();
+      if (!edge.isPermanent() && this.reachabilityMap.hasOlderPath(edge.getToNodeId(), edge.getFromNodeId())) {
+        edgeIterator.remove();
+      }
+    }
   }
 
   @Override
@@ -164,12 +155,32 @@ public final class GraphBuilder<T> {
     return this.graphFormatter.format(this.graphName, nodeList, edgeSet);
   }
 
-  private void safelyAddEdge(T fromNode, T toNode) {
+  /**
+   * Adds the two given nodes to the graph and creates an edge between them <strong>if they are not {@code null}</strong>.
+   * Nothing will be added to the graph if one or both nodes are {@code null}.
+   *
+   * @param from From node.
+   * @param to To node.
+   * @param permanent Whether the edge is permanent.
+   * @return This builder.
+   */
+  private GraphBuilder<T> addEdgeInternal(T from, T to, boolean permanent) {
+    if (from != null && to != null) {
+      addNode(from);
+      addNode(to);
+
+      safelyAddEdge(from, to, permanent);
+    }
+
+    return this;
+  }
+
+  private void safelyAddEdge(T fromNode, T toNode, boolean permanent) {
     String fromNodeId = this.nodeIdRenderer.render(fromNode);
     String toNodeId = this.nodeIdRenderer.render(toNode);
 
     if (!this.omitSelfReferences || !fromNodeId.equals(toNodeId)) {
-      Edge edge = new Edge(fromNodeId, toNodeId, this.edgeRenderer.render(fromNode, toNode));
+      Edge edge = new Edge(fromNodeId, toNodeId, this.edgeRenderer.render(fromNode, toNode), permanent);
       this.edges.add(edge);
       this.reachabilityMap.registerEdge(fromNodeId, toNodeId);
     }
@@ -205,37 +216,39 @@ public final class GraphBuilder<T> {
    */
   private static class ReachabilityMap {
 
-    private final Map<String, Set<String>> parentIndex = new HashMap<>();
+    private final Map<String, Set<String>> parentIndex = new LinkedHashMap<>();
 
     void registerEdge(String from, String to) {
       Set<String> parents = safelyGetParents(to);
       parents.add(from);
     }
 
-    boolean isReachable(String target, String source) {
-      return isReachableInternal(target, source, new HashSet<String>());
+    boolean hasOlderPath(String target, String source) {
+      return isReachable(target, source, true, new HashSet<String>());
     }
+
 
     /**
      * Recursively traverses the parents of {@code target} trying to find {@code source} by keeping track of already traversed
-     * nodes.
+     * nodes. If {@code olderParentsOnly} is set to {@code true}, only the parents that were inserted <strong>before</strong>
+     * {@code source} will be considered.
      *
      * @return {@code true} if {@code target} is reachable via {@code source}, {@code false} else.
      */
-    private boolean isReachableInternal(String target, String source, Set<String> alreadyVisited) {
+    private boolean isReachable(String target, String source, boolean olderParentsOnly, Set<String> alreadyVisited) {
       if (alreadyVisited.contains(target)) {
         return false;
       }
 
       alreadyVisited.add(target);
 
-      Set<String> parents = safelyGetParents(target);
+      Set<String> parents = olderParentsOnly ? getOlderParents(target, source) : safelyGetParents(target);
       if (parents.contains(source)) {
         return true;
       }
 
       for (String parent : parents) {
-        if (isReachableInternal(parent, source, alreadyVisited)) {
+        if (isReachable(parent, source, false, alreadyVisited)) {
           return true;
         }
       }
@@ -243,10 +256,28 @@ public final class GraphBuilder<T> {
       return false;
     }
 
+    private Set<String> getOlderParents(String target, String source) {
+      Set<String> olderParents = new LinkedHashSet<>(safelyGetParents(target));
+      boolean remove = false;
+      Iterator<String> iterator = olderParents.iterator();
+      while (iterator.hasNext()) {
+        String value = iterator.next();
+        if (value.equals(source)) {
+          remove = true;
+        }
+
+        if (remove) {
+          iterator.remove();
+        }
+      }
+
+      return olderParents;
+    }
+
     private Set<String> safelyGetParents(String node) {
       Set<String> parentPath = this.parentIndex.get(node);
       if (parentPath == null) {
-        parentPath = new HashSet<>();
+        parentPath = new LinkedHashSet<>();
         this.parentIndex.put(node, parentPath);
       }
 

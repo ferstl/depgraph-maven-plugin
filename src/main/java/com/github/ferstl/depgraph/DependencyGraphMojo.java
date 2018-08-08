@@ -29,7 +29,6 @@ import com.github.ferstl.depgraph.dependency.MavenGraphAdapter;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.SimpleGraphFactory;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static java.util.EnumSet.allOf;
 import static java.util.EnumSet.complementOf;
@@ -163,10 +162,10 @@ public class DependencyGraphMojo extends AbstractGraphMojo {
       resolutions = !this.showConflicts ? complementOf(of(NodeResolution.OMITTED_FOR_CONFLICT)) : resolutions;
       resolutions = !this.showDuplicates ? complementOf(of(NodeResolution.OMITTED_FOR_DUPLICATE)) : resolutions;
 
-      adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, resolutions, false);
+      adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, resolutions);
     } else {
       // there are no reachable paths to be omitted
-      adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED), false);
+      adapter = new MavenGraphAdapter(this.dependenciesResolver, transitiveIncludeExcludeFilter, targetFilter, EnumSet.of(INCLUDED));
     }
     return adapter;
   }
