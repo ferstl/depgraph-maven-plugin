@@ -137,14 +137,12 @@ parent:1.0.0-SNAPSHOT:compile
 |  \- spring-core:5.0.6.RELEASE:compile (optional)
 \- sub-parent:1.0.0-SNAPSHOT:compile
    +- module-3:1.0.0-SNAPSHOT:compile
-   |  +- module-1:1.0.0-SNAPSHOT:compile
    |  +- module-2:1.0.0-SNAPSHOT:compile
    |  \- querydsl-core:3.7.4:compile
    |     +- jsr305:1.3.9:compile
    |     +- mysema-commons-lang:0.2.4:compile
    |     \- bridge-method-annotation:1.13:compile
    \- module-2:1.0.0-SNAPSHOT:compile
-
 
 ```
 
