@@ -54,7 +54,7 @@ class GraphBuildingVisitor implements DependencyVisitor {
   public boolean visitEnter(org.eclipse.aether.graph.DependencyNode node) {
     DependencyNode node1 = new DependencyNode(node);
     if (isExcluded(node1)) {
-      return false;
+      return true;
     }
 
     this.nodeStack.push(node1);

@@ -31,7 +31,6 @@ import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEd
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.EnumSet.allOf;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -118,7 +117,7 @@ public class GraphBuildingVisitorTest {
     assertTrue(visitor.visitLeave(child1));
 
     // Don't process any further children of child2
-    assertFalse(visitor.visitEnter(child2));
+    assertTrue(visitor.visitEnter(child2));
     assertTrue(visitor.visitLeave(child2));
 
     assertThat(this.graphBuilder, hasNodesAndEdges(
