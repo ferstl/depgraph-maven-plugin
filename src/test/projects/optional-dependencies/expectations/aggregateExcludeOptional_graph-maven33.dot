@@ -1,0 +1,20 @@
+digraph "optional-test" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:module-c:jar:compile"[label=<module-c>]
+  "commons-codec:commons-codec:jar:compile"[label=<commons-codec>]
+  "com.github.ferstl:module-a:jar:compile"[label=<module-a>]
+  "com.github.ferstl:module-b:jar:compile"[label=<module-b>]
+  "com.github.ferstl:module-d:jar:compile"[label=<module-d>]
+  "com.github.ferstl:module-test:jar:compile"[label=<module-test>]
+
+  // Edge Definitions:
+  "com.github.ferstl:module-c:jar:compile" -> "commons-codec:commons-codec:jar:compile"
+  "com.github.ferstl:module-a:jar:compile" -> "com.github.ferstl:module-b:jar:compile"
+  "com.github.ferstl:module-a:jar:compile" -> "com.github.ferstl:module-c:jar:compile"
+  "com.github.ferstl:module-d:jar:compile" -> "commons-codec:commons-codec:jar:compile"
+  "com.github.ferstl:module-test:jar:compile" -> "com.github.ferstl:module-c:jar:compile"
+  "com.github.ferstl:module-test:jar:compile" -> "com.github.ferstl:module-d:jar:compile"
+}

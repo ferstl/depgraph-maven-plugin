@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 - 2017 the original author or authors.
+ * Copyright (c) 2014 - 2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ class GraphBuildingVisitor implements DependencyVisitor {
   public boolean visitEnter(org.eclipse.aether.graph.DependencyNode node) {
     DependencyNode node1 = new DependencyNode(node);
     if (isExcluded(node1)) {
-      return false;
+      return true;
     }
 
     this.nodeStack.push(node1);
