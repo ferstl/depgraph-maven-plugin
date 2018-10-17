@@ -39,7 +39,7 @@ id "org.springframework:spring-core:jar"
 label "<optional>
 org.springframework
 spring-core
-5.0.6.RELEASE"
+5.0.7.RELEASE"
 ]
 
 node [
