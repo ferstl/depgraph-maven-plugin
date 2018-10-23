@@ -50,7 +50,7 @@
     "numericId" : 6,
     "groupId" : "org.springframework",
     "artifactId" : "spring-core",
-    "version" : "5.0.6.RELEASE",
+    "version" : "5.0.7.RELEASE",
     "optional" : true,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
