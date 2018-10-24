@@ -236,6 +236,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Parameter(property = "printStyleConfiguration", defaultValue = "false")
   private boolean printStyleConfiguration;
 
+  /**
+   * Skip execution when set to {@true}.
+   *
+   * @since 3.3.0
+   */
+  @Parameter(property = "depgraph.skip", defaultValue = "false")
+  private boolean skip;
+
 
   /**
    * The project's artifact ID.
@@ -251,6 +259,11 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
   @Override
   public final void execute() throws MojoExecutionException, MojoFailureException {
+    if (this.skip) {
+      getLog().info("Skipping execution");
+      return;
+    }
+
     GraphFormat graphFormat = GraphFormat.forName(this.graphFormat);
     ArtifactFilter globalFilter = createGlobalArtifactFilter();
     ArtifactFilter transitiveIncludeExcludeFilter = createTransitiveIncludeExcludeFilter();

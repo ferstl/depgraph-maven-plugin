@@ -27,8 +27,8 @@ import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenRuntime.MavenRuntimeBuilder;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
-
 import static io.takari.maven.testing.TestResources.assertFileContents;
+import static io.takari.maven.testing.TestResources.assertFilesNotPresent;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
@@ -353,5 +353,21 @@ public class GraphIntegrationTest {
     assertFilesPresent(basedir, "target/dependency-graph.dot");
 
     assertFileContents(basedir, "expectations/aggregate-multiple-parents.dot", "target/dependency-graph.dot");
+  }
+
+  @Test
+  public void skipExecution() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-B")
+        .withCliOption("-Ddepgraph.skip")
+        // Somehow this test does not work on travis without fully qualifying the plugin.
+        .execute("clean", "package", "com.github.ferstl:depgraph-maven-plugin:aggregate");
+
+    result.assertErrorFreeLog();
+    result.assertLogText("Skipping execution");
+
+    assertFilesNotPresent(basedir, "target/dependency-graph.dot");
   }
 }
