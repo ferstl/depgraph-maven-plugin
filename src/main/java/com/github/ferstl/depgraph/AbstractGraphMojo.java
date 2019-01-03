@@ -273,7 +273,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
     try {
       GraphFactory graphFactory = createGraphFactory(globalFilter, transitiveIncludeExcludeFilter, targetFilter, graphStyleConfigurer);
-      String dependencyGraph = graphFactory.createGraph(this.project);
+      String dependencyGraph = graphFactory.createGraph(getProject());
       writeGraphFile(dependencyGraph, graphFilePath);
 
       if (graphFormat == GraphFormat.DOT && this.createImage) {
@@ -310,6 +310,10 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    */
   protected boolean showFullGraph() {
     return GraphFormat.forName(this.graphFormat) == JSON && this.showAllAttributesForJson;
+  }
+
+  protected MavenProject getProject() {
+    return this.project;
   }
 
   private ArtifactFilter createGlobalArtifactFilter() {
