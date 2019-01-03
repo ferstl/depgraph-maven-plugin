@@ -21,14 +21,14 @@ import org.apache.maven.project.ProjectBuildingRequest;
  * @since 3.3.0
  */
 @Mojo(
-    name = "from-artifact",
+    name = "for-artifact",
     defaultPhase = LifecyclePhase.NONE,
     requiresProject = false,
     requiresDirectInvocation = true,
     requiresDependencyCollection = ResolutionScope.NONE,
     requiresDependencyResolution = ResolutionScope.NONE,
     threadSafe = true)
-public class FromArtifactMojo extends DependencyGraphMojo {
+public class ForArtifactMojo extends DependencyGraphMojo {
 
   /**
    * The {@code gropId} of the artifact.

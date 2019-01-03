@@ -13,7 +13,7 @@ import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions({"3.6.0"})
-public class FromArtifactMojoIntegrationTest {
+public class ForArtifactMojoIntegrationTest {
 
   @Rule
   public final TestResources resources = new TestResources();
@@ -21,7 +21,7 @@ public class FromArtifactMojoIntegrationTest {
   private final MavenRuntime mavenRuntime;
   private final TestProperties testProperties;
 
-  public FromArtifactMojoIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
+  public ForArtifactMojoIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
     this.testProperties = new TestProperties();
     this.mavenRuntime = builder.build();
   }
@@ -45,12 +45,12 @@ public class FromArtifactMojoIntegrationTest {
    * Helper to create a fully qualified Maven goal with the curren plugin version. This is needed for tests
    * without POM files where {@code it-plugin.version} can not be injected.
    *
-   * @return The fully qualified goal {@code <groupId>:<artifactId>:<version>:from-artifact}
+   * @return The fully qualified goal {@code <groupId>:<artifactId>:<version>:for-artifact}
    */
   private String createFullyQualifiedGoal() {
     return this.testProperties.get("project.groupId") + ":"
         + this.testProperties.get("project.artifactId") + ":"
         + this.testProperties.get("project.version") + ":"
-        + "from-artifact";
+        + "for-artifact";
   }
 }
