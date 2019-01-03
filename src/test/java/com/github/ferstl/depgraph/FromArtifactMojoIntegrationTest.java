@@ -4,6 +4,7 @@ import java.io.File;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import io.takari.maven.testing.TestProperties;
 import io.takari.maven.testing.TestResources;
 import io.takari.maven.testing.executor.MavenExecutionResult;
 import io.takari.maven.testing.executor.MavenRuntime;
@@ -18,8 +19,10 @@ public class FromArtifactMojoIntegrationTest {
   public final TestResources resources = new TestResources();
 
   private final MavenRuntime mavenRuntime;
+  private final TestProperties testProperties;
 
   public FromArtifactMojoIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
+    this.testProperties = new TestProperties();
     this.mavenRuntime = builder.build();
   }
 
@@ -33,8 +36,21 @@ public class FromArtifactMojoIntegrationTest {
         .withCliOption("-DgroupId=com.google.guava")
         .withCliOption("-DartifactId=guava")
         .withCliOption("-Dversion=27.0.1-jre")
-        .execute("com.github.ferstl:depgraph-maven-plugin:3.3.0-SNAPSHOT:from-artifact");
+        .execute(createFullyQualifiedGoal());
 
     result.assertErrorFreeLog();
+  }
+
+  /**
+   * Helper to create a fully qualified Maven goal with the curren plugin version. This is needed for tests
+   * without POM files where {@code it-plugin.version} can not be injected.
+   *
+   * @return The fully qualified goal {@code <groupId>:<artifactId>:<version>:from-artifact}
+   */
+  private String createFullyQualifiedGoal() {
+    return this.testProperties.get("project.groupId") + ":"
+        + this.testProperties.get("project.artifactId") + ":"
+        + this.testProperties.get("project.version") + ":"
+        + "from-artifact";
   }
 }
