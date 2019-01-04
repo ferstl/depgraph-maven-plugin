@@ -18,11 +18,11 @@ This Maven plugin generates dependency graphs on single modules or in an aggrega
 For more information take a look at the [Plugin Documentation](https://ferstl.github.io/depgraph-maven-plugin/plugin-info.html), the [Release Notes](https://github.com/ferstl/depgraph-maven-plugin/wiki/Release-Notes) and the [Wiki](https://github.com/ferstl/depgraph-maven-plugin/wiki).
 
 
-## Plugin Coordinates
-
+## Getting Started
 The *depgraph-maven-plugin* is available on [Maven Central](http://central.maven.org/maven2/com/github/ferstl/depgraph-maven-plugin/). So no further repository configuration is required.
 
-These are the plugin coordinates:
+### Run in your Maven Project
+To use the plugin within your project, just add it to the `<build>` section:
 
     <build>
       <plugins>
@@ -30,12 +30,36 @@ These are the plugin coordinates:
           <groupId>com.github.ferstl</groupId>
           <artifactId>depgraph-maven-plugin</artifactId>
           <version>3.2.2</version>
+          <configuration>
+            ...
+          </configuration>
         </plugin>
       </plugins>
     </build>
 
-The release notes can be found in the [Wiki](https://github.com/ferstl/depgraph-maven-plugin/wiki/Release-Notes)
 
+### Run on the Command Line
+For ad-hoc dependency analysis the plugin can be used directly on the command line. To conveniently use this plugin on the command line it is recommended to add the groupId `com.github.ferstl` as "plugin group" in your Maven `settings.xml`:
+
+    <settings>
+      ...
+      <pluginGroups>
+        <pluginGroup>com.github.ferstl</pluginGroup>
+      </pluginGroups>
+      ...
+    </settings>
+
+With this configuration you can use the short form `depgraph:<goal>` on the command line, e.g.
+
+    mvn depgraph:graph
+
+Without defining the plugin group you need to fully qualify the plugin on the command line, e.g.:
+
+    # Latest version
+    mvn com.github.ferstl:depgraph-maven-plugin:graph
+    
+    # Specific version
+    mvn com.github.ferstl:depgraph-maven-plugin:3.2.2:graph
 
 ## Examples
 
