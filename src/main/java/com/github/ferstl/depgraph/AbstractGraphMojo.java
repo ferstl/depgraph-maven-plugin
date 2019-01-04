@@ -426,7 +426,12 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     String fileName = this.useArtifactIdInFileName ? this.artifactId : this.outputFileName;
     fileName = addFileExtensionIfNeeded(graphFormat, fileName);
 
-    return this.outputDirectory.toPath().resolve(fileName);
+    // ${project.build.directory} is not resolved when run without a POM file (e.g. for the for-artifact goal)
+    if (isOutputDirectoryResolved()) {
+      return this.outputDirectory.toPath().resolve(fileName);
+    }
+
+    return Paths.get(System.getProperty("user.dir"), fileName);
   }
 
   private String addFileExtensionIfNeeded(GraphFormat graphFormat, String fileName) {
@@ -436,6 +441,10 @@ abstract class AbstractGraphMojo extends AbstractMojo {
       fileName += fileExtension;
     }
     return fileName;
+  }
+
+  private boolean isOutputDirectoryResolved() {
+    return !this.outputDirectory.toString().contains("${project.basedir}");
   }
 
   private void writeGraphFile(String graph, Path graphFilePath) throws IOException {
