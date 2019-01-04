@@ -14,7 +14,7 @@ import static io.takari.maven.testing.TestResources.assertFileContents;
 
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions({"3.6.0"})
-public class ForArtifactMojoIntegrationTest {
+public class ForArtifactIntegrationTest {
 
   @Rule
   public final TestResources resources = new TestResources();
@@ -22,7 +22,7 @@ public class ForArtifactMojoIntegrationTest {
   private final MavenRuntime mavenRuntime;
   private final TestProperties testProperties;
 
-  public ForArtifactMojoIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
+  public ForArtifactIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
     this.testProperties = new TestProperties();
     this.mavenRuntime = builder.build();
   }
