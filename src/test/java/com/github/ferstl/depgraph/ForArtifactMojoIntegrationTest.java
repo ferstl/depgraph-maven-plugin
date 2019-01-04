@@ -33,9 +33,9 @@ public class ForArtifactMojoIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-B")
-        .withCliOption("-DgroupId=com.google.guava")
-        .withCliOption("-DartifactId=guava")
-        .withCliOption("-Dversion=27.0.1-jre")
+        .withCliOption("-DgroupId=org.springframework")
+        .withCliOption("-DartifactId=spring-jdbc")
+        .withCliOption("-Dversion=5.1.3.RELEASE")
         .execute(createFullyQualifiedGoal());
 
     result.assertErrorFreeLog();
