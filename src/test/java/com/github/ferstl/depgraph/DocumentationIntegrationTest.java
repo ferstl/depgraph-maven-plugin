@@ -34,7 +34,6 @@ import io.takari.maven.testing.executor.MavenExecutionResult;
 import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
-
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 import static java.nio.file.Files.copy;
 import static java.nio.file.Files.createDirectories;
@@ -226,6 +225,22 @@ public class DocumentationIntegrationTest {
         "sub-parent/target/dependency-graph.puml");
 
     collectFile("sub-parent/module-3/target/dependency-graph.puml", "with-conflicts.puml");
+  }
+
+  @Test
+  public void forArtifact() throws Exception {
+    runTest("for-artifact",
+        "-DgraphFormat=dot",
+        "-DexcludeOptionalDependencies",
+        "-DgroupId=org.springframework",
+        "-DartifactId=spring-jdbc",
+        "-Dversion=5.1.3.RELEASE");
+
+    assertFilesPresent(
+        this.basedir,
+        "target/dependency-graph.png");
+
+    collectFile("target/dependency-graph.png", "for-artifact.png");
   }
 
   private void runTest(String goal, String... cliOptions) throws Exception {

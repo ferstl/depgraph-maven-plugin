@@ -1,0 +1,9 @@
+com.google.guava:guava:27.0-jre:compile
++- com.google.guava:failureaccess:1.0:compile
++- com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava:compile
++- com.google.code.findbugs:jsr305:3.0.2:compile
++- org.checkerframework:checker-qual:2.5.2:compile
++- com.google.errorprone:error_prone_annotations:2.2.0:compile
++- com.google.j2objc:j2objc-annotations:1.1:compile
++- org.codehaus.mojo:animal-sniffer-annotations:1.17:compile
+\- jdk:srczip:999:system (optional)

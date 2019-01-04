@@ -162,7 +162,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private boolean showAllAttributesForJson;
 
   /**
-   * Output directory to write the dependency graph to.
+   * Output directory to write the dependency graph to. The default is the project's build directory. For goals that
+   * don't require a project the current directory will be used.
    *
    * @since 2.2.0
    */
@@ -237,7 +238,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private boolean printStyleConfiguration;
 
   /**
-   * Skip execution when set to {@true}.
+   * Skip execution when set to {@code true}.
    *
    * @since 3.3.0
    */
@@ -273,7 +274,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
     try {
       GraphFactory graphFactory = createGraphFactory(globalFilter, transitiveIncludeExcludeFilter, targetFilter, graphStyleConfigurer);
-      String dependencyGraph = graphFactory.createGraph(this.project);
+      String dependencyGraph = graphFactory.createGraph(getProject());
       writeGraphFile(dependencyGraph, graphFilePath);
 
       if (graphFormat == GraphFormat.DOT && this.createImage) {
@@ -310,6 +311,10 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    */
   protected boolean showFullGraph() {
     return GraphFormat.forName(this.graphFormat) == JSON && this.showAllAttributesForJson;
+  }
+
+  protected MavenProject getProject() {
+    return this.project;
   }
 
   private ArtifactFilter createGlobalArtifactFilter() {
@@ -422,7 +427,12 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     String fileName = this.useArtifactIdInFileName ? this.artifactId : this.outputFileName;
     fileName = addFileExtensionIfNeeded(graphFormat, fileName);
 
-    return this.outputDirectory.toPath().resolve(fileName);
+    // ${project.build.directory} is not resolved when run without a POM file (e.g. for the for-artifact goal)
+    if (isOutputDirectoryResolved()) {
+      return this.outputDirectory.toPath().resolve(fileName);
+    }
+
+    return Paths.get(System.getProperty("user.dir"), fileName);
   }
 
   private String addFileExtensionIfNeeded(GraphFormat graphFormat, String fileName) {
@@ -432,6 +442,10 @@ abstract class AbstractGraphMojo extends AbstractMojo {
       fileName += fileExtension;
     }
     return fileName;
+  }
+
+  private boolean isOutputDirectoryResolved() {
+    return !this.outputDirectory.toString().contains("${project.basedir}");
   }
 
   private void writeGraphFile(String graph, Path graphFilePath) throws IOException {
