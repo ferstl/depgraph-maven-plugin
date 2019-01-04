@@ -118,6 +118,11 @@ The goals [`depgraph:aggregate`](https://ferstl.github.io/depgraph-maven-plugin/
 The goal [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) does the same for the group IDs of all modules and their dependencies.
 
 
+### Graphs from Arbitrary Artifacts
+The goal [`depgraph:for-artifact`](https://ferstl.github.io/depgraph-maven-plugin/for-artifact-mojo.html) creates a dependency graph for an arbitrary artifact. This goal can be executed without a Maven project at any place:
+
+![Arbitrary Artifact](src/doc/for-artifact.png)
+
 ### Styling
 
 This maven plugin offers you a variety of styling options for graphs in the DOT format. These options are explained in detail on the [Styling Wiki page](https://github.com/ferstl/depgraph-maven-plugin/wiki/Styling). This is an example of the aggregated graph with some custom styles:
