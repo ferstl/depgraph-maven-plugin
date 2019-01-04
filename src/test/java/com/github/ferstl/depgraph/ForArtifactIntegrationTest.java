@@ -70,6 +70,25 @@ public class ForArtifactIntegrationTest {
     assertFileContents(basedir, "expectations/guava.txt", "target/dependency-graph.txt");
   }
 
+  @Test
+  public void runWithInexistentArtifact() throws Exception {
+    // arrange
+    File basedir = this.resources.getBasedir("no-project");
+
+    // act
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-B")
+        .withCliOption("-DgroupId=com.google.guava")
+        .withCliOption("-DartifactId=guava")
+        .withCliOption("-Dversion=000000abxdce")
+        .execute(createFullyQualifiedGoal());
+
+    // assert
+    result.assertLogText("[ERROR] Failed to execute goal com.github.ferstl:depgraph-maven-plugin");
+    result.assertLogText("com.google.guava:guava:jar:000000abxdce:compile");
+  }
+
   /**
    * Helper to create a fully qualified Maven goal with the curren plugin version. This is needed for tests
    * without POM files where {@code it-plugin.version} can not be injected.
