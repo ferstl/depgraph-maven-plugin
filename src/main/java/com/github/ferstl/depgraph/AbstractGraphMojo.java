@@ -162,7 +162,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private boolean showAllAttributesForJson;
 
   /**
-   * Output directory to write the dependency graph to.
+   * Output directory to write the dependency graph to. The default is the project's build directory. For goals that
+   * don't require a project the current directory will be used.
    *
    * @since 2.2.0
    */
@@ -237,7 +238,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private boolean printStyleConfiguration;
 
   /**
-   * Skip execution when set to {@true}.
+   * Skip execution when set to {@code true}.
    *
    * @since 3.3.0
    */
