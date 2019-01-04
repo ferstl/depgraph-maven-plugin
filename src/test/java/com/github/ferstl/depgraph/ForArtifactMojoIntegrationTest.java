@@ -10,6 +10,7 @@ import io.takari.maven.testing.executor.MavenExecutionResult;
 import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
+import static io.takari.maven.testing.TestResources.assertFileContents;
 
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions({"3.6.0"})
@@ -28,17 +29,23 @@ public class ForArtifactMojoIntegrationTest {
 
   @Test
   public void withoutProject() throws Exception {
+    // arrange
     File basedir = this.resources.getBasedir("no-project");
 
+    // act
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-B")
         .withCliOption("-DgroupId=org.springframework")
         .withCliOption("-DartifactId=spring-jdbc")
         .withCliOption("-Dversion=5.1.3.RELEASE")
+        .withCliOption("-DshowVersions")
+        .withCliOption("-DgraphFormat=text")
         .execute(createFullyQualifiedGoal());
 
+    // assert
     result.assertErrorFreeLog();
+    assertFileContents(basedir, "expectations/spring-jdbc.txt", "dependency-graph.txt");
   }
 
   /**
