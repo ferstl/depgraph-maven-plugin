@@ -28,7 +28,7 @@ public class ForArtifactIntegrationTest {
   }
 
   @Test
-  public void withoutProject() throws Exception {
+  public void runWithoutProject() throws Exception {
     // arrange
     File basedir = this.resources.getBasedir("no-project");
 
@@ -46,6 +46,28 @@ public class ForArtifactIntegrationTest {
     // assert
     result.assertErrorFreeLog();
     assertFileContents(basedir, "expectations/spring-jdbc.txt", "dependency-graph.txt");
+  }
+
+  @Test
+  public void runWithProject() throws Exception {
+    // arrange
+    File basedir = this.resources.getBasedir("single-dependency");
+
+    // act
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-B")
+        .withCliOption("-DgroupId=com.google.guava")
+        .withCliOption("-DartifactId=guava")
+        .withCliOption("-Dversion=27.0-jre")
+        .withCliOption("-DshowGroupIds")
+        .withCliOption("-DshowVersions")
+        .withCliOption("-DgraphFormat=text")
+        .execute(createFullyQualifiedGoal());
+
+    // assert
+    result.assertErrorFreeLog();
+    assertFileContents(basedir, "expectations/guava.txt", "target/dependency-graph.txt");
   }
 
   /**
