@@ -73,24 +73,24 @@
   <properties>
     <!-- Plugin versions. -->
     <license-maven-plugin.version>2.11</license-maven-plugin.version>
-    <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
-    <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
+    <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+    <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-    <maven-jar-plugin.version>2.5</maven-jar-plugin.version>
-    <maven-javadoc-plugin.version>2.10.1</maven-javadoc-plugin.version>
-    <maven-plugin-plugin.version>3.4</maven-plugin-plugin.version>
-    <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
+    <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+    <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+    <maven-plugin-plugin.version>3.6.0</maven-plugin-plugin.version>
+    <maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-    <maven-resources-plugin.version>2.7</maven-resources-plugin.version>
-    <maven-scm-publish-plugin.version>1.1</maven-scm-publish-plugin.version>
-    <maven-source-plugin.version>2.4</maven-source-plugin.version>
-    <maven-site-plugin.version>3.4</maven-site-plugin.version>
-    <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+    <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+    <maven-scm-publish-plugin.version>3.0.0</maven-scm-publish-plugin.version>
+    <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+    <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
+    <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-    <jacoco-mavan-plugin.version>0.7.9</jacoco-mavan-plugin.version>
-    <takari-lifecycle-plugin.version>1.13.3</takari-lifecycle-plugin.version>
+    <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
+    <takari-lifecycle-plugin.version>1.13.9</takari-lifecycle-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -338,7 +338,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>${jacoco-mavan-plugin.version}</version>
+          <version>${jacoco-maven-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -459,7 +459,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>${maven-project-info-reports-plugin}</version>
+        <version>3.0.0</version>
         <configuration>
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration>
@@ -470,13 +470,13 @@
               <report>summary</report>
               <report>dependency-info</report>
               <report>modules</report>
-              <report>license</report>
+              <report>licenses</report>
               <report>scm</report>
-              <report>issue-tracking</report>
+              <report>issue-management</report>
               <report>dependency-management</report>
               <report>dependencies</report>
               <report>dependency-convergence</report>
-              <report>cim</report>
+              <report>ci-management</report>
               <report>plugins</report>
             </reports>
           </reportSet>
