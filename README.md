@@ -29,7 +29,7 @@ To use the plugin within your project, just add it to the `<build>` section:
         <plugin>
           <groupId>com.github.ferstl</groupId>
           <artifactId>depgraph-maven-plugin</artifactId>
-          <version>3.2.2</version>
+          <version>3.3.0</version>
           <configuration>
             ...
           </configuration>
@@ -59,7 +59,7 @@ Without defining the plugin group you need to fully qualify the plugin on the co
     mvn com.github.ferstl:depgraph-maven-plugin:graph
     
     # Specific version
-    mvn com.github.ferstl:depgraph-maven-plugin:3.2.2:graph
+    mvn com.github.ferstl:depgraph-maven-plugin:3.3.0:graph
 
 ## Examples
 
