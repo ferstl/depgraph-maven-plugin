@@ -15,20 +15,15 @@
  */
 package com.github.ferstl.depgraph;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
-public class GraphFormatTest {
-
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
+class GraphFormatTest {
 
   @Test
-  public void forNameDot() {
+  void forNameDot() {
     // arrange
     String name1 = "dot";
     String name2 = "Dot";
@@ -46,7 +41,7 @@ public class GraphFormatTest {
   }
 
   @Test
-  public void forNameGml() {
+  void forNameGml() {
     // arrange
     String name1 = "gml";
     String name2 = "Gml";
@@ -64,7 +59,7 @@ public class GraphFormatTest {
   }
 
   @Test
-  public void forNamePuml() {
+  void forNamePuml() {
     // arrange
     String name1 = "puml";
     String name2 = "Puml";
@@ -83,7 +78,7 @@ public class GraphFormatTest {
 
 
   @Test
-  public void forNameJson() {
+  void forNameJson() {
     // arrange
     String name1 = "json";
     String name2 = "Json";
@@ -101,7 +96,7 @@ public class GraphFormatTest {
   }
 
   @Test
-  public void forNameText() {
+  void forNameText() {
     // arrange
     String name1 = "text";
     String name2 = "Text";
@@ -119,17 +114,13 @@ public class GraphFormatTest {
   }
 
   @Test
-  public void forNameWithUnknownFormat() {
-    // arrange
-    this.expectedException.expect(IllegalArgumentException.class);
-    this.expectedException.expectMessage("unknown_format");
-
+  void forNameWithUnknownFormat() {
     // act/assert
-    GraphFormat.forName("unknown_format");
+    assertThrows(IllegalArgumentException.class, () -> GraphFormat.forName("unknown_format"));
   }
 
   @Test
-  public void getFileExtension() {
+  void getFileExtension() {
     assertEquals(".dot", GraphFormat.DOT.getFileExtension());
     assertEquals(".gml", GraphFormat.GML.getFileExtension());
     assertEquals(".puml", GraphFormat.PUML.getFileExtension());

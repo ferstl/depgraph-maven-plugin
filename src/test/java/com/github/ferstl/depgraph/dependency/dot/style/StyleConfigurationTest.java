@@ -15,23 +15,21 @@
  */
 package com.github.ferstl.depgraph.dependency.dot.style;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.dot.style.resource.ClasspathStyleResource;
 import com.github.ferstl.depgraph.dependency.dot.style.resource.FileSystemStyleResource;
 import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
-import com.google.common.io.Files;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertEquals;
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-public class StyleConfigurationTest {
+class StyleConfigurationTest {
 
   private static final String SCOPE_COMPILE = "compile";
   private static final String SCOPE_PROVIDED = "provided";
@@ -54,19 +52,15 @@ public class StyleConfigurationTest {
   private StyleConfiguration emptyConfig;
   private ClasspathStyleResource testOverride;
 
-  @Rule
-  public TemporaryFolder tmp = new TemporaryFolder(Paths.get("target").toFile());
-
-
-  @Before
-  public void before() {
+  @BeforeEach
+  void before() {
     this.emptyConfig = new StyleConfiguration();
     this.testStyle = new ClasspathStyleResource("test-style.json", getClass().getClassLoader());
     this.testOverride = new ClasspathStyleResource("test-override-style.json", getClass().getClassLoader());
   }
 
   @Test
-  public void load() {
+  void load() {
     StyleConfiguration config = StyleConfiguration.load(this.testStyle);
 
     assertEquals("[shape=\"polygon\",color=\"black\",fontname=\"Courier\",fontsize=\"14\",fontcolor=\"green\",sides=\"8\"]", config.defaultNodeAttributes().toString());
@@ -84,7 +78,7 @@ public class StyleConfigurationTest {
   }
 
   @Test
-  public void loadWithOverride() {
+  void loadWithOverride() {
     StyleConfiguration config = StyleConfiguration.load(this.testStyle, this.testOverride);
 
     assertEquals("[rankdir=\"LR\"]", config.graphAttributes().toString());
@@ -99,21 +93,21 @@ public class StyleConfigurationTest {
   }
 
   @Test
-  public void defaultNodeAttributesForEmptyConfiguration() {
+  void defaultNodeAttributesForEmptyConfiguration() {
     DotAttributeBuilder attributes = this.emptyConfig.defaultNodeAttributes();
 
     assertEquals("[shape=\"box\"]", attributes.toString());
   }
 
   @Test
-  public void defaultEdgeAttributesForEmptyConfiguration() {
+  void defaultEdgeAttributesForEmptyConfiguration() {
     DotAttributeBuilder attributes = this.emptyConfig.defaultEdgeAttributes();
 
     assertEquals("", attributes.toString());
   }
 
   @Test
-  public void nodeAttributesForEmptyConfiguration() {
+  void nodeAttributesForEmptyConfiguration() {
     DotAttributeBuilder attributes = this.emptyConfig.nodeAttributes(COMPILE_STYLE_KEY, GROUP_ID, ARTIFACT_ID, VERSION, false, TYPE, CLASSIFIER_LINUX, SCOPE_COMPILE);
 
     assertEquals("[label=<groupId<br/>artifactId<br/>1.0.0<br/>jar<br/>linux<br/>compile>]", attributes.toString());
@@ -121,21 +115,22 @@ public class StyleConfigurationTest {
 
 
   @Test
-  public void edgeAttributesForEmptyConfiguration() {
+  void edgeAttributesForEmptyConfiguration() {
     DotAttributeBuilder attributes = this.emptyConfig.edgeAttributes(NodeResolution.INCLUDED, NodeResolution.INCLUDED, SCOPE_COMPILE, null, null);
 
     assertEquals("", attributes.toString());
   }
 
   @Test
-  public void toJson() throws IOException {
+  void toJson() throws IOException {
     StyleConfiguration config = StyleConfiguration.load(this.testStyle, this.testOverride);
 
     String json = config.toJson();
-    File configFile = this.tmp.newFile("config.json");
-    Files.asCharSink(configFile, UTF_8).write(json);
+    Path tempDir = Files.createTempDirectory(Paths.get("target"), "test");
+    Path configFile = tempDir.resolve("config.json");
+    Files.write(configFile, json.getBytes(UTF_8), CREATE_NEW);
 
-    StyleConfiguration reloadedConfig = StyleConfiguration.load(new FileSystemStyleResource(configFile.toPath()));
+    StyleConfiguration reloadedConfig = StyleConfiguration.load(new FileSystemStyleResource(configFile));
     assertEquals("[fontname=\"Courier\"]", reloadedConfig.edgeAttributes(NodeResolution.INCLUDED, NodeResolution.OMITTED_FOR_CONFLICT, SCOPE_PROVIDED, null, null).toString());
   }
 }

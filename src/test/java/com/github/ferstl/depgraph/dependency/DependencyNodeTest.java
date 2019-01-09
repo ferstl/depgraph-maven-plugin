@@ -19,28 +19,22 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.eclipse.aether.graph.DefaultDependencyNode;
 import org.eclipse.aether.graph.Dependency;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_CONFLICT;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_DUPLICATE;
 import static org.eclipse.aether.util.graph.transformer.ConflictResolver.NODE_DATA_WINNER;
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * JUnit tests for {@link DependencyNode}.
  */
-public class DependencyNodeTest {
-
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
+class DependencyNodeTest {
 
   @Test
-  public void defaultResolutionFromMavenArtifact() {
+  void defaultResolutionFromMavenArtifact() {
     // arrange
     DependencyNode adapter = new DependencyNode(createMavenArtifact());
 
@@ -49,7 +43,7 @@ public class DependencyNodeTest {
   }
 
   @Test
-  public void defaultResolutionFromAetherDependencyNode() {
+  void defaultResolutionFromAetherDependencyNode() {
     // arrange
     org.eclipse.aether.graph.DependencyNode aetherDependencyNode = createAetherDependencyNode();
 
@@ -61,7 +55,7 @@ public class DependencyNodeTest {
   }
 
   @Test
-  public void duplicateFromAetherDependencyNode() {
+  void duplicateFromAetherDependencyNode() {
     // arrange
     org.eclipse.aether.graph.DependencyNode aetherDependencyNode = createAetherDependencyNode();
     DefaultDependencyNode winner = new DefaultDependencyNode(aetherDependencyNode);
@@ -75,7 +69,7 @@ public class DependencyNodeTest {
   }
 
   @Test
-  public void conflictFromAetherDependencyNode() {
+  void conflictFromAetherDependencyNode() {
     // arrange
     org.eclipse.aether.graph.DependencyNode aetherDependencyNode = createAetherDependencyNode();
     org.eclipse.aether.artifact.Artifact winnerArtifact = createAetherArtifact();
@@ -92,7 +86,7 @@ public class DependencyNodeTest {
   }
 
   @Test
-  public void optionalFromAetherDependencyNode() {
+  void optionalFromAetherDependencyNode() {
     // arrange
     org.eclipse.aether.graph.DependencyNode aetherDependencyNode = createAetherDependencyNode();
     aetherDependencyNode.setOptional(true);
@@ -105,7 +99,7 @@ public class DependencyNodeTest {
   }
 
   @Test
-  public void mergeNonOptionalIntoOptional() {
+  void mergeNonOptionalIntoOptional() {
     // arrange
     // create an optional dependency
     org.eclipse.aether.graph.DependencyNode optionalNode = createAetherDependencyNode();
@@ -124,7 +118,7 @@ public class DependencyNodeTest {
 
 
   @Test
-  public void defaultCompileScope() {
+  void defaultCompileScope() {
     Artifact artifact = createMavenArtifact();
     artifact.setScope(null);
 
@@ -133,7 +127,7 @@ public class DependencyNodeTest {
   }
 
   @Test
-  public void effectiveScope() {
+  void effectiveScope() {
     // arrange
     Artifact artifact1 = createMavenArtifact();
     artifact1.setScope("runtime");
@@ -149,11 +143,8 @@ public class DependencyNodeTest {
   }
 
   @Test
-  public void nullArtifact() {
-    this.expectedException.expect(NullPointerException.class);
-    this.expectedException.expectMessage(not(emptyString()));
-
-    new DependencyNode((Artifact) null);
+  void nullArtifact() {
+    assertThrows(NullPointerException.class, () -> new DependencyNode((Artifact) null), "Artifact must not be null");
   }
 
 

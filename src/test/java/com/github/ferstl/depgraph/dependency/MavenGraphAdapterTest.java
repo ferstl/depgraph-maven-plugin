@@ -25,14 +25,13 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectDependenciesResolver;
 import org.eclipse.aether.RepositorySystemSession;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -41,10 +40,7 @@ import static org.mockito.Mockito.when;
 /**
  * JUnit tests for {@link MavenGraphAdapter}.
  */
-public class MavenGraphAdapterTest {
-
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
+class MavenGraphAdapterTest {
 
   private ProjectDependenciesResolver dependenciesResolver;
   private MavenProject mavenProject;
@@ -53,8 +49,8 @@ public class MavenGraphAdapterTest {
   private MavenGraphAdapter graphAdapter;
 
 
-  @Before
-  public void before() throws Exception {
+  @BeforeEach
+  void before() throws Exception {
     Artifact projectArtifact = mock(Artifact.class);
 
     this.mavenProject = new MavenProject();
@@ -78,20 +74,22 @@ public class MavenGraphAdapterTest {
   }
 
   @Test
-  public void dependencyGraph() throws Exception {
+  void dependencyGraph() throws Exception {
     this.graphAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.graphBuilder);
 
     verify(this.dependenciesResolver).resolve(any(DependencyResolutionRequest.class));
   }
 
   @Test
-  public void dependencyGraphWithException() throws Exception {
+  void dependencyGraphWithException() throws Exception {
     DependencyResolutionException exception = new DependencyResolutionException(mock(DependencyResolutionResult.class), "boom", new Exception());
     when(this.dependenciesResolver.resolve(any(DependencyResolutionRequest.class))).thenThrow(exception);
 
-    this.expectedException.expect(DependencyGraphException.class);
-    this.expectedException.expectCause(is(exception));
-
-    this.graphAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.graphBuilder);
+    try {
+      this.graphAdapter.buildDependencyGraph(this.mavenProject, this.globalFilter, this.graphBuilder);
+      fail("Expect exception");
+    } catch (DependencyGraphException e) {
+      assertEquals(exception, e.getCause());
+    }
   }
 }
