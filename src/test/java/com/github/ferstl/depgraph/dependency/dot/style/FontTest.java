@@ -15,20 +15,19 @@
  */
 package com.github.ferstl.depgraph.dependency.dot.style;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
 
-
-public class FontTest {
+class FontTest {
 
   private Font font;
   private Font emptyFont;
 
-  @Before
-  public void before() {
+  @BeforeEach
+  void before() {
     this.font = new Font();
     this.font.color = "blue";
     this.font.size = 10;
@@ -38,7 +37,7 @@ public class FontTest {
   }
 
   @Test
-  public void setAttributes() {
+  void setAttributes() {
     // arrange
     DotAttributeBuilder builder = new DotAttributeBuilder();
 
@@ -50,7 +49,7 @@ public class FontTest {
   }
 
   @Test
-  public void setAttributesEmpty() {
+  void setAttributesEmpty() {
     DotAttributeBuilder builder = new DotAttributeBuilder();
 
     // act
@@ -61,7 +60,7 @@ public class FontTest {
   }
 
   @Test
-  public void mergeFullToFull() {
+  void mergeFullToFull() {
     // arrange
     Font other = new Font();
     other.color = "red";
@@ -78,7 +77,7 @@ public class FontTest {
   }
 
   @Test
-  public void mergeEmptyToFull() {
+  void mergeEmptyToFull() {
     // act
     this.font.merge(this.emptyFont);
 
@@ -89,7 +88,7 @@ public class FontTest {
   }
 
   @Test
-  public void mergeFullToEmpty() {
+  void mergeFullToEmpty() {
     // act
     this.emptyFont.merge(this.font);
 

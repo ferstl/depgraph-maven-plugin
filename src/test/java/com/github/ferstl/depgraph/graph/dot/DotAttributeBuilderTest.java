@@ -15,121 +15,121 @@
  */
 package com.github.ferstl.depgraph.graph.dot;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * JUnit tests for {@link DotAttributeBuilder}.
  */
-public class DotAttributeBuilderTest {
+class DotAttributeBuilderTest {
 
 
   @Test
-  public void empty() {
+  void empty() {
     assertEquals("", new DotAttributeBuilder().toString());
   }
 
   @Test
-  public void label() {
+  void label() {
     assertEquals("[label=\"someLabel\"]", new DotAttributeBuilder().label("someLabel").toString());
   }
 
   @Test
-  public void htmlLabel() {
+  void htmlLabel() {
     String label = new DotAttributeBuilder().label("<<b>text1\ntext2</b><font point-size=\"10\">text3</font>>").toString();
     assertEquals("[label=<<b>text1\ntext2</b><font point-size=\"10\">text3</font>>]", label);
   }
 
   @Test
-  public void fontName() {
+  void fontName() {
     assertEquals("[fontname=\"Helvetica\"]", new DotAttributeBuilder().fontName("Helvetica").toString());
   }
 
   @Test
-  public void fontSize() {
+  void fontSize() {
     assertEquals("[fontsize=\"12\"]", new DotAttributeBuilder().fontSize(12).toString());
   }
 
   @Test
-  public void fontSizeZero() {
+  void fontSizeZero() {
     assertEquals("", new DotAttributeBuilder().fontSize(0).toString());
   }
 
   @Test
-  public void fontSizeNull() {
+  void fontSizeNull() {
     assertEquals("", new DotAttributeBuilder().fontSize(null).toString());
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void fontSizeNegative() {
-    new DotAttributeBuilder().fontSize(-1).toString();
+  @Test
+  void fontSizeNegative() {
+    assertThrows(IllegalArgumentException.class, () -> new DotAttributeBuilder().fontSize(-1).toString());
   }
 
   @Test
-  public void fontColor() {
+  void fontColor() {
     assertEquals("[fontcolor=\"green\"]", new DotAttributeBuilder().fontColor("green").toString());
   }
 
   @Test
-  public void style() {
+  void style() {
     assertEquals("[style=\"dashed\"]", new DotAttributeBuilder().style("dashed").toString());
   }
 
   @Test
-  public void color() {
+  void color() {
     assertEquals("[color=\"blue\"]", new DotAttributeBuilder().color("blue").toString());
   }
 
   @Test
-  public void fillColor() {
+  void fillColor() {
     assertEquals("[fillcolor=\"red\"]", new DotAttributeBuilder().fillColor("red").toString());
   }
 
   @Test
-  public void shape() {
+  void shape() {
     assertEquals("[shape=\"box\"]", new DotAttributeBuilder().shape("box").toString());
   }
 
   @Test
-  public void rankdir() {
+  void rankdir() {
     assertEquals("[rankdir=\"LR\"]", new DotAttributeBuilder().rankdir("LR").toString());
   }
 
   @Test
-  public void addAttribute() {
+  void addAttribute() {
     assertEquals("[someAttribute=\"someValue\"]", new DotAttributeBuilder().addAttribute("someAttribute", "someValue").toString());
   }
 
   @Test
-  public void addAttributeWithNullValue() {
+  void addAttributeWithNullValue() {
     assertEquals("", new DotAttributeBuilder().addAttribute("someAttribute", null).toString());
   }
 
   @Test
-  public void multipleAttributes() {
+  void multipleAttributes() {
     assertEquals("[label=\"someLabel\",color=\"green\",fontsize=\"10\"]", new DotAttributeBuilder().label("someLabel").color("green").fontSize(10).toString());
   }
 
   @Test
-  public void quoting() {
+  void quoting() {
     assertEquals("[label=\"some Label\"]", new DotAttributeBuilder().label("some Label").toString());
   }
 
   @Test
-  public void escaping() {
+  void escaping() {
     assertEquals("[label=\"some\\nLabel\"]", new DotAttributeBuilder().label("some\nLabel").toString());
   }
 
   @Test
-  public void isEmptyWithData() {
+  void isEmptyWithData() {
     assertFalse(new DotAttributeBuilder().label("some label").isEmpty());
   }
 
   @Test
-  public void isEmptyWithoutData() {
+  void isEmptyWithoutData() {
     assertTrue(new DotAttributeBuilder().isEmpty());
   }
 

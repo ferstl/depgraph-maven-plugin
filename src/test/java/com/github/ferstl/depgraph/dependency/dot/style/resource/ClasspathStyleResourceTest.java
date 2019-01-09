@@ -15,20 +15,19 @@
  */
 package com.github.ferstl.depgraph.dependency.dot.style.resource;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
+class ClasspathStyleResourceTest extends AbstractStyleResourceTest {
 
-public class ClasspathStyleResourceTest extends AbstractStyleResourceTest {
-
-  public ClasspathStyleResourceTest() {
+  ClasspathStyleResourceTest() {
     super(
         new ClasspathStyleResource("default-style.json", ClasspathStyleResourceTest.class.getClassLoader()),
         new ClasspathStyleResource("does-not-exist", ClasspathStyleResourceTest.class.getClassLoader()));
   }
 
   @Test
-  public void toStringTest() {
+  void toStringTest() {
     assertEquals("classpath:default-style.json", this.existingResource.toString());
   }
 }

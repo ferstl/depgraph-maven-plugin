@@ -15,18 +15,17 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
-
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.addClassifiers;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.addTypes;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class AbstractDependencyNodeNameRendererTest {
 
   @Test
-  public final void renderNothing() {
+  final void renderNothing() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, false, false, false, false, false);
@@ -39,7 +38,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderGroupId() {
+  final void renderGroupId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, false, false, false, false, false);
@@ -52,7 +51,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderArtifactId() {
+  final void renderArtifactId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, false, false, false);
@@ -65,7 +64,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderVersion() {
+  final void renderVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, false, false, false, true, false);
@@ -78,7 +77,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderOptional() {
+  final void renderOptional() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, false, false, false, false, true);
@@ -91,7 +90,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderGroupIdArtifactIdVersion() {
+  final void renderGroupIdArtifactIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, true, false);
@@ -104,7 +103,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderGroupIdArtifactIdVersionOptional() {
+  final void renderGroupIdArtifactIdVersionOptional() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, true, true);
@@ -117,7 +116,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderGroupIdArtifactId() {
+  final void renderGroupIdArtifactId() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, false, false);
@@ -130,7 +129,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderGroupIdArtifactIdOptional() {
+  final void renderGroupIdArtifactIdOptional() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, false, false, false, true);
@@ -143,7 +142,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderGroupIdVersion() {
+  final void renderGroupIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, false, false, false, true, false);
@@ -156,7 +155,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderGroupIdVersionOptional() {
+  final void renderGroupIdVersionOptional() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, false, false, false, true, true);
@@ -169,7 +168,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderArtifactIdVersion() {
+  final void renderArtifactIdVersion() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, false, true, false);
@@ -182,7 +181,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderArtifactIdVersionOptional() {
+  final void renderArtifactIdVersionOptional() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version", true);
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(false, true, false, false, true, true);
@@ -195,7 +194,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderTypes() {
+  final void renderTypes() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     addTypes(node, "jar", "zip");
@@ -209,7 +208,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderJarTypeOnly() {
+  final void renderJarTypeOnly() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     addTypes(node, "jar");
@@ -223,7 +222,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderClassifiers() {
+  final void renderClassifiers() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     addClassifiers(node, "classifier1", "classifier2");
@@ -237,7 +236,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderEmptyClassifier() {
+  final void renderEmptyClassifier() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version");
     addClassifiers(node, "");
@@ -251,7 +250,7 @@ public abstract class AbstractDependencyNodeNameRendererTest {
   }
 
   @Test
-  public final void renderAll() {
+  final void renderAll() {
     // arrange
     DependencyNode node = createDependencyNode("groupId", "artifactId", "version", "test");
     NodeRenderer<DependencyNode> renderer = createNodeNameRenderer(true, true, true, true, true, false);

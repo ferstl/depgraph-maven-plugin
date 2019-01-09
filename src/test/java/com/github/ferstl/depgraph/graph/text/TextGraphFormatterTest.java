@@ -17,17 +17,16 @@ package com.github.ferstl.depgraph.graph.text;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
-
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TextGraphFormatterTest {
+class TextGraphFormatterTest {
 
   @Test
-  public void indentation() {
+  void indentation() {
     // arrange + act
     String result = createTextGraph(
         edge("root", "child-1"),
@@ -66,7 +65,7 @@ public class TextGraphFormatterTest {
 
 
   @Test
-  public void rootWithOneChild() {
+  void rootWithOneChild() {
     // arrange + act
     String result = createTextGraph(edge("parent", "child"));
 
@@ -77,7 +76,7 @@ public class TextGraphFormatterTest {
   }
 
   @Test
-  public void namedEdge() {
+  void namedEdge() {
     // arrange + act
     String result = createTextGraph(
         edge("root", "child-1", "description"),
@@ -91,7 +90,7 @@ public class TextGraphFormatterTest {
   }
 
   @Test
-  public void multipleRoots() {
+  void multipleRoots() {
     // arrange + act
     String result = createTextGraph(
         edge("root-1", "child-1.1"),
@@ -117,7 +116,7 @@ public class TextGraphFormatterTest {
   }
 
   @Test
-  public void unrepeatedTransitiveDependencies() {
+  void unrepeatedTransitiveDependencies() {
     // arrange + act
     String result = createTextGraph(
         edge("root", "child-1"),
@@ -135,7 +134,7 @@ public class TextGraphFormatterTest {
   }
 
   @Test
-  public void repeatedTransitiveDependencies() {
+  void repeatedTransitiveDependencies() {
     // arrange + act
     String result = createTextGraph(
         true,

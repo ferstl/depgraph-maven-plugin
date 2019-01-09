@@ -15,50 +15,50 @@
  */
 package com.github.ferstl.depgraph.dependency.dot.style;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.junit.Assert.assertEquals;
 
-
-public class NodeTypeResolverTest {
+class NodeTypeResolverTest {
 
   private NodeTypeResolver resolver;
 
-  @Before
-  public void before() {
+  @BeforeEach
+  void before() {
     this.resolver = new NodeTypeResolver();
   }
 
   @Test
-  public void typeFromId() {
+  void typeFromId() {
     assertEquals(Box.class, this.resolver.typeFromId(null, "box").getRawClass());
     assertEquals(Polygon.class, this.resolver.typeFromId(null, "polygon").getRawClass());
     assertEquals(Ellipse.class, this.resolver.typeFromId(null, "ellipse").getRawClass());
   }
 
-  @Test(expected = RuntimeException.class)
-  public void typeFromIdForUnknownId() {
-    assertEquals(Ellipse.class, this.resolver.typeFromId(null, "moebius").getRawClass());
+  @Test
+  void typeFromIdForUnknownId() {
+    assertThrows(RuntimeException.class, () -> this.resolver.typeFromId(null, "moebius"));
   }
 
   @Test
-  public void getIdFromValue() {
+  void getIdFromValue() {
     assertEquals("box", this.resolver.idFromValue(new Box()));
     assertEquals("polygon", this.resolver.idFromValue(new Polygon()));
     assertEquals("ellipse", this.resolver.idFromValue(new Ellipse()));
   }
 
   @Test
-  public void getIdFromValueAndType() {
+  void getIdFromValueAndType() {
     assertEquals("box", this.resolver.idFromValueAndType(null, Box.class));
     assertEquals("polygon", this.resolver.idFromValueAndType(null, Polygon.class));
     assertEquals("ellipse", this.resolver.idFromValueAndType(null, Ellipse.class));
   }
 
   @Test
-  public void getMechanism() {
+  void getMechanism() {
     assertEquals(Id.CUSTOM, this.resolver.getMechanism());
   }
 }

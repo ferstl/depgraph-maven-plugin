@@ -16,17 +16,16 @@
 package com.github.ferstl.depgraph.dependency;
 
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import com.github.ferstl.depgraph.graph.Node;
 import com.github.ferstl.depgraph.graph.TestFormatter;
-
 import static com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer.versionlessId;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNodeWithConflict;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public abstract class AbstractGraphStyleConfigurerTest {
 
@@ -39,8 +38,8 @@ public abstract class AbstractGraphStyleConfigurerTest {
   private String toId;
   private DependencyNode toWithConflict;
 
-  @Before
-  public void before() {
+  @BeforeEach
+  void before() {
     this.graphStyleConfigurer = createGraphStyleConfigurer();
     this.formatter = new TestFormatter();
     this.from = createDependencyNode("group1", "artifact1", "version1");
@@ -52,7 +51,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
   }
 
   @Test
-  public void showGroupIds() {
+  void showGroupIds() {
     // arrange
     GraphBuilder<DependencyNode> graphBuilder = GraphBuilder.create(this.versionlessIdRenderer);
     this.graphStyleConfigurer
@@ -74,7 +73,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
   }
 
   @Test
-  public void showArtifactIds() {
+  void showArtifactIds() {
     // arrange
     GraphBuilder<DependencyNode> graphBuilder = GraphBuilder.create(this.versionlessIdRenderer);
     this.graphStyleConfigurer
@@ -95,7 +94,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
   }
 
   @Test
-  public void showVersionsOnNodes() {
+  void showVersionsOnNodes() {
     // arrange
     GraphBuilder<DependencyNode> graphBuilder = GraphBuilder.create(this.versionlessIdRenderer);
     this.graphStyleConfigurer
@@ -116,7 +115,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
   }
 
   @Test
-  public void showVersionsOnNodesWithConflict() {
+  void showVersionsOnNodesWithConflict() {
     // arrange
     GraphBuilder<DependencyNode> graphBuilder = GraphBuilder.create(this.versionlessIdRenderer);
     this.graphStyleConfigurer
@@ -137,7 +136,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
   }
 
   @Test
-  public void showVersionsOnEdgesWithoutConflict() {
+  void showVersionsOnEdgesWithoutConflict() {
     // arrange
     GraphBuilder<DependencyNode> graphBuilder = GraphBuilder.create(this.versionlessIdRenderer);
     this.graphStyleConfigurer
@@ -158,7 +157,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
   }
 
   @Test
-  public void showVersionsOnEdgesWithConflict() {
+  void showVersionsOnEdgesWithConflict() {
     // arrange
     GraphBuilder<DependencyNode> graphBuilder = GraphBuilder.create(this.versionlessIdRenderer);
     this.graphStyleConfigurer
@@ -179,7 +178,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
   }
 
   @Test
-  public void showAll() {
+  void showAll() {
     // arrange
     GraphBuilder<DependencyNode> graphBuilder = GraphBuilder.create(this.versionlessIdRenderer);
     this.graphStyleConfigurer
@@ -203,7 +202,7 @@ public abstract class AbstractGraphStyleConfigurerTest {
   }
 
   @Test
-  public void showNothing() {
+  void showNothing() {
     // arrange
     GraphBuilder<DependencyNode> graphBuilder = GraphBuilder.create(this.versionlessIdRenderer);
     this.graphStyleConfigurer.configure(graphBuilder)

@@ -22,8 +22,8 @@ import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
 import org.eclipse.aether.graph.DefaultDependencyNode;
 import org.eclipse.aether.graph.Dependency;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
@@ -31,13 +31,13 @@ import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEd
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.EnumSet.allOf;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class GraphBuildingVisitorTest {
+class GraphBuildingVisitorTest {
 
   private GraphBuilder<DependencyNode> graphBuilder;
   private ArtifactFilter globalFilter;
@@ -45,8 +45,8 @@ public class GraphBuildingVisitorTest {
   private ArtifactFilter targetFilter;
   private EnumSet<NodeResolution> includedResolutions;
 
-  @Before
-  public void before() {
+  @BeforeEach
+  void before() {
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 
     this.globalFilter = mock(ArtifactFilter.class);
@@ -71,7 +71,7 @@ public class GraphBuildingVisitorTest {
    * </pre>
    */
   @Test
-  public void parentAndChildren() {
+  void parentAndChildren() {
     org.eclipse.aether.graph.DependencyNode child1 = createMavenDependencyNode("child1");
     org.eclipse.aether.graph.DependencyNode child2 = createMavenDependencyNode("child2", "test");
     org.eclipse.aether.graph.DependencyNode parent = createMavenDependencyNode("parent", child1, child2);
@@ -103,7 +103,7 @@ public class GraphBuildingVisitorTest {
    * </pre>
    */
   @Test
-  public void ignoredNode() {
+  void ignoredNode() {
     org.eclipse.aether.graph.DependencyNode child1 = createMavenDependencyNode("child1");
     org.eclipse.aether.graph.DependencyNode child2 = createMavenDependencyNode("child2");
     org.eclipse.aether.graph.DependencyNode parent = createMavenDependencyNode("parent", child1, child2);
@@ -137,7 +137,7 @@ public class GraphBuildingVisitorTest {
    * </pre>
    */
   @Test
-  public void targetDepNode() {
+  void targetDepNode() {
     org.eclipse.aether.graph.DependencyNode child1 = createMavenDependencyNode("child1");
     org.eclipse.aether.graph.DependencyNode child2 = createMavenDependencyNode("child2");
     org.eclipse.aether.graph.DependencyNode parent = createMavenDependencyNode("parent", child1, child2);
@@ -174,7 +174,7 @@ public class GraphBuildingVisitorTest {
    * </pre>
    */
   @Test
-  public void multiTargetDepNode() {
+  void multiTargetDepNode() {
     org.eclipse.aether.graph.DependencyNode child4 = createMavenDependencyNode("child4");
     org.eclipse.aether.graph.DependencyNode child1 = createMavenDependencyNode("child1", child4);
     org.eclipse.aether.graph.DependencyNode child2 = createMavenDependencyNode("child2");

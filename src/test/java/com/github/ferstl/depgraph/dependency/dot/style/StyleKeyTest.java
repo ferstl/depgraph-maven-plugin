@@ -15,15 +15,16 @@
  */
 package com.github.ferstl.depgraph.dependency.dot.style;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class StyleKeyTest {
+class StyleKeyTest {
 
   private StyleKey groupId;
   private StyleKey artifactId;
@@ -33,8 +34,8 @@ public class StyleKeyTest {
   private StyleKey classifier;
   private StyleKey optional;
 
-  @Before
-  public void before() {
+  @BeforeEach
+  void before() {
     this.groupId = StyleKey.fromString("group.id");
     this.artifactId = StyleKey.fromString(",artifactId");
     this.scope = StyleKey.fromString(",,scope");
@@ -45,68 +46,70 @@ public class StyleKeyTest {
   }
 
   @Test
-  public void fromStringWithGroupIdOnly() {
+  void fromStringWithGroupIdOnly() {
     assertEquals("group.id,,,,,,", this.groupId.toString());
   }
 
   @Test
-  public void fromStringWithArtifactIdOnly() {
+  void fromStringWithArtifactIdOnly() {
     assertEquals(",artifactId,,,,,", this.artifactId.toString());
   }
 
   @Test
-  public void fromStringWithScopeOnly() {
+  void fromStringWithScopeOnly() {
     assertEquals(",,scope,,,,", this.scope.toString());
   }
 
   @Test
-  public void fromStringWithTypeOnly() {
+  void fromStringWithTypeOnly() {
     assertEquals(",,,type,,,", this.type.toString());
   }
 
   @Test
-  public void fromStringWithVersionOnly() {
+  void fromStringWithVersionOnly() {
     assertEquals(",,,,version,,", this.version.toString());
   }
 
   @Test
-  public void fromStringWithClassifierOnly() {
+  void fromStringWithClassifierOnly() {
     assertEquals(",,,,,classifier,", this.classifier.toString());
   }
 
   @Test
-  public void fromStringWithOptionalOnly() {
+  void fromStringWithOptionalOnly() {
     assertEquals(",,,,,,true", this.optional.toString());
   }
 
   @Test
-  public void fromStringEmpty() {
+  void fromStringEmpty() {
     StyleKey key = StyleKey.fromString("");
 
     assertEquals(",,,,,,", key.toString());
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void fromStringTooManyParts() {
-    StyleKey.fromString("groupId,artifactId,scope,type,version,something,classifier,else");
+  @Test
+  void fromStringTooManyParts() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> StyleKey.fromString("groupId,artifactId,scope,type,version,something,classifier,else"));
   }
 
   @Test
-  public void create() {
+  void create() {
     StyleKey key = StyleKey.create("groupId", "artifactId", "scope", "type", "version", "classifier", true);
 
     assertEquals("groupId,artifactId,scope,type,version,classifier,true", key.toString());
   }
 
   @Test
-  public void createWithNullValues() {
+  void createWithNullValues() {
     StyleKey key = StyleKey.create(null, null, null, null, null, null, null);
 
     assertEquals(",,,,,,", key.toString());
   }
 
   @Test
-  public void equalsAndHashCode() {
+  void equalsAndHashCode() {
     StyleKey groupIdEqual = StyleKey.fromString("group.id");
     StyleKey groupIdDifferent = StyleKey.fromString("group.id2");
 
@@ -123,7 +126,7 @@ public class StyleKeyTest {
   }
 
   @Test
-  public void matchesForGroupId() {
+  void matchesForGroupId() {
     StyleKey wildcard = StyleKey.fromString("group.id*");
 
     assertTrue(this.groupId.matches(this.groupId));
@@ -131,7 +134,7 @@ public class StyleKeyTest {
   }
 
   @Test
-  public void matchesForArtifactId() {
+  void matchesForArtifactId() {
     StyleKey wildcard = StyleKey.fromString(",artifactId*");
 
     assertTrue(this.artifactId.matches(this.artifactId));
@@ -139,7 +142,7 @@ public class StyleKeyTest {
   }
 
   @Test
-  public void matchesForScope() {
+  void matchesForScope() {
     StyleKey unsupportedWildcard = StyleKey.fromString(",,scope*");
 
     assertTrue(this.scope.matches(this.scope));
@@ -147,7 +150,7 @@ public class StyleKeyTest {
   }
 
   @Test
-  public void matchesForType() {
+  void matchesForType() {
     StyleKey unsupportedWildcard = StyleKey.fromString(",,,type*");
 
     assertTrue(this.type.matches(this.type));
@@ -155,7 +158,7 @@ public class StyleKeyTest {
   }
 
   @Test
-  public void matchesForVersion() {
+  void matchesForVersion() {
     StyleKey wildcard = StyleKey.fromString(",,,,version*");
 
     assertTrue(this.version.matches(this.version));
@@ -163,7 +166,7 @@ public class StyleKeyTest {
   }
 
   @Test
-  public void matchesForClassifier() {
+  void matchesForClassifier() {
     StyleKey wildcard = StyleKey.fromString(",,,,,classifier*");
 
     assertTrue(this.classifier.matches(this.classifier));
@@ -171,7 +174,7 @@ public class StyleKeyTest {
   }
 
   @Test
-  public void matchesForOptional() {
+  void matchesForOptional() {
     StyleKey unsupportedWildcard = StyleKey.fromString(",,,,,,true*");
 
     assertTrue(this.optional.matches(this.optional));
