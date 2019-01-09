@@ -18,7 +18,7 @@ package com.github.ferstl.depgraph.graph.puml;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.DependencyNodeUtil;
@@ -29,10 +29,9 @@ import com.github.ferstl.depgraph.graph.Node;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
-
-public class PumlGraphFormatterTest {
+class PumlGraphFormatterTest {
 
   private final PumlGraphFormatter formatter = new PumlGraphFormatter();
   private final NodeRenderer<DependencyNode> nodeIdRenderer = DependencyNodeIdRenderer.versionlessId().withType(true);
@@ -70,7 +69,7 @@ public class PumlGraphFormatterTest {
   );
 
   @Test
-  public void testFormatDependenciesGraphAsPumlDiagram() {
+  void testFormatDependenciesGraphAsPumlDiagram() {
     String puml = this.formatter.format("graphName", this.nodes, this.edges);
     assertEquals("@startuml\n"
         + "skinparam defaultTextAlignment center\n"

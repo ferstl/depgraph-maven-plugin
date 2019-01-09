@@ -15,25 +15,24 @@
  */
 package com.github.ferstl.depgraph.graph.gml;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
-
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GmlGraphFormatterTest {
+class GmlGraphFormatterTest {
 
   private GmlGraphFormatter formatter;
 
-  @Before
-  public void before() {
+  @BeforeEach
+  void before() {
     this.formatter = new GmlGraphFormatter();
   }
 
   @Test
-  public void format() {
+  void format() {
     // arrange
     Node<?> node1 = new Node<>("id1", "label \"name1\"", new Object());
     Node<?> node2 = new Node<>("id2", "", new Object());

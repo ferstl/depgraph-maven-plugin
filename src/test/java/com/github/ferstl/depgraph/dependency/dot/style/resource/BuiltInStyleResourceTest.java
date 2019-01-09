@@ -15,33 +15,19 @@
  */
 package com.github.ferstl.depgraph.dependency.dot.style.resource;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import com.github.ferstl.depgraph.dependency.dot.style.StyleConfiguration;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.assertTrue;
+class BuiltInStyleResourceTest {
 
-@RunWith(Parameterized.class)
-public class BuiltInStyleResourceTest {
+  @ParameterizedTest
+  @EnumSource(BuiltInStyleResource.class)
+  void resourcesExistAndCanBeLoaded(BuiltInStyleResource resource) {
+    ClasspathStyleResource styleResource = resource.createStyleResource(getClass().getClassLoader());
 
-  private final BuiltInStyleResource resource;
-
-  public BuiltInStyleResourceTest(BuiltInStyleResource resource) {
-    this.resource = resource;
-  }
-
-  @Parameters(name = "{0}")
-  public static BuiltInStyleResource[] resources() {
-    return BuiltInStyleResource.values();
-  }
-
-  @Test
-  public void resourcesExistAndCanBeLoaded() {
-    ClasspathStyleResource styleResource = this.resource.createStyleResource(getClass().getClassLoader());
-
-    assertTrue("Style configuration " + this.resource + " does not exist.", styleResource.exists());
+    assertTrue(styleResource.exists(), "Style configuration " + resource + " does not exist.");
     StyleConfiguration.load(styleResource);
   }
 

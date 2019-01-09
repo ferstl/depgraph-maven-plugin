@@ -15,18 +15,17 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
-
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNode;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNodeWithConflict;
 import static com.github.ferstl.depgraph.dependency.DependencyNodeUtil.createDependencyNodeWithDuplicate;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class AbstractDependencyEdgeRendererTest {
 
   @Test
-  public final void renderWithoutVersion() {
+  final void renderWithoutVersion() {
     // arrange
     EdgeRenderer<DependencyNode> renderer = createEdgeRenderer(false);
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
@@ -40,7 +39,7 @@ public abstract class AbstractDependencyEdgeRendererTest {
   }
 
   @Test
-  public final void renderWithNonConflictingVersion() {
+  final void renderWithNonConflictingVersion() {
     // arrange
     EdgeRenderer<DependencyNode> renderer = createEdgeRenderer(true);
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
@@ -54,7 +53,7 @@ public abstract class AbstractDependencyEdgeRendererTest {
   }
 
   @Test
-  public final void renderWithConflictShowingVersion() {
+  final void renderWithConflictShowingVersion() {
     // arrange
     EdgeRenderer<DependencyNode> renderer = createEdgeRenderer(true);
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
@@ -68,7 +67,7 @@ public abstract class AbstractDependencyEdgeRendererTest {
   }
 
   @Test
-  public final void renderWithConflictNotShowingVersion() {
+  final void renderWithConflictNotShowingVersion() {
     // arrange
     EdgeRenderer<DependencyNode> renderer = createEdgeRenderer(false);
     DependencyNode from = createDependencyNode("group1", "artifact1", "version1");
@@ -82,7 +81,7 @@ public abstract class AbstractDependencyEdgeRendererTest {
   }
 
   @Test
-  public final void renderWithDuplicate() {
+  final void renderWithDuplicate() {
     // arrange
     EdgeRenderer<DependencyNode> edgeRenderer = createEdgeRenderer(false);
 

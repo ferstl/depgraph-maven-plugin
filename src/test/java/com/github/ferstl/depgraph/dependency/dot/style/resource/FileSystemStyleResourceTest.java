@@ -17,19 +17,18 @@ package com.github.ferstl.depgraph.dependency.dot.style.resource;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
 
+class FileSystemStyleResourceTest extends AbstractStyleResourceTest {
 
-public class FileSystemStyleResourceTest extends AbstractStyleResourceTest {
-
-  public FileSystemStyleResourceTest() {
+  FileSystemStyleResourceTest() {
     super(new FileSystemStyleResource(Paths.get("src/main/resources/default-style.json")), new FileSystemStyleResource(Paths.get("src/main/resources/does-not-exist")));
   }
 
   @Test
-  public void toStringTest() {
+  void toStringTest() {
     Path path = Paths.get("src/main/resources/default-style.json");
     assertEquals("file:" + path.toString(), this.existingResource.toString());
   }

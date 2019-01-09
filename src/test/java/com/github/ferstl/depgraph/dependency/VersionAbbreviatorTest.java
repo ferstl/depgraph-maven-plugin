@@ -15,20 +15,19 @@
  */
 package com.github.ferstl.depgraph.dependency;
 
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviateVersion;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class VersionAbbreviatorTest {
+class VersionAbbreviatorTest {
 
   @Test
-  public void abbreviateRegularVersion() {
+  void abbreviateRegularVersion() {
     assertEquals("1.0.0", abbreviateVersion("1.0.0"));
   }
 
   @Test
-  public void abbreviateSnapshotVersion() {
+  void abbreviateSnapshotVersion() {
     assertEquals("1.0.0-S.", abbreviateVersion("1.0.0-SNAPSHOT"));
   }
 }

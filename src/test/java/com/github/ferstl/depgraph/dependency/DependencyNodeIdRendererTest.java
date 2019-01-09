@@ -17,14 +17,13 @@ package com.github.ferstl.depgraph.dependency;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
-
-public class DependencyNodeIdRendererTest {
+class DependencyNodeIdRendererTest {
 
   @Test
-  public void groupId() {
+  void groupId() {
     // act
     String result = DependencyNodeIdRenderer.groupId().render(createDependencyNode());
 
@@ -33,7 +32,7 @@ public class DependencyNodeIdRendererTest {
   }
 
   @Test
-  public void versionLessId() {
+  void versionLessId() {
     // act
     String result = DependencyNodeIdRenderer.versionlessId().render(createDependencyNode());
 
@@ -42,7 +41,7 @@ public class DependencyNodeIdRendererTest {
   }
 
   @Test
-  public void versionLessIdWithType() {
+  void versionLessIdWithType() {
     // act
     String result = DependencyNodeIdRenderer.versionlessId()
         .withType(true)
@@ -53,7 +52,7 @@ public class DependencyNodeIdRendererTest {
   }
 
   @Test
-  public void versionLessIdWithClassifier() {
+  void versionLessIdWithClassifier() {
     // act
     String result = DependencyNodeIdRenderer.versionlessId()
         .withClassifier(true)
@@ -64,7 +63,7 @@ public class DependencyNodeIdRendererTest {
   }
 
   @Test
-  public void versionLessIdFull() {
+  void versionLessIdFull() {
     // act
     String result = DependencyNodeIdRenderer.versionlessId()
         .withType(true)
@@ -77,7 +76,7 @@ public class DependencyNodeIdRendererTest {
   }
 
   @Test
-  public void versionLessIdWithScope() {
+  void versionLessIdWithScope() {
     // act
     String result = DependencyNodeIdRenderer.versionlessId().withScope(true).render(createDependencyNode());
 
@@ -87,7 +86,7 @@ public class DependencyNodeIdRendererTest {
 
 
   @Test
-  public void versionLessIdWithEmptyClassifier() {
+  void versionLessIdWithEmptyClassifier() {
     // arrange
     Artifact artifact = new DefaultArtifact(
         "groupId",

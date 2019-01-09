@@ -15,48 +15,47 @@
  */
 package com.github.ferstl.depgraph.graph.dot;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * JUnit tests for {@link DotEscaper}.
  */
-public class DotEscaperTest {
+class DotEscaperTest {
 
 
   @Test
-  public void escapeNewlinesBackslashN() {
+  void escapeNewlinesBackslashN() {
     assertEquals("\"backslashN\\n\"", DotEscaper.escape("backslashN\n"));
   }
 
   @Test
-  public void escapeNewlinesBackslashR() {
+  void escapeNewlinesBackslashR() {
     assertEquals("\"backslashR\\n\"", DotEscaper.escape("backslashR\r"));
   }
 
   @Test
-  public void escapeNewlinesBackslashRN() {
+  void escapeNewlinesBackslashRN() {
     assertEquals("\"backslashRN\\n\"", DotEscaper.escape("backslashRN\r\n"));
   }
 
   @Test
-  public void escapeQuotes() {
+  void escapeQuotes() {
     assertEquals("\"there are \\\"quotes\\\" in the middle.\"", DotEscaper.escape("there are \"quotes\" in the middle."));
   }
 
   @Test
-  public void escapeQuotesAlreadyQuoted() {
+  void escapeQuotesAlreadyQuoted() {
     assertEquals("\"there are \\\"quotes\\\" in the middle.\"", DotEscaper.escape("\"there are \"quotes\" in the middle.\""));
   }
 
   @Test
-  public void quoteIfRequired() {
+  void quoteIfRequired() {
     assertEquals("\"QuotingRequired\"", DotEscaper.escape("QuotingRequired"));
   }
 
   @Test
-  public void quoteIfRequiredAlreadyQuoted() {
+  void quoteIfRequiredAlreadyQuoted() {
     assertEquals("\"Already quoted\"", DotEscaper.escape("\"Already quoted\""));
   }
 

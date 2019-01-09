@@ -16,30 +16,30 @@
 package com.github.ferstl.depgraph.graph;
 
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * JUnit tests for {@link GraphBuilder}.
  */
-public class GraphBuilderTest {
+class GraphBuilderTest {
 
   private GraphBuilder<String> graphBuilder;
   private String fromNode;
   private String toNode;
   private TestFormatter formatter;
 
-  @Before
-  public void before() {
+  @BeforeEach
+  void before() {
     this.formatter = new TestFormatter();
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
     this.graphBuilder.graphFormatter(this.formatter);
@@ -49,7 +49,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void graphName() {
+  void graphName() {
     // arrange
     this.graphBuilder.graphName("test-graph");
 
@@ -62,7 +62,7 @@ public class GraphBuilderTest {
 
 
   @Test
-  public void defaults() {
+  void defaults() {
     // arrange
     this.graphBuilder.addEdge(this.fromNode, this.toNode);
 
@@ -79,7 +79,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void nullNodes() {
+  void nullNodes() {
     // arrange
     this.graphBuilder.addEdge(this.fromNode, null);
 
@@ -92,7 +92,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void dontOmitSelfReferences() {
+  void dontOmitSelfReferences() {
     // arrange
     this.graphBuilder
         .addEdge(this.fromNode, this.fromNode);
@@ -108,7 +108,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void omitSelfReferences() {
+  void omitSelfReferences() {
     // arrange
     this.graphBuilder
         .omitSelfReferences()
@@ -125,7 +125,7 @@ public class GraphBuilderTest {
 
 
   @Test
-  public void customNodeNameRenderer() {
+  void customNodeNameRenderer() {
     // arrange
     this.graphBuilder.useNodeNameRenderer(TestNodeRenderer.INSTANCE)
         .addEdge(this.fromNode, this.toNode);
@@ -142,7 +142,7 @@ public class GraphBuilderTest {
 
 
   @Test
-  public void customEdgeRenderer() {
+  void customEdgeRenderer() {
     // arrange
     this.graphBuilder
         .useEdgeRenderer(TestEdgeRenderer.INSTANCE)
@@ -159,7 +159,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void getEffectiveNode() {
+  void getEffectiveNode() {
     // arrange
     this.graphBuilder.addEdge(this.fromNode, this.toNode);
     this.graphBuilder.useNodeNameRenderer(TestNodeRenderer.INSTANCE)
@@ -173,7 +173,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void getEffectiveNodeForUnknownNode() {
+  void getEffectiveNodeForUnknownNode() {
     // arrange
     this.graphBuilder.addEdge(this.fromNode, this.toNode);
 
@@ -185,7 +185,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void addNode() {
+  void addNode() {
     // arrange
     this.graphBuilder.addNode(this.fromNode);
 
@@ -199,13 +199,13 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void isEmpty() {
+  void isEmpty() {
     // assert
     assertTrue(this.graphBuilder.isEmpty());
   }
 
   @Test
-  public void isEmptyWithData() {
+  void isEmptyWithData() {
     // arrange
     this.graphBuilder.addEdge(this.fromNode, this.toNode);
 
@@ -214,7 +214,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void reduceEdges() {
+  void reduceEdges() {
     // arrange
     this.graphBuilder.addEdge("A", "B");
     this.graphBuilder.addEdge("B", "C");
@@ -232,7 +232,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void reduceEdgesWithPermanentEdge() {
+  void reduceEdgesWithPermanentEdge() {
     // arrange
     this.graphBuilder.addEdge("A", "B");
     this.graphBuilder.addEdge("B", "C");
@@ -251,7 +251,7 @@ public class GraphBuilderTest {
   }
 
   @Test
-  public void reduceEdgesWithCycle() {
+  void reduceEdgesWithCycle() {
     // arrange
     this.graphBuilder.addEdge("A", "B");
     this.graphBuilder.addEdge("B", "C");

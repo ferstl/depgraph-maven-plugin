@@ -17,30 +17,29 @@ package com.github.ferstl.depgraph.dependency.dot.style.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-public abstract class AbstractStyleResourceTest {
+abstract class AbstractStyleResourceTest {
 
   final StyleResource existingResource;
   final StyleResource nonExistingResource;
 
-  public AbstractStyleResourceTest(StyleResource existingResource, StyleResource nonExistingResource) {
+  AbstractStyleResourceTest(StyleResource existingResource, StyleResource nonExistingResource) {
     this.existingResource = existingResource;
     this.nonExistingResource = nonExistingResource;
   }
 
   @Test
-  public void existsOnExistingResource() {
+  void existsOnExistingResource() {
     assertTrue(this.existingResource.exists());
   }
 
   @Test
-  public void openStreamOnExistingResource() {
+  void openStreamOnExistingResource() {
     try (InputStream is = this.existingResource.openStream()) {
       assertNotNull(is);
     } catch (IOException e) {
@@ -49,14 +48,12 @@ public abstract class AbstractStyleResourceTest {
   }
 
   @Test
-  public void existsOnNonExistingResource() {
+  void existsOnNonExistingResource() {
     assertFalse(this.nonExistingResource.exists());
   }
 
-  @Test(expected = IOException.class)
-  public void openStreamOnNonExistingResource() throws IOException {
-    try (InputStream is = this.nonExistingResource.openStream()) {
-      fail("There should not be a stream on an inexistent resource.");
-    }
+  @Test
+  void openStreamOnNonExistingResource() throws IOException {
+    assertThrows(IOException.class, this.nonExistingResource::openStream);
   }
 }

@@ -15,20 +15,19 @@
  */
 package com.github.ferstl.depgraph.graph.dot;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
-
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DotGraphFormatterTest {
+class DotGraphFormatterTest {
 
   private DotGraphFormatter formatter;
 
-  @Before
-  public void before() {
+  @BeforeEach
+  void before() {
     DotAttributeBuilder graphAttributeBuilder = new DotAttributeBuilder();
     DotAttributeBuilder nodeAttributeBuilder = new DotAttributeBuilder().shape("box").fontName("Helvetica");
     DotAttributeBuilder edgeAttributeBuilder = new DotAttributeBuilder().fontName("Helvetica").fontSize(10);
@@ -36,7 +35,7 @@ public class DotGraphFormatterTest {
   }
 
   @Test
-  public void format() {
+  void format() {
     // arrange
     Node<?> node1 = new Node<>("id1", "name1", new Object());
     Node<?> node2 = new Node<>("id2", "", new Object());

@@ -15,7 +15,7 @@
  */
 package com.github.ferstl.depgraph.dependency.dot;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import com.github.ferstl.depgraph.dependency.AbstractDependencyEdgeRendererTest;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.dot.style.StyleConfiguration;
@@ -25,7 +25,7 @@ public class DotDependencyEdgeRendererTest extends AbstractDependencyEdgeRendere
 
   private StyleConfiguration styleConfiguration;
 
-  @Before
+  @BeforeEach
   public void before() {
     this.styleConfiguration = new StyleConfiguration();
   }
