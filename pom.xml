@@ -7,7 +7,7 @@
 
   <groupId>com.github.ferstl</groupId>
   <artifactId>depgraph-maven-plugin</artifactId>
-  <version>3.4.0-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Depgraph Maven Plugin</name>
@@ -224,8 +224,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
           <configuration>
-            <source>1.7</source>
-            <target>1.7</target>
+            <source>1.8</source>
+            <target>1.8</target>
           </configuration>
         </plugin>
 
