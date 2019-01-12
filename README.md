@@ -63,7 +63,7 @@ Without defining the plugin group you need to fully qualify the plugin on the co
 
 ## Examples
 
-All examples are based on a multi-module project with the following structure:
+All examples are based on a [multi-module project](https://github.com/ferstl/depgraph-maven-plugin/tree/master/src/test/projects/depgraph-maven-plugin-test) with the following structure:
 
     parent
     - module-1
