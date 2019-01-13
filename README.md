@@ -15,7 +15,7 @@ This Maven plugin generates dependency graphs on single modules or in an aggrega
 - `.txt`<br/>
   A more powerful alternative to `mvn dependency:tree`. The text graphs are printed to the console. 
 
-For more information take a look at the [Plugin Documentation](https://ferstl.github.io/depgraph-maven-plugin/plugin-info.html), the [Release Notes](https://github.com/ferstl/depgraph-maven-plugin/wiki/Release-Notes) and the [Wiki](https://github.com/ferstl/depgraph-maven-plugin/wiki).
+For more information take a look at the [Plugin Documentation](https://ferstl.github.io/depgraph-maven-plugin/plugin-info.html), the [Release Notes](https://github.com/ferstl/depgraph-maven-plugin/releases) and the [Wiki](https://github.com/ferstl/depgraph-maven-plugin/wiki).
 
 
 ## Getting Started
