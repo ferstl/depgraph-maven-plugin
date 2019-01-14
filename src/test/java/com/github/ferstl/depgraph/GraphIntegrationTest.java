@@ -32,7 +32,7 @@ import static io.takari.maven.testing.TestResources.assertFilesNotPresent;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.5.2", "3.3.9"})
+@MavenVersions({"3.6.0", "3.3.9"})
 public class GraphIntegrationTest {
 
   @Rule
