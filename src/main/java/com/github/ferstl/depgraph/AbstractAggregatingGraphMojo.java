@@ -16,10 +16,10 @@
 package com.github.ferstl.depgraph;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import com.github.ferstl.depgraph.dependency.SubProjectSupplier;
 
 public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
 
@@ -71,13 +71,7 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
   @Parameter(defaultValue = "${session}", readonly = true)
   private MavenSession mavenSession;
 
-  SubProjectSupplier createReactorOrderSubProjectSupplier() {
-    return new SubProjectSupplier() {
-
-      @Override
-      public Collection<MavenProject> getSubProjects(MavenProject parent) {
-        return AbstractAggregatingGraphMojo.this.mavenSession.getProjectDependencyGraph().getSortedProjects();
-      }
-    };
+  Supplier<Collection<MavenProject>> subProjectsInReactorOrder() {
+    return () -> AbstractAggregatingGraphMojo.this.mavenSession.getProjectDependencyGraph().getSortedProjects();
   }
 }

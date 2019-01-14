@@ -16,6 +16,7 @@
 package com.github.ferstl.depgraph.dependency;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
@@ -29,7 +30,7 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 public class AggregatingGraphFactory implements GraphFactory {
 
   private final MavenGraphAdapter mavenGraphAdapter;
-  private final SubProjectSupplier subProjectSupplier;
+  private final Supplier<Collection<MavenProject>> subProjectSupplier;
   private final ArtifactFilter globalFilter;
   private final GraphBuilder<DependencyNode> graphBuilder;
   private final boolean includeParentProjects;
@@ -37,7 +38,7 @@ public class AggregatingGraphFactory implements GraphFactory {
 
   public AggregatingGraphFactory(
       MavenGraphAdapter mavenGraphAdapter,
-      SubProjectSupplier subProjectSupplier,
+      Supplier<Collection<MavenProject>> subProjectSupplier,
       ArtifactFilter globalFilter,
       GraphBuilder<DependencyNode> graphBuilder,
       boolean includeParentProjects,
@@ -58,7 +59,7 @@ public class AggregatingGraphFactory implements GraphFactory {
       buildModuleTree(parent, this.graphBuilder);
     }
 
-    Collection<MavenProject> collectedProjects = this.subProjectSupplier.getSubProjects(parent);
+    Collection<MavenProject> collectedProjects = this.subProjectSupplier.get();
     for (MavenProject collectedProject : collectedProjects) {
       // Process project only if its artifact is not filtered
       if (isPartOfGraph(collectedProject)) {
