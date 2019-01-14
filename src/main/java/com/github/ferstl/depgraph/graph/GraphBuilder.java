@@ -133,13 +133,7 @@ public final class GraphBuilder<T> {
   }
 
   public void reduceEdges() {
-    Iterator<Edge> edgeIterator = this.edges.iterator();
-    while (edgeIterator.hasNext()) {
-      Edge edge = edgeIterator.next();
-      if (!edge.isPermanent() && this.reachabilityMap.hasOlderPath(edge.getToNodeId(), edge.getFromNodeId())) {
-        edgeIterator.remove();
-      }
-    }
+    this.edges.removeIf(edge -> !edge.isPermanent() && this.reachabilityMap.hasOlderPath(edge.getToNodeId(), edge.getFromNodeId()));
   }
 
   @Override
@@ -187,24 +181,11 @@ public final class GraphBuilder<T> {
   }
 
   private static <T> EdgeRenderer<T> createDefaultEdgeRenderer() {
-    return new EdgeRenderer<T>() {
-
-      @Override
-      public String render(T from, T to) {
-        return "";
-      }
-
-    };
+    return (from, to) -> "";
   }
 
   private static <T> NodeRenderer<T> createDefaultNodeNameRenderer() {
-    return new NodeRenderer<T>() {
-
-      @Override
-      public String render(T node) {
-        return "";
-      }
-    };
+    return node -> "";
   }
 
   /**
@@ -275,13 +256,7 @@ public final class GraphBuilder<T> {
     }
 
     private Set<String> safelyGetParents(String node) {
-      Set<String> parentPath = this.parentIndex.get(node);
-      if (parentPath == null) {
-        parentPath = new LinkedHashSet<>();
-        this.parentIndex.put(node, parentPath);
-      }
-
-      return parentPath;
+      return this.parentIndex.computeIfAbsent(node, k -> new LinkedHashSet<>());
     }
 
   }

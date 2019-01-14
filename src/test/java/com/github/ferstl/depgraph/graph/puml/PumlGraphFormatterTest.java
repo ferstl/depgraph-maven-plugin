@@ -27,8 +27,7 @@ import com.github.ferstl.depgraph.dependency.puml.PumlDependencyNodeNameRenderer
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PumlGraphFormatterTest {
@@ -49,14 +48,9 @@ class PumlGraphFormatterTest {
       new Tuple("org.springframework:spring-core:5.0.6.RELEASE:optional", false)
   );
 
-  private final List<Node<?>> nodes = Lists.transform(this.dependencies,
-      new Function<Tuple, Node<?>>() {
-
-        @Override
-        public Node<?> apply(Tuple tuple) {
-          return makeNode(tuple.description, tuple.conflict);
-        }
-      });
+  private final List<Node<?>> nodes = this.dependencies.stream()
+      .map(tuple -> makeNode(tuple.description, tuple.conflict))
+      .collect(toList());
 
   private final Collection<Edge> edges = Arrays.asList(
       makeEgde(this.dependencies.get(0), this.dependencies.get(1)),
