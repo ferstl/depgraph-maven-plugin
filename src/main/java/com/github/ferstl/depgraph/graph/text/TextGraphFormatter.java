@@ -81,7 +81,7 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
       for (Node<?> node : nodes) {
         String nodeId = node.getNodeId();
         this.nodesById.put(nodeId, node);
-        this.relations.put(nodeId, new ArrayList<Edge>());
+        this.relations.put(nodeId, new ArrayList<>());
       }
     }
 

@@ -224,7 +224,7 @@ public final class GraphBuilder<T> {
     }
 
     boolean hasOlderPath(String target, String source) {
-      return isReachable(target, source, true, new HashSet<String>());
+      return isReachable(target, source, true, new HashSet<>());
     }
 
 

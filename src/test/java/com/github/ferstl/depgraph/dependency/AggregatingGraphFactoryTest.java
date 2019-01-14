@@ -292,7 +292,7 @@ class AggregatingGraphFactoryTest {
     MavenProject project = new MavenProject();
     project.setArtifactId(artifactId);
     // Make sure that we can modify the list later.
-    project.setCollectedProjects(new ArrayList<MavenProject>());
+    project.setCollectedProjects(new ArrayList<>());
 
     DefaultArtifact artifact = new DefaultArtifact("groupId", artifactId, "version", "compile", "jar", "", null);
     project.setArtifact(artifact);
