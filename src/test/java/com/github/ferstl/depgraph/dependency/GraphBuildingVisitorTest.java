@@ -16,7 +16,6 @@
 package com.github.ferstl.depgraph.dependency;
 
 import java.util.EnumSet;
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
@@ -24,7 +23,6 @@ import org.eclipse.aether.graph.DefaultDependencyNode;
 import org.eclipse.aether.graph.Dependency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import static com.github.ferstl.depgraph.graph.GraphBuilderMatcher.hasNodesAndEdges;
@@ -33,6 +31,7 @@ import static java.util.Collections.singletonList;
 import static java.util.EnumSet.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -50,14 +49,14 @@ class GraphBuildingVisitorTest {
     this.graphBuilder = GraphBuilder.create(ToStringNodeIdRenderer.INSTANCE);
 
     this.globalFilter = mock(ArtifactFilter.class);
-    when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
+    when(this.globalFilter.include(any())).thenReturn(true);
 
     this.transitiveFilter = mock(ArtifactFilter.class);
-    when(this.transitiveFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
+    when(this.transitiveFilter.include(any())).thenReturn(true);
 
     // this is the same as an empty list of target dependencies
     this.targetFilter = mock(ArtifactFilter.class);
-    when(this.targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
+    when(this.targetFilter.include(any())).thenReturn(true);
 
     this.includedResolutions = allOf(NodeResolution.class);
   }

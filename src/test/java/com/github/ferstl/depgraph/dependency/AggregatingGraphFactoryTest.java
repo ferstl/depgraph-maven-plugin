@@ -17,7 +17,6 @@ package com.github.ferstl.depgraph.dependency;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.DependencyResolutionRequest;
@@ -29,7 +28,6 @@ import org.eclipse.aether.RepositorySystemSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
@@ -67,9 +65,9 @@ class AggregatingGraphFactoryTest {
     this.globalFilter = mock(ArtifactFilter.class);
     ArtifactFilter transitiveIncludeExcludeFilter = mock(ArtifactFilter.class);
     ArtifactFilter targetFilter = mock(ArtifactFilter.class);
-    when(this.globalFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
-    when(transitiveIncludeExcludeFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
-    when(targetFilter.include(ArgumentMatchers.<Artifact>any())).thenReturn(true);
+    when(this.globalFilter.include(any())).thenReturn(true);
+    when(transitiveIncludeExcludeFilter.include(any())).thenReturn(true);
+    when(targetFilter.include(any())).thenReturn(true);
 
     DependencyResolutionResult dependencyResolutionResult = mock(DependencyResolutionResult.class);
     org.eclipse.aether.graph.DependencyNode dependencyNode = mock(org.eclipse.aether.graph.DependencyNode.class);

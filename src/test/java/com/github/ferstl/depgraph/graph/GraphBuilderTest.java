@@ -15,7 +15,6 @@
  */
 package com.github.ferstl.depgraph.graph;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.github.ferstl.depgraph.ToStringNodeIdRenderer;
@@ -195,7 +194,7 @@ class GraphBuilderTest {
     // assert
     Node<?> fromNode = new Node<>(this.fromNode, "", "");
     assertThat(this.formatter.nodes, contains(new Node[]{fromNode}));
-    assertThat(this.formatter.edges, Matchers.<Edge>empty());
+    assertThat(this.formatter.edges, empty());
   }
 
   @Test

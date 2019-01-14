@@ -18,15 +18,14 @@ package com.github.ferstl.depgraph.dependency.json;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
-import java.util.Collections;
 import org.apache.maven.artifact.Artifact;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
-
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
+import static java.util.Collections.emptyList;
 
 public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
@@ -59,9 +58,9 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
         this.showArtifactId ? artifact.getArtifactId() : null,
         this.showVersion ? node.getEffectiveVersion() : null,
         this.showOptional ? artifact.isOptional() : null,
-        this.showClassifiers ? node.getClassifiers() : Collections.<String>emptyList(),
+        this.showClassifiers ? node.getClassifiers() : emptyList(),
         node.getScopes(),
-        this.showTypes ? node.getTypes() : Collections.<String>emptyList());
+        this.showTypes ? node.getTypes() : emptyList());
 
     StringWriter jsonStringWriter = new StringWriter();
     try {
