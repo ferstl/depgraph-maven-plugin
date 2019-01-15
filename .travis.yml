@@ -1,7 +1,8 @@
 sudo: false
 language: java
 jdk:
-- oraclejdk8
+  - oraclejdk8
+  - openjdk11
 
 addons:
   apt:
@@ -9,10 +10,10 @@ addons:
       - graphviz
 
 script:
-- mvn clean install javadoc:javadoc
+  - mvn clean install javadoc:javadoc
 
 after_success:
-- mvn jacoco:prepare-agent test jacoco:report coveralls:report
+  - mvn jacoco:prepare-agent test jacoco:report coveralls:report
 
 cache:
   directories:
