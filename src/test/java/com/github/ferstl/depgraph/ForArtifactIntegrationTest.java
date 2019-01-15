@@ -78,6 +78,7 @@ public class ForArtifactIntegrationTest {
         .withCliOption("-DshowGroupIds")
         .withCliOption("-DshowVersions")
         .withCliOption("-DgraphFormat=text")
+        .withCliOption("-Dscope=runtime")
         .execute(createFullyQualifiedGoal());
 
     // assert

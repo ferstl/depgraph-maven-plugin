@@ -5,5 +5,4 @@ com.google.guava:guava:27.0-jre:compile
 +- org.checkerframework:checker-qual:2.5.2:compile
 +- com.google.errorprone:error_prone_annotations:2.2.0:compile
 +- com.google.j2objc:j2objc-annotations:1.1:compile
-+- org.codehaus.mojo:animal-sniffer-annotations:1.17:compile
-\- jdk:srczip:999:system (optional)
+\- org.codehaus.mojo:animal-sniffer-annotations:1.17:compile
