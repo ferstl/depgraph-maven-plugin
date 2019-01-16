@@ -30,7 +30,7 @@ import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.6.0", "3.3.9"})
+@MavenVersions({"3.6.0", "3.1.0"})
 public class MergeOptionsIntegrationTest {
 
   @Rule
@@ -53,7 +53,8 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .execute("clean", "package", "depgraph:graph");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:graph");
 
     result.assertErrorFreeLog();
     assertFilesPresent(
@@ -70,7 +71,8 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .execute("clean", "package", "depgraph:aggregate");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");
@@ -83,7 +85,8 @@ public class MergeOptionsIntegrationTest {
     File basedir = this.resources.getBasedir("merge-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .execute("clean", "package", "depgraph:aggregate-by-groupid");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:aggregate-by-groupid");
 
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");
@@ -97,7 +100,8 @@ public class MergeOptionsIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DmergeScopes")
-        .execute("clean", "package", "depgraph:aggregate");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");
@@ -111,7 +115,8 @@ public class MergeOptionsIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DmergeScopes")
-        .execute("clean", "package", "depgraph:aggregate-by-groupid");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:aggregate-by-groupid");
 
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");
@@ -125,7 +130,8 @@ public class MergeOptionsIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DmergeClassifiers")
-        .execute("clean", "package", "depgraph:graph");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:graph");
 
     result.assertErrorFreeLog();
     assertFilesPresent(
@@ -143,7 +149,8 @@ public class MergeOptionsIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DmergeTypes")
-        .execute("clean", "package", "depgraph:graph");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:graph");
 
     result.assertErrorFreeLog();
     assertFilesPresent(
@@ -162,7 +169,8 @@ public class MergeOptionsIntegrationTest {
         .forProject(basedir)
         .withCliOption("-DmergeTypes")
         .withCliOption("-DmergeClassifiers")
-        .execute("clean", "package", "depgraph:graph");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:graph");
 
     result.assertErrorFreeLog();
     assertFilesPresent(
@@ -180,7 +188,8 @@ public class MergeOptionsIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DmergeClassifiers")
-        .execute("clean", "package", "depgraph:aggregate");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");
@@ -194,7 +203,8 @@ public class MergeOptionsIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DmergeTypes")
-        .execute("clean", "package", "depgraph:aggregate");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");
@@ -209,7 +219,8 @@ public class MergeOptionsIntegrationTest {
         .forProject(basedir)
         .withCliOption("-DmergeTypes")
         .withCliOption("-DmergeClassifiers")
-        .execute("clean", "package", "depgraph:aggregate");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");
@@ -225,7 +236,8 @@ public class MergeOptionsIntegrationTest {
         .withCliOption("-DmergeTypes")
         .withCliOption("-DmergeClassifiers")
         .withCliOption("-DmergeScopes")
-        .execute("clean", "package", "depgraph:aggregate");
+        // Maven 3.1 does not resolve the module-2 ZIP dependency from the reactor. That's why we need to execute "install".
+        .execute("clean", "install", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
     assertFilesPresent(basedir, "target/dependency-graph.dot");

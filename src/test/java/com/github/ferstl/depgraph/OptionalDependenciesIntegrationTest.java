@@ -30,7 +30,7 @@ import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.6.0", "3.3.9"})
+@MavenVersions({"3.6.0", "3.1.0"})
 public class OptionalDependenciesIntegrationTest {
 
   @Rule
@@ -68,8 +68,8 @@ public class OptionalDependenciesIntegrationTest {
 
     String mavenVersion = this.mavenRuntime.getMavenVersion();
 
-    // Maven 3.3.x does not handle the optional dependencies as seen from module-d correctly.
-    if (mavenVersion.startsWith("3.3")) {
+    // Maven versions 3.3.x and smaller do not handle the optional dependencies as seen from module-d correctly.
+    if (mavenVersion.startsWith("3.1")) {
       assertFileContents(basedir, "expectations/graph_module-d-maven33.dot", "module-d/target/dependency-graph.dot");
     } else {
       assertFileContents(basedir, "expectations/graph_module-d.dot", "module-d/target/dependency-graph.dot");
@@ -115,8 +115,8 @@ public class OptionalDependenciesIntegrationTest {
 
     String mavenVersion = this.mavenRuntime.getMavenVersion();
 
-    // Maven 3.3.x does not handle the optional dependencies as seen from module-d correctly.
-    if (mavenVersion.startsWith("3.3")) {
+    // Maven versions 3.3.x and smaller do not handle the optional dependencies as seen from module-d correctly.
+    if (mavenVersion.startsWith("3.1")) {
       assertFileContents(basedir, "expectations/graphExcludeOptional_module-d-maven33.dot", "module-d/target/dependency-graph.dot");
     } else {
       assertFileContents(basedir, "expectations/graphExcludeOptional_module-d.dot", "module-d/target/dependency-graph.dot");
@@ -141,8 +141,8 @@ public class OptionalDependenciesIntegrationTest {
 
     String mavenVersion = this.mavenRuntime.getMavenVersion();
 
-    // Maven 3.3.x does not handle the optional dependencies as seen from module-d correctly.
-    if (mavenVersion.startsWith("3.3")) {
+    // Maven versions 3.3.x and smaller do not handle the optional dependencies as seen from module-d correctly.
+    if (mavenVersion.startsWith("3.1")) {
       assertFileContents(basedir, "expectations/aggregateExcludeOptional_graph-maven33.dot", "target/dependency-graph.dot");
     } else {
       assertFileContents(basedir, "expectations/aggregateExcludeOptional_graph.dot", "target/dependency-graph.dot");
