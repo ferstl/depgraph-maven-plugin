@@ -287,6 +287,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${maven-javadoc-plugin.version}</version>
           <configuration>
+            <source>8</source>
             <links>
               <link>http://docs.oracle.com/javase/7/docs/api/</link>
               <link>http://maven.apache.org/ref/${maven.version}/maven-plugin-api/apidocs/</link>
