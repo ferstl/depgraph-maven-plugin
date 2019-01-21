@@ -289,7 +289,7 @@
           <configuration>
             <source>8</source>
             <links>
-              <link>http://docs.oracle.com/javase/7/docs/api/</link>
+              <link>http://docs.oracle.com/javase/8/docs/api/</link>
               <link>http://maven.apache.org/ref/${maven.version}/maven-plugin-api/apidocs/</link>
               <link>http://maven.apache.org/ref/${maven.version}/maven-artifact/apidocs/</link>
               <link>http://maven.apache.org/ref/${maven.version}/maven-model/apidocs/</link>
