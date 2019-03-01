@@ -61,6 +61,12 @@ Without defining the plugin group you need to fully qualify the plugin on the co
     # Specific version
     mvn com.github.ferstl:depgraph-maven-plugin:3.3.0:graph
 
+The output of the goal is in `target` directory. By default, it generates a DOT file for
+[Graphviz](http://www.graphviz.org/).
+
+    ls target/
+    dependency-graph.dot
+
 ## Examples
 
 All examples are based on a [multi-module project](https://github.com/ferstl/depgraph-maven-plugin/tree/master/src/test/projects/depgraph-maven-plugin-test) with the following structure:
