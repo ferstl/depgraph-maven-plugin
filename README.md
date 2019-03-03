@@ -21,6 +21,8 @@ For more information take a look at the [Plugin Documentation](https://ferstl.gi
 ## Getting Started
 The *depgraph-maven-plugin* is available on [Maven Central](http://central.maven.org/maven2/com/github/ferstl/depgraph-maven-plugin/). So no further repository configuration is required.
 
+Unless configured otherwise, the dependecy graphs will be written to the project's build directory, `target/dependency-graph.<extension>`.
+
 ### Run in your Maven Project
 To use the plugin within your project, just add it to the `<build>` section:
 
