@@ -27,12 +27,14 @@ import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenRuntime.MavenRuntimeBuilder;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
+import static com.github.ferstl.depgraph.MavenVersion.MAX_VERSION;
+import static com.github.ferstl.depgraph.MavenVersion.MIN_VERSION;
 import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesNotPresent;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.6.1", "3.1.0"})
+@MavenVersions({MAX_VERSION, MIN_VERSION})
 public class GraphIntegrationTest {
 
   @Rule
