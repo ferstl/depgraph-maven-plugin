@@ -30,7 +30,7 @@ import static io.takari.maven.testing.TestResources.assertFileContents;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.6.0", "3.1.0"})
+@MavenVersions({"3.6.1", "3.1.0"})
 public class MergeOptionsIntegrationTest {
 
   @Rule

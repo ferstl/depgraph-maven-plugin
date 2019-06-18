@@ -43,7 +43,7 @@ import static org.junit.Assume.assumeTrue;
  * Integration test that creates the images for this plugin's README.MD documentation.
  */
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.6.0", "3.1.0"})
+@MavenVersions({"3.6.1", "3.1.0"})
 public class DocumentationIntegrationTest {
 
   @Rule

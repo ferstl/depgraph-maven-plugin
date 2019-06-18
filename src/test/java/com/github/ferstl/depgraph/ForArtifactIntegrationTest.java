@@ -28,7 +28,7 @@ import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 import static io.takari.maven.testing.TestResources.assertFileContents;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.6.0", "3.1.0"})
+@MavenVersions({"3.6.1", "3.1.0"})
 public class ForArtifactIntegrationTest {
 
   @Rule
