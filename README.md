@@ -21,7 +21,7 @@ For more information take a look at the [Plugin Documentation](https://ferstl.gi
 ## Getting Started
 The *depgraph-maven-plugin* is available on [Maven Central](http://central.maven.org/maven2/com/github/ferstl/depgraph-maven-plugin/). So no further repository configuration is required.
 
-Unless configured otherwise, the dependecy graphs will be written to the project's build directory, `target/dependency-graph.<extension>`.
+Unless configured otherwise, the dependency graphs will be written to the project's build directory, `target/dependency-graph.<extension>`.
 
 ### Run in your Maven Project
 To use the plugin within your project, just add it to the `<build>` section:
@@ -41,7 +41,7 @@ To use the plugin within your project, just add it to the `<build>` section:
 
 
 ### Run on the Command Line
-For ad-hoc dependency analysis the plugin can be used directly on the command line. To conveniently use this plugin on the command line it is recommended to add the groupId `com.github.ferstl` as "plugin group" in your Maven `settings.xml`:
+For ad-hoc dependency analysis the plugin can be used directly on the command line. To conveniently use this plugin on the command line, it is recommended to add the groupId `com.github.ferstl` as "plugin group" in your Maven `settings.xml`:
 
     <settings>
       ...
@@ -51,11 +51,11 @@ For ad-hoc dependency analysis the plugin can be used directly on the command li
       ...
     </settings>
 
-With this configuration you can use the short form `depgraph:<goal>` on the command line, e.g.
+With this configuration, you can use the short form `depgraph:<goal>` on the command line, e.g.
 
     mvn depgraph:graph
 
-Without defining the plugin group you need to fully qualify the plugin on the command line, e.g.:
+Without defining the plugin group, you need to fully qualify the plugin on the command line, e.g.:
 
     # Latest version
     mvn com.github.ferstl:depgraph-maven-plugin:graph
@@ -84,22 +84,22 @@ A simple graph can be created by executing the [`depgraph:graph`](https://ferstl
 
 The goal can be configured to show the versions and/or groupIds on the dependencies:
 
-**With versions**
+**With versions (`-DshowVersions`)**
 
 ![Simple dependency graph with versions](src/doc/with-versions.png)
 
 
-**With groupIds**
+**With groupIds (`-DshowGroupIds`)**
 
 ![Simple dependency graph with groupIds](src/doc/with-group-ids.png)
 
 ### Duplicates and Conflicts
 
-The [`depgraph:graph`](https://ferstl.github.io/depgraph-maven-plugin/graph-mojo.html) goal can be configured to show duplicate and/or conflicting versions. Duplicate versions are shown as dotted black arrows. Conflicting versions are shown as dashed red arrows:
+The [`depgraph:graph`](https://ferstl.github.io/depgraph-maven-plugin/graph-mojo.html) goal can be configured to show duplicate (`-DshowDuplicates`) and/or conflicting (`-DshowConflicts`) versions. Duplicate versions are shown as dotted black arrows. Conflicting versions are shown as dashed red arrows:
 
 ![Dependency graph showing duplicates and conflicts](src/doc/duplicates-and-conflicts.png)
 
-Duplicate dependencies do occur when more than one module defines the same dependency, which is not a problem. Maven's dependency resolution will just pick one dependency and omit all the duplicates. A conflict occurs when the same dependency occurs in different versions in the reactor. In this case Maven will choose the [nearest](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html) version and ommit the others. Occurrences of conflicting versions should be investigated and solved if possible.  
+Duplicate dependencies do occur when more than one module defines the same dependency, which is not a problem: Maven's dependency resolution will just pick one dependency and omit all the duplicates. A conflict occurs when the same dependency occurs in different versions in the reactor. In this case Maven will choose the [nearest](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html) version and ommit the others. Occurrences of conflicting versions should be investigated and solved if possible.  
 
 ### Dependency Graph by `groupId`
 
@@ -127,7 +127,7 @@ The goal [`depgraph:for-artifact`](https://ferstl.github.io/depgraph-maven-plugi
 
 ### Styling
 
-This maven plugin offers you a variety of styling options for graphs in the DOT format. These options are explained in detail on the [Styling Wiki page](https://github.com/ferstl/depgraph-maven-plugin/wiki/Styling). This is an example of the aggregated graph with some custom styles:
+This Maven plugin offers you a variety of styling options for graphs in the DOT format. These options are explained in detail on the [Styling Wiki page](https://github.com/ferstl/depgraph-maven-plugin/wiki/Styling). This is an example of the aggregated graph with some custom styles:
 
 ![Dependency graph with custom styles](src/doc/aggregated-styled.png)
 
@@ -177,7 +177,7 @@ parent:1.0.0-SNAPSHOT:compile
 
 ```
 
-For the aggregated graphs the option `-DrepeatTransitiveDependenciesInTextGraph` will show transitive dependencies on each node. Without this option (which is the default) transitive dependencies will only be shown the first time they occur.
+For the aggregated graphs, the option `-DrepeatTransitiveDependenciesInTextGraph` will show transitive dependencies on each node. Without this option (which is the default), transitive dependencies will only be shown the first time they occur.
 
 #### JSON
 
