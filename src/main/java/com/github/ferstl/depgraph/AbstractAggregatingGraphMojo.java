@@ -21,7 +21,7 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
+public abstract class AbstractAggregatingGraphMojo extends AbstractDependencyGraphMojo {
 
   /**
    * Merge dependencies that occur in multiple scopes into one graph node instead of having a node per scope.

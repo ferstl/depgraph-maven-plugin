@@ -19,7 +19,7 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.NONE,
     threadSafe = true)
-public class BuildTreeMojo extends AbstractGraphMojo {
+public class BuildTreeMojo extends AbstractDependencyGraphMojo {
 
   @Parameter(defaultValue = "${session}", readonly = true)
   private MavenSession mavenSession;
