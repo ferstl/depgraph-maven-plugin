@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.depgraph.graph;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -25,6 +26,7 @@ import com.github.ferstl.depgraph.graph.dot.DotAttributeBuilder;
 import com.github.ferstl.depgraph.graph.dot.DotGraphFormatter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import static java.util.Collections.emptySet;
 
 /**
  * A builder to create <a href="http://www.graphviz.org/doc/info/lang.html">DOT</a> strings by defining edges between
@@ -38,6 +40,7 @@ public final class GraphBuilder<T> {
   private final NodeRenderer<? super T> nodeIdRenderer;
   private final Map<String, Node<T>> nodeDefinitions;
   private final Set<Edge> edges;
+  private final Map<String, Set<Edge>> edgesByNode;
   private final ReachabilityMap reachabilityMap;
 
   private String graphName;
@@ -54,6 +57,7 @@ public final class GraphBuilder<T> {
     this.nodeIdRenderer = nodeIdRenderer;
     this.nodeDefinitions = new LinkedHashMap<>();
     this.edges = new LinkedHashSet<>();
+    this.edgesByNode = new HashMap<>();
     this.reachabilityMap = new ReachabilityMap();
 
     DotAttributeBuilder graphAttributeBuilder = new DotAttributeBuilder();
@@ -105,6 +109,17 @@ public final class GraphBuilder<T> {
     String nodeId = this.nodeIdRenderer.render(node);
     String nodeName = this.nodeNameRenderer.render(node);
     this.nodeDefinitions.put(nodeId, new Node<>(nodeId, nodeName, node));
+
+    return this;
+  }
+
+  public GraphBuilder<T> removeNode(T node) {
+    String nodeId = this.nodeIdRenderer.render(node);
+    Set<Edge> relatedEdges = this.edgesByNode.getOrDefault(nodeId, emptySet());
+
+    this.nodeDefinitions.remove(nodeId);
+    this.edges.removeAll(relatedEdges);
+    this.edgesByNode.remove(nodeId);
 
     return this;
   }
@@ -173,11 +188,15 @@ public final class GraphBuilder<T> {
     String fromNodeId = this.nodeIdRenderer.render(fromNode);
     String toNodeId = this.nodeIdRenderer.render(toNode);
 
-    if (!this.omitSelfReferences || !fromNodeId.equals(toNodeId)) {
-      Edge edge = new Edge(fromNodeId, toNodeId, this.edgeRenderer.render(fromNode, toNode), permanent);
-      this.edges.add(edge);
-      this.reachabilityMap.registerEdge(fromNodeId, toNodeId);
+    if (this.omitSelfReferences && fromNodeId.equals(toNodeId)) {
+      return;
     }
+
+    Edge edge = new Edge(fromNodeId, toNodeId, this.edgeRenderer.render(fromNode, toNode), permanent);
+    this.edges.add(edge);
+    this.edgesByNode.computeIfAbsent(fromNodeId, k -> new HashSet<>()).add(edge);
+    this.edgesByNode.computeIfAbsent(toNodeId, k -> new HashSet<>()).add(edge);
+    this.reachabilityMap.registerEdge(fromNodeId, toNodeId);
   }
 
   private static <T> EdgeRenderer<T> createDefaultEdgeRenderer() {

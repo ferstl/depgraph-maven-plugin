@@ -198,6 +198,21 @@ class GraphBuilderTest {
   }
 
   @Test
+  void removeNode() {
+    // arrange
+    this.graphBuilder.addEdge("A", "B");
+    this.graphBuilder.addEdge("B", "C");
+    this.graphBuilder.addEdge("A", "C");
+
+    // act
+    this.graphBuilder.removeNode("B");
+    this.graphBuilder.toString();
+
+    // assert
+    assertThat(this.formatter.edges, contains(new Edge("A", "C", "")));
+  }
+
+  @Test
   void isEmpty() {
     // assert
     assertTrue(this.graphBuilder.isEmpty());
