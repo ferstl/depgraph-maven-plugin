@@ -1,6 +1,5 @@
 package com.github.ferstl.depgraph;
 
-import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -19,13 +18,13 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.NONE,
     threadSafe = true)
-public class BuildTreeMojo extends AbstractDependencyGraphMojo {
+public class BuildTreeMojo extends AbstractGraphMojo {
 
   @Parameter(defaultValue = "${session}", readonly = true)
   private MavenSession mavenSession;
 
   @Override
-  protected BuildTreeGraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+  protected BuildTreeGraphFactory createGraphFactory(GraphStyleConfigurer graphStyleConfigurer) {
     DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer.versionlessId();
 
     GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
