@@ -20,6 +20,22 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
     threadSafe = true)
 public class BuildTreeMojo extends AbstractGraphMojo {
 
+  /**
+   * If set to {@code true}, the created graph will show the {@code groupId} on all modules.
+   *
+   * @since 4.0.0
+   */
+  @Parameter(property = "showGroupIds", defaultValue = "false")
+  private boolean showGroupIds;
+
+  /**
+   * If set to {@code true}, the created graph will show versions on all modules.
+   *
+   * @since 4.0.0
+   */
+  @Parameter(property = "showVersions", defaultValue = "false")
+  private boolean showVersions;
+
   @Parameter(defaultValue = "${session}", readonly = true)
   private MavenSession mavenSession;
 
@@ -28,8 +44,9 @@ public class BuildTreeMojo extends AbstractGraphMojo {
     DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer.versionlessId();
 
     GraphBuilder<DependencyNode> graphBuilder = graphStyleConfigurer
+        .showGroupIds(this.showGroupIds)
         .showArtifactIds(true)
-        .showVersionsOnNodes(true)
+        .showVersionsOnNodes(this.showVersions)
         .configure(GraphBuilder.create(nodeIdRenderer));
 
     return new BuildTreeGraphFactory(graphBuilder, this.mavenSession.getProjectDependencyGraph());
