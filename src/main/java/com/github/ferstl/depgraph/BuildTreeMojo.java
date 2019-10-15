@@ -11,6 +11,13 @@ import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
+/**
+ * Creates a graph that shows the build execution tree of a maven project. The build execution tree is helpful to
+ * analyze which modules can be built in parallel and which modules depend on each other when building the project.
+ *
+ * @see <a href="https://cwiki.apache.org/confluence/display/MAVEN/Parallel+builds+in+Maven+3"/>
+ * @since 4.0.0
+ */
 @Mojo(
     name = "build-tree",
     aggregator = true,
