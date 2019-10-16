@@ -17,6 +17,9 @@ public class BuildTreeGraphFactory implements GraphFactory {
 
   @Override
   public String createGraph(MavenProject project) {
+    DependencyNode root = new DependencyNode(project.getArtifact());
+    this.graphBuilder.addNode(root);
+
     for (MavenProject module : this.projectDependencyGraph.getSortedProjects()) {
       List<MavenProject> downstreamProjects = this.projectDependencyGraph.getDownstreamProjects(module, false);
 
