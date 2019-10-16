@@ -27,6 +27,7 @@ import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 import static com.github.ferstl.depgraph.MavenVersion.MAX_VERSION;
 import static com.github.ferstl.depgraph.MavenVersion.MIN_VERSION;
+import static io.takari.maven.testing.TestResources.assertFileContents;
 
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions({MAX_VERSION, MIN_VERSION})
@@ -59,4 +60,19 @@ public class BuildTreeIntegrationTest {
     result.assertErrorFreeLog();
   }
 
+  @Test
+  public void singleModule() throws Exception {
+    // arrange
+    File basedir = this.resources.getBasedir("no-dependencies");
+
+    // act
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-B")
+        .execute("depgraph:build-tree");
+
+    // assert
+    result.assertErrorFreeLog();
+    assertFileContents(basedir, "expectations/build-tree.dot", "target/dependency-graph.dot");
+  }
 }
