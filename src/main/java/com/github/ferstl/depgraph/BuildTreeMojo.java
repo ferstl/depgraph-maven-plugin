@@ -1,5 +1,6 @@
 package com.github.ferstl.depgraph;
 
+import java.util.Set;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -9,6 +10,7 @@ import com.github.ferstl.depgraph.dependency.BuildTreeGraphFactory;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
+import com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
 
 /**
@@ -57,5 +59,13 @@ public class BuildTreeMojo extends AbstractGraphMojo {
         .configure(GraphBuilder.create(nodeIdRenderer));
 
     return new BuildTreeGraphFactory(graphBuilder, this.mavenSession.getProjectDependencyGraph());
+  }
+
+  @Override
+  protected Set<BuiltInStyleResource> getAdditionalStyleResources() {
+    Set<BuiltInStyleResource> resources = super.getAdditionalStyleResources();
+    resources.add(BuiltInStyleResource.BUILD_TREE_STYLE);
+
+    return resources;
   }
 }
