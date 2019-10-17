@@ -47,13 +47,14 @@ public class BuildTreeIntegrationTest {
   @Test
   public void test() throws Exception {
     // arrange
-    File basedir = this.resources.getBasedir("reduced-edges-test");
+    File basedir = this.resources.getBasedir("build-tree-test");
 
     // act
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-B")
         .withCliOption("-DcreateImage")
+        //.withCliOption("-DgraphFormat=text")
         .execute("depgraph:build-tree");
 
     // assert
