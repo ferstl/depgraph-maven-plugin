@@ -8,13 +8,6 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>build-tree-database</artifactId>
+  <artifactId>build-tree-common</artifactId>
 
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>build-tree-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
 </project>

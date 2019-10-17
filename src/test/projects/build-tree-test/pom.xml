@@ -10,6 +10,7 @@
   <modules>
     <module>build-tree-api</module>
     <module>build-tree-application</module>
+    <module>build-tree-common</module>
     <module>build-tree-database</module>
     <module>build-tree-service</module>
     <module>build-tree-ui</module>
