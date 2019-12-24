@@ -159,7 +159,7 @@ public class DocumentationIntegrationTest {
     runTest("aggregate",
         "-DgraphFormat=text",
         "-DincludeParentProjects",
-        "-Dscope=compile",
+        "-DclasspathScope=compile",
         "-DshowVersions");
 
     assertFilesPresent(this.basedir, "target/dependency-graph.txt");

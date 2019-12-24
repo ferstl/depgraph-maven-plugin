@@ -87,9 +87,28 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * </ul>
    *
    * @since 1.0.0
+   * @deprecated Use {@link #classpathScope} instead.
    */
+  @Deprecated
   @Parameter(property = "scope")
   private String scope;
+
+  /**
+   * The scope of the artifacts that should be included in the graph. An empty string indicates all scopes (default).
+   * The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+   * <ul>
+   * <li>{@code compile}: Shows compile, provided and system dependencies</li>
+   * <li>{@code provided}: Shows provided dependencies</li>
+   * <li>{@code runtime}: Shows compile and runtime dependencies</li>
+   * <li>{@code system}: Shows system dependencies</li>
+   * <li>{@code test} (default): Shows all dependencies</li>
+   * </ul>
+   * This parameter replaces the former {@code scope} parameter which was introduced in version 1.0.0.
+   *
+   * @since 4.0.0
+   */
+  @Parameter(property = "classpathScope")
+  private String classpathScope;
 
   /**
    * List of artifacts to be included in the form of {@code groupId:artifactId:type:classifier}.
@@ -321,7 +340,15 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     AndArtifactFilter filter = new AndArtifactFilter();
 
     if (this.scope != null) {
-      filter.add(new ScopeArtifactFilter(this.scope));
+      getLog().warn("The 'scope' parameter is deprecated and will be removed in future versions. Use 'classpathScope' instead.");
+      // Prefer the new parameter if it is set
+      if (this.classpathScope == null) {
+        filter.add(new ScopeArtifactFilter(this.scope));
+      }
+    }
+
+    if (this.classpathScope != null) {
+      filter.add(new ScopeArtifactFilter(this.classpathScope));
     }
 
     if (!this.includes.isEmpty()) {
