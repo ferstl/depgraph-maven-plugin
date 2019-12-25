@@ -25,6 +25,7 @@ import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_CONFLICT;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.OMITTED_FOR_DUPLICATE;
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 
 /**
  * Representation of a dependency graph node. It adapts these Maven-specific classes:
@@ -56,18 +57,15 @@ public final class DependencyNode {
       throw new NullPointerException("Artifact must not be null");
     }
 
-    // FIXME: better create a copy of the artifact and set the missing attributes there.
-    if (artifact.getScope() == null) {
-      artifact.setScope("compile");
-    }
-
     this.effectiveVersion = effectiveVersion;
     this.scopes = new TreeSet<>();
     this.classifiers = new TreeSet<>();
     this.types = new TreeSet<>();
     this.artifact = artifact;
     this.resolution = resolution;
-    this.scopes.add(artifact.getScope());
+    if (artifact.getScope() != null) {
+      this.scopes.add(artifact.getScope());
+    }
     this.types.add(artifact.getType());
 
     if (!isNullOrEmpty(artifact.getClassifier())) {
@@ -131,8 +129,7 @@ public final class DependencyNode {
       return this.scopes.iterator().next();
     }
 
-    // should never happen
-    return null;
+    return SCOPE_COMPILE;
   }
 
 

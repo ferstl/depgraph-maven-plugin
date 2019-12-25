@@ -62,6 +62,11 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import static com.github.ferstl.depgraph.GraphFormat.JSON;
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
+import static org.apache.maven.artifact.Artifact.SCOPE_PROVIDED;
+import static org.apache.maven.artifact.Artifact.SCOPE_RUNTIME;
+import static org.apache.maven.artifact.Artifact.SCOPE_SYSTEM;
+import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
 
 /**
  * Abstract mojo to create all possible kinds of graphs. Graphs are created with instances of the
@@ -87,9 +92,36 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * </ul>
    *
    * @since 1.0.0
+   * @deprecated Use {@link #classpathScope} instead.
    */
+  @Deprecated
   @Parameter(property = "scope")
   private String scope;
+
+  /**
+   * The scope of the artifacts that should be included in the graph. An empty string indicates all scopes (default).
+   * The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+   * <ul>
+   * <li>{@code compile}: Equivalent to `-Dscopes=compile,provided,system`</li>
+   * <li>{@code provided}: Equivalent to `-Dscopes=provided`</li>
+   * <li>{@code runtime}: Equivalent to `-Dscopes=compile,runtime`</li>
+   * <li>{@code system}: Equivalent to `-Dscopes=system`</li>
+   * <li>{@code test} (default): Shows all dependencies</li>
+   * </ul>
+   * This parameter replaces the former {@code scope} parameter which was introduced in version 1.0.0.
+   *
+   * @since 4.0.0
+   */
+  @Parameter(property = "classpathScope")
+  private String classpathScope;
+
+  /**
+   * List of dependency scopes to be included in the graph. If empty, all scopes are included.
+   *
+   * @since 4.0.0
+   */
+  @Parameter(property = "scopes")
+  private List<String> scopes;
 
   /**
    * List of artifacts to be included in the form of {@code groupId:artifactId:type:classifier}.
@@ -245,7 +277,6 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Parameter(property = "depgraph.skip", defaultValue = "false")
   private boolean skip;
 
-
   /**
    * The project's artifact ID.
    */
@@ -321,7 +352,23 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     AndArtifactFilter filter = new AndArtifactFilter();
 
     if (this.scope != null) {
-      filter.add(new ScopeArtifactFilter(this.scope));
+      getLog().warn("The 'scope' parameter is deprecated and will be removed in future versions. Use 'classpathScope' instead.");
+      // Prefer the new parameter if it is set
+      if (this.classpathScope == null) {
+        this.classpathScope = this.scope;
+      }
+    }
+
+    if (this.classpathScope != null) {
+      if (this.scopes.isEmpty()) {
+        filter.add(new ScopeArtifactFilter(this.classpathScope));
+      } else {
+        getLog().warn("Both 'classpathScope' (formerly 'scope') and 'scopes' parameters are set. The 'classpathScope' parameter will be ignored.");
+      }
+    }
+
+    if (!this.scopes.isEmpty()) {
+      filter.add(createScopesArtifactFilter(this.scopes));
     }
 
     if (!this.includes.isEmpty()) {
@@ -358,6 +405,27 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
     if (!this.targetIncludes.isEmpty()) {
       filter.add(new StrictPatternIncludesArtifactFilter(this.targetIncludes));
+    }
+
+    return filter;
+  }
+
+  private ArtifactFilter createScopesArtifactFilter(List<String> scopes) {
+    ScopeArtifactFilter filter = new ScopeArtifactFilter();
+    for (String scope : scopes) {
+      if (SCOPE_COMPILE.equals(scope)) {
+        filter.setIncludeCompileScope(true);
+      } else if (SCOPE_RUNTIME.equals(scope)) {
+        filter.setIncludeRuntimeScope(true);
+      } else if (SCOPE_TEST.equals(scope)) {
+        filter.setIncludeTestScope(true);
+      } else if (SCOPE_PROVIDED.equals(scope)) {
+        filter.setIncludeProvidedScope(true);
+      } else if (SCOPE_SYSTEM.equals(scope)) {
+        filter.setIncludeSystemScope(true);
+      } else {
+        getLog().warn("Unknown scope: " + scope);
+      }
     }
 
     return filter;

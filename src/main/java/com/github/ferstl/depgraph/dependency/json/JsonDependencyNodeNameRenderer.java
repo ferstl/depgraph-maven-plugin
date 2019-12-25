@@ -26,6 +26,8 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 
 public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
@@ -59,7 +61,7 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
         this.showVersion ? node.getEffectiveVersion() : null,
         this.showOptional ? artifact.isOptional() : null,
         this.showClassifiers ? node.getClassifiers() : emptyList(),
-        node.getScopes(),
+        !node.getScopes().isEmpty() ? node.getScopes() : singletonList(SCOPE_COMPILE),
         this.showTypes ? node.getTypes() : emptyList());
 
     StringWriter jsonStringWriter = new StringWriter();

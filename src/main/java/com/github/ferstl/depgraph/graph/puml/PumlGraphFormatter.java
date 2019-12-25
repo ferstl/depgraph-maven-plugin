@@ -22,6 +22,7 @@ import com.github.ferstl.depgraph.dependency.puml.PumlNodeInfo;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.GraphFormatter;
 import com.github.ferstl.depgraph.graph.Node;
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 
 /**
  * Graph formatter for <a href="PlantUML">http://plantuml.com/component-diagram</a> diagram.
@@ -67,7 +68,7 @@ public class PumlGraphFormatter implements GraphFormatter {
           .append(escape(node.getNodeId()));
 
 
-      if (!nodeInfo.getStereotype().equals("compile")) {
+      if (!nodeInfo.getStereotype().equals(SCOPE_COMPILE)) {
         puml.append("<<")
             .append(nodeInfo.getStereotype())
             .append(">>");

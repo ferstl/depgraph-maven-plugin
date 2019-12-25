@@ -29,6 +29,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.ProjectBuildingRequest;
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 
 /**
  * Creates a dependency graph from an arbitrary artifact.
@@ -107,7 +108,7 @@ public class ForArtifactMojo extends DependencyGraphMojo {
     buildingRequest.setResolveDependencies(true);
     buildingRequest.setActiveProfileIds(this.profiles);
 
-    DefaultArtifact artifact = new DefaultArtifact(this.groupId, this.artifactId, this.version, "compile", this.type, this.classifier, new DefaultArtifactHandler());
+    DefaultArtifact artifact = new DefaultArtifact(this.groupId, this.artifactId, this.version, SCOPE_COMPILE, this.type, this.classifier, new DefaultArtifactHandler());
     try {
       return this.projectBuilder.build(artifact, buildingRequest).getProject();
     } catch (ProjectBuildingException e) {
