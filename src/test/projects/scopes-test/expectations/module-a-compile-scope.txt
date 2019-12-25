@@ -1,0 +1,3 @@
+module-a:compile
+\- module-b:compile
+   \- module-d:compile

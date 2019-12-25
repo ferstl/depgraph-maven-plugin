@@ -1,0 +1,11 @@
+module-d:compile
+\- junit-jupiter:test
+   +- junit-jupiter-api:test
+   |  +- apiguardian-api:test
+   |  +- opentest4j:test
+   |  \- junit-platform-commons:test
+   +- junit-jupiter-params:test
+   \- junit-jupiter-engine:test
+      \- junit-platform-engine:test
+module-a:compile
+\- module-c:provided
