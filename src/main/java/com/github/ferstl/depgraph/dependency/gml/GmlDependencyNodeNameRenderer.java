@@ -20,6 +20,7 @@ import java.util.Set;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 
 public class GmlDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
@@ -74,7 +75,7 @@ public class GmlDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
   }
 
   private static String createScopeString(Set<String> scopes) {
-    if (scopes.size() > 1 || !scopes.contains("compile")) {
+    if (!scopes.isEmpty() && (scopes.size() > 1 || !scopes.contains(SCOPE_COMPILE))) {
       return "(" + SLASH_JOINER.join(scopes) + ")";
     }
 

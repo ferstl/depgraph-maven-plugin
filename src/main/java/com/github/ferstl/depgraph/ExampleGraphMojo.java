@@ -28,7 +28,10 @@ import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
-
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
+import static org.apache.maven.artifact.Artifact.SCOPE_PROVIDED;
+import static org.apache.maven.artifact.Artifact.SCOPE_RUNTIME;
+import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
 import static org.eclipse.aether.util.graph.transformer.ConflictResolver.NODE_DATA_WINNER;
 
 /**
@@ -67,14 +70,14 @@ public class ExampleGraphMojo extends DependencyGraphMojo {
 
     @Override
     public String createGraph(MavenProject project) {
-      DefaultArtifact aA = new DefaultArtifact("com.example", "artifact-a", "1.0.0", "compile", "jar", "", null);
-      DefaultArtifact aB = new DefaultArtifact("com.example", "artifact-b", "1.0.0", "compile", "jar", "", null);
-      DefaultArtifact aC = new DefaultArtifact("com.example", "artifact-c", "2.0.0", "compile", "jar", "", null);
-      DefaultArtifact aD = new DefaultArtifact("com.example", "artifact-d", "1.0.0", "compile", "jar", "", null);
-      DefaultArtifact aE = new DefaultArtifact("com.example.sub", "artifact-e", "1.0.0", "provided", "jar", "", null);
-      DefaultArtifact aF = new DefaultArtifact("com.example.sub", "artifact-f", "1.0.0", "runtime", "jar", "", null);
-      DefaultArtifact aG = new DefaultArtifact("com.example.sub", "artifact-g", "1.0.0", "test", "jar", "", null);
-      DefaultArtifact aZ = new DefaultArtifact("com.example.sub", "artifact-zip", "1.0.0", "compile", "zip", "", null);
+      DefaultArtifact aA = new DefaultArtifact("com.example", "artifact-a", "1.0.0", SCOPE_COMPILE, "jar", "", null);
+      DefaultArtifact aB = new DefaultArtifact("com.example", "artifact-b", "1.0.0", SCOPE_COMPILE, "jar", "", null);
+      DefaultArtifact aC = new DefaultArtifact("com.example", "artifact-c", "2.0.0", SCOPE_COMPILE, "jar", "", null);
+      DefaultArtifact aD = new DefaultArtifact("com.example", "artifact-d", "1.0.0", SCOPE_COMPILE, "jar", "", null);
+      DefaultArtifact aE = new DefaultArtifact("com.example.sub", "artifact-e", "1.0.0", SCOPE_PROVIDED, "jar", "", null);
+      DefaultArtifact aF = new DefaultArtifact("com.example.sub", "artifact-f", "1.0.0", SCOPE_RUNTIME, "jar", "", null);
+      DefaultArtifact aG = new DefaultArtifact("com.example.sub", "artifact-g", "1.0.0", SCOPE_TEST, "jar", "", null);
+      DefaultArtifact aZ = new DefaultArtifact("com.example.sub", "artifact-zip", "1.0.0", SCOPE_COMPILE, "zip", "", null);
 
       DependencyNode nA = new DependencyNode(aA);
       DependencyNode nB = new DependencyNode(aB);

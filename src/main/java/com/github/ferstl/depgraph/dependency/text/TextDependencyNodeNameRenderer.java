@@ -15,10 +15,12 @@
  */
 package com.github.ferstl.depgraph.dependency.text;
 
+import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 
 public class TextDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
 
@@ -51,13 +53,21 @@ public class TextDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
         this.showVersion ? node.getEffectiveVersion() : null,
         this.showTypes ? SLASH_JOINER.join(node.getTypes()) : null,
         this.showClassifiers ? SLASH_JOINER.join(node.getClassifiers()) : null,
-        SLASH_JOINER.join(node.getScopes()));
+        createScopeString(node.getScopes()));
 
     if (this.showOptional && artifact.isOptional()) {
       return artifactString + " (optional)";
     }
 
     return artifactString;
+  }
+
+  private static String createScopeString(Set<String> scopes) {
+    if (scopes.isEmpty()) {
+      return SCOPE_COMPILE;
+    }
+
+    return SLASH_JOINER.join(scopes);
   }
 
 }

@@ -18,7 +18,6 @@ package com.github.ferstl.depgraph.dependency;
 import org.apache.maven.artifact.Artifact;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
-
 import static com.google.common.base.Strings.emptyToNull;
 
 public class DependencyNodeIdRenderer implements NodeRenderer<DependencyNode> {
@@ -79,6 +78,6 @@ public class DependencyNodeIdRenderer implements NodeRenderer<DependencyNode> {
         this.withArtifactId ? artifact.getArtifactId() : null,
         this.withType ? artifact.getType() : null,
         this.withClassifier ? emptyToNull(artifact.getClassifier()) : null,
-        this.withScope ? artifact.getScope() : null);
+        this.withScope ? node.getEffectiveScope() : null);
   }
 }

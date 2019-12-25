@@ -118,15 +118,6 @@ class DependencyNodeTest {
 
 
   @Test
-  void defaultCompileScope() {
-    Artifact artifact = createMavenArtifact();
-    artifact.setScope(null);
-
-    DependencyNode adapter = new DependencyNode(artifact);
-    assertEquals("compile", adapter.getArtifact().getScope());
-  }
-
-  @Test
   void effectiveScope() {
     // arrange
     Artifact artifact1 = createMavenArtifact();
@@ -140,6 +131,15 @@ class DependencyNodeTest {
 
     // assert
     assertEquals("provided", node.getEffectiveScope());
+  }
+
+  @Test
+  void effectiveScopeForNull() {
+    Artifact artifact = createMavenArtifact();
+    artifact.setScope(null);
+
+    DependencyNode adapter = new DependencyNode(artifact);
+    assertEquals("compile", adapter.getEffectiveScope());
   }
 
   @Test

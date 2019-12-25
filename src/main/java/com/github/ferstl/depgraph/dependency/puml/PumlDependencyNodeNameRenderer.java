@@ -57,7 +57,7 @@ public class PumlDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
 
     nodeInfo
         .withLabel(name)
-        .withStereotype(node.getArtifact().getScope())
+        .withStereotype(node.getEffectiveScope())
         .withOptional(this.showOptional && artifact.isOptional());
 
     return nodeInfo.toString();

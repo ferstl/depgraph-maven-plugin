@@ -23,6 +23,7 @@ import com.github.ferstl.depgraph.dependency.dot.style.StyleConfiguration;
 import com.github.ferstl.depgraph.dependency.dot.style.StyleKey;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
 import com.google.common.base.Joiner;
+import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 
 
 public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNode> {
@@ -71,7 +72,7 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
   }
 
   private static String createScopeString(Set<String> scopes) {
-    if (scopes.size() > 1 || !scopes.contains("compile")) {
+    if (!scopes.isEmpty() && (scopes.size() > 1 || !scopes.contains(SCOPE_COMPILE))) {
       return "(" + SLASH_JOINER.join(scopes) + ")";
     }
 
