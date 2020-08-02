@@ -41,7 +41,7 @@
     "numericId" : 5,
     "groupId" : "com.google.guava",
     "artifactId" : "guava",
-    "version" : "21.0",
+    "version" : "29.0-jre",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
@@ -50,7 +50,7 @@
     "numericId" : 6,
     "groupId" : "org.springframework",
     "artifactId" : "spring-core",
-    "version" : "5.0.7.RELEASE",
+    "version" : "5.2.8.RELEASE",
     "optional" : true,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]

@@ -38,7 +38,7 @@ node [
 id "com.google.guava:guava:jar"
 label "com.google.guava
 guava
-21.0"
+29.0-jre"
 ]
 
 node [

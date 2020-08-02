@@ -50,7 +50,7 @@
     "numericId" : 6,
     "groupId" : "com.google.guava",
     "artifactId" : "guava",
-    "version" : "21.0",
+    "version" : "29.0-jre",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
