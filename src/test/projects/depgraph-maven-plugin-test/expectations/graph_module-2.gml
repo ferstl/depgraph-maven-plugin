@@ -17,7 +17,7 @@ node [
 id "com.google.guava:guava:jar"
 label "com.google.guava
 guava
-21.0"
+29.0-jre"
 ]
 
 node [
@@ -39,7 +39,7 @@ id "org.springframework:spring-core:jar"
 label "<optional>
 org.springframework
 spring-core
-5.0.7.RELEASE"
+5.2.8.RELEASE"
 ]
 
 node [
