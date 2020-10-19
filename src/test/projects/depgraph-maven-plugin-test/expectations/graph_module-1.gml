@@ -24,7 +24,7 @@ node [
 id "junit:junit:jar"
 label "junit
 junit
-4.12
+4.13.1
 (test)"
 ]
 
