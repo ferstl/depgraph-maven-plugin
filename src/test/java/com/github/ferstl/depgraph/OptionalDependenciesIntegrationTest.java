@@ -71,7 +71,7 @@ public class OptionalDependenciesIntegrationTest {
     String mavenVersion = this.mavenRuntime.getMavenVersion();
 
     // Maven versions 3.3.x and smaller do not handle the optional dependencies as seen from module-d correctly.
-    if (mavenVersion.startsWith("3.1")) {
+    if (mavenVersion.startsWith(MIN_VERSION)) {
       assertFileContents(basedir, "expectations/graph_module-d-maven33.dot", "module-d/target/dependency-graph.dot");
     } else {
       assertFileContents(basedir, "expectations/graph_module-d.dot", "module-d/target/dependency-graph.dot");
@@ -118,7 +118,7 @@ public class OptionalDependenciesIntegrationTest {
     String mavenVersion = this.mavenRuntime.getMavenVersion();
 
     // Maven versions 3.3.x and smaller do not handle the optional dependencies as seen from module-d correctly.
-    if (mavenVersion.startsWith("3.1")) {
+    if (mavenVersion.startsWith(MIN_VERSION)) {
       assertFileContents(basedir, "expectations/graphExcludeOptional_module-d-maven33.dot", "module-d/target/dependency-graph.dot");
     } else {
       assertFileContents(basedir, "expectations/graphExcludeOptional_module-d.dot", "module-d/target/dependency-graph.dot");
@@ -144,7 +144,7 @@ public class OptionalDependenciesIntegrationTest {
     String mavenVersion = this.mavenRuntime.getMavenVersion();
 
     // Maven versions 3.3.x and smaller do not handle the optional dependencies as seen from module-d correctly.
-    if (mavenVersion.startsWith("3.1")) {
+    if (mavenVersion.startsWith(MIN_VERSION)) {
       assertFileContents(basedir, "expectations/aggregateExcludeOptional_graph-maven33.dot", "target/dependency-graph.dot");
     } else {
       assertFileContents(basedir, "expectations/aggregateExcludeOptional_graph.dot", "target/dependency-graph.dot");
