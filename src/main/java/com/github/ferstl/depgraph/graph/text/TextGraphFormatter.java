@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import com.github.ferstl.depgraph.graph.Edge;
 import com.github.ferstl.depgraph.graph.Node;
 
@@ -73,7 +74,9 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
 
         List<Boolean> lastParents = new ArrayList<>();
         lastParents.add(!rootIterator.hasNext());
-        writeChildren(stringBuilder, root, lastParents);
+        Set<String> currentPath = new LinkedHashSet<>();
+
+        writeChildren(stringBuilder, root, currentPath, lastParents);
       }
     }
 
@@ -96,22 +99,27 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
       }
     }
 
-    private void writeChildren(StringBuilder stringBuilder, String parent, List<Boolean> lastParents) {
+    private void writeChildren(StringBuilder stringBuilder, String parent, Set<String> currentPath, List<Boolean> lastParents) {
       Collection<Edge> edges = this.relations.get(parent);
       Iterator<Edge> edgeIterator = edges.iterator();
 
       while (edgeIterator.hasNext()) {
         Edge edge = edgeIterator.next();
         Node<?> childNode = this.nodesById.get(edge.getToNodeId());
+        boolean circleDetected = currentPath.contains(childNode.getNodeId());
 
         // Write the current child node
         indent(stringBuilder, lastParents, !edgeIterator.hasNext());
-        writeChildNode(stringBuilder, childNode.getNodeName(), edge.getName());
+        writeChildNode(stringBuilder, childNode.getNodeName(), edge.getName(), circleDetected);
 
         // Recursively write sub tree
         lastParents.add(!edgeIterator.hasNext());
-        writeChildren(stringBuilder, childNode.getNodeId(), lastParents);
+        if (!circleDetected) {
+          currentPath.add(childNode.getNodeId());
+          writeChildren(stringBuilder, childNode.getNodeId(), currentPath, lastParents);
+        }
         lastParents.remove(lastParents.size() - 1);
+        currentPath.remove(childNode.getNodeId());
       }
 
       if (!this.repeatTransitiveDependencies) {
@@ -133,10 +141,12 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
       }
     }
 
-    private void writeChildNode(StringBuilder stringBuilder, String childNodeName, String edgeName) {
+    private void writeChildNode(StringBuilder stringBuilder, String childNodeName, String edgeName, boolean circleDetected) {
       stringBuilder.append(childNodeName);
       if (edgeName != null && !edgeName.isEmpty()) {
-        stringBuilder.append(" (").append(edgeName).append(")");
+        stringBuilder.append(" (").append(circleDetected ? "circle, " : "").append(edgeName).append(")");
+      } else if (circleDetected) {
+        stringBuilder.append(" (circle)");
       }
       stringBuilder.append("\n");
     }
