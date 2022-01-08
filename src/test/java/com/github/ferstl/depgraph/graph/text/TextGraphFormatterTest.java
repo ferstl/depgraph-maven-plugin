@@ -154,6 +154,43 @@ public class TextGraphFormatterTest {
     assertEquals(expected, result);
   }
 
+  @Test
+  public void circularDependency() {
+    // arrange + act
+    String result = createTextGraph(
+        true,
+        edge("root", "child-1"),
+        edge("child-1", "child-1.1"),
+        // circle
+        edge("child-1.1", "child-1"));
+
+    // assert
+    String expected = "root\n"
+        + "\\- child-1\n"
+        + "   \\- child-1.1\n"
+        + "      \\- child-1 (circle)\n";
+
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void circularDependencyWithEdgeName() {
+    // arrange + act
+    String result = createTextGraph(
+        true,
+        edge("root", "child-1"),
+        edge("child-1", "child-1.1"),
+        // circle
+        edge("child-1.1", "child-1", "omitted for conflict: 0.0.0"));
+
+    // assert
+    String expected = "root\n"
+        + "\\- child-1\n"
+        + "   \\- child-1.1\n"
+        + "      \\- child-1 (circle, omitted for conflict: 0.0.0)\n";
+    assertEquals(expected, result);
+  }
+
   private String createTextGraph(Edge... edges) {
     return createTextGraph(false, edges);
   }

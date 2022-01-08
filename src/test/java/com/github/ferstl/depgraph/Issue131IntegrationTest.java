@@ -12,6 +12,10 @@ import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 
+/**
+ * Integration test for Issue #131 where a conflicting dependency introduced a circle and lead to
+ * a {@code StackOverflowError}.
+ */
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions({"3.5.2", "3.3.9"})
 public class Issue131IntegrationTest {
@@ -32,7 +36,7 @@ public class Issue131IntegrationTest {
   }
 
   @Test
-  public void test() throws Exception {
+  public void circularDependency() throws Exception {
     File basedir = this.resources.getBasedir("issue-131");
     //mvn -N com.github.ferstl:depgraph-maven-plugin:graph -DgraphFormat=text -DshowDuplicates -DshowConflicts -DshowVersions -DshowGroupIds
     MavenExecutionResult result = this.mavenRuntime
