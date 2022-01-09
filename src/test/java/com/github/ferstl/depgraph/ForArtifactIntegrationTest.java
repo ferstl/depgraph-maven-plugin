@@ -106,6 +106,76 @@ public class ForArtifactIntegrationTest {
     result.assertLogText("com.google.guava:guava:jar:000000abxdce:compile");
   }
 
+  @Test
+  public void runWithArtifactParameter() throws Exception {
+    // arrange
+    File basedir = this.resources.getBasedir("no-project");
+
+    // act
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-Dartifact=org.springframework:spring-jdbc:5.1.3.RELEASE")
+        .withCliOption("-DshowVersions")
+        .withCliOption("-DgraphFormat=text")
+        .execute(createFullyQualifiedGoal());
+
+    // assert
+    result.assertErrorFreeLog();
+    assertFileContents(basedir, "expectations/spring-jdbc.txt", "dependency-graph.txt");
+  }
+
+  @Test
+  public void runWithArtifactAndGavParameters() throws Exception {
+    // arrange
+    File basedir = this.resources.getBasedir("no-project");
+
+    // act
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-Dartifact=org.springframework:spring-jdbc:5.1.3.RELEASE")
+        .withCliOption("-DgroupId=org.springframework")
+        .withCliOption("-DartifactId=spring-jdbc")
+        .withCliOption("-Dversion=5.1.3.RELEASE")
+        .execute(createFullyQualifiedGoal());
+
+    // assert
+    result.assertLogText("[ERROR] Failed to execute goal com.github.ferstl:depgraph-maven-plugin");
+    result.assertLogText("Artifact can be defined with either 'artifact' or 'groupId'/'artifactId'/'version' but not both");
+  }
+
+  @Test
+  public void runWithInvalidArtifactParameter() throws Exception {
+    // arrange
+    File basedir = this.resources.getBasedir("no-project");
+
+    // act
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-Dartifact=org.springframework:spring-jdbc")
+        .execute(createFullyQualifiedGoal());
+
+    // assert
+    result.assertLogText("[ERROR] Failed to execute goal com.github.ferstl:depgraph-maven-plugin");
+    result.assertLogText("Invalid artifact definition: org.springframework:spring-jdbc");
+  }
+
+  @Test
+  public void runWithIncompleteGavParameters() throws Exception {
+    // arrange
+    File basedir = this.resources.getBasedir("no-project");
+
+    // act
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgroupId=com.google.guava")
+        .withCliOption("-Dversion=27.0-jre")
+        .execute(createFullyQualifiedGoal());
+
+    // assert
+    result.assertLogText("[ERROR] Failed to execute goal com.github.ferstl:depgraph-maven-plugin");
+    result.assertLogText("'groupId', 'artifactId' and 'version' parameters have to be defined");
+  }
+
   /**
    * Helper to create a fully qualified Maven goal with the curren plugin version. This is needed for tests
    * without POM files where {@code it-plugin.version} can not be injected.
