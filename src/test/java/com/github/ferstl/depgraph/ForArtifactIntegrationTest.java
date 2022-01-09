@@ -41,7 +41,9 @@ public class ForArtifactIntegrationTest {
 
   public ForArtifactIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
     this.testProperties = new TestProperties();
-    this.mavenRuntime = builder.build();
+    this.mavenRuntime = builder
+        .withCliOptions("-B")
+        .build();
   }
 
   @Test
@@ -52,7 +54,6 @@ public class ForArtifactIntegrationTest {
     // act
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DgroupId=org.springframework")
         .withCliOption("-DartifactId=spring-jdbc")
         .withCliOption("-Dversion=5.1.3.RELEASE")
@@ -73,7 +74,6 @@ public class ForArtifactIntegrationTest {
     // act
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DgroupId=com.google.guava")
         .withCliOption("-DartifactId=guava")
         .withCliOption("-Dversion=27.0-jre")
@@ -96,7 +96,6 @@ public class ForArtifactIntegrationTest {
     // act
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DgroupId=com.google.guava")
         .withCliOption("-DartifactId=guava")
         .withCliOption("-Dversion=000000abxdce")

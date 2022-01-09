@@ -41,7 +41,9 @@ public class OptionalDependenciesIntegrationTest {
   private final MavenRuntime mavenRuntime;
 
   public OptionalDependenciesIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
-    this.mavenRuntime = builder.build();
+    this.mavenRuntime = builder
+        .withCliOptions("-B")
+        .build();
   }
 
   @Before
@@ -55,8 +57,7 @@ public class OptionalDependenciesIntegrationTest {
     File basedir = this.resources.getBasedir("optional-dependencies");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
-        .execute("clean", "package", "depgraph:graph");
+        .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
     assertFilesPresent(
@@ -84,8 +85,7 @@ public class OptionalDependenciesIntegrationTest {
     File basedir = this.resources.getBasedir("optional-dependencies");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
-        .execute("clean", "package", "depgraph:aggregate");
+        .execute("clean", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
 
@@ -101,9 +101,8 @@ public class OptionalDependenciesIntegrationTest {
     File basedir = this.resources.getBasedir("optional-dependencies");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DexcludeOptionalDependencies")
-        .execute("clean", "package", "depgraph:graph");
+        .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
     assertFilesPresent(
@@ -131,9 +130,8 @@ public class OptionalDependenciesIntegrationTest {
     File basedir = this.resources.getBasedir("optional-dependencies");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DexcludeOptionalDependencies")
-        .execute("clean", "package", "depgraph:aggregate");
+        .execute("clean", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
 

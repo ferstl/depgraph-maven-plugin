@@ -26,7 +26,9 @@ public class ScopesIntegrationTest {
   private final MavenRuntime mavenRuntime;
 
   public ScopesIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
-    this.mavenRuntime = builder.build();
+    this.mavenRuntime = builder
+        .withCliOptions("-B")
+        .build();
   }
 
   @Before
@@ -40,10 +42,9 @@ public class ScopesIntegrationTest {
     File basedir = this.resources.getBasedir("scopes-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DgraphFormat=text")
         .withCliOption("-Dscopes=compile")
-        .execute("clean", "package", "depgraph:graph");
+        .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
 
@@ -66,10 +67,9 @@ public class ScopesIntegrationTest {
     File basedir = this.resources.getBasedir("scopes-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DgraphFormat=text")
         .withCliOption("-Dscopes=provided")
-        .execute("clean", "package", "depgraph:graph");
+        .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
 
@@ -92,11 +92,10 @@ public class ScopesIntegrationTest {
     File basedir = this.resources.getBasedir("scopes-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DgraphFormat=text")
         .withCliOption("-DclasspathScope=test")
         .withCliOption("-Dscopes=compile")
-        .execute("clean", "package", "depgraph:graph");
+        .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
     result.assertLogText("The 'classpathScope' parameter will be ignored");
@@ -108,10 +107,9 @@ public class ScopesIntegrationTest {
     File basedir = this.resources.getBasedir("scopes-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DgraphFormat=text")
         .withCliOption("-Dscopes=compile")
-        .execute("clean", "package", "depgraph:aggregate");
+        .execute("clean", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
 
@@ -124,10 +122,9 @@ public class ScopesIntegrationTest {
     File basedir = this.resources.getBasedir("scopes-test");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-DgraphFormat=text")
         .withCliOption("-Dscopes=provided,test")
-        .execute("clean", "package", "depgraph:aggregate");
+        .execute("clean", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
 

@@ -41,7 +41,9 @@ public class MergeOptionsIntegrationTest {
   private final MavenRuntime mavenRuntime;
 
   public MergeOptionsIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
-    this.mavenRuntime = builder.build();
+    this.mavenRuntime = builder
+        .withCliOptions("-B")
+        .build();
   }
 
   @Before

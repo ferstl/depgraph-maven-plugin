@@ -28,7 +28,9 @@ public class Issue131IntegrationTest {
   private final MavenRuntime mavenRuntime;
 
   public Issue131IntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
-    this.mavenRuntime = builder.build();
+    this.mavenRuntime = builder
+        .withCliOptions("-B")
+        .build();
   }
 
   @Before
@@ -43,14 +45,13 @@ public class Issue131IntegrationTest {
     //mvn -N com.github.ferstl:depgraph-maven-plugin:graph -DgraphFormat=text -DshowDuplicates -DshowConflicts -DshowVersions -DshowGroupIds
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .withCliOption("-B")
         .withCliOption("-N")
         .withCliOption("-DgraphFormat=text")
         .withCliOption("-DshowDuplicates")
         .withCliOption("-DshowConflicts")
         .withCliOption("-DshowVersions")
         .withCliOption("-DshowGroupIds")
-        .execute("clean", "package", "depgraph:graph");
+        .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
   }

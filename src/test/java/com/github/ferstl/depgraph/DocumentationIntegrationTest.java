@@ -56,7 +56,9 @@ public class DocumentationIntegrationTest {
   private Path imagePath;
 
   public DocumentationIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
-    this.mavenRuntime = builder.build();
+    this.mavenRuntime = builder
+        .withCliOptions("-B")
+        .build();
   }
 
   @Before
@@ -253,7 +255,7 @@ public class DocumentationIntegrationTest {
       execution.withCliOption(cliOption);
     }
 
-    MavenExecutionResult result = execution.execute("clean", "package", "depgraph:" + goal);
+    MavenExecutionResult result = execution.execute("clean", "depgraph:" + goal);
     result.assertErrorFreeLog();
   }
 

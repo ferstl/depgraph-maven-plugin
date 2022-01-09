@@ -41,7 +41,9 @@ public class ReducedEdgesIntegrationTest {
   private final MavenRuntime mavenRuntime;
 
   public ReducedEdgesIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
-    this.mavenRuntime = builder.build();
+    this.mavenRuntime = builder
+        .withCliOptions("-B")
+        .build();
   }
 
   @Before
@@ -56,7 +58,7 @@ public class ReducedEdgesIntegrationTest {
     // Reduced edges are the default
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
-        .execute("clean", "package", "depgraph:aggregate");
+        .execute("clean", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
     assertFilesPresent(
@@ -71,7 +73,7 @@ public class ReducedEdgesIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DreduceEdges=false")
-        .execute("clean", "package", "depgraph:aggregate");
+        .execute("clean", "depgraph:aggregate");
 
     result.assertErrorFreeLog();
     assertFilesPresent(
