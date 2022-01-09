@@ -16,6 +16,8 @@
 package com.github.ferstl.depgraph;
 
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.execution.MavenSession;
@@ -47,27 +49,37 @@ import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
 public class ForArtifactMojo extends DependencyGraphMojo {
 
   /**
-   * The {@code gropId} of the artifact.
+   * Artifact in the form of {@code groupId:artifactId:version[:packaging[:classifier]]}.
+   * This is a shorter alternative for the {@code groupId}, {@code artifactId}, {@code version},
+   * {@code type}, {@code classifier} options.
+   *
+   * @since 4.0.0
+   */
+  @Parameter(property = "artifact")
+  private String artifact;
+
+  /**
+   * The {@code gropId} of the artifact. Required if {@code artifact} is not defined.
    *
    * @since 3.3.0
    */
-  @Parameter(property = "groupId", required = true)
+  @Parameter(property = "groupId")
   private String groupId;
 
   /**
-   * The {@code artifactId} of the artifact.
+   * The {@code artifactId} of the artifact. Required if {@code artifact} is not defined.
    *
    * @since 3.3.0
    */
-  @Parameter(property = "artifactId", required = true)
+  @Parameter(property = "artifactId")
   private String artifactId;
 
   /**
-   * The {@code version} of the artifact.
+   * The {@code version} of the artifact. Required if {@code artifact} is not defined.
    *
    * @since 3.3.0
    */
-  @Parameter(property = "version", required = true)
+  @Parameter(property = "version")
   private String version;
 
   /**
@@ -108,12 +120,61 @@ public class ForArtifactMojo extends DependencyGraphMojo {
     buildingRequest.setResolveDependencies(true);
     buildingRequest.setActiveProfileIds(this.profiles);
 
-    DefaultArtifact artifact = new DefaultArtifact(this.groupId, this.artifactId, this.version, SCOPE_COMPILE, this.type, this.classifier, new DefaultArtifactHandler());
+    Artifact artifact = createArtifact();
     try {
       return this.projectBuilder.build(artifact, buildingRequest).getProject();
     } catch (ProjectBuildingException e) {
       throw new IllegalStateException("Error while creating Maven project from Artifact '" + artifact + "'.", e);
     }
 
+  }
+
+  private Artifact createArtifact() {
+    validateParameters();
+
+    String groupId = this.groupId;
+    String artifactId = this.artifactId;
+    String version = this.version;
+    String type = this.type;
+    String classifier = this.classifier;
+
+    if (StringUtils.isNotBlank(artifact)) {
+      String[] parts = this.artifact.split(":");
+
+      // At least groupId/artifactId/version is required
+      if (parts.length < 3) {
+        throw new IllegalArgumentException("Invalid artifact definition: " + this.artifact);
+      }
+
+      groupId = parts[0];
+      artifactId = parts[1];
+      version = parts[2];
+      if (parts.length > 3 && StringUtils.isNotBlank(parts[3])) {
+        type = parts[3];
+      }
+      if (parts.length > 4) {
+        classifier = parts[4];
+      }
+
+    }
+
+    return new DefaultArtifact(groupId, artifactId, version, SCOPE_COMPILE, type, classifier, new DefaultArtifactHandler());
+  }
+
+  private void validateParameters() {
+    // Either artifact or GAV parameters
+    if (StringUtils.isNotBlank(artifact)) {
+      // GAV parameters must not be set
+      if (StringUtils.isNotBlank(this.groupId)
+          || StringUtils.isNotBlank(this.artifactId)
+          || StringUtils.isNotBlank(this.version)) {
+        throw new IllegalArgumentException("Artifact can be defined with either 'artifact' or 'groupId'/'artifactId'/'version' but not both");
+      }
+      // All GAV parameters have to be set
+    } else if (StringUtils.isBlank(this.groupId)
+        || StringUtils.isBlank(this.artifactId)
+        || StringUtils.isBlank(this.version)) {
+      throw new IllegalArgumentException("'groupId', 'artifactId' and 'version' parameters have to be defined");
+    }
   }
 }
