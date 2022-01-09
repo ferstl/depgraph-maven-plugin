@@ -54,6 +54,8 @@ public final class MavenGraphAdapter {
     DefaultDependencyResolutionRequest request = new DefaultDependencyResolutionRequest();
     request.setMavenProject(project);
     request.setRepositorySession(getVerboseRepositorySession(project));
+    // only download the poms, not the artifacts
+    request.setResolutionFilter((node, parents) -> false);
 
     DependencyResolutionResult result;
     try {
