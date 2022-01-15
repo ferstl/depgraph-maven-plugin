@@ -41,7 +41,7 @@ import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.TEST,
     threadSafe = true)
-public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregatingGraphMojo {
+public class AggregatingDependencyGraphByGroupIdMojo extends AbstractAggregatingDependencyGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {

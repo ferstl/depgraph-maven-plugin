@@ -39,7 +39,7 @@ import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.TEST,
     threadSafe = true)
-public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
+public class DependencyGraphByGroupIdMojo extends AbstractDependencyGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {

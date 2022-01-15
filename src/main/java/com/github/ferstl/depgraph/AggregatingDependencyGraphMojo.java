@@ -40,7 +40,7 @@ import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.TEST,
     threadSafe = true)
-public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo {
+public class AggregatingDependencyGraphMojo extends AbstractAggregatingDependencyGraphMojo {
 
   /**
    * If set to {@code true}, the created graph will show the {@code groupId} on all artifacts.

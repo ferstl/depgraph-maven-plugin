@@ -46,7 +46,7 @@ import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
     requiresDependencyCollection = ResolutionScope.NONE,
     requiresDependencyResolution = ResolutionScope.NONE,
     threadSafe = true)
-public class ForArtifactMojo extends DependencyGraphMojo {
+public class ForArtifactDependencyGraphMojo extends DependencyGraphMojo {
 
   /**
    * Artifact in the form of {@code groupId:artifactId:version[:packaging[:classifier]]}.
@@ -138,7 +138,7 @@ public class ForArtifactMojo extends DependencyGraphMojo {
     String type = this.type;
     String classifier = this.classifier;
 
-    if (StringUtils.isNotBlank(artifact)) {
+    if (StringUtils.isNotBlank(this.artifact)) {
       String[] parts = this.artifact.split(":");
 
       // At least groupId/artifactId/version is required
@@ -163,7 +163,7 @@ public class ForArtifactMojo extends DependencyGraphMojo {
 
   private void validateParameters() {
     // Either artifact or GAV parameters
-    if (StringUtils.isNotBlank(artifact)) {
+    if (StringUtils.isNotBlank(this.artifact)) {
       // GAV parameters must not be set
       if (StringUtils.isNotBlank(this.groupId)
           || StringUtils.isNotBlank(this.artifactId)

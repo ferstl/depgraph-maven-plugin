@@ -42,7 +42,7 @@ import static java.util.EnumSet.of;
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.TEST,
     threadSafe = true)
-public class DependencyGraphMojo extends AbstractGraphMojo {
+public class DependencyGraphMojo extends AbstractDependencyGraphMojo {
 
   /**
    * If set to {@code true}, the created graph will show the {@code groupId} on all artifacts.

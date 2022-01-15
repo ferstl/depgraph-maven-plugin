@@ -1,6 +1,5 @@
 package com.github.ferstl.depgraph;
 
-import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -44,7 +43,7 @@ public class ReactorGraphMojo extends AbstractGraphMojo {
   private MavenSession mavenSession;
 
   @Override
-  protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
+  protected GraphFactory createGraphFactory(GraphStyleConfigurer graphStyleConfigurer) {
     DependencyNodeIdRenderer nodeIdRenderer = DependencyNodeIdRenderer.versionlessId();
     GraphBuilder<DependencyNode> graphBuilder = createGraphBuilder(graphStyleConfigurer, nodeIdRenderer);
 

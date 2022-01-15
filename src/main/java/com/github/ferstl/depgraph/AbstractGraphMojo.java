@@ -24,13 +24,9 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
-import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -38,9 +34,6 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectDependenciesResolver;
-import org.apache.maven.shared.artifact.filter.ScopeArtifactFilter;
-import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilter;
-import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
@@ -62,117 +55,17 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import static com.github.ferstl.depgraph.GraphFormat.JSON;
-import static org.apache.maven.artifact.Artifact.SCOPE_COMPILE;
-import static org.apache.maven.artifact.Artifact.SCOPE_PROVIDED;
-import static org.apache.maven.artifact.Artifact.SCOPE_RUNTIME;
-import static org.apache.maven.artifact.Artifact.SCOPE_SYSTEM;
-import static org.apache.maven.artifact.Artifact.SCOPE_TEST;
 
 /**
  * Abstract mojo to create all possible kinds of graphs. Graphs are created with instances of the
  * {@link GraphFactory} interface. This class defines an abstract method to create such factories. In case Graphviz is
  * installed on the system where this plugin is executed, it is also possible to run the dot program and create images
- * out of the generated dot files. Besides that, this class allows the configuration of several basic mojo parameters,
- * such as includes, excludes, etc.
+ * out of the generated dot files..
  */
 abstract class AbstractGraphMojo extends AbstractMojo {
 
   private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\r?\n");
   private static final String OUTPUT_FILE_NAME = "dependency-graph";
-
-  /**
-   * The scope of the artifacts that should be included in the graph. An empty string indicates all scopes (default).
-   * The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
-   * <ul>
-   * <li>{@code compile}: Shows compile, provided and system dependencies</li>
-   * <li>{@code provided}: Shows provided dependencies</li>
-   * <li>{@code runtime}: Shows compile and runtime dependencies</li>
-   * <li>{@code system}: Shows system dependencies</li>
-   * <li>{@code test} (default): Shows all dependencies</li>
-   * </ul>
-   *
-   * @since 1.0.0
-   * @deprecated Use {@link #classpathScope} instead.
-   */
-  @Deprecated
-  @Parameter(property = "scope")
-  private String scope;
-
-  /**
-   * The scope of the artifacts that should be included in the graph. An empty string indicates all scopes (default).
-   * The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
-   * <ul>
-   * <li>{@code compile}: Equivalent to `-Dscopes=compile,provided,system`</li>
-   * <li>{@code provided}: Equivalent to `-Dscopes=provided`</li>
-   * <li>{@code runtime}: Equivalent to `-Dscopes=compile,runtime`</li>
-   * <li>{@code system}: Equivalent to `-Dscopes=system`</li>
-   * <li>{@code test} (default): Shows all dependencies</li>
-   * </ul>
-   * This parameter replaces the former {@code scope} parameter which was introduced in version 1.0.0.
-   *
-   * @since 4.0.0
-   */
-  @Parameter(property = "classpathScope")
-  private String classpathScope;
-
-  /**
-   * List of dependency scopes to be included in the graph. If empty, all scopes are included.
-   *
-   * @since 4.0.0
-   */
-  @Parameter(property = "scopes")
-  private List<String> scopes;
-
-  /**
-   * List of artifacts to be included in the form of {@code groupId:artifactId:type:classifier}.
-   *
-   * @since 1.0.0
-   */
-  @Parameter(property = "includes")
-  private List<String> includes;
-
-  /**
-   * List of artifacts to be excluded in the form of {@code groupId:artifactId:type:classifier}.
-   *
-   * @since 1.0.0
-   */
-  @Parameter(property = "excludes")
-  private List<String> excludes;
-
-  /**
-   * List of artifacts in the form of {@code groupId:artifactId:type:classifier} to be included if they are
-   * <strong>transitive</strong>.
-   *
-   * @since 3.0.0
-   */
-  @Parameter(property = "transitiveIncludes")
-  private List<String> transitiveIncludes;
-
-  /**
-   * List of artifacts in the form of {@code groupId:artifactId:type:classifier} to be excluded if they are
-   * <strong>transitive</strong>.
-   *
-   * @since 3.0.0
-   */
-  @Parameter(property = "transitiveExcludes")
-  private List<String> transitiveExcludes;
-
-  /**
-   * List of artifacts, in the form of {@code groupId:artifactId:type:classifier}, to restrict the dependency graph
-   * only to artifacts that depend on them.
-   *
-   * @since 1.0.4
-   */
-  @Parameter(property = "targetIncludes")
-  private List<String> targetIncludes;
-
-  /**
-   * Indicates whether optional dependencies should be excluded from the graph.
-   *
-   * @since 3.2.0
-   */
-  @Parameter(property = "excludeOptionalDependencies", defaultValue = "false")
-  private boolean excludeOptionalDependencies;
 
   /**
    * Format of the graph, either &quot;dot&quot; (default), &quot;gml&quot;, &quot;puml&quot;, &quot;json&quot; or &quot;text&quot;.
@@ -297,14 +190,11 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
 
     GraphFormat graphFormat = GraphFormat.forName(this.graphFormat);
-    ArtifactFilter globalFilter = createGlobalArtifactFilter();
-    ArtifactFilter transitiveIncludeExcludeFilter = createTransitiveIncludeExcludeFilter();
-    ArtifactFilter targetFilter = createTargetArtifactFilter();
     GraphStyleConfigurer graphStyleConfigurer = createGraphStyleConfigurer(graphFormat);
     Path graphFilePath = createGraphFilePath(graphFormat);
 
     try {
-      GraphFactory graphFactory = createGraphFactory(globalFilter, transitiveIncludeExcludeFilter, targetFilter, graphStyleConfigurer);
+      GraphFactory graphFactory = createGraphFactory(graphStyleConfigurer);
       String dependencyGraph = graphFactory.createGraph(getProject());
       writeGraphFile(dependencyGraph, graphFilePath);
 
@@ -321,7 +211,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
   }
 
-  protected abstract GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer);
+  protected abstract GraphFactory createGraphFactory(GraphStyleConfigurer graphStyleConfigurer);
 
   /**
    * Override this method to configure additional style resources. It is recommendet to call
@@ -346,89 +236,6 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
   protected MavenProject getProject() {
     return this.project;
-  }
-
-  private ArtifactFilter createGlobalArtifactFilter() {
-    AndArtifactFilter filter = new AndArtifactFilter();
-
-    if (this.scope != null) {
-      getLog().warn("The 'scope' parameter is deprecated and will be removed in future versions. Use 'classpathScope' instead.");
-      // Prefer the new parameter if it is set
-      if (this.classpathScope == null) {
-        this.classpathScope = this.scope;
-      }
-    }
-
-    if (this.classpathScope != null) {
-      if (this.scopes.isEmpty()) {
-        filter.add(new ScopeArtifactFilter(this.classpathScope));
-      } else {
-        getLog().warn("Both 'classpathScope' (formerly 'scope') and 'scopes' parameters are set. The 'classpathScope' parameter will be ignored.");
-      }
-    }
-
-    if (!this.scopes.isEmpty()) {
-      filter.add(createScopesArtifactFilter(this.scopes));
-    }
-
-    if (!this.includes.isEmpty()) {
-      filter.add(new StrictPatternIncludesArtifactFilter(this.includes));
-    }
-
-    if (!this.excludes.isEmpty()) {
-      filter.add(new StrictPatternExcludesArtifactFilter(this.excludes));
-    }
-
-    if (this.excludeOptionalDependencies) {
-      filter.add(new OptionalArtifactFilter());
-    }
-
-    return filter;
-  }
-
-  private ArtifactFilter createTransitiveIncludeExcludeFilter() {
-    AndArtifactFilter filter = new AndArtifactFilter();
-
-    if (!this.transitiveIncludes.isEmpty()) {
-      filter.add(new StrictPatternIncludesArtifactFilter(this.transitiveIncludes));
-    }
-
-    if (!this.transitiveExcludes.isEmpty()) {
-      filter.add(new StrictPatternExcludesArtifactFilter(this.transitiveExcludes));
-    }
-
-    return filter;
-  }
-
-  private ArtifactFilter createTargetArtifactFilter() {
-    AndArtifactFilter filter = new AndArtifactFilter();
-
-    if (!this.targetIncludes.isEmpty()) {
-      filter.add(new StrictPatternIncludesArtifactFilter(this.targetIncludes));
-    }
-
-    return filter;
-  }
-
-  private ArtifactFilter createScopesArtifactFilter(List<String> scopes) {
-    ScopeArtifactFilter filter = new ScopeArtifactFilter();
-    for (String scope : scopes) {
-      if (SCOPE_COMPILE.equals(scope)) {
-        filter.setIncludeCompileScope(true);
-      } else if (SCOPE_RUNTIME.equals(scope)) {
-        filter.setIncludeRuntimeScope(true);
-      } else if (SCOPE_TEST.equals(scope)) {
-        filter.setIncludeTestScope(true);
-      } else if (SCOPE_PROVIDED.equals(scope)) {
-        filter.setIncludeProvidedScope(true);
-      } else if (SCOPE_SYSTEM.equals(scope)) {
-        filter.setIncludeSystemScope(true);
-      } else {
-        getLog().warn("Unknown scope: " + scope);
-      }
-    }
-
-    return filter;
   }
 
   private GraphStyleConfigurer createGraphStyleConfigurer(GraphFormat graphFormat) throws MojoFailureException {
@@ -594,13 +401,5 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     }
 
     return dotExecutablePath.toAbsolutePath().toString();
-  }
-
-  private static class OptionalArtifactFilter implements ArtifactFilter {
-
-    @Override
-    public boolean include(Artifact artifact) {
-      return !artifact.isOptional();
-    }
   }
 }
