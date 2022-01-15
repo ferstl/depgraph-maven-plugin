@@ -52,6 +52,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractDependencyGraphMojo {
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
         .showOptional(false)
+        .showScope(true)
         .configure(GraphBuilder.create(DependencyNodeIdRenderer.groupId().withScope(true)))
         .omitSelfReferences();
 

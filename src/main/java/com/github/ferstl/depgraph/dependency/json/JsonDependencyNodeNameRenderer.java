@@ -37,15 +37,17 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
   private final boolean showClassifiers;
   private final boolean showVersion;
   private final boolean showOptional;
+  private final boolean showScope;
   private final ObjectMapper objectMapper;
 
-  public JsonDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
+  public JsonDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, boolean showScope) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showTypes = showTypes;
     this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
     this.showOptional = showOptional;
+    this.showScope = showScope;
 
     this.objectMapper = new ObjectMapper()
         .setSerializationInclusion(NON_EMPTY)
@@ -61,7 +63,7 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
         this.showVersion ? node.getEffectiveVersion() : null,
         this.showOptional ? artifact.isOptional() : null,
         this.showClassifiers ? node.getClassifiers() : emptyList(),
-        !node.getScopes().isEmpty() ? node.getScopes() : singletonList(SCOPE_COMPILE),
+        this.showScope ? (!node.getScopes().isEmpty() ? node.getScopes() : singletonList(SCOPE_COMPILE)) : emptyList(),
         this.showTypes ? node.getTypes() : emptyList());
 
     StringWriter jsonStringWriter = new StringWriter();

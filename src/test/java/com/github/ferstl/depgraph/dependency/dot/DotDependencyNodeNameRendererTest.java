@@ -31,8 +31,8 @@ public class DotDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
   }
 
   @Override
-  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
-    return new DotDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional, this.styleConfiguration);
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, boolean showScope) {
+    return new DotDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional, showScope, this.styleConfiguration);
   }
 
   @Override
@@ -123,6 +123,11 @@ public class DotDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
   @Override
   protected String renderAllResult() {
     return "[label=<groupId<br/>artifactId<br/>version<br/>.jar/.tar.gz/.zip<br/>classifier1/classifier2<br/>(test)>]";
+  }
+
+  @Override
+  protected String renderOmitScopeResult() {
+    return "[label=<groupId<br/>artifactId<br/>version>]";
   }
 
 }

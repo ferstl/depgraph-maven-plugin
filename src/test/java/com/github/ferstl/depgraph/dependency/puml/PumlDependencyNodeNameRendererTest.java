@@ -22,13 +22,13 @@ import com.github.ferstl.depgraph.graph.NodeRenderer;
 public class PumlDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
   @Override
-  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
-    return new PumlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional);
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, boolean showScope) {
+    return new PumlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional, showScope);
   }
 
   @Override
   protected String renderNothingResult() {
-    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"\",\"stereotype\":\"compile\"}";
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"\"}";
   }
 
   @Override
@@ -114,5 +114,10 @@ public class PumlDependencyNodeNameRendererTest extends AbstractDependencyNodeNa
   @Override
   protected String renderAllResult() {
     return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"groupId\\\\nartifactId\\\\n.jar/.tar.gz/.zip\\\\nclassifier1/classifier2\\\\nversion\",\"stereotype\":\"test\"}";
+  }
+
+  @Override
+  protected String renderOmitScopeResult() {
+    return "{\"component\":\"rectangle\",\"optional\":false,\"label\":\"groupId\\\\nartifactId\\\\nversion\"}";
   }
 }

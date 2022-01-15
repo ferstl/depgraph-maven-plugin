@@ -22,8 +22,8 @@ import com.github.ferstl.depgraph.graph.NodeRenderer;
 public class GmlDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
   @Override
-  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
-    return new GmlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional);
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, boolean showScope) {
+    return new GmlDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional, showScope);
   }
 
   @Override
@@ -135,5 +135,12 @@ public class GmlDependencyNodeNameRendererTest extends AbstractDependencyNodeNam
         + ".jar/.tar.gz/.zip\n"
         + "classifier1/classifier2\n"
         + "(test)\"";
+  }
+
+  @Override
+  protected String renderOmitScopeResult() {
+    return "label \"groupId\n"
+        + "artifactId\n"
+        + "version\"";
   }
 }

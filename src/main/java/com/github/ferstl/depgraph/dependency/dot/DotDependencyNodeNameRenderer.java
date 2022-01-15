@@ -37,14 +37,16 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
   private final boolean showVersion;
   private final boolean showOptional;
   private final StyleConfiguration styleConfiguration;
+  private final boolean showScope;
 
-  public DotDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, StyleConfiguration styleConfiguration) {
+  public DotDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, boolean showScope, StyleConfiguration styleConfiguration) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showTypes = showTypes;
     this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
     this.showOptional = showOptional;
+    this.showScope = showScope;
     this.styleConfiguration = styleConfiguration;
   }
 
@@ -67,7 +69,7 @@ public class DotDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
         this.showOptional && artifact.isOptional(),
         this.showTypes ? types : null,
         this.showClassifiers ? classifiers : null,
-        scopes
+        this.showScope ? scopes : null
     ).toString();
   }
 

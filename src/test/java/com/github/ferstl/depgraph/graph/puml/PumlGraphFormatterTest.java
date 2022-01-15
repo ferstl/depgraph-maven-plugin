@@ -34,7 +34,7 @@ class PumlGraphFormatterTest {
 
   private final PumlGraphFormatter formatter = new PumlGraphFormatter();
   private final NodeRenderer<DependencyNode> nodeIdRenderer = DependencyNodeIdRenderer.versionlessId().withType(true);
-  private final PumlDependencyNodeNameRenderer nodeInfoRenderer = new PumlDependencyNodeNameRenderer(true, true, false, false, true, false);
+  private final PumlDependencyNodeNameRenderer nodeInfoRenderer = new PumlDependencyNodeNameRenderer(true, true, false, false, true, false, true);
   private final PumlDependencyEgdeRenderer edgeInfoRenderer = new PumlDependencyEgdeRenderer(true);
 
   private final List<Tuple> dependencies = Arrays.asList(

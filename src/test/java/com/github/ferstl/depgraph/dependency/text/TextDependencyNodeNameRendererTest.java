@@ -22,13 +22,13 @@ import com.github.ferstl.depgraph.graph.NodeRenderer;
 public class TextDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
   @Override
-  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
-    return new TextDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional);
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, boolean showScope) {
+    return new TextDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional, showScope);
   }
 
   @Override
   protected String renderNothingResult() {
-    return "compile";
+    return "";
   }
 
   @Override
@@ -114,5 +114,10 @@ public class TextDependencyNodeNameRendererTest extends AbstractDependencyNodeNa
   @Override
   protected String renderAllResult() {
     return "groupId:artifactId:version:jar/tar.gz/zip:classifier1/classifier2:test";
+  }
+
+  @Override
+  protected String renderOmitScopeResult() {
+    return "groupId:artifactId:version";
   }
 }

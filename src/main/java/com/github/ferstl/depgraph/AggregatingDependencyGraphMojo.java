@@ -122,6 +122,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingDependenc
         .showTypes(this.showTypes)
         .showClassifiers(this.showClassifiers)
         .showOptional(this.showOptional)
+        .showScope(true)
         .showVersionsOnNodes(this.showVersions)
         // This graph won't show any conflicting dependencies. So don't show versions on edges
         .showVersionsOnEdges(false)

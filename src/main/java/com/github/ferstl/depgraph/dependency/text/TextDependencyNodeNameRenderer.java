@@ -33,14 +33,16 @@ public class TextDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
   private final boolean showClassifiers;
   private final boolean showVersion;
   private final boolean showOptional;
+  private final boolean showScope;
 
-  public TextDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersionsOnNodes, boolean showOptional) {
+  public TextDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersionsOnNodes, boolean showOptional, boolean showScope) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showTypes = showTypes;
     this.showClassifiers = showClassifiers;
     this.showVersion = showVersionsOnNodes;
     this.showOptional = showOptional;
+    this.showScope = showScope;
   }
 
   @Override
@@ -53,7 +55,7 @@ public class TextDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
         this.showVersion ? node.getEffectiveVersion() : null,
         this.showTypes ? SLASH_JOINER.join(node.getTypes()) : null,
         this.showClassifiers ? SLASH_JOINER.join(node.getClassifiers()) : null,
-        createScopeString(node.getScopes()));
+        this.showScope ? createScopeString(node.getScopes()) : null);
 
     if (this.showOptional && artifact.isOptional()) {
       return artifactString + " (optional)";

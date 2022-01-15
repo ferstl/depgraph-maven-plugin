@@ -55,6 +55,7 @@ public class ReactorGraphMojo extends AbstractGraphMojo {
     return graphStyleConfigurer
         .showGroupIds(this.showGroupIds)
         .showArtifactIds(true)
+        .showScope(false)
         .showVersionsOnNodes(this.showVersions)
         .configure(GraphBuilder.create(nodeIdRenderer));
   }

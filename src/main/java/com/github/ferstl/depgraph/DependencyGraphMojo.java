@@ -141,6 +141,7 @@ public class DependencyGraphMojo extends AbstractDependencyGraphMojo {
         .showTypes(this.showTypes)
         .showClassifiers(this.showClassifiers)
         .showOptional(this.showOptional)
+        .showScope(true)
         .showVersionsOnNodes(this.showVersions)
         .showVersionsOnEdges(this.showVersions && requiresFullGraph())
         .configure(GraphBuilder.create(nodeIdRenderer));
