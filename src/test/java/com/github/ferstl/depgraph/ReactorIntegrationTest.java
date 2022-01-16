@@ -37,11 +37,23 @@ public class ReactorIntegrationTest {
   }
 
   @Test
-  public void reactor() throws Exception {
+  public void reactorText() throws Exception {
     File basedir = this.resources.getBasedir("reactor-graph");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DgraphFormat=text")
+        .execute("clean", "depgraph:reactor");
+
+    result.assertErrorFreeLog();
+  }
+
+  @Test
+  public void reactorImage() throws Exception {
+    File basedir = this.resources.getBasedir("reactor-graph");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=dot")
+        .withCliOption("-DcreateImage")
         .execute("clean", "depgraph:reactor");
 
     result.assertErrorFreeLog();

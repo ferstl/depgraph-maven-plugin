@@ -1,5 +1,6 @@
 package com.github.ferstl.depgraph;
 
+import java.util.Set;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -10,7 +11,9 @@ import com.github.ferstl.depgraph.dependency.DependencyNodeIdRenderer;
 import com.github.ferstl.depgraph.dependency.GraphFactory;
 import com.github.ferstl.depgraph.dependency.GraphStyleConfigurer;
 import com.github.ferstl.depgraph.dependency.ReactorGraphFactory;
+import com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleResource;
 import com.github.ferstl.depgraph.graph.GraphBuilder;
+import static com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleResource.REACTOR_STYLE;
 
 /**
  * @since 4.0.0
@@ -58,5 +61,13 @@ public class ReactorGraphMojo extends AbstractGraphMojo {
         .showScope(false)
         .showVersionsOnNodes(this.showVersions)
         .configure(GraphBuilder.create(nodeIdRenderer));
+  }
+
+  @Override
+  protected Set<BuiltInStyleResource> getAdditionalStyleResources() {
+    Set<BuiltInStyleResource> additionalStyleResources = super.getAdditionalStyleResources();
+    additionalStyleResources.add(REACTOR_STYLE);
+    
+    return additionalStyleResources;
   }
 }
