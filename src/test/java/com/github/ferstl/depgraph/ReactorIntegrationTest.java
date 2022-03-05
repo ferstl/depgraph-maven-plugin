@@ -14,6 +14,7 @@ import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 import static com.github.ferstl.depgraph.MavenVersion.MAX_VERSION;
 import static com.github.ferstl.depgraph.MavenVersion.MIN_VERSION;
+import static io.takari.maven.testing.TestResources.assertFileContents;
 
 @RunWith(MavenJUnitTestRunner.class)
 @MavenVersions({MIN_VERSION, MAX_VERSION})
@@ -45,18 +46,7 @@ public class ReactorIntegrationTest {
         .execute("clean", "depgraph:reactor");
 
     result.assertErrorFreeLog();
+
+    assertFileContents(basedir, "expectations/reactor.txt", "target/dependency-graph.txt");
   }
-
-  @Test
-  public void reactorImage() throws Exception {
-    File basedir = this.resources.getBasedir("reactor-graph");
-    MavenExecutionResult result = this.mavenRuntime
-        .forProject(basedir)
-        .withCliOption("-DgraphFormat=dot")
-        .withCliOption("-DcreateImage")
-        .execute("clean", "depgraph:reactor");
-
-    result.assertErrorFreeLog();
-  }
-
 }

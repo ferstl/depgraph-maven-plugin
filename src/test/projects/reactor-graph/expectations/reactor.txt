@@ -1,0 +1,7 @@
+reactor-parent
++- reactor-api
+\- reactor-common
+   +- reactor-database
+   |  \- reactor-service
+   \- reactor-ui
+      \- reactor-application
