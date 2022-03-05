@@ -128,7 +128,7 @@ The goal [`depgraph:for-artifact`](https://ferstl.github.io/depgraph-maven-plugi
 
 ### Reactor graph
 
-The goal [`depgraph:reactor`](https://ferstl.github.io/depgraph-maven-plugin/reactor.html) creates a dependency graph
+The goal [`depgraph:reactor`](https://ferstl.github.io/depgraph-maven-plugin/reactor-mojo.html) creates a dependency graph
 for the build reactor of a multi-module project:
 
 ![Build Reactor](src/doc/reactor.png)
