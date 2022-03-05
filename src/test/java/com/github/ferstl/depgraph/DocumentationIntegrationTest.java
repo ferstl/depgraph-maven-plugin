@@ -247,8 +247,7 @@ public class DocumentationIntegrationTest {
   }
 
   private void runTest(String goal, String... cliOptions) throws Exception {
-    File basedir = getBaseDir();
-    MavenExecution execution = this.mavenRuntime.forProject(basedir);
+    MavenExecution execution = this.mavenRuntime.forProject(this.basedir);
     execution.withCliOption("-DcreateImage");
     for (String cliOption : cliOptions) {
       execution.withCliOption(cliOption);
