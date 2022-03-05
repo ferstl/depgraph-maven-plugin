@@ -16,6 +16,8 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 import static com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleResource.REACTOR_STYLE;
 
 /**
+ * Creates a dependency graph of the Maven rector in a multi-module project.
+ *
  * @since 4.0.0
  */
 @Mojo(
