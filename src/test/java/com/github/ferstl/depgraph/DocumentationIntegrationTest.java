@@ -144,6 +144,18 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  public void aggregatedWithDotArguments() throws Exception {
+    runTest("aggregate",
+        "-DincludeParentProjects",
+        "-DdotArguments=-Kneato    -Nfontcolor=red",
+        "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3");
+
+    assertFilesPresent(this.basedir, "target/dependency-graph.png");
+
+    collectFile("target/dependency-graph.png", "dot-arguments.png");
+  }
+
+  @Test
   public void aggregatedJson() throws Exception {
     runTest("aggregate",
         "-DgraphFormat=json",

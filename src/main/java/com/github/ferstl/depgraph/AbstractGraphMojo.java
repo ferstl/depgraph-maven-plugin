@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -137,13 +138,23 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private String imageFormat;
 
   /**
-   * Only relevant when {@code graphFormat=dot}: Path to the dot executable. Use this option in case
-   * {@link #createImage} is set to {@code true} and the dot executable is not on the system {@code PATH}.
+   * Only relevant when {@code graphFormat=dot} and {@code createImage=true}: Path to the dot executable. Use this
+   * option in case {@link #createImage} is set to {@code true} and the dot executable is not on the system
+   * {@code PATH}.
    *
    * @since 1.0.0
    */
   @Parameter(property = "dotExecutable")
   private File dotExecutable;
+
+  /**
+   * Only relevant when {@code graphFormat=dot} and {@code createImage=true}: Additional arguments for the {@code dot}
+   * executable (besides {@code -T} and {@code -o}).
+   *
+   * @since 4.0.0
+   */
+  @Parameter(property = "dotArguments", defaultValue = "")
+  private String dotArguments;
 
   /**
    * Only relevant when {@code graphFormat=dot}: Path to a custom style configuration in JSON format.
@@ -343,6 +354,11 @@ abstract class AbstractGraphMojo extends AbstractMojo {
         "-T", this.imageFormat,
         "-o", graphFile.toAbsolutePath().toString(),
         graphFilePath.toAbsolutePath().toString()};
+
+    if (StringUtils.isNotBlank(this.dotArguments)) {
+      String[] dotArguments = this.dotArguments.split(" +");
+      arguments = ArrayUtils.addAll(arguments, dotArguments);
+    }
 
     Commandline cmd = new Commandline();
     cmd.setExecutable(dotExecutable);
