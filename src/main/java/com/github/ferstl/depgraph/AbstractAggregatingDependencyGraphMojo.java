@@ -21,7 +21,7 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
+public abstract class AbstractAggregatingDependencyGraphMojo extends AbstractDependencyGraphMojo {
 
   /**
    * Merge dependencies that occur in multiple scopes into one graph node instead of having a node per scope.
@@ -72,6 +72,6 @@ public abstract class AbstractAggregatingGraphMojo extends AbstractGraphMojo {
   private MavenSession mavenSession;
 
   Supplier<Collection<MavenProject>> subProjectsInReactorOrder() {
-    return () -> AbstractAggregatingGraphMojo.this.mavenSession.getProjectDependencyGraph().getSortedProjects();
+    return () -> AbstractAggregatingDependencyGraphMojo.this.mavenSession.getProjectDependencyGraph().getSortedProjects();
   }
 }

@@ -34,7 +34,7 @@ public class TextGraphStyleConfigurer extends AbstractGraphStyleConfigurer {
   @Override
   public GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder) {
     return graphBuilder
-        .useNodeNameRenderer(new TextDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes, this.showOptional))
+        .useNodeNameRenderer(new TextDependencyNodeNameRenderer(this.showGroupId, this.showArtifactId, this.showTypes, this.showClassifiers, this.showVersionsOnNodes, this.showOptional, this.showScope))
         .useEdgeRenderer(new TextDependencyEdgeRenderer(this.showVersionOnEdges))
         .graphFormatter(new TextGraphFormatter(this.repeatTransitiveDependencies));
   }

@@ -22,13 +22,13 @@ import com.github.ferstl.depgraph.graph.NodeRenderer;
 public class JsonDependencyNodeNameRendererTest extends AbstractDependencyNodeNameRendererTest {
 
   @Override
-  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
-    return new JsonDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional);
+  protected NodeRenderer<DependencyNode> createNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, boolean showScope) {
+    return new JsonDependencyNodeNameRenderer(showGroupId, showArtifactId, showTypes, showClassifiers, showVersion, showOptional, showScope);
   }
 
   @Override
   protected String renderNothingResult() {
-    return "{\"scopes\":[\"compile\"]}";
+    return "{}";
   }
 
   @Override
@@ -115,5 +115,10 @@ public class JsonDependencyNodeNameRendererTest extends AbstractDependencyNodeNa
   @Override
   protected String renderAllResult() {
     return "{\"groupId\":\"groupId\",\"artifactId\":\"artifactId\",\"version\":\"version\",\"classifiers\":[\"classifier1\",\"classifier2\"],\"scopes\":[\"test\"],\"types\":[\"jar\",\"tar.gz\",\"zip\"]}";
+  }
+
+  @Override
+  protected String renderOmitScopeResult() {
+    return "{\"groupId\":\"groupId\",\"artifactId\":\"artifactId\",\"version\":\"version\"}";
   }
 }

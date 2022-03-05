@@ -39,7 +39,7 @@ import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.TEST,
     threadSafe = true)
-public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
+public class DependencyGraphByGroupIdMojo extends AbstractDependencyGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
@@ -52,6 +52,7 @@ public class DependencyGraphByGroupIdMojo extends AbstractGraphMojo {
         .showVersionsOnNodes(false)
         .showVersionsOnEdges(false)
         .showOptional(false)
+        .showScope(true)
         .configure(GraphBuilder.create(DependencyNodeIdRenderer.groupId().withScope(true)))
         .omitSelfReferences();
 

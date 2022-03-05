@@ -38,5 +38,7 @@ public interface GraphStyleConfigurer {
 
   GraphStyleConfigurer repeatTransitiveDependencies(boolean repeatTransitiveDependencies);
 
+  GraphStyleConfigurer showScope(boolean showScope);
+
   GraphBuilder<DependencyNode> configure(GraphBuilder<DependencyNode> graphBuilder);
 }

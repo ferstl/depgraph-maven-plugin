@@ -125,6 +125,15 @@ The goal [`depgraph:for-artifact`](https://ferstl.github.io/depgraph-maven-plugi
 
 ![Arbitrary Artifact](src/doc/for-artifact.png)
 
+
+### Reactor graph
+
+The goal [`depgraph:reactor`](https://ferstl.github.io/depgraph-maven-plugin/reactor.html) creates a dependency graph
+for the build reactor of a multi-module project:
+
+![Build Reactor](src/doc/reactor.png)
+
+
 ### Styling
 
 This Maven plugin offers you a variety of styling options for graphs in the DOT format. These options are explained in detail on the [Styling Wiki page](https://github.com/ferstl/depgraph-maven-plugin/wiki/Styling). This is an example of the aggregated graph with some custom styles:

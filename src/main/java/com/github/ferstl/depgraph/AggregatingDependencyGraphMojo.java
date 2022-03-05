@@ -40,7 +40,7 @@ import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
     inheritByDefault = false,
     requiresDependencyCollection = ResolutionScope.TEST,
     threadSafe = true)
-public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo {
+public class AggregatingDependencyGraphMojo extends AbstractAggregatingDependencyGraphMojo {
 
   /**
    * If set to {@code true}, the created graph will show the {@code groupId} on all artifacts.
@@ -122,6 +122,7 @@ public class AggregatingDependencyGraphMojo extends AbstractAggregatingGraphMojo
         .showTypes(this.showTypes)
         .showClassifiers(this.showClassifiers)
         .showOptional(this.showOptional)
+        .showScope(true)
         .showVersionsOnNodes(this.showVersions)
         // This graph won't show any conflicting dependencies. So don't show versions on edges
         .showVersionsOnEdges(false)

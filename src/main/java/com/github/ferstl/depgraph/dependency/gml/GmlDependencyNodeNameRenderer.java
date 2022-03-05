@@ -33,14 +33,16 @@ public class GmlDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
   private final boolean showClassifiers;
   private final boolean showVersion;
   private final boolean showOptional;
+  private final boolean showScope;
 
-  public GmlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional) {
+  public GmlDependencyNodeNameRenderer(boolean showGroupId, boolean showArtifactId, boolean showTypes, boolean showClassifiers, boolean showVersion, boolean showOptional, boolean showScope) {
     this.showGroupId = showGroupId;
     this.showArtifactId = showArtifactId;
     this.showTypes = showTypes;
     this.showClassifiers = showClassifiers;
     this.showVersion = showVersion;
     this.showOptional = showOptional;
+    this.showScope = showScope;
   }
 
   @Override
@@ -52,7 +54,7 @@ public class GmlDependencyNodeNameRenderer implements NodeRenderer<DependencyNod
         this.showVersion ? node.getEffectiveVersion() : null,
         this.showTypes ? createTypeString(node.getTypes()) : null,
         this.showClassifiers ? createClassifierString(node.getClassifiers()) : null,
-        createScopeString(node.getScopes()));
+        this.showScope ? createScopeString(node.getScopes()) : null);
 
     if (content.isEmpty()) {
       return "";

@@ -35,7 +35,6 @@ import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 import static com.github.ferstl.depgraph.MavenVersion.MAX_VERSION;
-import static com.github.ferstl.depgraph.MavenVersion.MIN_VERSION;
 import static io.takari.maven.testing.TestResources.assertFilesPresent;
 import static java.nio.file.Files.copy;
 import static java.nio.file.Files.createDirectories;
@@ -45,7 +44,7 @@ import static org.junit.Assume.assumeTrue;
  * Integration test that creates the images for this plugin's README.MD documentation.
  */
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({MAX_VERSION, MIN_VERSION})
+@MavenVersions(MAX_VERSION)
 public class DocumentationIntegrationTest {
 
   @Rule
@@ -248,8 +247,7 @@ public class DocumentationIntegrationTest {
   }
 
   private void runTest(String goal, String... cliOptions) throws Exception {
-    File basedir = getBaseDir();
-    MavenExecution execution = this.mavenRuntime.forProject(basedir);
+    MavenExecution execution = this.mavenRuntime.forProject(this.basedir);
     execution.withCliOption("-DcreateImage");
     for (String cliOption : cliOptions) {
       execution.withCliOption(cliOption);

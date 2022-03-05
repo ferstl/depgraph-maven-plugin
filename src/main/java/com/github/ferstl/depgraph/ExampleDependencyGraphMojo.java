@@ -46,7 +46,7 @@ import static org.eclipse.aether.util.graph.transformer.ConflictResolver.NODE_DA
     defaultPhase = LifecyclePhase.NONE,
     requiresDependencyCollection = ResolutionScope.NONE,
     threadSafe = true)
-public class ExampleGraphMojo extends DependencyGraphMojo {
+public class ExampleDependencyGraphMojo extends DependencyGraphMojo {
 
   @Override
   protected GraphFactory createGraphFactory(ArtifactFilter globalFilter, ArtifactFilter transitiveIncludeExcludeFilter, ArtifactFilter targetFilter, GraphStyleConfigurer graphStyleConfigurer) {
