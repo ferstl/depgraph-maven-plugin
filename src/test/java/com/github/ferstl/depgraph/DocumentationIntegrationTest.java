@@ -246,6 +246,19 @@ public class DocumentationIntegrationTest {
     collectFile("target/dependency-graph.png", "for-artifact.png");
   }
 
+  @Test
+  public void reactor() throws Exception {
+    this.basedir = getBaseDirForReactor();
+    runTest("reactor",
+        "-DgraphFormat=dot");
+
+    assertFilesPresent(
+        this.basedir,
+        "target/dependency-graph.png");
+
+    collectFile("target/dependency-graph.png", "reactor.png");
+  }
+
   private void runTest(String goal, String... cliOptions) throws Exception {
     MavenExecution execution = this.mavenRuntime.forProject(this.basedir);
     execution.withCliOption("-DcreateImage");
@@ -259,6 +272,10 @@ public class DocumentationIntegrationTest {
 
   private File getBaseDir() throws IOException {
     return this.resources.getBasedir("depgraph-maven-plugin-test");
+  }
+
+  private File getBaseDirForReactor() throws IOException {
+    return this.resources.getBasedir("reactor-graph");
   }
 
   private void collectFile(String file, String renameTo) throws IOException {
