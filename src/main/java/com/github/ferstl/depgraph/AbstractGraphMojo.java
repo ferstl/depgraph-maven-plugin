@@ -137,8 +137,9 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private String imageFormat;
 
   /**
-   * Only relevant when {@code graphFormat=dot}: Path to the dot executable. Use this option in case
-   * {@link #createImage} is set to {@code true} and the dot executable is not on the system {@code PATH}.
+   * Only relevant when {@code graphFormat=dot} and {@code createImage=true}: Path to the dot executable. Use this
+   * option in case {@link #createImage} is set to {@code true} and the dot executable is not on the system
+   * {@code PATH}.
    *
    * @since 1.0.0
    */
