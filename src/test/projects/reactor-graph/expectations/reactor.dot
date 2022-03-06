@@ -1,0 +1,21 @@
+digraph "G" {
+  node [shape="box",style="rounded",fontname="Helvetica",fontsize="14"]
+  edge [fontsize="10",fontname="Helvetica"]
+
+  // Node Definitions:
+  "com.github.ferstl:reactor-ui"[label=<reactor-ui>]
+  "com.github.ferstl:reactor-application"[label=<reactor-application>]
+  "com.github.ferstl:reactor-database"[label=<reactor-database>]
+  "com.github.ferstl:reactor-service"[label=<reactor-service>]
+  "com.github.ferstl:reactor-common"[label=<reactor-common>]
+  "com.github.ferstl:reactor-parent"[label=<reactor-parent>]
+  "com.github.ferstl:reactor-api"[label=<reactor-api>]
+
+  // Edge Definitions:
+  "com.github.ferstl:reactor-ui" -> "com.github.ferstl:reactor-application"[style="solid"]
+  "com.github.ferstl:reactor-database" -> "com.github.ferstl:reactor-service"[style="solid"]
+  "com.github.ferstl:reactor-common" -> "com.github.ferstl:reactor-database"[style="solid"]
+  "com.github.ferstl:reactor-common" -> "com.github.ferstl:reactor-ui"[style="solid"]
+  "com.github.ferstl:reactor-parent" -> "com.github.ferstl:reactor-api"[style="solid"]
+  "com.github.ferstl:reactor-parent" -> "com.github.ferstl:reactor-common"[style="solid"]
+}

@@ -1,0 +1,22 @@
+@startuml
+skinparam defaultTextAlignment center
+skinparam rectangle {
+  BackgroundColor<<optional>> beige
+  BackgroundColor<<test>> lightGreen
+  BackgroundColor<<runtime>> lightBlue
+  BackgroundColor<<provided>> lightGray
+}
+rectangle "reactor-ui" as com_github_ferstl_reactor_ui
+rectangle "reactor-application" as com_github_ferstl_reactor_application
+rectangle "reactor-database" as com_github_ferstl_reactor_database
+rectangle "reactor-service" as com_github_ferstl_reactor_service
+rectangle "reactor-common" as com_github_ferstl_reactor_common
+rectangle "reactor-parent" as com_github_ferstl_reactor_parent
+rectangle "reactor-api" as com_github_ferstl_reactor_api
+com_github_ferstl_reactor_ui -[#000000]-> com_github_ferstl_reactor_application
+com_github_ferstl_reactor_database -[#000000]-> com_github_ferstl_reactor_service
+com_github_ferstl_reactor_common -[#000000]-> com_github_ferstl_reactor_database
+com_github_ferstl_reactor_common -[#000000]-> com_github_ferstl_reactor_ui
+com_github_ferstl_reactor_parent -[#000000]-> com_github_ferstl_reactor_api
+com_github_ferstl_reactor_parent -[#000000]-> com_github_ferstl_reactor_common
+@enduml
