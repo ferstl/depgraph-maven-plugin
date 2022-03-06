@@ -68,7 +68,7 @@ public class PumlGraphFormatter implements GraphFormatter {
           .append(escape(node.getNodeId()));
 
 
-      if (!nodeInfo.getStereotype().equals(SCOPE_COMPILE)) {
+      if (nodeInfo.getStereotype() != null && !nodeInfo.getStereotype().equals(SCOPE_COMPILE)) {
         puml.append("<<")
             .append(nodeInfo.getStereotype())
             .append(">>");

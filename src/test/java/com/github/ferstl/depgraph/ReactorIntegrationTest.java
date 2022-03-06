@@ -49,4 +49,44 @@ public class ReactorIntegrationTest {
 
     assertFileContents(basedir, "expectations/reactor.txt", "target/dependency-graph.txt");
   }
+
+  @Test
+  public void reactorDot() throws Exception {
+    File basedir = this.resources.getBasedir("reactor-graph");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=dot")
+        .execute("clean", "depgraph:reactor");
+
+    result.assertErrorFreeLog();
+
+    assertFileContents(basedir, "expectations/reactor.dot", "target/dependency-graph.dot");
+  }
+
+  // Issue #144
+  @Test
+  public void reactorPuml() throws Exception {
+    File basedir = this.resources.getBasedir("reactor-graph");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=puml")
+        .execute("clean", "depgraph:reactor");
+
+    result.assertErrorFreeLog();
+
+    assertFileContents(basedir, "expectations/reactor.puml", "target/dependency-graph.puml");
+  }
+
+  @Test
+  public void reactorGml() throws Exception {
+    File basedir = this.resources.getBasedir("reactor-graph");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=gml")
+        .execute("clean", "depgraph:reactor");
+
+    result.assertErrorFreeLog();
+
+    assertFileContents(basedir, "expectations/reactor.gml", "target/dependency-graph.gml");
+  }
 }

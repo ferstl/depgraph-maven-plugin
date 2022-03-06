@@ -18,7 +18,6 @@ package com.github.ferstl.depgraph.dependency.puml;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.graph.EdgeRenderer;
-
 import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviateVersion;
 
 /**
@@ -44,7 +43,7 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
 
     switch (resolution) {
       case INCLUDED:
-
+      case PARENT:
         edgeInfo.withBegin("-[")
             .withColor(INCLUDE_COLOR)
             .withEnd("]->")
