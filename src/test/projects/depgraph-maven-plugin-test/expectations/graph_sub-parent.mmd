@@ -1,0 +1,15 @@
+flowchart TD
+  %% Node Definitions:
+  com.github.ferstl:module-2:jar["module-2"]
+  com.github.ferstl:module-1:jar["module-1"]
+  com.google.guava:guava:jar["guava"]
+  commons-codec:commons-codec:jar["commons-codec"]
+  org.apache.commons:commons-lang3:jar["commons-lang3"]
+  com.github.ferstl:sub-parent:pom["sub-parent"]
+
+  %% Edge Definitions:
+  com.github.ferstl:module-2:jar --> com.github.ferstl:module-1:jar
+  com.github.ferstl:module-2:jar --> com.google.guava:guava:jar
+  com.github.ferstl:module-2:jar --> commons-codec:commons-codec:jar
+  com.github.ferstl:module-2:jar --> org.apache.commons:commons-lang3:jar
+  com.github.ferstl:sub-parent:pom --> com.github.ferstl:module-2:jar

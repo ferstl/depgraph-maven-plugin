@@ -1,0 +1,17 @@
+flowchart TD
+  %% Node Definitions:
+  com.github.ferstl:compile["com.github.ferstl"]
+  com.google.guava:compile["com.google.guava"]
+  commons-codec:compile["commons-codec"]
+  org.apache.commons:compile["org.apache.commons"]
+  org.springframework:compile["org.springframework"]
+  junit:test["junit<br/><font size=1>(test)</font>"]
+  org.hamcrest:test["org.hamcrest<br/><font size=1>(test)</font>"]
+
+  %% Edge Definitions:
+  com.github.ferstl:compile --> com.google.guava:compile
+  com.github.ferstl:compile --> commons-codec:compile
+  com.github.ferstl:compile --> org.apache.commons:compile
+  com.github.ferstl:compile --> org.springframework:compile
+  junit:test --> org.hamcrest:test
+  com.github.ferstl:compile --> junit:test

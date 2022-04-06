@@ -8,6 +8,8 @@ This Maven plugin generates dependency graphs on single modules or in an aggrega
   DOT files can be visualized with [Graphviz](http://www.graphviz.org/). When [Graphviz](http://www.graphviz.org/) is installed, the generated `.dot` files can be directly rendered into all supported image formats. 
 - `.gml` (Graph Markup Language)<br/>
   GML files can be visualized with the [yEd Graph Editor](https://www.yworks.com/products/yed) which allows further processing and layouting of the dependency graph.
+- `.mmd` (Mermaid)<br/>
+  Mermaid graphes can be easily embedded in application and in markdown files. See [here](https://mermaid-js.github.io/mermaid/#/).
 - `.puml` (PlantUML)<br/>
   PlantUML files can be visualized by various tools like [planttext.com](https://www.planttext.com/) or in IntelliJ with the [PlantUML Plugin](https://plugins.jetbrains.com/plugin/7017-plantuml-integration).
 - `.json`<br/>
@@ -153,6 +155,47 @@ Since the generated dependency graph does not store any layout information, you 
 
 - Choose *Tools -> Fit Node To Label* and press *OK* in the upcoming dialog
 - Choose your layout algorithm in the *Layout* menu to layout the graph
+
+
+#### Mermaid
+
+Mermaid graphes can be easily embedded in application and in markdown files. See [here](https://mermaid-js.github.io/mermaid/#/).
+
+```mermaid
+flowchart TD
+  %% Node Definitions:
+  com.github.ferstl:module-1:jar["module-1<br/>1.0.0-SNAPSHOT"]
+  commons-codec:commons-codec:jar["commons-codec<br/>1.10"]
+  org.apache.commons:commons-lang3:jar["commons-lang3<br/>3.1"]
+  com.github.ferstl:module-3:jar["module-3<br/>1.0.0-SNAPSHOT"]
+  com.github.ferstl:module-2:jar["module-2<br/>1.0.0-SNAPSHOT"]
+  com.google.guava:guava:jar["guava<br/>30.1.1-jre"]
+  com.mysema.querydsl:querydsl-core:jar["querydsl-core<br/>3.7.4"]
+  com.google.code.findbugs:jsr305:jar["jsr305<br/>1.3.9"]
+  com.mysema.commons:mysema-commons-lang:jar["mysema-commons-lang<br/>0.2.4"]
+  com.infradna.tool:bridge-method-annotation:jar["bridge-method-annotation<br/>1.13"]
+
+  %% Edge Definitions:
+  com.github.ferstl:module-1:jar --> commons-codec:commons-codec:jar
+  com.github.ferstl:module-1:jar --> org.apache.commons:commons-lang3:jar
+  com.github.ferstl:module-3:jar --> com.github.ferstl:module-1:jar
+  com.github.ferstl:module-2:jar --> com.github.ferstl:module-1:jar
+  com.github.ferstl:module-2:jar --> com.google.guava:guava:jar
+  com.github.ferstl:module-2:jar --> commons-codec:commons-codec:jar
+  com.github.ferstl:module-2:jar --3.0--> org.apache.commons:commons-lang3:jar
+  com.github.ferstl:module-3:jar --> com.github.ferstl:module-2:jar
+  com.mysema.querydsl:querydsl-core:jar --> com.google.guava:guava:jar
+  com.mysema.querydsl:querydsl-core:jar --> com.google.code.findbugs:jsr305:jar
+  com.mysema.querydsl:querydsl-core:jar --> com.mysema.commons:mysema-commons-lang:jar
+  com.mysema.querydsl:querydsl-core:jar --> com.infradna.tool:bridge-method-annotation:jar
+  com.github.ferstl:module-3:jar --> com.mysema.querydsl:querydsl-core:jar
+
+  %% Edge Styles:
+  linkStyle 3 color:#000000, stroke:#000000, stroke-dasharray:3px
+  linkStyle 5 color:#000000, stroke:#000000, stroke-dasharray:3px
+  linkStyle 6 color:#FF0000, stroke:#FF0000, stroke-dasharray:10px
+  linkStyle 8 color:#000000, stroke:#000000, stroke-dasharray:3px
+```
 
 #### PlantUML
 
