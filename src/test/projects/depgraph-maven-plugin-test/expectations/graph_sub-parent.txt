@@ -1,6 +1,6 @@
 sub-parent:1.0.0-SNAPSHOT:compile
 \- module-2:1.0.0-SNAPSHOT:compile
    +- module-1:1.0.0-SNAPSHOT:compile
-   +- guava:30.1.1-jre:compile
-   +- commons-codec:1.10:compile
+   +- guava:31.1-jre:compile
+   +- commons-codec:1.15:compile
    \- commons-lang3:3.0:compile

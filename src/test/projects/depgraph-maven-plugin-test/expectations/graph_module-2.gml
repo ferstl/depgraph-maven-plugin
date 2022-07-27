@@ -17,14 +17,14 @@ node [
 id "com.google.guava:guava:jar"
 label "com.google.guava
 guava
-30.1.1-jre"
+31.1-jre"
 ]
 
 node [
 id "commons-codec:commons-codec:jar"
 label "commons-codec
 commons-codec
-1.10"
+1.15"
 ]
 
 node [
@@ -39,14 +39,14 @@ id "org.springframework:spring-core:jar"
 label "<optional>
 org.springframework
 spring-core
-5.2.8.RELEASE"
+5.3.22"
 ]
 
 node [
 id "junit:junit:jar"
 label "junit
 junit
-4.13.1
+4.13.2
 (test)"
 ]
 

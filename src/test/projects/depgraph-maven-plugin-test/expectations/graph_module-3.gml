@@ -10,7 +10,7 @@ node [
 id "commons-codec:commons-codec:jar"
 label "commons-codec
 commons-codec
-1.10"
+1.15"
 ]
 
 node [
@@ -38,7 +38,7 @@ node [
 id "com.google.guava:guava:jar"
 label "com.google.guava
 guava
-30.1.1-jre"
+31.1-jre"
 ]
 
 node [

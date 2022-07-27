@@ -14,7 +14,7 @@
     "numericId" : 2,
     "groupId" : "commons-codec",
     "artifactId" : "commons-codec",
-    "version" : "1.10",
+    "version" : "1.15",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
@@ -50,7 +50,7 @@
     "numericId" : 6,
     "groupId" : "com.google.guava",
     "artifactId" : "guava",
-    "version" : "30.1.1-jre",
+    "version" : "31.1-jre",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
