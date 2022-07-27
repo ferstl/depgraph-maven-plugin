@@ -101,7 +101,9 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
 
     private void writeChildren(StringBuilder stringBuilder, String parent, Set<String> currentPath, List<Boolean> lastParents) {
       Collection<Edge> edges = this.relations.get(parent);
-      Iterator<Edge> edgeIterator = edges.iterator();
+      // Prevent ConcurrentModificationException (see #159)
+      Collection<Edge> edgesCopy = new ArrayList<>(edges);
+      Iterator<Edge> edgeIterator = edgesCopy.iterator();
 
       while (edgeIterator.hasNext()) {
         Edge edge = edgeIterator.next();
