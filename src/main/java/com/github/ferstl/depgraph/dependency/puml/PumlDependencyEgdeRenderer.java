@@ -26,7 +26,7 @@ import static com.github.ferstl.depgraph.dependency.VersionAbbreviator.abbreviat
 public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> {
 
   private static final String INCLUDE_COLOR = "#000000"; // black
-  private static final String DUPLICATE_COLOR = "#D3D3D3"; // lightGray
+  private static final String DUPLICATE_COLOR = "#ABABAB"; // medium grey
   private static final String CONFLICT_COLOR = "#FF0000"; // red
 
   private final boolean renderVersion;
