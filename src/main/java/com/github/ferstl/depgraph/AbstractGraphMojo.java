@@ -74,7 +74,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * @since 2.1.0
    */
   @Parameter(property = "graphFormat", defaultValue = "dot")
-  private String graphFormat;
+  String graphFormat;
 
   /**
    * If set to {@code true} (which is the default) <strong>and</strong> the graph format is 'json', the graph will show
@@ -94,7 +94,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * @since 2.2.0
    */
   @Parameter(property = "outputDirectory", defaultValue = "${project.build.directory}")
-  private File outputDirectory;
+  File outputDirectory;
 
   /**
    * The name of the dependency graph file. A file extension matching the configured {@code graphFormat} will be
@@ -103,7 +103,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * @since 2.2.0
    */
   @Parameter(property = "outputFileName", defaultValue = OUTPUT_FILE_NAME)
-  private String outputFileName;
+  String outputFileName;
 
   /**
    * Indicates whether the project's artifact ID should be used as file name for the generated graph files.
@@ -115,7 +115,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * @since 2.2.0
    */
   @Parameter(property = "useArtifactIdInFileName", defaultValue = "false")
-  private boolean useArtifactIdInFileName;
+  boolean useArtifactIdInFileName;
 
   /**
    * Only relevant when {@code graphFormat=dot}: If set to {@code true} and Graphviz is installed on the system where
@@ -188,7 +188,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private String artifactId;
 
   @Parameter(defaultValue = "${project}", readonly = true)
-  private MavenProject project;
+  MavenProject project;
 
   @Component
   ProjectDependenciesResolver dependenciesResolver;
@@ -309,7 +309,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     return customStyleResource;
   }
 
-  private Path createGraphFilePath(GraphFormat graphFormat) {
+  Path createGraphFilePath(GraphFormat graphFormat) {
     String fileName = this.useArtifactIdInFileName ? this.artifactId : this.outputFileName;
     fileName = addFileExtensionIfNeeded(graphFormat, fileName);
 
@@ -321,7 +321,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     return Paths.get(System.getProperty("user.dir"), fileName);
   }
 
-  private String addFileExtensionIfNeeded(GraphFormat graphFormat, String fileName) {
+  String addFileExtensionIfNeeded(GraphFormat graphFormat, String fileName) {
     String fileExtension = graphFormat.getFileExtension();
 
     if (!fileName.endsWith(fileExtension)) {
@@ -404,7 +404,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
     return graphFileName;
   }
 
-  private String determineDotExecutable() throws IOException {
+  String determineDotExecutable() throws IOException {
     if (this.dotExecutable == null) {
       return "dot";
     }
