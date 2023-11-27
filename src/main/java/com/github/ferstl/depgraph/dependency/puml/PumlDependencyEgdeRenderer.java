@@ -91,26 +91,5 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
         .toString();
     }
   }
-
-  // public void includeColor(PumlEdgeInfo edgeInfo){
-  //   edgeInfo.withBegin("-[")
-  //           .withColor(INCLUDE_COLOR)
-  //           .withEnd("]->")
-  //           .withLabel("");
-  // }
-
-  // public void conflictColor(PumlEdgeInfo edgeInfo, DependencyNode to){
-  //   edgeInfo.withBegin(".[")
-  //           .withColor(CONFLICT_COLOR)
-  //           .withEnd("].>")
-  //           .withLabel(this.renderVersion ? abbreviateVersion(to.getArtifact().getVersion()) : "");
-  // }
-
-  // public void duplicateColor(PumlEdgeInfo edgeInfo){
-  //   edgeInfo.withBegin(".[")
-  //           .withColor(DUPLICATE_COLOR)
-  //           .withEnd("].>")
-  //           .withLabel("");
-  // }
 }
 
