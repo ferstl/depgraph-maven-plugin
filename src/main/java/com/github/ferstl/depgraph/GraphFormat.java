@@ -27,13 +27,13 @@ public enum GraphFormat {
     }
   };
 
-  public static GraphFormat forName(String name) {
-    try {
-      return valueOf(name.toUpperCase());
-    } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Unsupported output format: " + name, e);
-    }
-  }
+  // public static GraphFormat forName(String name) {
+  //   try {
+  //     return valueOf(name.toUpperCase());
+  //   } catch (IllegalArgumentException e) {
+  //     throw new IllegalArgumentException("Unsupported output format: " + name, e);
+  //   }
+  // }
 
   public String getFileExtension() {
     return "." + name().toLowerCase();

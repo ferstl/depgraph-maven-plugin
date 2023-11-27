@@ -44,22 +44,16 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
     switch (resolution) {
       case INCLUDED:
       case PARENT:
-        edgeInfo.withBegin("-[")
-            .withColor(INCLUDE_COLOR)
-            .withEnd("]->")
-            .withLabel("");
+        //includeColor(edgeInfo);
+        new IncludedEdgeRenderingStrategy().applyColor(edgeInfo, to);
         break;
       case OMITTED_FOR_CONFLICT:
-        edgeInfo.withBegin(".[")
-            .withColor(CONFLICT_COLOR)
-            .withEnd("].>")
-            .withLabel(this.renderVersion ? abbreviateVersion(to.getArtifact().getVersion()) : "");
+        //conflictColor(edgeInfo, to);
+        new OmittedForConflictEdgeRenderingStrategy().applyColor(edgeInfo, to);
         break;
       case OMITTED_FOR_DUPLICATE:
-        edgeInfo.withBegin(".[")
-            .withColor(DUPLICATE_COLOR)
-            .withEnd("].>")
-            .withLabel("");
+        //duplicateColor(edgeInfo);
+        new OmittedForDuplicateEdgeRenderingStrategy().applyColor(edgeInfo, to);
         break;
       default:
         // do not output an edge in other cases
@@ -67,4 +61,56 @@ public class PumlDependencyEgdeRenderer implements EdgeRenderer<DependencyNode> 
 
     return edgeInfo.toString();
   }
+
+  public class IncludedEdgeRenderingStrategy {
+    public void applyColor(PumlEdgeInfo edgeInfo, DependencyNode to) {
+      edgeInfo.withBegin("-[")
+        .withColor(INCLUDE_COLOR)
+        .withEnd("]->")
+        .withLabel("")
+        .toString();
+    }
+  }
+
+  public class OmittedForConflictEdgeRenderingStrategy {
+    public void applyColor(PumlEdgeInfo edgeInfo, DependencyNode to) {
+      edgeInfo.withBegin(".[")
+        .withColor(CONFLICT_COLOR)
+        .withEnd("].>")
+        .withLabel(abbreviateVersion(to.getArtifact().getVersion()))
+        .toString();
+    }
+  }
+
+  public class OmittedForDuplicateEdgeRenderingStrategy {
+    public void applyColor(PumlEdgeInfo edgeInfo, DependencyNode to) {
+      edgeInfo.withBegin(".[")
+        .withColor(DUPLICATE_COLOR)
+        .withEnd("].>")
+        .withLabel("")
+        .toString();
+    }
+  }
+
+  // public void includeColor(PumlEdgeInfo edgeInfo){
+  //   edgeInfo.withBegin("-[")
+  //           .withColor(INCLUDE_COLOR)
+  //           .withEnd("]->")
+  //           .withLabel("");
+  // }
+
+  // public void conflictColor(PumlEdgeInfo edgeInfo, DependencyNode to){
+  //   edgeInfo.withBegin(".[")
+  //           .withColor(CONFLICT_COLOR)
+  //           .withEnd("].>")
+  //           .withLabel(this.renderVersion ? abbreviateVersion(to.getArtifact().getVersion()) : "");
+  // }
+
+  // public void duplicateColor(PumlEdgeInfo edgeInfo){
+  //   edgeInfo.withBegin(".[")
+  //           .withColor(DUPLICATE_COLOR)
+  //           .withEnd("].>")
+  //           .withLabel("");
+  // }
 }
+

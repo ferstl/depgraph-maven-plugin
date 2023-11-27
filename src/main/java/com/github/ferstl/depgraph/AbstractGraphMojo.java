@@ -193,6 +193,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   @Component
   ProjectDependenciesResolver dependenciesResolver;
 
+  public static String forName(String name) {
+    try {
+      return name.toUpperCase();
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Unsupported output format: " + name, e);
+    }
+  }
+
   @Override
   public final void execute() throws MojoExecutionException, MojoFailureException {
     if (this.skip) {
@@ -200,7 +208,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
       return;
     }
 
-    GraphFormat graphFormat = GraphFormat.forName(this.graphFormat);
+    String stringName = forName(this.graphFormat);
+    GraphFormat graphFormat = GraphFormat.valueOf(stringName);
     GraphStyleConfigurer graphStyleConfigurer = createGraphStyleConfigurer(graphFormat);
     Path graphFilePath = createGraphFilePath(graphFormat);
 
@@ -242,7 +251,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
    * @return {@code true} if the full graph should be shown, {@code false} else.
    */
   protected boolean showFullGraph() {
-    return GraphFormat.forName(this.graphFormat) == JSON && this.showAllAttributesForJson;
+    return GraphFormat.valueOf(forName(this.graphFormat)) == JSON && this.showAllAttributesForJson;
+    //return GraphFormat.forName(this.graphFormat) == JSON && this.showAllAttributesForJson;
   }
 
   protected MavenProject getProject() {

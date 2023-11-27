@@ -46,6 +46,6 @@ public class ClasspathStyleResource implements StyleResource {
 
   @Override
   public String toString() {
-    return "classpath:" + this.name;
+    return "path: " + this.name;
   }
 }

@@ -42,6 +42,6 @@ public class FileSystemStyleResource implements StyleResource {
 
   @Override
   public String toString() {
-    return "file:" + this.location;
+    return "path:" + this.location;
   }
 }

@@ -23,4 +23,6 @@ public interface StyleResource {
   boolean exists();
 
   InputStream openStream() throws IOException;
+
+  String toString();
 }
