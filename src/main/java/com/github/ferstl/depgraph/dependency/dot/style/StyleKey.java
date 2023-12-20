@@ -111,22 +111,24 @@ public final class StyleKey {
   private static boolean wildcardMatch(String value1, String value2) {
     if (value1.indexOf('*') != -1) {
       int lastMatch = 0;
+      
       for (String matchStr : value1.split("\\*")) {
         int indexOfMatch = value2.substring(lastMatch).indexOf(matchStr);
         lastMatch += indexOfMatch + matchStr.length();
+        
         if (indexOfMatch == -1) {
           return false;
         }
       }
+      
       return true;
     }
 
     return match(value1, value2);
   }
-  
+
   private static boolean match(String value1, String value2) {
     return value1.isEmpty() || value1.equals(value2);
   }
-
 
 }
