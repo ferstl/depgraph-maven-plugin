@@ -180,4 +180,12 @@ class StyleKeyTest {
     assertTrue(this.optional.matches(this.optional));
     assertFalse(unsupportedWildcard.matches(this.optional));
   }
+
+  @Test
+  void matchesForWildcard() {
+    StyleKey styleKey = StyleKey.fromString("groupId,artifactId,scope,type,version,classifier,optional");
+    StyleKey wildcard = StyleKey.fromString("gr*Id,*tifa*Id,,,versi**on,*ssif*,");
+
+    assertTrue(wildcard.matches(styleKey));
+  }
 }
