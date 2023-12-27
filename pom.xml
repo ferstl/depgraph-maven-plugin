@@ -87,8 +87,8 @@
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
     <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
-    <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-    <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+    <coveralls-maven-plugin.version>4.5.0-M2</coveralls-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
     <!-- Last version that runs with JDK8 -->
     <takari-lifecycle-plugin.version>2.0.8</takari-lifecycle-plugin.version>
 
@@ -354,16 +354,9 @@
         </plugin>
 
         <plugin>
-          <groupId>org.eluder.coveralls</groupId>
+          <groupId>com.github.hazendaz.maven</groupId>
           <artifactId>coveralls-maven-plugin</artifactId>
           <version>${coveralls-maven-plugin.version}</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.glassfish.jaxb</groupId>
-              <artifactId>jaxb-runtime</artifactId>
-              <version>2.3.5</version>
-            </dependency>
-          </dependencies>
         </plugin>
 
         <plugin>

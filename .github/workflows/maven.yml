@@ -40,4 +40,4 @@ jobs:
           distribution: 'zulu'
           cache: maven
       - name: Coveralls Report
-        run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent test org.jacoco:jacoco-maven-plugin:report org.eluder.coveralls:coveralls-maven-plugin:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
+        run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent test org.jacoco:jacoco-maven-plugin:report com.github.hazendaz.maven:coveralls-maven-plugin:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
