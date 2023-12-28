@@ -15,11 +15,10 @@
  */
 package com.github.ferstl.depgraph.dependency.dot.style;
 
+import java.util.Arrays;
 import java.util.Objects;
-import org.apache.commons.lang3.StringUtils;
 import com.google.common.base.Joiner;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
-import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public final class StyleKey {
 
@@ -40,9 +39,7 @@ public final class StyleKey {
     }
 
     String[] expanded = new String[NUM_ELEMENTS];
-    for (int i = 0; i < expanded.length; i++) {
-      expanded[i] = "";
-    }
+    Arrays.fill(expanded, "");
 
     for (int i = 0; i < parts.length; i++) {
       expanded[i] = defaultIfEmpty(parts[i], "");
@@ -111,16 +108,16 @@ public final class StyleKey {
   private static boolean wildcardMatch(String value1, String value2) {
     if (value1.indexOf('*') != -1) {
       int lastMatch = 0;
-      
+
       for (String matchStr : value1.split("\\*")) {
         int indexOfMatch = value2.substring(lastMatch).indexOf(matchStr);
         lastMatch += indexOfMatch + matchStr.length();
-        
+
         if (indexOfMatch == -1) {
           return false;
         }
       }
-      
+
       return true;
     }
 

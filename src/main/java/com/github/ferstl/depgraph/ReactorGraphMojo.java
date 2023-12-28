@@ -31,7 +31,7 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 import static com.github.ferstl.depgraph.dependency.dot.style.resource.BuiltInStyleResource.REACTOR_STYLE;
 
 /**
- * Creates a dependency graph of the Maven rector in a multi-module project.
+ * Creates a dependency graph of the Maven rector in a multimodule project.
  *
  * @since 4.0.0
  */
@@ -84,7 +84,7 @@ public class ReactorGraphMojo extends AbstractGraphMojo {
   protected Set<BuiltInStyleResource> getAdditionalStyleResources() {
     Set<BuiltInStyleResource> additionalStyleResources = super.getAdditionalStyleResources();
     additionalStyleResources.add(REACTOR_STYLE);
-    
+
     return additionalStyleResources;
   }
 }

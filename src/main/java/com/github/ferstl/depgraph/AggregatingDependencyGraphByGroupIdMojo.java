@@ -32,7 +32,7 @@ import com.github.ferstl.depgraph.graph.GraphBuilder;
 import static com.github.ferstl.depgraph.dependency.NodeResolution.INCLUDED;
 
 /**
- * Aggregates all dependencies of a multi-module by their group IDs.
+ * Aggregates all dependencies of a multimodule by their group IDs.
  */
 @Mojo(
     name = "aggregate-by-groupid",

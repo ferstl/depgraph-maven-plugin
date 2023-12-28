@@ -1,11 +1,13 @@
 # depgraph-maven-plugin
+
 *- A Maven plugin that generates dependency graphs in various formats (DOT, GML, PlantUML, JSON and Text)*
 
 [![Build Status](https://github.com/ferstl/depgraph-maven-plugin/actions/workflows/maven.yml/badge.svg)](https://github.com/ferstl/depgraph-maven-plugin/actions/workflows/maven.yml)  [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/depgraph-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/depgraph-maven-plugin) [![Coverage Status](https://coveralls.io/repos/github/ferstl/depgraph-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/ferstl/depgraph-maven-plugin?branch=master) [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This Maven plugin generates dependency graphs on single modules or in an aggregated form on multi-module projects. The dependency graphs can be created in the following formats:
+This Maven plugin generates dependency graphs on single modules or in an aggregated form on multimodule projects. The dependency graphs can be created in the following formats:
+
 - `.dot`<br/>
-  DOT files can be visualized with [Graphviz](http://www.graphviz.org/). When [Graphviz](http://www.graphviz.org/) is installed, the generated `.dot` files can be directly rendered into all supported image formats. 
+  DOT files can be visualized with [Graphviz](http://www.graphviz.org/). When [Graphviz](http://www.graphviz.org/) is installed, the generated `.dot` files can be directly rendered into all supported image formats.
 - `.gml` (Graph Markup Language)<br/>
   GML files can be visualized with the [yEd Graph Editor](https://www.yworks.com/products/yed) which allows further processing and layouting of the dependency graph.
 - `.puml` (PlantUML)<br/>
@@ -13,17 +15,18 @@ This Maven plugin generates dependency graphs on single modules or in an aggrega
 - `.json`<br/>
   This format is intended for Javascript libraries to visualize the dependency graph or for further processing.
 - `.txt`<br/>
-  A more powerful alternative to `mvn dependency:tree`. The text graphs are printed to the console. 
+  A more powerful alternative to `mvn dependency:tree`. The text graphs are printed to the console.
 
 For more information take a look at the [Plugin Documentation](https://ferstl.github.io/depgraph-maven-plugin/plugin-info.html), the [Release Notes](https://github.com/ferstl/depgraph-maven-plugin/releases) and the [Wiki](https://github.com/ferstl/depgraph-maven-plugin/wiki).
 
-
 ## Getting Started
+
 The *depgraph-maven-plugin* is available on [Maven Central](http://central.maven.org/maven2/com/github/ferstl/depgraph-maven-plugin/). So no further repository configuration is required.
 
 Unless configured otherwise, the dependency graphs will be written to the project's build directory, `target/dependency-graph.<extension>`.
 
 ### Run in your Maven Project
+
 To use the plugin within your project, just add it to the `<build>` section:
 
     <build>
@@ -39,8 +42,8 @@ To use the plugin within your project, just add it to the `<build>` section:
       </plugins>
     </build>
 
-
 ### Run on the Command Line
+
 For ad-hoc dependency analysis the plugin can be used directly on the command line. To conveniently use this plugin on the command line, it is recommended to add the groupId `com.github.ferstl` as "plugin group" in your Maven `settings.xml`:
 
     <settings>
@@ -65,7 +68,7 @@ Without defining the plugin group, you need to fully qualify the plugin on the c
 
 ## Examples
 
-All examples are based on a [multi-module project](https://github.com/ferstl/depgraph-maven-plugin/tree/master/src/test/projects/depgraph-maven-plugin-test) with the following structure:
+All examples are based on a [multimodule project](https://github.com/ferstl/depgraph-maven-plugin/tree/master/src/test/projects/depgraph-maven-plugin-test) with the following structure:
 
     parent
     - module-1
@@ -74,7 +77,6 @@ All examples are based on a [multi-module project](https://github.com/ferstl/dep
       - module-3
 
 Each of the modules contains some dependencies in different scopes.
-
 
 ### Simple Dependency Graph
 
@@ -88,7 +90,6 @@ The goal can be configured to show the versions and/or groupIds on the dependenc
 
 ![Simple dependency graph with versions](src/doc/with-versions.png)
 
-
 **With groupIds (`-DshowGroupIds`)**
 
 ![Simple dependency graph with groupIds](src/doc/with-group-ids.png)
@@ -99,7 +100,8 @@ The [`depgraph:graph`](https://ferstl.github.io/depgraph-maven-plugin/graph-mojo
 
 ![Dependency graph showing duplicates and conflicts](src/doc/duplicates-and-conflicts.png)
 
-Duplicate dependencies do occur when more than one module defines the same dependency, which is not a problem: Maven's dependency resolution will just pick one dependency and omit all the duplicates. A conflict occurs when the same dependency occurs in different versions in the reactor. In this case Maven will choose the [nearest](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html) version and ommit the others. Occurrences of conflicting versions should be investigated and solved if possible.  
+Duplicate dependencies do occur when more than one module defines the same dependency, which is not a problem: Maven's dependency resolution will just pick one dependency and omit all the duplicates. A conflict occurs when the same dependency occurs in different versions in the reactor. In this case Maven will choose the [nearest](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html) version and ommit the others. Occurrences of conflicting versions should be
+investigated and solved if possible.
 
 ### Dependency Graph by `groupId`
 
@@ -109,30 +111,27 @@ The [`depgraph:by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/by-gr
 
 Such graphs give a higher-level overview of a project, i.e. they show better which "frameworks" used by a maven project.
 
-
 ### Aggregated Graphs
 
-The goals [`depgraph:aggregate`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-mojo.html) and [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) create aggregated dependency graphs on the root of a multi-module project. They show the **union** of all the modules' dependencies by omitting redundant edges. Here is an example of an aggregated graph, which connects the parent project and its modules with dotted black arrows (the `sub-parent` and its `module-3` were excluded from the graph for clarity):
+The goals [`depgraph:aggregate`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-mojo.html) and [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) create aggregated dependency graphs on the root of a multimodule project. They show the **union** of all the modules' dependencies by omitting redundant edges. Here is an example of an aggregated graph, which connects the parent project and its modules with dotted black arrows (
+the `sub-parent` and its `module-3` were excluded from the graph for clarity):
 
 ![Aggregated dependency graph](src/doc/aggregated.png)
 
-
 The goal [`depgraph:aggregate-by-groupid`](https://ferstl.github.io/depgraph-maven-plugin/aggregate-by-groupid-mojo.html) does the same for the group IDs of all modules and their dependencies.
 
-
 ### Graphs from Arbitrary Artifacts
+
 The goal [`depgraph:for-artifact`](https://ferstl.github.io/depgraph-maven-plugin/for-artifact-mojo.html) creates a dependency graph for an arbitrary artifact. This goal can be executed without a Maven project at any place:
 
 ![Arbitrary Artifact](src/doc/for-artifact.png)
 
-
 ### Reactor graph
 
 The goal [`depgraph:reactor`](https://ferstl.github.io/depgraph-maven-plugin/reactor-mojo.html) creates a dependency graph
-for the build reactor of a multi-module project:
+for the build reactor of a multimodule project:
 
 ![Build Reactor](src/doc/reactor.png)
-
 
 ### Styling
 
@@ -143,6 +142,7 @@ This Maven plugin offers you a variety of styling options for graphs in the DOT 
 It shows all dependencies with group ID `com.github.ferstl` with a blue background, all test dependencies with grey text and all other dependencies with grey background.
 
 ### Other Graph Formats
+
 #### GML for yEd
 
 The GML graph format (set the `graphFormat` property to `gml`) allows visualizing a dependency graph in the [yEd Graph Editor](https://www.yworks.com/products/yed).
@@ -159,8 +159,6 @@ Since the generated dependency graph does not store any layout information, you 
 PlantUML graphs can be visualized with various tools, e.g. [planttext.com](https://www.planttext.com/) or the [PlantUML Integration](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) for IntelliJ (requires [Graphviz](http://www.graphviz.org/) for rendering).
 
 ![PlantUML dependency graph](src/doc/puml.png)
-
-
 
 #### Text
 
@@ -226,16 +224,18 @@ JSON graphs are intended for Javascript libraries or for further processing. Usi
 
 ## FAQ
 
-Q: Help! The dependency graph of my 10 year old 100-module enterprise project looks like a ball of wool. I can't see anything!
+Q: Help! The dependency graph of my 10-year-old 100-module enterprise project looks like a ball of wool. I can't see anything!
 
 A: Think carefully what information you want to see in your dependency graph. Do you really want to have all third-party dependencies in your graph or do you want to see only the dependencies between your own modules? Would the `groupId` graph be a better alternative?
-Generally, you should consequently exclude dependencies that don't give you useful information. The inclusion/exclusion mechanisms in this plugin are quite powerful and easy to use. A good starting point is the exclusion of dependencies to "utility" libraries, such as `commons-lang`, `guava` or `my-enterprise-project-common`. Such dependencies are typically used by every single module which is (in most cases) perfectly fine. So they don't give you much useful information when they show up in the dependency graph.
+Generally, you should consequently exclude dependencies that don't give you useful information. The inclusion/exclusion mechanisms in this plugin are quite powerful and easy to use. A good starting point is the exclusion of dependencies to "utility" libraries, such as `commons-lang`, `guava` or `my-enterprise-project-common`. Such dependencies are typically used by every single module which is (in most cases) perfectly fine. So they don't give you much useful information when they show up in the
+dependency graph.
 
 -----
 
 Q: Help! This plugin has thousands of parameters. How do I know which ones to choose?
 
 A: Don't worry, there are only less than 40 parameters and the plugin provides good defaults for most of them. Start your dependency graph without setting any parameters and see if it fits your needs. If it doesn't, start customizing it:
+
 - Use `graphFormat` to get a graph in a different format than DOT.
 - Use `includes` and/or `excludes` for filtering.
 - Use the `show*` parameters to display more information in the graph, e.g. `showGroupIds`, `showVersions`, etc.

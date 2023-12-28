@@ -112,17 +112,74 @@ class StyleKeyTest {
   void equalsAndHashCode() {
     StyleKey groupIdEqual = StyleKey.fromString("group.id");
     StyleKey groupIdDifferent = StyleKey.fromString("group.id2");
+    StyleKey artifactIdEqual = StyleKey.fromString(",artifactId");
+    StyleKey artifactIdDifferent = StyleKey.fromString(",artifactId2");
+    StyleKey versionEqual = StyleKey.fromString(",,,,version");
+    StyleKey versionDifferent = StyleKey.fromString(",,,,version2");
+    StyleKey scopeEqual = StyleKey.fromString(",,scope");
+    StyleKey scopeDifferent = StyleKey.fromString(",,scope2");
+    StyleKey typeEqual = StyleKey.fromString(",,,type");
+    StyleKey typeDifferent = StyleKey.fromString(",,,type2");
+    StyleKey classifierEqual = StyleKey.fromString(",,,,,classifier");
+    StyleKey classifierDifferent = StyleKey.fromString(",,,,,classifier2");
+    StyleKey optionalEqual = StyleKey.fromString(",,,,,,true");
+    StyleKey optionalDifferent = StyleKey.fromString(",,,,,,false");
 
     assertEquals(this.groupId, groupIdEqual);
     assertEquals(groupIdEqual, this.groupId);
     assertNotEquals(this.groupId, groupIdDifferent);
     assertNotEquals(groupIdDifferent, this.groupId);
-    assertEquals(this.artifactId, this.artifactId);
-    assertNotEquals(this.version, "something else");
 
+    assertEquals(this.artifactId, artifactIdEqual);
+    assertEquals(artifactIdEqual, this.artifactId);
+    assertNotEquals(this.artifactId, artifactIdDifferent);
+    assertNotEquals(artifactIdDifferent, this.artifactId);
+
+    assertEquals(this.version, versionEqual);
+    assertEquals(versionEqual, this.version);
+    assertNotEquals(this.version, versionDifferent);
+    assertNotEquals(versionDifferent, this.version);
+
+    assertEquals(this.scope, scopeEqual);
+    assertEquals(scopeEqual, this.scope);
+    assertNotEquals(this.scope, scopeDifferent);
+    assertNotEquals(scopeDifferent, this.scope);
+
+    assertEquals(this.type, typeEqual);
+    assertEquals(typeEqual, this.type);
+    assertNotEquals(this.type, typeDifferent);
+    assertNotEquals(typeDifferent, this.type);
+
+    assertEquals(this.classifier, classifierEqual);
+    assertEquals(classifierEqual, this.classifier);
+    assertNotEquals(this.classifier, classifierDifferent);
+    assertNotEquals(classifierDifferent, this.classifier);
+
+    assertEquals(this.optional, optionalEqual);
+    assertEquals(optionalEqual, this.optional);
+    assertNotEquals(this.optional, optionalDifferent);
+    assertNotEquals(optionalDifferent, this.optional);
 
     assertEquals(this.groupId.hashCode(), groupIdEqual.hashCode());
-    assertNotEquals(this.artifactId.hashCode(), this.scope.hashCode());
+    assertNotEquals(this.groupId.hashCode(), groupIdDifferent.hashCode());
+
+    assertEquals(this.artifactId.hashCode(), artifactIdEqual.hashCode());
+    assertNotEquals(this.artifactId.hashCode(), artifactIdDifferent.hashCode());
+
+    assertEquals(this.version.hashCode(), versionEqual.hashCode());
+    assertNotEquals(this.version.hashCode(), versionDifferent.hashCode());
+
+    assertEquals(this.scope.hashCode(), scopeEqual.hashCode());
+    assertNotEquals(this.scope.hashCode(), scopeDifferent.hashCode());
+
+    assertEquals(this.type.hashCode(), typeEqual.hashCode());
+    assertNotEquals(this.type.hashCode(), typeDifferent.hashCode());
+
+    assertEquals(this.classifier.hashCode(), classifierEqual.hashCode());
+    assertNotEquals(this.classifier.hashCode(), classifierDifferent.hashCode());
+
+    assertEquals(this.optional.hashCode(), optionalEqual.hashCode());
+    assertNotEquals(this.optional.hashCode(), optionalDifferent.hashCode());
   }
 
   @Test

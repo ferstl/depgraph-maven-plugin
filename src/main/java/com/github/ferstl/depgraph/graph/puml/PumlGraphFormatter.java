@@ -96,7 +96,7 @@ public class PumlGraphFormatter implements GraphFormatter {
           .append(" ")
           .append(escape(edge.getToNodeId()));
 
-      if (edgeInfo.getLabel() != null && !edgeInfo.getLabel().equals("")) {
+      if (edgeInfo.getLabel() != null && !edgeInfo.getLabel().isEmpty()) {
         puml.append(": ")
             .append(edgeInfo.getLabel());
       }

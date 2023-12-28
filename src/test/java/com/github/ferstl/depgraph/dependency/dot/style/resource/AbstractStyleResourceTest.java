@@ -53,7 +53,7 @@ abstract class AbstractStyleResourceTest {
   }
 
   @Test
-  void openStreamOnNonExistingResource() throws IOException {
+  void openStreamOnNonExistingResource() {
     assertThrows(IOException.class, this.nonExistingResource::openStream);
   }
 }

@@ -61,7 +61,7 @@ import static com.github.ferstl.depgraph.GraphFormat.JSON;
  * Abstract mojo to create all possible kinds of graphs. Graphs are created with instances of the
  * {@link GraphFactory} interface. This class defines an abstract method to create such factories. In case Graphviz is
  * installed on the system where this plugin is executed, it is also possible to run the dot program and create images
- * out of the generated dot files..
+ * out of the generated dot files.
  */
 abstract class AbstractGraphMojo extends AbstractMojo {
 
@@ -225,7 +225,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   protected abstract GraphFactory createGraphFactory(GraphStyleConfigurer graphStyleConfigurer);
 
   /**
-   * Override this method to configure additional style resources. It is recommendet to call
+   * Override this method to configure additional style resources. It is recommended to call
    * {@code super.getAdditionalStyleResources()} and add them to the set.
    *
    * @return A set of additional built-in style resources to use.

@@ -284,7 +284,7 @@ class GraphBuilderTest {
 
     @Override
     public String render(String from, String to) {
-      return from.substring(0, 1) + "->" + to.substring(0, 1);
+      return from.charAt(0) + "->" + to.charAt(0);
     }
   }
 }

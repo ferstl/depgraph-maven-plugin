@@ -13,7 +13,7 @@
   <name>Depgraph Maven Plugin</name>
   <description>
     This Maven plugin generates dependency graphs on single modules or in an aggregated form
-    on multi-module projects. The graphs are represented by .dot files. In case that Graphviz
+    on multimodule projects. The graphs are represented by .dot files. In case that Graphviz
     is installed on the machine where this plugin is run, the .dot file can be directly converted
     into all supported image files.
   </description>
@@ -22,7 +22,7 @@
   <licenses>
     <license>
       <name>Apache 2</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -284,11 +284,11 @@
           <configuration>
             <source>8</source>
             <links>
-              <link>http://docs.oracle.com/javase/8/docs/api/</link>
-              <link>http://maven.apache.org/ref/${maven.version}/maven-plugin-api/apidocs/</link>
-              <link>http://maven.apache.org/ref/${maven.version}/maven-artifact/apidocs/</link>
-              <link>http://maven.apache.org/ref/${maven.version}/maven-model/apidocs/</link>
-              <link>http://maven.apache.org/ref/${maven.version}/maven-core/apidocs/</link>
+              <link>https://docs.oracle.com/javase/8/docs/api/</link>
+              <link>https://maven.apache.org/ref/${maven.version}/maven-plugin-api/apidocs/</link>
+              <link>https://maven.apache.org/ref/${maven.version}/maven-artifact/apidocs/</link>
+              <link>https://maven.apache.org/ref/${maven.version}/maven-model/apidocs/</link>
+              <link>https://maven.apache.org/ref/${maven.version}/maven-core/apidocs/</link>
             </links>
           </configuration>
         </plugin>

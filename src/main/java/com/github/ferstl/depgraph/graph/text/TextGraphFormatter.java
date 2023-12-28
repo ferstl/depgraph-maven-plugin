@@ -114,7 +114,7 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
         indent(stringBuilder, lastParents, !edgeIterator.hasNext());
         writeChildNode(stringBuilder, childNode.getNodeName(), edge.getName(), circleDetected);
 
-        // Recursively write sub tree
+        // Recursively write subtree
         lastParents.add(!edgeIterator.hasNext());
         if (!circleDetected) {
           currentPath.add(childNode.getNodeId());
@@ -135,7 +135,7 @@ public class TextGraphFormatter implements com.github.ferstl.depgraph.graph.Grap
         stringBuilder.append(lastParents.get(i) ? INDENTATION_FOR_LAST_PARENT : INDENTATION_FOR_PARENT);
       }
 
-      // Use different element markers depending on whether the element is the last one in the sub tree.
+      // Use different element markers depending on whether the element is the last one in the subtree.
       if (lastElement) {
         stringBuilder.append(LAST_ELEMENT_MARKER);
       } else {
