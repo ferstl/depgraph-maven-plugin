@@ -34,7 +34,7 @@ To use the plugin within your project, just add it to the `<build>` section:
         <plugin>
           <groupId>com.github.ferstl</groupId>
           <artifactId>depgraph-maven-plugin</artifactId>
-          <version>4.0.2</version>
+          <version>4.0.3</version>
           <configuration>
             ...
           </configuration>
@@ -64,7 +64,7 @@ Without defining the plugin group, you need to fully qualify the plugin on the c
     mvn com.github.ferstl:depgraph-maven-plugin:graph
     
     # Specific version
-    mvn com.github.ferstl:depgraph-maven-plugin:4.0.2:graph
+    mvn com.github.ferstl:depgraph-maven-plugin:4.0.3:graph
 
 ## Examples
 
@@ -192,33 +192,46 @@ JSON graphs are intended for Javascript libraries or for further processing. Usi
 
 ````json
 {
-  "graphName" : "parent",
-  "artifacts" : [ {
-    "id" : "com.github.ferstl:module-2:jar:compile",
-    "numericId" : 1,
-    "groupId" : "com.github.ferstl",
-    "artifactId" : "module-2",
-    "version" : "1.0.0-SNAPSHOT",
-    "optional" : false,
-    "scopes" : [ "compile" ],
-    "types" : [ "jar" ]
-  }, {
-    "id" : "com.github.ferstl:module-1:jar:compile",
-    "numericId" : 2,
-    "groupId" : "com.github.ferstl",
-    "artifactId" : "module-1",
-    "version" : "1.0.0-SNAPSHOT",
-    "optional" : false,
-    "scopes" : [ "compile" ],
-    "types" : [ "jar" ]
-  } ],
-  "dependencies" : [ {
-    "from" : "com.github.ferstl:module-2:jar:compile",
-    "to" : "com.github.ferstl:module-1:jar:compile",
-    "numericFrom" : 0,
-    "numericTo" : 1,
-    "resolution" : "INCLUDED"
-  } ]
+  "graphName": "parent",
+  "artifacts": [
+    {
+      "id": "com.github.ferstl:module-2:jar:compile",
+      "numericId": 1,
+      "groupId": "com.github.ferstl",
+      "artifactId": "module-2",
+      "version": "1.0.0-SNAPSHOT",
+      "optional": false,
+      "scopes": [
+        "compile"
+      ],
+      "types": [
+        "jar"
+      ]
+    },
+    {
+      "id": "com.github.ferstl:module-1:jar:compile",
+      "numericId": 2,
+      "groupId": "com.github.ferstl",
+      "artifactId": "module-1",
+      "version": "1.0.0-SNAPSHOT",
+      "optional": false,
+      "scopes": [
+        "compile"
+      ],
+      "types": [
+        "jar"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "com.github.ferstl:module-2:jar:compile",
+      "to": "com.github.ferstl:module-1:jar:compile",
+      "numericFrom": 0,
+      "numericTo": 1,
+      "resolution": "INCLUDED"
+    }
+  ]
 }
 ````
 
