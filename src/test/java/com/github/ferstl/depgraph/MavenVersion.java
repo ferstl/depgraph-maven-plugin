@@ -18,7 +18,7 @@ package com.github.ferstl.depgraph;
 public final class MavenVersion {
 
   public static final String MIN_VERSION = "3.2.5";
-  public static final String MAX_VERSION = "3.8.6";
+  public static final String MAX_VERSION = "3.9.6";
 
   private MavenVersion() {
     throw new AssertionError("not instantiable");
