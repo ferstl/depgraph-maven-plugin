@@ -4,4 +4,4 @@ module-2:compile
 +- commons-codec:compile
 +- commons-lang3:compile
 +- spring-core:compile (optional)
-\- junit:test
+\- junit-jupiter:test

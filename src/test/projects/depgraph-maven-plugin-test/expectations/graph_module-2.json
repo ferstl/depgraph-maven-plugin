@@ -14,7 +14,7 @@
     "numericId" : 2,
     "groupId" : "commons-codec",
     "artifactId" : "commons-codec",
-    "version" : "1.15",
+    "version" : "1.16.0",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
@@ -23,7 +23,7 @@
     "numericId" : 3,
     "groupId" : "org.apache.commons",
     "artifactId" : "commons-lang3",
-    "version" : "3.0",
+    "version" : "3.12.0",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
@@ -41,7 +41,7 @@
     "numericId" : 5,
     "groupId" : "com.google.guava",
     "artifactId" : "guava",
-    "version" : "31.1-jre",
+    "version" : "33.0.0-jre",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
@@ -50,25 +50,16 @@
     "numericId" : 6,
     "groupId" : "org.springframework",
     "artifactId" : "spring-core",
-    "version" : "5.3.22",
+    "version" : "6.1.2",
     "optional" : true,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
-    "id" : "junit:junit:jar",
+    "id" : "org.junit.jupiter:junit-jupiter:jar",
     "numericId" : 7,
-    "groupId" : "junit",
-    "artifactId" : "junit",
-    "version" : "4.13.2",
-    "optional" : false,
-    "scopes" : [ "test" ],
-    "types" : [ "jar" ]
-  }, {
-    "id" : "org.hamcrest:hamcrest-core:jar",
-    "numericId" : 8,
-    "groupId" : "org.hamcrest",
-    "artifactId" : "hamcrest-core",
-    "version" : "1.3",
+    "groupId" : "org.junit.jupiter",
+    "artifactId" : "junit-jupiter",
+    "version" : "5.10.1",
     "optional" : false,
     "scopes" : [ "test" ],
     "types" : [ "jar" ]
@@ -84,7 +75,7 @@
     "to" : "org.apache.commons:commons-lang3:jar",
     "numericFrom" : 0,
     "numericTo" : 2,
-    "version" : "3.1",
+    "version" : "3.14.0",
     "resolution" : "OMITTED_FOR_CONFLICT"
   }, {
     "from" : "com.github.ferstl:module-2:jar",
@@ -117,14 +108,8 @@
     "numericTo" : 5,
     "resolution" : "INCLUDED"
   }, {
-    "from" : "junit:junit:jar",
-    "to" : "org.hamcrest:hamcrest-core:jar",
-    "numericFrom" : 6,
-    "numericTo" : 7,
-    "resolution" : "INCLUDED"
-  }, {
     "from" : "com.github.ferstl:module-2:jar",
-    "to" : "junit:junit:jar",
+    "to" : "org.junit.jupiter:junit-jupiter:jar",
     "numericFrom" : 3,
     "numericTo" : 6,
     "resolution" : "INCLUDED"

@@ -16,19 +16,19 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.mysema.querydsl</groupId>
+        <groupId>com.querydsl</groupId>
         <artifactId>querydsl-core</artifactId>
-        <version>3.7.4</version>
+        <version>5.0.0</version>
       </dependency>
       <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
-        <version>1.15</version>
+        <version>1.16.0</version>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>31.1-jre</version>
+        <version>33.0.0-jre</version>
         <exclusions>
           <exclusion>
             <groupId>*</groupId>
@@ -39,7 +39,7 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-core</artifactId>
-        <version>5.3.22</version>
+        <version>6.1.2</version>
         <exclusions>
           <exclusion>
             <groupId>*</groupId>
@@ -48,10 +48,16 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.13.2</version>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.10.1</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>*</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -70,10 +76,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.12.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>11</source>
+          <target>11</target>
         </configuration>
       </plugin>
     </plugins>

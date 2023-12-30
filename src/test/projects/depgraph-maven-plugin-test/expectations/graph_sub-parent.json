@@ -14,7 +14,7 @@
     "numericId" : 2,
     "groupId" : "commons-codec",
     "artifactId" : "commons-codec",
-    "version" : "1.15",
+    "version" : "1.16.0",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
@@ -23,7 +23,7 @@
     "numericId" : 3,
     "groupId" : "org.apache.commons",
     "artifactId" : "commons-lang3",
-    "version" : "3.0",
+    "version" : "3.12.0",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
@@ -41,7 +41,7 @@
     "numericId" : 5,
     "groupId" : "com.google.guava",
     "artifactId" : "guava",
-    "version" : "31.1-jre",
+    "version" : "33.0.0-jre",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
@@ -66,7 +66,7 @@
     "to" : "org.apache.commons:commons-lang3:jar",
     "numericFrom" : 0,
     "numericTo" : 2,
-    "version" : "3.1",
+    "version" : "3.14.0",
     "resolution" : "OMITTED_FOR_CONFLICT"
   }, {
     "from" : "com.github.ferstl:module-2:jar",

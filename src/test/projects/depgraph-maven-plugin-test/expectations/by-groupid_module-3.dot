@@ -7,17 +7,13 @@ digraph "module-3" {
   "commons-codec:compile"[label=<<font point-size="14">commons-codec</font>>]
   "org.apache.commons:compile"[label=<<font point-size="14">org.apache.commons</font>>]
   "com.google.guava:compile"[label=<<font point-size="14">com.google.guava</font>>]
-  "com.mysema.querydsl:compile"[label=<<font point-size="14">com.mysema.querydsl</font>>]
-  "com.google.code.findbugs:compile"[label=<<font point-size="14">com.google.code.findbugs</font>>]
+  "com.querydsl:compile"[label=<<font point-size="14">com.querydsl</font>>]
   "com.mysema.commons:compile"[label=<<font point-size="14">com.mysema.commons</font>>]
-  "com.infradna.tool:compile"[label=<<font point-size="14">com.infradna.tool</font>>]
 
   // Edge Definitions:
   "com.github.ferstl:compile" -> "commons-codec:compile"
   "com.github.ferstl:compile" -> "org.apache.commons:compile"
   "com.github.ferstl:compile" -> "com.google.guava:compile"
-  "com.mysema.querydsl:compile" -> "com.google.code.findbugs:compile"
-  "com.mysema.querydsl:compile" -> "com.mysema.commons:compile"
-  "com.mysema.querydsl:compile" -> "com.infradna.tool:compile"
-  "com.github.ferstl:compile" -> "com.mysema.querydsl:compile"
+  "com.querydsl:compile" -> "com.mysema.commons:compile"
+  "com.github.ferstl:compile" -> "com.querydsl:compile"
 }

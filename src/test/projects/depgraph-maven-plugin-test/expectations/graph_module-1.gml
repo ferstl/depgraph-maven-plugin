@@ -10,29 +10,21 @@ node [
 id "commons-codec:commons-codec:jar"
 label "commons-codec
 commons-codec
-1.15"
+1.16.0"
 ]
 
 node [
 id "org.apache.commons:commons-lang3:jar"
 label "org.apache.commons
 commons-lang3
-3.1"
+3.14.0"
 ]
 
 node [
-id "junit:junit:jar"
-label "junit
-junit
-4.13.2
-(test)"
-]
-
-node [
-id "org.hamcrest:hamcrest-core:jar"
-label "org.hamcrest
-hamcrest-core
-1.3
+id "org.junit.jupiter:junit-jupiter:jar"
+label "org.junit.jupiter
+junit-jupiter
+5.10.1
 (test)"
 ]
 
@@ -47,13 +39,8 @@ target "org.apache.commons:commons-lang3:jar"
 ]
 
 edge [
-source "junit:junit:jar"
-target "org.hamcrest:hamcrest-core:jar"
-]
-
-edge [
 source "com.github.ferstl:module-1:jar"
-target "junit:junit:jar"
+target "org.junit.jupiter:junit-jupiter:jar"
 ]
 
 ]

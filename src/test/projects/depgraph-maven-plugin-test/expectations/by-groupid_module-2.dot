@@ -8,14 +8,12 @@ digraph "module-2" {
   "commons-codec:compile"[label=<<font point-size="14">commons-codec</font>>]
   "org.apache.commons:compile"[label=<<font point-size="14">org.apache.commons</font>>]
   "org.springframework:compile"[label=<<font point-size="14">org.springframework</font>>]
-  "junit:test"[label=<<font point-size="14">junit</font><font point-size="10"><br/>(test)</font>>]
-  "org.hamcrest:test"[label=<<font point-size="14">org.hamcrest</font><font point-size="10"><br/>(test)</font>>]
+  "org.junit.jupiter:test"[label=<<font point-size="14">org.junit.jupiter</font><font point-size="10"><br/>(test)</font>>]
 
   // Edge Definitions:
   "com.github.ferstl:compile" -> "com.google.guava:compile"
   "com.github.ferstl:compile" -> "commons-codec:compile"
   "com.github.ferstl:compile" -> "org.apache.commons:compile"
   "com.github.ferstl:compile" -> "org.springframework:compile"
-  "junit:test" -> "org.hamcrest:test"
-  "com.github.ferstl:compile" -> "junit:test"
+  "com.github.ferstl:compile" -> "org.junit.jupiter:test"
 }

@@ -187,7 +187,7 @@ public class GraphIntegrationTest {
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
         .withCliOption("-DgraphFormat=text")
-        .withCliOption("-DtransitiveIncludes=com.mysema.*:*")
+        .withCliOption("-DtransitiveIncludes=com.querydsl:*")
         .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
@@ -229,8 +229,8 @@ public class GraphIntegrationTest {
         .forProject(basedir)
         .withCliOption("-DgraphFormat=text")
         .withCliOption("-DshowGroupIds")
-        .withCliOption("-DtargetIncludes=com.mysema.*:*")
-        .withCliOption("-DtransitiveExcludes=com.mysema.*:*")
+        .withCliOption("-DtargetIncludes=com.querydsl:*")
+        .withCliOption("-DtransitiveExcludes=com.querydsl:*")
         .execute("clean", "depgraph:aggregate");
 
     result.assertErrorFreeLog();

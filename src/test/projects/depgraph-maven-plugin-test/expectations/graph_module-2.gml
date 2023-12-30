@@ -17,21 +17,21 @@ node [
 id "com.google.guava:guava:jar"
 label "com.google.guava
 guava
-31.1-jre"
+33.0.0-jre"
 ]
 
 node [
 id "commons-codec:commons-codec:jar"
 label "commons-codec
 commons-codec
-1.15"
+1.16.0"
 ]
 
 node [
 id "org.apache.commons:commons-lang3:jar"
 label "org.apache.commons
 commons-lang3
-3.0"
+3.12.0"
 ]
 
 node [
@@ -39,22 +39,14 @@ id "org.springframework:spring-core:jar"
 label "<optional>
 org.springframework
 spring-core
-5.3.22"
+6.1.2"
 ]
 
 node [
-id "junit:junit:jar"
-label "junit
-junit
-4.13.2
-(test)"
-]
-
-node [
-id "org.hamcrest:hamcrest-core:jar"
-label "org.hamcrest
-hamcrest-core
-1.3
+id "org.junit.jupiter:junit-jupiter:jar"
+label "org.junit.jupiter
+junit-jupiter
+5.10.1
 (test)"
 ]
 
@@ -84,13 +76,8 @@ target "org.springframework:spring-core:jar"
 ]
 
 edge [
-source "junit:junit:jar"
-target "org.hamcrest:hamcrest-core:jar"
-]
-
-edge [
 source "com.github.ferstl:module-2:jar"
-target "junit:junit:jar"
+target "org.junit.jupiter:junit-jupiter:jar"
 ]
 
 ]

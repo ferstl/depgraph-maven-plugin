@@ -1,8 +1,7 @@
 module-2:1.0.0-SNAPSHOT:compile
 +- module-1:1.0.0-SNAPSHOT:compile
-+- guava:31.1-jre:compile
-+- commons-codec:1.15:compile
-+- commons-lang3:3.0:compile
-+- spring-core:5.3.22:compile (optional)
-\- junit:4.13.2:test
-   \- hamcrest-core:1.3:test
++- guava:33.0.0-jre:compile
++- commons-codec:1.16.0:compile
++- commons-lang3:3.12.0:compile
++- spring-core:6.1.2:compile (optional)
+\- junit-jupiter:5.10.1:test

@@ -10,14 +10,14 @@ node [
 id "commons-codec:commons-codec:jar"
 label "commons-codec
 commons-codec
-1.15"
+1.16.0"
 ]
 
 node [
 id "org.apache.commons:commons-lang3:jar"
 label "org.apache.commons
 commons-lang3
-3.1"
+3.14.0"
 ]
 
 node [
@@ -38,21 +38,14 @@ node [
 id "com.google.guava:guava:jar"
 label "com.google.guava
 guava
-31.1-jre"
+33.0.0-jre"
 ]
 
 node [
-id "com.mysema.querydsl:querydsl-core:jar"
-label "com.mysema.querydsl
+id "com.querydsl:querydsl-core:jar"
+label "com.querydsl
 querydsl-core
-3.7.4"
-]
-
-node [
-id "com.google.code.findbugs:jsr305:jar"
-label "com.google.code.findbugs
-jsr305
-1.3.9"
+5.0.0"
 ]
 
 node [
@@ -60,13 +53,6 @@ id "com.mysema.commons:mysema-commons-lang:jar"
 label "com.mysema.commons
 mysema-commons-lang
 0.2.4"
-]
-
-node [
-id "com.infradna.tool:bridge-method-annotation:jar"
-label "com.infradna.tool
-bridge-method-annotation
-1.13"
 ]
 
 edge [
@@ -95,23 +81,13 @@ target "com.github.ferstl:module-2:jar"
 ]
 
 edge [
-source "com.mysema.querydsl:querydsl-core:jar"
-target "com.google.code.findbugs:jsr305:jar"
-]
-
-edge [
-source "com.mysema.querydsl:querydsl-core:jar"
+source "com.querydsl:querydsl-core:jar"
 target "com.mysema.commons:mysema-commons-lang:jar"
 ]
 
 edge [
-source "com.mysema.querydsl:querydsl-core:jar"
-target "com.infradna.tool:bridge-method-annotation:jar"
-]
-
-edge [
 source "com.github.ferstl:module-3:jar"
-target "com.mysema.querydsl:querydsl-core:jar"
+target "com.querydsl:querydsl-core:jar"
 ]
 
 ]

@@ -17,21 +17,21 @@ node [
 id "com.google.guava:guava:jar"
 label "com.google.guava
 guava
-31.1-jre"
+33.0.0-jre"
 ]
 
 node [
 id "commons-codec:commons-codec:jar"
 label "commons-codec
 commons-codec
-1.15"
+1.16.0"
 ]
 
 node [
 id "org.apache.commons:commons-lang3:jar"
 label "org.apache.commons
 commons-lang3
-3.0"
+3.12.0"
 ]
 
 node [

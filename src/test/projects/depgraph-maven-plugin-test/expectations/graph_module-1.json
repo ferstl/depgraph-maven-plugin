@@ -14,7 +14,7 @@
     "numericId" : 2,
     "groupId" : "commons-codec",
     "artifactId" : "commons-codec",
-    "version" : "1.15",
+    "version" : "1.16.0",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
@@ -23,25 +23,16 @@
     "numericId" : 3,
     "groupId" : "org.apache.commons",
     "artifactId" : "commons-lang3",
-    "version" : "3.1",
+    "version" : "3.14.0",
     "optional" : false,
     "scopes" : [ "compile" ],
     "types" : [ "jar" ]
   }, {
-    "id" : "junit:junit:jar",
+    "id" : "org.junit.jupiter:junit-jupiter:jar",
     "numericId" : 4,
-    "groupId" : "junit",
-    "artifactId" : "junit",
-    "version" : "4.13.2",
-    "optional" : false,
-    "scopes" : [ "test" ],
-    "types" : [ "jar" ]
-  }, {
-    "id" : "org.hamcrest:hamcrest-core:jar",
-    "numericId" : 5,
-    "groupId" : "org.hamcrest",
-    "artifactId" : "hamcrest-core",
-    "version" : "1.3",
+    "groupId" : "org.junit.jupiter",
+    "artifactId" : "junit-jupiter",
+    "version" : "5.10.1",
     "optional" : false,
     "scopes" : [ "test" ],
     "types" : [ "jar" ]
@@ -59,14 +50,8 @@
     "numericTo" : 2,
     "resolution" : "INCLUDED"
   }, {
-    "from" : "junit:junit:jar",
-    "to" : "org.hamcrest:hamcrest-core:jar",
-    "numericFrom" : 3,
-    "numericTo" : 4,
-    "resolution" : "INCLUDED"
-  }, {
     "from" : "com.github.ferstl:module-1:jar",
-    "to" : "junit:junit:jar",
+    "to" : "org.junit.jupiter:junit-jupiter:jar",
     "numericFrom" : 0,
     "numericTo" : 3,
     "resolution" : "INCLUDED"

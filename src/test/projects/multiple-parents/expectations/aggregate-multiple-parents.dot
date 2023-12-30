@@ -10,8 +10,7 @@ digraph "parent" {
   "com.github.ferstl:submodule:jar:compile"[label=<submodule>]
   "commons-codec:commons-codec:jar:compile"[label=<commons-codec>]
   "org.apache.commons:commons-lang3:jar:compile"[label=<commons-lang3>]
-  "junit:junit:jar:test"[label=<junit<font point-size="10"><br/>(test)</font>>]
-  "org.hamcrest:hamcrest-core:jar:test"[label=<hamcrest-core<font point-size="10"><br/>(test)</font>>]
+  "org.junit.jupiter:junit-jupiter:jar:test"[label=<junit-jupiter<font point-size="10"><br/>(test)</font>>]
 
   // Edge Definitions:
   "org.springframework.boot:spring-boot-starter-parent:pom:compile" -> "org.springframework.boot:module-other-parent:jar:compile"[style="dashed"]
@@ -21,6 +20,5 @@ digraph "parent" {
   "org.springframework.boot:module-other-parent:jar:compile" -> "org.apache.commons:commons-lang3:jar:compile"
   "com.github.ferstl:submodule:jar:compile" -> "commons-codec:commons-codec:jar:compile"
   "com.github.ferstl:submodule:jar:compile" -> "org.apache.commons:commons-lang3:jar:compile"
-  "junit:junit:jar:test" -> "org.hamcrest:hamcrest-core:jar:test"
-  "com.github.ferstl:submodule:jar:compile" -> "junit:junit:jar:test"
+  "com.github.ferstl:submodule:jar:compile" -> "org.junit.jupiter:junit-jupiter:jar:test"
 }

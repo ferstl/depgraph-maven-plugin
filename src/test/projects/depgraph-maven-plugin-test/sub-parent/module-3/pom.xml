@@ -22,7 +22,7 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.mysema.querydsl</groupId>
+      <groupId>com.querydsl</groupId>
       <artifactId>querydsl-core</artifactId>
     </dependency>
   </dependencies>

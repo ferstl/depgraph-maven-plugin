@@ -1,5 +1,4 @@
 module-1:1.0.0-SNAPSHOT:compile
-+- commons-codec:1.15:compile
-+- commons-lang3:3.1:compile
-\- junit:4.13.2:test
-   \- hamcrest-core:1.3:test
++- commons-codec:1.16.0:compile
++- commons-lang3:3.14.0:compile
+\- junit-jupiter:5.10.1:test

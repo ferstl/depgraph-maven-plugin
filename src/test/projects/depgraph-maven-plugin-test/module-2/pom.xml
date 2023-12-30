@@ -27,7 +27,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.0</version>
+      <version>3.12.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -35,8 +35,8 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
     </dependency>
   </dependencies>
 </project>
