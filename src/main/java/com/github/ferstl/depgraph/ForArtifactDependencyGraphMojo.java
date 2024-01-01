@@ -16,6 +16,8 @@
 package com.github.ferstl.depgraph;
 
 import java.util.List;
+import java.util.stream.Stream;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
@@ -163,18 +165,30 @@ public class ForArtifactDependencyGraphMojo extends DependencyGraphMojo {
 
   private void validateParameters() {
     // Either artifact or GAV parameters
-    if (StringUtils.isNotBlank(this.artifact)) {
+    if (checkNotBlank()) {
       // GAV parameters must not be set
-      if (StringUtils.isNotBlank(this.groupId)
-          || StringUtils.isNotBlank(this.artifactId)
-          || StringUtils.isNotBlank(this.version)) {
-        throw new IllegalArgumentException("Artifact can be defined with either 'artifact' or 'groupId'/'artifactId'/'version' but not both");
-      }
+      isNotBlank();
       // All GAV parameters have to be set
-    } else if (StringUtils.isBlank(this.groupId)
-        || StringUtils.isBlank(this.artifactId)
-        || StringUtils.isBlank(this.version)) {
+    } else if (checkBlank()) {
       throw new IllegalArgumentException("'groupId', 'artifactId' and 'version' parameters have to be defined");
+    }
+  }
+
+  private boolean checkNotBlank(){
+    if(StringUtils.isNotBlank(this.artifact)) return true;
+    return false;
+  }
+
+  private boolean checkBlank(){
+    if (Stream.of(this.groupId, this.artifactId, this.version).anyMatch(StringUtils::isBlank)) {
+      return true;
+    }
+    return false;
+  }
+
+  private void isNotBlank(){
+    if (Stream.of(this.groupId, this.artifactId, this.version).anyMatch(StringUtils::isNotBlank)) {
+      throw new IllegalArgumentException("Artifact can be defined with either 'artifact' or 'groupId'/'artifactId'/'version' but not both");
     }
   }
 }
