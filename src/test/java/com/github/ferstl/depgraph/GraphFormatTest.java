@@ -114,6 +114,24 @@ class GraphFormatTest {
   }
 
   @Test
+  void forNameMermaid() {
+    // arrange
+    String name1 = "mermaid";
+    String name2 = "Mermaid";
+    String name3 = "MERMAID";
+
+    // act
+    GraphFormat result1 = GraphFormat.forName(name1);
+    GraphFormat result2 = GraphFormat.forName(name2);
+    GraphFormat result3 = GraphFormat.forName(name3);
+
+    // assert
+    assertSame(GraphFormat.MERMAID, result2);
+    assertSame(GraphFormat.MERMAID, result1);
+    assertSame(GraphFormat.MERMAID, result3);
+  }
+
+  @Test
   void forNameWithUnknownFormat() {
     // act/assert
     assertThrows(IllegalArgumentException.class, () -> GraphFormat.forName("unknown_format"));
@@ -126,5 +144,6 @@ class GraphFormatTest {
     assertEquals(".puml", GraphFormat.PUML.getFileExtension());
     assertEquals(".json", GraphFormat.JSON.getFileExtension());
     assertEquals(".txt", GraphFormat.TEXT.getFileExtension());
+    assertEquals(".mmd", GraphFormat.MERMAID.getFileExtension());
   }
 }

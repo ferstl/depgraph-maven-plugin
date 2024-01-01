@@ -1,0 +1,23 @@
+flowchart TD
+  %% Node Definitions:
+  com.github.ferstl:module-1:jar["module-1"]
+  commons-codec:commons-codec:jar["commons-codec"]
+  org.apache.commons:commons-lang3:jar["commons-lang3"]
+  com.github.ferstl:module-3:jar["module-3"]
+  com.github.ferstl:module-2:jar["module-2"]
+  com.google.guava:guava:jar["guava"]
+  com.mysema.querydsl:querydsl-core:jar["querydsl-core"]
+  com.google.code.findbugs:jsr305:jar["jsr305"]
+  com.mysema.commons:mysema-commons-lang:jar["mysema-commons-lang"]
+  com.infradna.tool:bridge-method-annotation:jar["bridge-method-annotation"]
+
+  %% Edge Definitions:
+  com.github.ferstl:module-1:jar --> commons-codec:commons-codec:jar
+  com.github.ferstl:module-1:jar --> org.apache.commons:commons-lang3:jar
+  com.github.ferstl:module-3:jar --> com.github.ferstl:module-1:jar
+  com.github.ferstl:module-2:jar --> com.google.guava:guava:jar
+  com.github.ferstl:module-3:jar --> com.github.ferstl:module-2:jar
+  com.mysema.querydsl:querydsl-core:jar --> com.google.code.findbugs:jsr305:jar
+  com.mysema.querydsl:querydsl-core:jar --> com.mysema.commons:mysema-commons-lang:jar
+  com.mysema.querydsl:querydsl-core:jar --> com.infradna.tool:bridge-method-annotation:jar
+  com.github.ferstl:module-3:jar --> com.mysema.querydsl:querydsl-core:jar

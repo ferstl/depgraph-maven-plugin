@@ -113,6 +113,67 @@ public class GraphIntegrationTest {
   }
 
   @Test
+  public void graphInMermaid() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+            .forProject(basedir)
+            .withCliOption("-DgraphFormat=mermaid")
+            .execute("depgraph:graph");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(
+            basedir,
+            "module-1/target/dependency-graph.mmd",
+            "module-2/target/dependency-graph.mmd",
+            "sub-parent/module-3/target/dependency-graph.mmd",
+            "target/dependency-graph.mmd",
+            "sub-parent/target/dependency-graph.mmd");
+
+    assertFileContents(basedir, "expectations/graph_parent.mmd", "target/dependency-graph.mmd");
+    assertFileContents(basedir, "expectations/graph_module-1.mmd", "module-1/target/dependency-graph.mmd");
+    assertFileContents(basedir, "expectations/graph_module-2.mmd", "module-2/target/dependency-graph.mmd");
+    assertFileContents(basedir, "expectations/graph_sub-parent.mmd", "sub-parent/target/dependency-graph.mmd");
+    assertFileContents(basedir, "expectations/graph_module-3.mmd", "sub-parent/module-3/target/dependency-graph.mmd");
+  }
+
+  @Test
+  public void byGroupIdInMermaid() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+            .forProject(basedir)
+            .withCliOption("-DgraphFormat=mermaid")
+            .execute("clean", "depgraph:by-groupid");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(
+            basedir,
+            "module-1/target/dependency-graph.mmd",
+            "module-2/target/dependency-graph.mmd",
+            "sub-parent/module-3/target/dependency-graph.mmd",
+            "target/dependency-graph.mmd",
+            "sub-parent/target/dependency-graph.mmd");
+
+    assertFileContents(basedir, "expectations/by-groupid_parent.mmd", "target/dependency-graph.mmd");
+    assertFileContents(basedir, "expectations/by-groupid_module-1.mmd", "module-1/target/dependency-graph.mmd");
+    assertFileContents(basedir, "expectations/by-groupid_module-2.mmd", "module-2/target/dependency-graph.mmd");
+    assertFileContents(basedir, "expectations/by-groupid_sub-parent.mmd", "sub-parent/target/dependency-graph.mmd");
+    assertFileContents(basedir, "expectations/by-groupid_module-3.mmd", "sub-parent/module-3/target/dependency-graph.mmd");
+  }
+
+  @Test
+  public void exampleInMermaid() throws Exception {
+    File basedir = this.resources.getBasedir("no-dependencies");
+    MavenExecutionResult result = this.mavenRuntime
+            .forProject(basedir)
+            .withCliOption("-DgraphFormat=mermaid")
+            .execute("clean", "depgraph:example");
+
+    result.assertErrorFreeLog();
+    assertFilesPresent(basedir, "target/dependency-graph.mmd");
+    assertFileContents(basedir, "expectations/example.mmd", "target/dependency-graph.mmd");
+  }
+
+  @Test
   public void customGraphStyle() throws Exception {
     File basedir = this.resources.getBasedir("single-dependency");
     String styleConfiguration = basedir.toPath().resolve("graph-style.json").toAbsolutePath().toString();

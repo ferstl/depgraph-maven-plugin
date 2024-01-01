@@ -26,6 +26,8 @@ import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import com.github.ferstl.depgraph.dependency.mermaid.MermaidGraphStyleConfigurer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
@@ -69,7 +71,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private static final String OUTPUT_FILE_NAME = "dependency-graph";
 
   /**
-   * Format of the graph, either &quot;dot&quot; (default), &quot;gml&quot;, &quot;puml&quot;, &quot;json&quot; or &quot;text&quot;.
+   * Format of the graph, either &quot;dot&quot; (default), &quot;gml&quot;, &quot;puml&quot;, &quot;mermaid&quot;, &quot;json&quot; or &quot;text&quot;.
    *
    * @since 2.1.0
    */
@@ -260,6 +262,8 @@ abstract class AbstractGraphMojo extends AbstractMojo {
         return new PumlGraphStyleConfigurer();
       case JSON:
         return new JsonGraphStyleConfigurer();
+      case MERMAID:
+        return new MermaidGraphStyleConfigurer();
       case TEXT:
         return new TextGraphStyleConfigurer();
       default:
