@@ -95,6 +95,7 @@
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.build.outputTimestamp>2024-04-24T16:35:00Z</project.build.outputTimestamp>
     <maven.version>3.8.6</maven.version>
   </properties>
 
