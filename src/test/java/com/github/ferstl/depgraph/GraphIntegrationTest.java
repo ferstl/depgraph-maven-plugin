@@ -301,6 +301,8 @@ public class GraphIntegrationTest {
         .execute("clean", "depgraph:graph");
 
     result.assertErrorFreeLog();
+    result.assertLogText("Dependency graph:");
+    result.assertLogText("sub-parent:1.0.0-SNAPSHOT:compile");
     assertFilesPresent(
         basedir,
         "module-1/target/dependency-graph.txt",
@@ -309,6 +311,34 @@ public class GraphIntegrationTest {
         "target/dependency-graph.txt",
         "sub-parent/target/dependency-graph.txt");
 
+    assertFileContents(basedir, "expectations/graph_parent.txt", "target/dependency-graph.txt");
+    assertFileContents(basedir, "expectations/graph_module-1.txt", "module-1/target/dependency-graph.txt");
+    assertFileContents(basedir, "expectations/graph_module-2.txt", "module-2/target/dependency-graph.txt");
+    assertFileContents(basedir, "expectations/graph_sub-parent.txt", "sub-parent/target/dependency-graph.txt");
+    assertFileContents(basedir, "expectations/graph_module-3.txt", "sub-parent/module-3/target/dependency-graph.txt");
+  }
+
+  @Test
+  public void graphInTextNotLogged() throws Exception {
+    File basedir = this.resources.getBasedir("depgraph-maven-plugin-test");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .withCliOption("-DgraphFormat=text")
+        .withCliOption("-DshowVersions")
+        .withCliOption("-DlogTextGraph=false")
+        .execute("clean", "depgraph:graph");
+    
+    result.assertErrorFreeLog();
+    result.assertNoLogText("Dependency graph:");
+    result.assertNoLogText("sub-parent:1.0.0-SNAPSHOT:compile");
+    assertFilesPresent(
+        basedir,
+        "module-1/target/dependency-graph.txt",
+        "module-2/target/dependency-graph.txt",
+        "sub-parent/module-3/target/dependency-graph.txt",
+        "target/dependency-graph.txt",
+        "sub-parent/target/dependency-graph.txt");
+    
     assertFileContents(basedir, "expectations/graph_parent.txt", "target/dependency-graph.txt");
     assertFileContents(basedir, "expectations/graph_module-1.txt", "module-1/target/dependency-graph.txt");
     assertFileContents(basedir, "expectations/graph_module-2.txt", "module-2/target/dependency-graph.txt");

@@ -182,6 +182,14 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   private boolean skip;
 
   /**
+   * Log the text graph in addition to writing to a file. Only relevant when {@code graphFormat=text}.
+   *
+   * @since 4.0.4
+   */
+  @Parameter(property = "logTextGraph", defaultValue = "true")
+  private boolean logTextGraph;
+
+  /**
    * The project's artifact ID.
    */
   @Parameter(defaultValue = "${project.artifactId}", readonly = true)
@@ -211,7 +219,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
 
       if (graphFormat == GraphFormat.DOT && this.createImage) {
         createDotGraphImage(graphFilePath);
-      } else if (graphFormat == GraphFormat.TEXT) {
+      } else if (graphFormat == GraphFormat.TEXT && this.logTextGraph) {
         getLog().info("Dependency graph:\n" + dependencyGraph);
       }
 
