@@ -73,11 +73,12 @@ public class DependencyNodeIdRenderer implements NodeRenderer<DependencyNode> {
   public String render(DependencyNode node) {
     Artifact artifact = node.getArtifact();
 
-    return COLON_JOINER.join(
-        this.withGroupId ? artifact.getGroupId() : null,
-        this.withArtifactId ? artifact.getArtifactId() : null,
-        this.withType ? artifact.getType() : null,
-        this.withClassifier ? emptyToNull(artifact.getClassifier()) : null,
-        this.withScope ? node.getEffectiveScope() : null);
+    String groupId = this.withGroupId ? artifact.getGroupId() : null;
+    String artifactId = this.withArtifactId ? artifact.getArtifactId() : null;
+    String type = this.withType ? artifact.getType() : null;
+    String classifier = this.withClassifier ? emptyToNull(artifact.getClassifier()) : null;
+    String scope = this.withScope ? node.getEffectiveScope() : null;
+
+    return COLON_JOINER.join(groupId, artifactId, type, classifier, scope);
   }
 }

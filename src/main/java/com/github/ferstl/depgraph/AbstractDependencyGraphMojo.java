@@ -145,14 +145,25 @@ abstract class AbstractDependencyGraphMojo extends AbstractGraphMojo {
   private ArtifactFilter createGlobalArtifactFilter() {
     AndArtifactFilter filter = new AndArtifactFilter();
 
+    handleDeprecatedScope();
+    addClasspathScopeToFilter(filter);
+    addScopesToFilter(filter);
+    addIncludesToFilter(filter);
+    addExcludesToFilter(filter);
+    addOptionalFilterToFilter(filter);
+    return filter;
+  }
+
+  private void handleDeprecatedScope() {
     if (this.scope != null) {
       getLog().warn("The 'scope' parameter is deprecated and will be removed in future versions. Use 'classpathScope' instead.");
-      // Prefer the new parameter if it is set
       if (this.classpathScope == null) {
         this.classpathScope = this.scope;
       }
     }
+  }
 
+  private void addClasspathScopeToFilter(AndArtifactFilter filter) {
     if (this.classpathScope != null) {
       if (this.scopes.isEmpty()) {
         filter.add(new ScopeArtifactFilter(this.classpathScope));
@@ -160,24 +171,30 @@ abstract class AbstractDependencyGraphMojo extends AbstractGraphMojo {
         getLog().warn("Both 'classpathScope' (formerly 'scope') and 'scopes' parameters are set. The 'classpathScope' parameter will be ignored.");
       }
     }
+  }
 
+  private void addScopesToFilter(AndArtifactFilter filter) {
     if (!this.scopes.isEmpty()) {
       filter.add(createScopesArtifactFilter(this.scopes));
     }
+  }
 
+  private void addIncludesToFilter(AndArtifactFilter filter) {
     if (!this.includes.isEmpty()) {
       filter.add(new StrictPatternIncludesArtifactFilter(this.includes));
     }
+  }
 
+  private void addExcludesToFilter(AndArtifactFilter filter) {
     if (!this.excludes.isEmpty()) {
       filter.add(new StrictPatternExcludesArtifactFilter(this.excludes));
     }
+  }
 
+  private void addOptionalFilterToFilter(AndArtifactFilter filter) {
     if (this.excludeOptionalDependencies) {
       filter.add(new OptionalArtifactFilter());
     }
-
-    return filter;
   }
 
   private ArtifactFilter createTransitiveIncludeExcludeFilter() {
