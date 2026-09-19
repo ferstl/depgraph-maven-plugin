@@ -20,6 +20,12 @@ public enum GraphFormat {
   GML,
   PUML,
   JSON,
+  MERMAID {
+    @Override
+    public String getFileExtension() {
+      return ".mmd";
+    }
+  },
   TEXT {
     @Override
     public String getFileExtension() {

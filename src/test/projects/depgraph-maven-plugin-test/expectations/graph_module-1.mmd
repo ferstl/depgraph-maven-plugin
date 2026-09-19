@@ -1,0 +1,13 @@
+flowchart TD
+  %% Node Definitions:
+  com.github.ferstl:module-1:jar["module-1"]
+  commons-codec:commons-codec:jar["commons-codec"]
+  org.apache.commons:commons-lang3:jar["commons-lang3"]
+  junit:junit:jar["junit<br/><font size=1>(test)</font>"]
+  org.hamcrest:hamcrest-core:jar["hamcrest-core<br/><font size=1>(test)</font>"]
+
+  %% Edge Definitions:
+  com.github.ferstl:module-1:jar --> commons-codec:commons-codec:jar
+  com.github.ferstl:module-1:jar --> org.apache.commons:commons-lang3:jar
+  junit:junit:jar --> org.hamcrest:hamcrest-core:jar
+  com.github.ferstl:module-1:jar --> junit:junit:jar

@@ -1,0 +1,26 @@
+flowchart TD
+  %% Node Definitions:
+  com.example:artifact-a:jar["artifact-a"]
+  com.example:artifact-b:jar["artifact-b"]
+  com.example:artifact-d:jar["artifact-d"]
+  com.example.sub:artifact-g:jar["artifact-g<br/><font size=1>(test)</font>"]
+  com.example:artifact-c:jar["artifact-c"]
+  com.example.sub:artifact-zip:zip["artifact-zip"]
+  com.example.sub:artifact-e:jar["artifact-e<br/><font size=1>(provided)</font>"]
+  com.example.sub:artifact-f:jar["artifact-f<br/><font size=1>(runtime)</font>"]
+
+  %% Edge Definitions:
+  com.example:artifact-a:jar --> com.example:artifact-b:jar
+  com.example:artifact-a:jar --> com.example:artifact-d:jar
+  com.example.sub:artifact-g:jar --> com.example:artifact-c:jar
+  com.example:artifact-b:jar --> com.example:artifact-c:jar
+  com.example:artifact-b:jar --> com.example:artifact-d:jar
+  com.example.sub:artifact-zip:zip --> com.example:artifact-c:jar
+  com.example:artifact-d:jar --> com.example.sub:artifact-e:jar
+  com.example:artifact-d:jar --> com.example.sub:artifact-f:jar
+  com.example:artifact-b:jar --> com.example.sub:artifact-g:jar
+  com.example:artifact-b:jar --> com.example.sub:artifact-zip:zip
+
+  %% Edge Styles:
+  linkStyle 2 color:#FF0000, stroke:#FF0000, stroke-dasharray:10px
+  linkStyle 5 color:#000000, stroke:#000000, stroke-dasharray:3px

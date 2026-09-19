@@ -168,6 +168,18 @@ public class DocumentationIntegrationTest {
   }
 
   @Test
+  public void aggregatedMermaid() throws Exception {
+    runTest("aggregate",
+            "-DgraphFormat=mermaid",
+            "-DincludeParentProjects",
+            "-Dexcludes=com.github.ferstl:sub-parent,com.github.ferstl:module-3");
+
+    assertFilesPresent(this.basedir, "target/dependency-graph.mmd");
+
+    collectFile("target/dependency-graph.mmd", "aggregated.mmd");
+  }
+
+  @Test
   public void aggregatedText() throws Exception {
     runTest("aggregate",
         "-DgraphFormat=text",
@@ -221,6 +233,25 @@ public class DocumentationIntegrationTest {
         "sub-parent/target/dependency-graph.gml");
 
     collectFile("sub-parent/module-3/target/dependency-graph.gml", "with-conflicts.gml");
+  }
+
+  @Test
+  public void mermaidWithConflicts() throws Exception {
+    runTest("graph",
+            "-DgraphFormat=mermaid",
+            "-DshowVersions",
+            "-DshowDuplicates",
+            "-DshowConflicts");
+
+    assertFilesPresent(
+            this.basedir,
+            "module-1/target/dependency-graph.mmd",
+            "module-2/target/dependency-graph.mmd",
+            "sub-parent/module-3/target/dependency-graph.mmd",
+            "target/dependency-graph.mmd",
+            "sub-parent/target/dependency-graph.mmd");
+
+    collectFile("sub-parent/module-3/target/dependency-graph.mmd", "with-conflicts.mmd");
   }
 
   @Test
