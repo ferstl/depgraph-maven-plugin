@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
 import org.apache.maven.artifact.Artifact;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ferstl.depgraph.dependency.DependencyNode;
 import com.github.ferstl.depgraph.graph.NodeRenderer;
@@ -77,7 +78,7 @@ public class JsonDependencyNodeNameRenderer implements NodeRenderer<DependencyNo
     return jsonStringWriter.toString();
   }
 
-
+  @JsonPropertyOrder(value = {"groupId", "artifactId", "version", "optional", "classifiers", "scopes", "types"})
   private static class ArtifactData {
 
     private final String groupId;
