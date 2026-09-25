@@ -17,6 +17,8 @@ package com.github.ferstl.depgraph;
 
 import java.io.File;
 import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,6 +29,8 @@ import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenRuntime.MavenRuntimeBuilder;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import static com.github.ferstl.depgraph.MavenVersion.MAX_VERSION;
 import static com.github.ferstl.depgraph.MavenVersion.MIN_VERSION;
 import static io.takari.maven.testing.TestResources.assertFileContents;
@@ -46,6 +50,18 @@ public class GraphIntegrationTest {
     this.mavenRuntime = builder
         .withCliOptions("-B")
         .build();
+  }
+
+  public void assertJsonFileContents(File basedir, String expFile, String srcFile) throws Exception {
+    Path basePath = basedir.toPath();
+    Path expFilePath = basePath.resolve(expFile);
+    Path srcFilePath = basePath.resolve(srcFile);
+
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode treeExp = mapper.readTree(expFilePath.toFile());
+    JsonNode treeSrc = mapper.readTree(srcFilePath.toFile());
+
+    Assert.assertEquals(treeExp, treeSrc);
   }
 
   @Before
@@ -284,11 +300,11 @@ public class GraphIntegrationTest {
         "target/dependency-graph.json",
         "sub-parent/target/dependency-graph.json");
 
-    assertFileContents(basedir, "expectations/graph_parent.json", "target/dependency-graph.json");
-    assertFileContents(basedir, "expectations/graph_module-1.json", "module-1/target/dependency-graph.json");
-    assertFileContents(basedir, "expectations/graph_module-2.json", "module-2/target/dependency-graph.json");
-    assertFileContents(basedir, "expectations/graph_sub-parent.json", "sub-parent/target/dependency-graph.json");
-    assertFileContents(basedir, "expectations/graph_module-3.json", "sub-parent/module-3/target/dependency-graph.json");
+    assertJsonFileContents(basedir, "expectations/graph_parent.json", "target/dependency-graph.json");
+    assertJsonFileContents(basedir, "expectations/graph_module-1.json", "module-1/target/dependency-graph.json");
+    assertJsonFileContents(basedir, "expectations/graph_module-2.json", "module-2/target/dependency-graph.json");
+    assertJsonFileContents(basedir, "expectations/graph_sub-parent.json", "sub-parent/target/dependency-graph.json");
+    assertJsonFileContents(basedir, "expectations/graph_module-3.json", "sub-parent/module-3/target/dependency-graph.json");
   }
 
   @Test
