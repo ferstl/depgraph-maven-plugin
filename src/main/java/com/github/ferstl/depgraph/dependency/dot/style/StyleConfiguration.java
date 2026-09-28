@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.ferstl.depgraph.dependency.NodeResolution;
 import com.github.ferstl.depgraph.dependency.dot.style.resource.StyleResource;
@@ -68,7 +68,7 @@ public class StyleConfiguration {
 
     return new ObjectMapper()
         .registerModule(module)
-        .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE)
+        .setPropertyNamingStrategy(PropertyNamingStrategies.KEBAB_CASE)
         .setSerializationInclusion(Include.NON_EMPTY)
         .setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
   }
