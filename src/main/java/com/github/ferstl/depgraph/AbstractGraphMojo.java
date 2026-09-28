@@ -184,7 +184,7 @@ abstract class AbstractGraphMojo extends AbstractMojo {
   /**
    * Log the text graph in addition to writing to a file. Only relevant when {@code graphFormat=text}.
    *
-   * @since 4.0.4
+   * @since 4.0.5
    */
   @Parameter(property = "logTextGraph", defaultValue = "true")
   private boolean logTextGraph;
